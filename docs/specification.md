@@ -3,6 +3,24 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
 
 
 
+## Funkcionális specifikáció:
+
+- Két fajta felhasználó:
+  - Átalános Felhasználó(csapat/résztvevő)
+  - Szervező (admin)
+- Szervezőnek lehetősége lesz:
+  - új játékot / versenyt létrehozni
+  - játékot módosítani
+  - játékhoz új helyszínt létrehozni
+  - helyszínhez új kérdést létrehozni
+  - helyszínt / kérdést módosítani / törölni
+  - csapat jelentkezést elfogadni / elutasítani
+- Általános felhasználónak (résztvevőnek) lehetősége lesz:
+  - Jelentkezni / lejelentkezni játékra
+  - Játék helyszíneinek kérdéseire válaszolni
+
+
+
 ## Backend:
 
 - Kotlin Spring backend
