@@ -6,9 +6,9 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
 
 #### **1. hét:**
 
-​	Témajelentkés.
-​	Téma kitalálása.
-​	Használandó technológiák kiválasztása.
+- Témajelentkés.
+- Téma kitalálása.
+- Használandó technológiák kiválasztása.
 
 Először kitaláltam a témát, majd megtörtént a témajelentkezés.
 Utána kiválasztottam a felhasználandó technológiákat. Backenden Kotlin Spring mellet döntöttem, mivel Java Spring-ben már van egy kis tapasztalatom, Kotlin-t pedig az Android fejlesztések által már ismerem. 
@@ -16,10 +16,10 @@ Frontenden mindenképp lesz elég új dolog, amit meg kell ismerjek.
 
 #### **2. hét:**
 
-​	GitHub Repository létrehozása.
-​	Backend technológia megismerése.
-​	Backend Projekt létrehozása.
-​	Backend Specifikáció és ütemterv elkészítése
+- GitHub Repository létrehozása.
+- Backend technológia megismerése.
+- Backend Projekt létrehozása.
+- Backend Specifikáció és ütemterv elkészítése
 
 Létrehoztam egy GitHub Repository-t, tehát a projekthez verziókövetéshez a GitHub-ot fogom használni.
 Utána olvastam a Kotlin Springnek, hogy a legfontosabb alapismeretek meglegyenek.

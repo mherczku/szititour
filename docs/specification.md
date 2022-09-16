@@ -11,13 +11,13 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
 
 - Backend architektúra / rétegek:
 
-  ![szititour-backend](..\\images\backend-layers.png)
+  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/backend-layers.png)
 
   
 
 - UML - adatmodellek és kapcsolataik:
 
-![szititour-backend](..\\images\szititour-backend.png)
+![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/szititour-backend.png)
 
 
 
@@ -33,7 +33,7 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
 
 - Angular architektúra:
 
-  ![szititour-backend](..\\images\angular-architecture.png)
+  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/angular-architecture.png)
 
   Tehát az oldal és a komponensek kinézetét html template-k fogják leírni (+CSS).
   Ezeket komponensek tartalmazzák, hogy újra felhasználhatóak legyenek és az egyes komponensek a saját logikájukat / feladataikat el tudják végezni önmaguk.
