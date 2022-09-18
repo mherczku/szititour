@@ -59,7 +59,24 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
 
   
 
-- MockUp tervek: (elkészítés alatt)
+- MockUp tervek: 
+
+  - Admin felület:
+
+  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-games.png)
+
+  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-edit.png)
+
+  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-places.png)
+
+  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-questions.png)
+
+  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-teams.png)
+
+  
+
+  - Felhasználó felület:
+
 
 
 
