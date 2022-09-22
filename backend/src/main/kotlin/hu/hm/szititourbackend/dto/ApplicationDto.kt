@@ -1,10 +1,7 @@
 package hu.hm.szititourbackend.dto
 
-import hu.hm.szititourbackend.enum.QuestionType
-import hu.hm.szititourbackend.model.Application
 import java.sql.Timestamp
 import java.time.Instant
-import javax.persistence.*
 
 
 class ApplicationDto(

@@ -1,7 +1,6 @@
-package hu.hm.szititourbackend.model
+package hu.hm.szititourbackend.datamodel
 
 import hu.hm.szititourbackend.dto.ApplicationDto
-import hu.hm.szititourbackend.enum.QuestionType
 import java.sql.Timestamp
 import java.time.Instant
 import javax.persistence.*

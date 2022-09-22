@@ -1,12 +1,8 @@
-package hu.hm.szititourbackend.model
+package hu.hm.szititourbackend.datamodel
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import hu.hm.szititourbackend.dto.ApplicationDto
 import hu.hm.szititourbackend.dto.PlaceDto
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
-import java.sql.Timestamp
-import java.time.Instant
 import javax.persistence.*
 
 @Entity
@@ -24,7 +20,6 @@ class Place(
 
     @OneToMany(mappedBy = "place", cascade = [CascadeType.ALL])
     @Fetch(FetchMode.JOIN)
-    @JsonIgnore
     val questions: MutableList<Question> = mutableListOf(),
     // 0. question is the riddle to the next place
 

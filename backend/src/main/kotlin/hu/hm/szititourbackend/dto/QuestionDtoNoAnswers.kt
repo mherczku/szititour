@@ -9,7 +9,7 @@ class QuestionDtoNoAnswers(
 
     val id: Int = 0,
     val name: String = "",
-    val type: QuestionType = QuestionType.short,
+    val type: QuestionType = QuestionType.shortText,
     val isRiddle: Boolean = false,
     val img: String = "",
 

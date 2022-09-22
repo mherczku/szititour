@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.model
+package hu.hm.szititourbackend.datamodel
 
 import hu.hm.szititourbackend.dto.GameDto
 import org.hibernate.annotations.Fetch
