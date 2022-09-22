@@ -14,10 +14,13 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
   - játékhoz új helyszínt létrehozni
   - helyszínhez új kérdést létrehozni
   - helyszínt / kérdést módosítani / törölni
-  - csapat jelentkezést elfogadni / elutasítani
+  - csapat jelentkezést elfogadni / elutasítani (amennyiben a jelentkezés helyes, jelentkezési díj be lett fizetve)
+  - Csapatok által beküldött válaszokat helyesnek vagy helytelennek ítélni
 - Általános felhasználónak (résztvevőnek) lehetősége lesz:
   - Jelentkezni / lejelentkezni játékra
   - Játék helyszíneinek kérdéseire válaszolni
+    - A kérdés típusától függ, hogy a válasz melyik tulajdonságába kerül mentésre a megadott válasz. Mivel egy válaszról mindig tudni, hogy milyen típusú kérdéshez tartozik, így egyértelműen kiszedhető belőle a szükséges adat.
+    - Egy játék aktív időszaka a "dateStart"-tól "dateEnd"-ig tart. A kérdésekre ebben az időszakon belül tudnak válaszolni a jelentkezett (elfogadott) csapatok.
 
 
 
@@ -34,6 +37,12 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
   
 
 - UML - adatmodellek és kapcsolataik:
+
+  - Helyszíneknek lesz koordinátái (longitude, latitude) és címe (address), viszont ezek csak később lesz jelentősége.
+  - A Team osztály reprezentál egy felhasználót
+    - ("user" nem lehetett a neve, mivel postgresql adabázis nem szeretné)
+    - A szervezőket is ez az osztály reprezentálja azzal a különbséggel, hogy az ő esetükben az "isAdmin" változó  értéke "true".
+
 
 ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/szititour-backend.png)
 
@@ -61,21 +70,44 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
 
 - MockUp tervek: 
 
-  - Admin felület:
+  - Admin felület: 
 
-  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-games.png)
+    - Játékok:
 
-  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-edit.png)
+      ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-games.png)
 
-  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-places.png)
+    - Játék hozzáadása / szerkesztése:
 
-  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-questions.png)
+      ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-edit.png)
 
-  ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-teams.png)
+      
 
+    - Helyszínek + hozzáadása / szerkesztése:
+
+      ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-places.png)
   
-
+    - Kérdések + hozzáadása / szerkesztése:
+  
+      ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-questions.png)
+  
+    - Játékra jelentkező csapatok listája (jelentkezők elfogadása / elutasítása):
+  
+      ![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/mockup-teams.png)
+  
+  
+  
+  
+  
+  
   - Felhasználó felület:
+    - Bejelentkezés
+    - Regisztráció
+    - Elfelejtett jelszó
+    - Profil
+    - Leendő játékok + Jelentkezés / Lejelentkezés
+    - Aktív játék - Helyszínek
+    - Aktív játék kérdések + Válasz beküldése
+    - 
 
 
 
