@@ -1,6 +1,8 @@
 package hu.hm.szititourbackend.datamodel
 
+import hu.hm.szititourbackend.dto.GameActiveDto
 import hu.hm.szititourbackend.dto.GameDto
+import hu.hm.szititourbackend.dto.GameOnlyBasicDto
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 import java.sql.Timestamp
@@ -52,4 +54,37 @@ fun MutableList<Game>.convertToDto(): MutableList<GameDto> {
         dtos.add(it.convertToDto())
     }
     return dtos
+}
+
+fun Game.convertToBasicDto(): GameOnlyBasicDto {
+    return GameOnlyBasicDto(
+        this.id,
+        this.title,
+        this.dateStart,
+        this.dateEnd,
+        this.img,
+        this.createdAt,
+        this.updatedAt
+    )
+}
+
+fun MutableList<Game>.convertToBasicDto(): MutableList<GameOnlyBasicDto> {
+    val dtos = mutableListOf<GameOnlyBasicDto>()
+    this.forEach {
+        dtos.add(it.convertToBasicDto())
+    }
+    return dtos
+}
+
+fun Game.convertToActiveDto(): GameActiveDto {
+    return GameActiveDto(
+        this.id,
+        this.title,
+        this.dateStart,
+        this.dateEnd,
+        this.img,
+        this.createdAt,
+        this.updatedAt,
+        this.places.convertToActiveDto()
+    )
 }

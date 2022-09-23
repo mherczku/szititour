@@ -1,6 +1,5 @@
-package hu.hm.szititourbackend.model
+package hu.hm.szititourbackend.datamodel
 
-import hu.hm.szititourbackend.dto.PlaceDto
 import hu.hm.szititourbackend.dto.QuestionDto
 import hu.hm.szititourbackend.dto.QuestionDtoNoAnswers
 import hu.hm.szititourbackend.enum.QuestionType
@@ -14,7 +13,7 @@ class Question(
     @Column(nullable = false, updatable = false)
     val id: Int = 0,
     val name: String = "",
-    val type: QuestionType = QuestionType.short,
+    val type: QuestionType = QuestionType.shortText,
     val isRiddle: Boolean = false,
     val img: String = "",
 
@@ -53,6 +52,14 @@ fun MutableList<Question>.convertToDto(): MutableList<QuestionDto> {
     val dtos = mutableListOf<QuestionDto>()
     this.forEach {
         dtos.add(it.convertToDto())
+    }
+    return dtos
+}
+
+fun MutableList<Question>.convertToDtoNoAnswers(): MutableList<QuestionDtoNoAnswers> {
+    val dtos = mutableListOf<QuestionDtoNoAnswers>()
+    this.forEach {
+        dtos.add(it.convertToDtoNoAnswers())
     }
     return dtos
 }

@@ -14,13 +14,13 @@ class Answer(
     val answerBoolean: Boolean = false,
     val answerNumber : Int = 0,
     val img: String = "",
-    val correct: Boolean? = null,
+    var correct: Boolean? = null,
 
     @ManyToOne
-    val team: Team = Team(),
+    var team: Team = Team(),
 
     @ManyToOne
-    val question: Question = Question(),
+    var question: Question = Question(),
 
     )
 

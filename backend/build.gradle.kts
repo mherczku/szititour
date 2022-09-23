@@ -24,6 +24,7 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation ("com.auth0:java-jwt:4.0.0")
 }
 
 tasks.withType<KotlinCompile> {

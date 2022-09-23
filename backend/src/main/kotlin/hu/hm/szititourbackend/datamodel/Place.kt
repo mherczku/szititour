@@ -1,5 +1,6 @@
 package hu.hm.szititourbackend.datamodel
 
+import hu.hm.szititourbackend.dto.PlaceActiveDto
 import hu.hm.szititourbackend.dto.PlaceDto
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
@@ -45,6 +46,23 @@ fun MutableList<Place>.convertToDto(): MutableList<PlaceDto> {
     val dtos = mutableListOf<PlaceDto>()
     this.forEach {
         dtos.add(it.convertToDto())
+    }
+    return dtos
+}
+
+fun Place.convertToActiveDto(): PlaceActiveDto {
+    return PlaceActiveDto(
+        this.id,
+        this.name,
+        this.img,
+        this.questions.convertToDtoNoAnswers()
+    )
+}
+
+fun MutableList<Place>.convertToActiveDto(): MutableList<PlaceActiveDto> {
+    val dtos = mutableListOf<PlaceActiveDto>()
+    this.forEach {
+        dtos.add(it.convertToActiveDto())
     }
     return dtos
 }
