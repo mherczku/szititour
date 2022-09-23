@@ -2,41 +2,43 @@
 
 #### Anonymus:
 
-- Login (email, password)
+- Login(LoginData) - Response + TOKEN (if successful)
 
-- Register (email{unique}, password)
+- Register(LoginData) - Reponse
 
   
 
-#### LoggedIn:
+#### LoggedIn: (Valid Token Required)
 
 - User:
 
-  - updateProfile(name, img, members[string])
+  - updateProfile(TeamUpdateProfileDto) - TeamDto - /user/update
 
-  - getAllGames() - [id, dateStart, dateEnd, title, img, hasUserApplied, isUserApplicationAccepted]
+  - getAllGames() - List[GameOnlyBasicDto] - /user/games
 
-  - applyForGame (GameID)
+  - applyForGame (GameId) - Response - /user/apply
 
-  - cancelApplicationForGame (GameID)
+  - cancelApplicationForGame (GameId) - Response - /user/cancel
 
-  - logout()
-
-    
-
-- User - active game: - if has valid application
-
-  - GetGameData (GameID) - [id, dateStart, dateEnd, title, img, places[+questions]]
-
-  - answerQuestion (QuestionID, Answer) - if has valid application
+  - logout() - -
 
     
 
-- Admin: + functions
+- User - active game: - **accepted application required**
 
-  - CRUD for every class
+  - getGameData (GameId) - GameActiveDto - /user/activegame
+
+  - answerQuestion (QuestionId, Answer) - Response - /user/answer/{questionId}
+
+    
+
+- Admin: (**valid token with admin privileges required**)
+
+  - CRUD for every class  - /games /teams /applications /places /questions /answers
     - CREATE - POST mapping
-    - READ - GET(id), GET(all) mapping
-    - UPDATE - PUT mapping (e.g. accept team applications)
+    - READ: 
+      - GET(id) -  /{id}
+      - GET(all) mapping
+    - UPDATE - PUT mapping
     - DELETE - DELETE mapping
 
