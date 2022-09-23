@@ -25,9 +25,19 @@ Létrehoztam egy GitHub Repository-t, tehát a projekthez verziókövetéshez a 
 Utána olvastam a Kotlin Springnek, hogy a legfontosabb alapismeretek meglegyenek.
 Ezután létrehoztam a backend projektet, hogy lássam, hogy fog kinézni, és fel tudjam tölteni Repository-ba.
 Megírtam a specifikációt, ahol részletezem a felhasználandó technológiákat, és megírtam a féléves ütemtervet is nagyvonalakban.
-Backendhez elkészítettem az UML diagrammot, amely tartalmazza milyen adatmodellek lesznek, és azok milyen kapcsolatban lesznek egymással.
+Backendhez elkészítettem az UML diagramot, amely tartalmazza milyen adatmodellek lesznek, és azok milyen kapcsolatban lesznek egymással.
 
 #### **3. hét:**
+
+- UML diagram adatosztályok kiegészítése javítása
+- Specifikáció javítása, funkcionális specifikáció kiegészítése
+- Backend adatmodellek létrehozása
+- Backend DTO-k és hozzá tartozó konverterek elkészítése
+- JWT Token authentikáció megismerése
+
+Megbeszéltek szerint kibővítettem az UML diagramot a megfelelő kapcsolatokkal / tulajdonságokkal és a funkcionális specifikációt is kiegészítettem a hiányzó adatokkal.
+Ezek után létrehoztam az adatmodelleket (Entitásokat) az UML diagram alapján. Az adatmodellekhez készítettem DTO-kat is, melyek körkörös függőség mentesek és így tud kommunikálni majd a Frontend-el. Az elkészített adatmodellek és hozzájuk tartozó DTO-khoz implementálta a converter/mapper függvényeket.
+Utána olvastam és megismerkedtem a Jwt Token authentikációval és működésével 
 
 #### **4. hét:**
 
