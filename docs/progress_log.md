@@ -41,6 +41,17 @@ Utána olvastam és megismerkedtem a Jwt Token authentikációval és működés
 
 #### **4. hét:**
 
+- Backend Repository-k elkészítése
+- Backend Service-k elkészítése
+- Backend Authentikáció implementálása - AuthUtils
+- Backend DTO-k és hozzá tartozó konverterek elkészítése
+- Backend Utils komponens létrehozása - validációk
+- Backend / Java app dockerizálásának megismerése
+
+A hét során implementáltam a backend nagy részét, így már csak a kontrollerek maradtak. Elkészítettem a Repository oszályokat, és Service osztályokat, valamint a még hiányzó Dto-kat / extra adat modelleket. Az előző héten szerzett információk alapján elkészítettem egy AuthUtils osztály mely a Jwt authentikációt fogja biztosítani.
+Emellete elkészült egy Utils osztály is, amely az email / password validációhoz szolgáltat függvényeket.
+A maradék időben utána olvastam, hogyan lehet dockerizálni egy java applikációt, mivel Google ingyenes tervét már előző félévben felhasználtam, mint kiderült, és arra jutottam, hogy hosszútávon érdemesebb lenne saját környezetet biztosítsak a projekt futtatásához, és ártani sem árt, ha tudom, hogy kell ilyet. A folyamatot egy fokkal nehezíti, hogy Arm architektúrára szeretném buildelni az image-t.
+
 #### **5. hét:**
 
 #### **6. hét:**
