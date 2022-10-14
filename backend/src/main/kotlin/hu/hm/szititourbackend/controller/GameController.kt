@@ -15,7 +15,7 @@ import java.util.*
 class GameController @Autowired constructor(private val gameService: GameService) {
 
     @PostMapping()
-    fun addGame(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @RequestBody game: Game): ResponseEntity<GameDto> {
+    fun addGame(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody game: Game): ResponseEntity<GameDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -25,7 +25,7 @@ class GameController @Autowired constructor(private val gameService: GameService
     }
 
     @GetMapping("/{id}")
-    fun getGameById(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @PathVariable id: Int): ResponseEntity<GameDto?> {
+    fun getGameById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<GameDto?> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -38,7 +38,7 @@ class GameController @Autowired constructor(private val gameService: GameService
     }
 
     @GetMapping
-    fun getAllGames(@CookieValue(AuthUtils.COOKIE_NAME) token: String?): ResponseEntity<List<GameDto>> {
+    fun getAllGames(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?): ResponseEntity<List<GameDto>> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -48,7 +48,7 @@ class GameController @Autowired constructor(private val gameService: GameService
     }
 
     @PutMapping
-    fun updateGame(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @RequestBody game: Game): ResponseEntity<GameDto> {
+    fun updateGame(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody game: Game): ResponseEntity<GameDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -57,7 +57,7 @@ class GameController @Autowired constructor(private val gameService: GameService
     }
 
     @DeleteMapping("/{id}")
-    fun deleteGameById(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
+    fun deleteGameById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)

@@ -13,7 +13,7 @@ object AuthUtils {
     private const val JWT_TOKEN_VALIDITY = 1 * 60 * 60 * 1000 // 1 hour
     private val JWTVerifier = JWT.require(Algorithm.HMAC256(SECRET_KEY)).build()
     private const val IS_ADMIN = "isAdmin"
-    const val COOKIE_NAME = "jwt_token"
+    const val TOKEN_NAME = "Authorization"
 
     fun createToken(id: Int, isAdmin: Boolean = false): String {
         val audience = id.toString()
@@ -25,10 +25,11 @@ object AuthUtils {
             .sign(Algorithm.HMAC256(SECRET_KEY))
     }
 
-    fun verifyToken(token: String?): VerificationResponse {
-        if(token.isNullOrEmpty()) {
+    fun verifyToken(bearerToken: String?): VerificationResponse {
+        if(bearerToken.isNullOrEmpty()) {
             return VerificationResponse(verified = false, errorMessage = "Empty Token")
         }
+        val token = bearerToken.substring(7)
         return try {
             val jwt: DecodedJWT = JWTVerifier.verify(token)
             if(jwt.getClaim(IS_ADMIN).isMissing) {

@@ -15,7 +15,7 @@ import java.util.*
 class ApplicationController @Autowired constructor(private val applicationService: ApplicationService) {
 
     @PostMapping()
-    fun addApplication(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @RequestBody application: Application): ResponseEntity<ApplicationDto> {
+    fun addApplication(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody application: Application): ResponseEntity<ApplicationDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -25,7 +25,7 @@ class ApplicationController @Autowired constructor(private val applicationServic
     }
 
     @GetMapping("/{id}")
-    fun getApplicationById(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @PathVariable id: Int): ResponseEntity<ApplicationDto?> {
+    fun getApplicationById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<ApplicationDto?> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -38,7 +38,7 @@ class ApplicationController @Autowired constructor(private val applicationServic
     }
 
     @GetMapping
-    fun getAllApplications(@CookieValue(AuthUtils.COOKIE_NAME) token: String?): ResponseEntity<List<ApplicationDto>> {
+    fun getAllApplications(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?): ResponseEntity<List<ApplicationDto>> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -48,7 +48,7 @@ class ApplicationController @Autowired constructor(private val applicationServic
     }
 
     @PutMapping
-    fun updateApplication(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @RequestBody application: Application): ResponseEntity<ApplicationDto> {
+    fun updateApplication(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody application: Application): ResponseEntity<ApplicationDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -57,7 +57,7 @@ class ApplicationController @Autowired constructor(private val applicationServic
     }
 
     @DeleteMapping("/{id}")
-    fun deleteApplicationById(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
+    fun deleteApplicationById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)

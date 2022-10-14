@@ -15,7 +15,7 @@ import java.util.*
 class PlaceController @Autowired constructor(private val placeService: PlaceService) {
 
     @PostMapping()
-    fun addPlace(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @RequestBody place: Place): ResponseEntity<Place> {
+    fun addPlace(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody place: Place): ResponseEntity<Place> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -25,7 +25,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
     }
 
     @GetMapping("/{id}")
-    fun getPlaceById(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @PathVariable id: Int): ResponseEntity<PlaceDto?> {
+    fun getPlaceById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<PlaceDto?> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -38,7 +38,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
     }
 
     @GetMapping
-    fun getAllPlaces(@CookieValue(AuthUtils.COOKIE_NAME) token: String?): ResponseEntity<List<PlaceDto>> {
+    fun getAllPlaces(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?): ResponseEntity<List<PlaceDto>> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -48,7 +48,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
     }
 
     @PutMapping
-    fun updatePlace(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @RequestBody place: Place): ResponseEntity<PlaceDto> {
+    fun updatePlace(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody place: Place): ResponseEntity<PlaceDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -57,7 +57,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
     }
 
     @DeleteMapping("/{id}")
-    fun deletePlaceById(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
+    fun deletePlaceById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)

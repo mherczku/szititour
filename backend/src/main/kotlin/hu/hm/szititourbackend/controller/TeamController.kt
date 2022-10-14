@@ -15,7 +15,7 @@ import java.util.*
 class TeamController @Autowired constructor(private val teamService: TeamService) {
 
     @PostMapping()
-    fun addTeam(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @RequestBody team: Team): ResponseEntity<TeamDto> {
+    fun addTeam(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody team: Team): ResponseEntity<TeamDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -25,7 +25,7 @@ class TeamController @Autowired constructor(private val teamService: TeamService
     }
 
     @GetMapping("/{id}")
-    fun getTeamById(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @PathVariable id: Int): ResponseEntity<TeamDto?> {
+    fun getTeamById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<TeamDto?> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -38,7 +38,7 @@ class TeamController @Autowired constructor(private val teamService: TeamService
     }
 
     @GetMapping
-    fun getAllTeams(@CookieValue(AuthUtils.COOKIE_NAME) token: String?): ResponseEntity<List<TeamDto>> {
+    fun getAllTeams(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?): ResponseEntity<List<TeamDto>> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -48,7 +48,7 @@ class TeamController @Autowired constructor(private val teamService: TeamService
     }
 
     @PutMapping
-    fun updateTeam(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @RequestBody team: Team): ResponseEntity<TeamDto> {
+    fun updateTeam(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody team: Team): ResponseEntity<TeamDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -57,7 +57,7 @@ class TeamController @Autowired constructor(private val teamService: TeamService
     }
 
     @DeleteMapping("/{id}")
-    fun deleteTeamById(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
+    fun deleteTeamById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)

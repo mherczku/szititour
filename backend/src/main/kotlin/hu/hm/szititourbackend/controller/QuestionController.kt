@@ -15,7 +15,7 @@ import java.util.*
 class QuestionController @Autowired constructor(private val questionService: QuestionService) {
 
     @PostMapping()
-    fun addQuestion(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @RequestBody question: Question): ResponseEntity<QuestionDto> {
+    fun addQuestion(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody question: Question): ResponseEntity<QuestionDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -25,7 +25,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
     }
 
     @GetMapping("/{id}")
-    fun getQuestionById(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @PathVariable id: Int): ResponseEntity<QuestionDto?> {
+    fun getQuestionById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<QuestionDto?> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -38,7 +38,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
     }
 
     @GetMapping
-    fun getAllQuestions(@CookieValue(AuthUtils.COOKIE_NAME) token: String?): ResponseEntity<List<QuestionDto>> {
+    fun getAllQuestions(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?): ResponseEntity<List<QuestionDto>> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -48,7 +48,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
     }
 
     @PutMapping
-    fun updateQuestion(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @RequestBody question: Question): ResponseEntity<QuestionDto> {
+    fun updateQuestion(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody question: Question): ResponseEntity<QuestionDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -57,7 +57,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
     }
 
     @DeleteMapping("/{id}")
-    fun deleteQuestionById(@CookieValue(AuthUtils.COOKIE_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
+    fun deleteQuestionById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)

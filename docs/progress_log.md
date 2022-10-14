@@ -54,7 +54,17 @@ A maradék időben utána olvastam, hogyan lehet dockerizálni egy java appliká
 
 #### **5. hét:**
 
+- Backend Controllerek implementálása
+- Backend / Java app dockerizálása
+
+
+
 #### **6. hét:**
+
+- Cross-Origin Resource Sharing (CORS) - Kotlin implementálása
+- Frontend SiteBuild
+
+
 
 #### **7. hét:**
 

@@ -2,7 +2,6 @@ package hu.hm.szititourbackend.controller
 
 import hu.hm.szititourbackend.datamodel.Answer
 import hu.hm.szititourbackend.datamodel.convertToActiveDto
-import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.*
 import hu.hm.szititourbackend.extramodel.Response
 import hu.hm.szititourbackend.service.*
@@ -26,7 +25,7 @@ class LoggedInController @Autowired constructor(
 
     @PostMapping("update")
     fun updateProfile(
-        @CookieValue(AuthUtils.COOKIE_NAME) token: String?,
+        @RequestHeader(AuthUtils.TOKEN_NAME) token: String?,
         @RequestBody profileUpdate: TeamUpdateProfileDto
     ): ResponseEntity<TeamDto> {
         val verification = AuthUtils.verifyToken(token)
@@ -42,7 +41,7 @@ class LoggedInController @Autowired constructor(
     }
 
     @GetMapping("games")
-    fun getAllAvailableGames(@CookieValue(AuthUtils.COOKIE_NAME) token: String?): ResponseEntity<List<GameOnlyBasicDto>> {
+    fun getAllAvailableGames(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?): ResponseEntity<List<GameOnlyBasicDto>> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -53,7 +52,7 @@ class LoggedInController @Autowired constructor(
 
     @PostMapping("apply")
     fun applyForGame(
-        @CookieValue(AuthUtils.COOKIE_NAME) token: String?,
+        @RequestHeader(AuthUtils.TOKEN_NAME) token: String?,
         @RequestBody gameId: Int
     ): ResponseEntity<Response> {
         val verification = AuthUtils.verifyToken(token)
@@ -70,7 +69,7 @@ class LoggedInController @Autowired constructor(
 
     @PostMapping("cancel")
     fun cancelApplicationForGame(
-        @CookieValue(AuthUtils.COOKIE_NAME) token: String?,
+        @RequestHeader(AuthUtils.TOKEN_NAME) token: String?,
         @RequestBody gameId: Int
     ): ResponseEntity<Response> {
         val verification = AuthUtils.verifyToken(token)
@@ -97,7 +96,7 @@ class LoggedInController @Autowired constructor(
 
     @PostMapping("activegame")
     fun getGameData(
-        @CookieValue(AuthUtils.COOKIE_NAME) token: String?,
+        @RequestHeader(AuthUtils.TOKEN_NAME) token: String?,
         @RequestBody gameId: Int
     ): ResponseEntity<GameActiveDto> {
         val verification = AuthUtils.verifyToken(token)
@@ -120,7 +119,7 @@ class LoggedInController @Autowired constructor(
 
     @PostMapping("answer/{questionId}")
     fun answerQuestion(
-        @CookieValue(AuthUtils.COOKIE_NAME) token: String?,
+        @RequestHeader(AuthUtils.TOKEN_NAME) token: String?,
         @PathVariable questionId: Int,
         answer: Answer
     ): ResponseEntity<Response> {

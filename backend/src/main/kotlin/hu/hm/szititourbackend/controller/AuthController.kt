@@ -1,5 +1,5 @@
 package hu.hm.szititourbackend.controller
-import hu.hm.szititourbackend.datamodel.Answer
+
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.extramodel.LoginData
 import hu.hm.szititourbackend.extramodel.Response
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -31,10 +30,7 @@ class AuthController @Autowired constructor(private val teamService: TeamService
             val team =  t.get()
             if(team.password == credentials.password){
                 val token = AuthUtils.createToken(team.id, team.admin)
-                val cookie = Cookie(AuthUtils.COOKIE_NAME, token)
-                //cookie.isHttpOnly = true
-                //cookie.secure = true
-                response.addCookie(cookie)
+                response.addHeader(AuthUtils.TOKEN_NAME, "Bearer $token")
                 return ResponseEntity(Response(true, "", "Login Successful"), HttpStatus.OK)
             }
             return ResponseEntity(Response(false, "Email or password is wrong", ""), HttpStatus.UNAUTHORIZED)
@@ -61,5 +57,4 @@ class AuthController @Autowired constructor(private val teamService: TeamService
             return ResponseEntity(Response(false, "Email or password is invalid", ""), HttpStatus.BAD_REQUEST)
         }
     }
-
 }
