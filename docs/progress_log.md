@@ -6,7 +6,7 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
 
 #### **1. hét:**
 
-- Témajelentkés.
+- Témajelentkezés
 - Téma kitalálása.
 - Használandó technológiák kiválasztása.
 
@@ -57,14 +57,21 @@ A maradék időben utána olvastam, hogyan lehet dockerizálni egy java appliká
 - Backend Controllerek implementálása
 - Backend / Java app dockerizálása
 
+Elkészítettem a hiányzó controller osztályokat, implementáltam authentikáció ellenőrzést (Jwt Token Cookie). Az authentikációs endpointok az AuthController-ben kaptak helyet. A bejelentkezett felhasználó számára elérhető összes funkció pedig a LoggedInController-ben található. A többi controller által szolgáltatott funkciók csak az admin felhasználóknak elérhetőek. (ezek közül lehet lesz majd pár eltávolítva miután kiderül, hogy biztosan feleslegesek)
+Sikerült az appot dockerizálni Arm architekúrára így a legfrissebb verziót bármikor tudom használni és tesztelni.
+
 
 
 #### **6. hét:**
 
 - Cross-Origin Resource Sharing (CORS) - Kotlin implementálása
-- Frontend SiteBuild
+- Token utazásának cseréje Cookieről Header Bearer Authorization
+- Frontend
+  - Környezet létrehozása
+  - Authentikáció teszt
 
 
+Frontend környezet létrehozása, után szembesültem vele, hogy hiányzik a backend implementációból a Cross Origin Resource Sharing. Ennek utána olvasása közben megtudtam, hogy van elterjedtebb / biztonságosabb mondja Token utaztatásának (Authorization Bearer Header), így következő lépésben átírtam a backend controllereket erre a módszerre. (Postmanben is könnyebb így tesztelni, token-t megjegyzi). Létrehoztam egy bejelentkező felületet és kipróbáltam  a bejelentkezést, próba adat lekérést. Miután ezek működtek a következő feladatok az admin felületek elkészítése lesz.
 
 #### **7. hét:**
 
