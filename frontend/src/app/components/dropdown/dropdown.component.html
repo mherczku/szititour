@@ -1,0 +1,38 @@
+<div (click)="toggle($event)"
+     class="p-5 mobile:px-3 w-full hover:border-amber-600 rounded border-1 border-transparent shadow mb-1">
+
+  <div class="flex w-full justify-between items-center">
+
+    <div class="flex w-fit gap-[10%] items-center">
+      <img class="max-w-[30%] aspect-video rounded object-cover max-h-[50px]"
+           src="assets/img/sample.jpg" alt="{{place.name}}">
+      <p class="text-size-base font-bold">{{place.name}}</p>
+      <app-buttons *ngIf="open" (click)="$event.stopPropagation()" classes="min-w-[18px]" routerLink="/admin-place/1" iconSrc="assets/svg/edit.svg" [type]="ButtonType.iconButton"></app-buttons>
+    </div>
+
+    <img class="cursor-pointer" [ngClass]="open ? 'rotate-180' : ''" src="assets/svg/anchor-down-black.svg"
+         alt="Dropdown">
+
+  </div>
+
+  <div class="transition-all"
+       (click)="$event.stopPropagation()"
+       [ngClass]="open ? 'h-fit mt-5' : 'h-0'">
+    <div *ngIf="open" class="flex flex-col gap-4">
+      <div class="flex gap-2 mobile:flex-col">
+        <p class="text-size-base font-bold">Címe: </p>
+        <p class="text-size-base">{{place.address}}</p>
+      </div>
+      <img class="object-contain max-h-[300px] aspect-video" src="assets/img/sample.jpg" alt="{{place.name}}">
+      <div *ngFor="let question of place.questions" class="flex flex-col gap-3">
+        <div class="flex gap-1 mobile:flex-col">
+          <p class="text-size-base font-bold">Kérdés {{place.questions.indexOf(question) + 1}}: </p>
+          <p class="text-size-base">{{question.name}} </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>

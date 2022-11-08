@@ -1,0 +1,57 @@
+
+* {
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shadowButton:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+
+.anim-shake {
+  -webkit-animation-name: shake;
+  animation-name: shake;
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+
+}
+
+@-webkit-keyframes shake {
+  from,
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+}
+
+@keyframes shake {
+  from,
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  50%
+   {
+    -webkit-transform: translate3d(0px, -5px, 0);
+    transform: translate3d(0px, -5px, 0);
+  }
+}

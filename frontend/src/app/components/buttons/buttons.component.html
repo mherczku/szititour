@@ -1,0 +1,44 @@
+<div [ngSwitch]="type"
+     (click)="onClick($event)">
+
+  <p *ngSwitchCase="ButtonType.green"
+     class="p-2 text-size-base bg-green-600 p-2 !text-white shadowButton rounded {{classes}}">{{text}}
+  </p>
+
+  <div *ngSwitchCase="ButtonType.iconBlueHover" (mouseenter)="mouseOver = true" (mouseleave)="mouseOver = false"
+       class="{{classes}}  py-3  relative w-full flex cursor-pointer items-center flex-row justify-center gap-4">
+    <img [ngClass]="mouseOver ? 'anim-shake' : ''" class="w-[15%]" [src]="iconSrc" alt="Button Icon">
+    <p [ngClass]="mouseOver ? '' : ''" class="text-size-min italic">{{text}}</p>
+  </div>
+
+  <div *ngSwitchCase="ButtonType.iconButton" class="{{classes}} h-full items-center flex cursor-pointer text-size-base">
+    <img class="" [src]="iconSrc" alt="Icon">
+  </div>
+
+  <div *ngSwitchCase="ButtonType.simple"
+       [ngClass]="isDisabledBlocked ? 'opacity-60 cursor-not-allowed' : isDisabledProgress ? 'opacity-60 cursor-progress' : 'cursor-pointer'">
+    <p class="px-4 py-3 bg-m-blue text-size-base hover:bg-m-green rounded !text-white font-semibold {{classes}}">
+      {{text}}
+    </p>
+  </div>
+
+  <div *ngSwitchCase="ButtonType.hoverBold"
+       [ngClass]="isDisabledBlocked ? 'opacity-60 cursor-not-allowed' : isDisabledProgress ? 'opacity-60 cursor-progress' : 'cursor-pointer'">
+    <p class="hover:text-m-blue text-size-base hover:font-semibold {{classes}}">
+      {{text}}
+    </p>
+  </div>
+
+  <div *ngSwitchCase="ButtonType.hoverBoldTextChange" (mouseenter)="mouseOver = true"
+       [ngClass]="isDisabledBlocked ? 'opacity-60 cursor-not-allowed' : isDisabledProgress ? 'opacity-60 cursor-progress' : 'cursor-pointer'"
+       (mouseleave)="mouseOver = false">
+    <p class="!text-m-green text-size-base hover:font-semibold {{classes}}">
+      {{mouseOver ? textHover : text}}
+    </p>
+  </div>
+
+</div>
+
+
+
+

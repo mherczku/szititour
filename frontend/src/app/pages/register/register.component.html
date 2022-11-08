@@ -1,0 +1,19 @@
+<div class="relative flex justify-center mt-10 p-5">
+
+  <div class="relative neumorphism mobile:p-5 p-10 mobile:w-full">
+
+    <p class="text-size-h1 font-bold mb-10">Regisztráció</p>
+
+    <app-text-input classes="mb-5" placeholder="Add meg az e-mail címed" label="E-mail *"></app-text-input>
+    <app-text-input classes="mb-5" [password]="true" placeholder="Adj meg egy jelszót" label="Jelszó *"></app-text-input>
+    <app-text-input classes="mb-5" [password]="true" placeholder="Add meg még egyszer" label="Jelszó még egyszer *"></app-text-input>
+
+    <div class="flex justify-between items-center">
+      <app-buttons classes="hover:pr-12" [type]="ButtonType.hoverBoldTextChange" textHover="Lépj be!" text="Már van fiókod?"></app-buttons>
+      <app-buttons classes="" text="Regisztrálás"></app-buttons>
+    </div>
+  </div>
+
+
+</div>
+
