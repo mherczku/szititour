@@ -1,8 +1,14 @@
-<div class="flex mobile:flex-col justify-between bg-white shadow-2xl rounded p-5">
-  <div>
-    <app-text-input [(value)]="place.name" [type]="TextInputType.editableP"></app-text-input>
+<div class="flex w-full mobile:flex-col justify-between bg-white shadow-2xl rounded p-5">
+  <div class="w-[45%]">
+    <app-text-input classes="w-fit mb-5" [(value)]="place.name" [label]="'Name:'" [type]="TextInputType.editableP"></app-text-input>
+    <app-text-input classes="w-fit mb-5" [(value)]="place.address" [label]="'Address:'" [type]="TextInputType.editableP"></app-text-input>
+    <div class="border-1 w-[50%]">
+      <img class="aspect-video " [src]="place.img" alt="place image">
+    </div>
   </div>
-  <div>
+  <div class="w-[45%]">
+    <p class="text-size-lg">Questions:</p>
+
 
   </div>
 </div>
