@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {NetworkResponse} from "../interfaces/network-response";
 
 
 @Injectable({providedIn: 'root'})
@@ -11,8 +12,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  public login(email: string, password: string): Observable<unknown> {
-    return this.http.post<unknown>(`${this.baseUrl}/login`, {email: email, password: password})
+  public login(email: string, password: string): Observable<NetworkResponse> {
+    return this.http.post<NetworkResponse>(`${this.baseUrl}/login`, {email: email, password: password})
   }
 
   public register(email: string, password: string) /*Observable<unknown>*/ {
