@@ -11,7 +11,6 @@ module.exports = {
         'm-blue': '#218AEB',
         'kon-blue': '#25AAD3',
         'kon-orange': '#EB5221',
-        'smoke2': '#F8F8F8',
         'smoke': '#F5F5F5',
       },
       screens: {
