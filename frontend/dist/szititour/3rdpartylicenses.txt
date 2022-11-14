@@ -16,6 +16,12 @@ MIT
 @angular/router
 MIT
 
+@ngneat/hot-toast
+MIT
+
+@ngneat/overview
+MIT
+
 rxjs
 Apache-2.0
                                Apache License
