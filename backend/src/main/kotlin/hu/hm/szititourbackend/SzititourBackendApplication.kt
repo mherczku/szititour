@@ -15,7 +15,7 @@ class SzititourBackendApplication {
         val corsConfiguration = CorsConfiguration()
 
         corsConfiguration.allowCredentials = true
-        corsConfiguration.allowedOrigins = listOf("http://localhost:4200", "http://192.168.100.66:4200", "http://192.168.2.47:4200", "http://192.168.2.73:8082")
+        corsConfiguration.allowedOrigins = listOf("http://localhost:4200", "http://192.168.100.66:4200", "http://192.168.2.47:4200", "http://192.168.2.73:8082", "http://wildfire.ddns.net:8080")
         corsConfiguration.allowedHeaders = listOf(
             "Origin", "Access-Control-Allow-Origin", "Content-Type",
             "Accept", "Authorization", "Origin, Accept", "X-Requested-With",
