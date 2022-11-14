@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ButtonType } from 'src/app/enums/button-type';
 import {ListType} from "../../../enums/list-types";
 import {Game} from "../../../interfaces/game";
+import {AdminService} from "../../../services/AdminService";
 
 
 @Component({
@@ -14,14 +15,7 @@ export class GamesComponent implements OnInit {
   ButtonType = ButtonType;
   ListType = ListType;
 
-  games: Game[] = [
-    {applications: ["t1", "t2"], dateEnd: "2020.10.10", dateStart: "2020.10.10", id: 5, img: "assets/img/sample.jpg", places: ["p1", "p2"], title: "SampleTitle"},
-    {applications: [], dateEnd: "", dateStart: "", id: 1, places: [], title: ""},
-    {applications: [], dateEnd: "", dateStart: "", id: 2, places: [], title: ""},
-    {applications: [], dateEnd: "", dateStart: "", id: 3, places: [], title: ""},
-    {applications: [], dateEnd: "", dateStart: "", id: 4, places: [], title: ""}
-
-  ]
+  games: Game[] = []
   EDIT = "EDIT"
   TEAMS = "TEAMS"
   PLACES = "PLACES"
@@ -30,6 +24,14 @@ export class GamesComponent implements OnInit {
   placesModalVisible: boolean = false
 
   selectedGame: Game = {applications: [], dateEnd: "", dateStart: "", id: 0, places: [], title: ""}
+
+  constructor(private adminService: AdminService) { }
+
+  ngOnInit(): void {
+    this.adminService.getAllGames().subscribe((res: any) => {
+      this.games = res
+    })
+  }
 
   editGame(g: Game) {
     this.selectedGame = g
@@ -54,11 +56,6 @@ export class GamesComponent implements OnInit {
         break;
       }
     }
-  }
-
-  constructor() { }
-
-  ngOnInit(): void {
   }
 
 }

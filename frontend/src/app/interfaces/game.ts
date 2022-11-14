@@ -1,3 +1,4 @@
+import {Place} from "./place";
 
 export interface Game {
   id: number,
@@ -5,6 +6,6 @@ export interface Game {
   dateStart: string,
   dateEnd: string,
   img?: string,
-  places: string[],
+  places: Place[],
   applications: string[]
 }
