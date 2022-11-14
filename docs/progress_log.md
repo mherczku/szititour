@@ -75,11 +75,61 @@ Frontend környezet létrehozása, után szembesültem vele, hogy hiányzik a ba
 
 #### **7. hét:**
 
+- Backend: Spring Security megismerése
+- Frontend
+  - AuthService implementálása - token kezelés
+  - AuthInterceptor implementálása
+  - Login, Register felület
+  - Login összekötése Backende-l
+
+
+
+
 #### **8. hét:**
+
+- Frontend
+
+  - AuthService implementálása - token kezelés
+  - UnauthorizedInterceptor implementálása
+  - Model Interface-s elkészítése
+  - Buttons, GameCard, Navbar komponensek felületek elkészítése
+
+  - TextInput componensek implementálása
+
+  
 
 #### **9. hét:**
 
+- Frontend:
+
+  - ErrorInterceptor implementálása
+
+  - Dropdown, EditGame, EditPlace, List(team, place) komponens felületek elkészítése
+
+  - Modal komponens implementálása
+
+  - Routing - LazyLoad
+
+    
+
 #### **10. hét:**
+
+- Backend:
+  - SSL tesztelés, implementálás: cors fura ssl-en? + self signed certificate nem jó !
+  - Docker elérhetővé tétele távolról
+  - Update CORS policies
+
+- Frontend
+
+  - GitHub pages - GitHub workflow
+
+  - Docker elérhetővé tétele távolról
+
+  - AdminService - első rész - admin felület bekötésének elkezdése
+
+  - HotToast Notification Library telepítése, bekötése loginnál, interceptoroknál
+
+    
 
 #### **11. hét:**
 
