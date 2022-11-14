@@ -9,13 +9,15 @@ import {NavbarModule} from "./components/navbar/navbar.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptors/AuthInterceptor";
 import {AppRoutingModule} from "./app-routing.module";
+import {HotToastModule} from "@ngneat/hot-toast";
+import {ErrorInterceptor} from "./interceptors/ErrorInterceptor";
+import {UnauthorizedInterceptor} from "./interceptors/UnauthorizedInterceptor";
 
 @NgModule({
   declarations: [
     AppComponent,
     GridImageComponent,
     LoginFormComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -23,9 +25,12 @@ import {AppRoutingModule} from "./app-routing.module";
     BrowserAnimationsModule,
     NavbarModule,
     HttpClientModule,
+    HotToastModule.forRoot()
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]
 })
