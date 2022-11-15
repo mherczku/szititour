@@ -70,8 +70,9 @@ Sikerült az appot dockerizálni Arm architekúrára így a legfrissebb verziót
   - Környezet létrehozása
   - Authentikáció teszt
 
-
 Frontend környezet létrehozása, után szembesültem vele, hogy hiányzik a backend implementációból a Cross Origin Resource Sharing. Ennek utána olvasása közben megtudtam, hogy van elterjedtebb / biztonságosabb mondja Token utaztatásának (Authorization Bearer Header), így következő lépésben átírtam a backend controllereket erre a módszerre. (Postmanben is könnyebb így tesztelni, token-t megjegyzi). Létrehoztam egy bejelentkező felületet és kipróbáltam  a bejelentkezést, próba adat lekérést. Miután ezek működtek a következő feladatok az admin felületek elkészítése lesz.
+
+
 
 #### **7. hét:**
 
@@ -80,7 +81,10 @@ Frontend környezet létrehozása, után szembesültem vele, hogy hiányzik a ba
   - AuthService implementálása - token kezelés
   - AuthInterceptor implementálása
   - Login, Register felület
-  - Login összekötése Backende-l
+  - Login összekötése Backend-el
+
+Backenden Spring Security megismerkedésével és kipróbálásával túl sok idő elment, így arra jutottam nem fogom most átírni a Backend Security logikát, hanem majd leközelebb, amikor újra amúgy is nagyobb módosítást kell rajta végezni, inkább elkezdek haladni a Frontendel.
+Frontenden elkészítettem a Login és Register felületet, valamint ezeket összekötöttem Backendel is. A Token elkapásához / beillesztéséhez elkészítettem az AuthInterceptort és a Token (bejelentkezés) kezeléséhez pedig az AuthService-t implementáltam.
 
 
 
@@ -89,28 +93,30 @@ Frontend környezet létrehozása, után szembesültem vele, hogy hiányzik a ba
 
 - Frontend
 
-  - AuthService implementálása - token kezelés
+  - AuthService implementálása2 - token kezelés remove token
   - UnauthorizedInterceptor implementálása
-  - Model Interface-s elkészítése
+  - Model Interface-ek elkészítése
   - Buttons, GameCard, Navbar komponensek felületek elkészítése
-
   - TextInput componensek implementálása
-
   
+
+Elkészítettem az UnauthorizedInterceptor-t, ami a bejelentkezés felülethez navigál, ha ilyen elkap egy ilyen HttpErrorResponse-t. AuthService-t kiegészítettem a Token eltávolítása függvénnyel (kijelentkezéshez). Elkészítettem pár model Interface-t, hogy megfelelő adat modelleket használjon a Frontend is. A felületi komponensek közül megcsináltam a Buttons-t, GameCard-ot, Navbar-t, és a TextInputot.
+
+
 
 #### **9. hét:**
 
 - Frontend:
 
   - ErrorInterceptor implementálása
+- HotToast Notification Library telepítése, bekötése loginnál, interceptoroknál
+  - Dropdown, EditGame, List(team, place) komponens felületek elkészítése
+- Modal komponens implementálása
 
-  - Dropdown, EditGame, EditPlace, List(team, place) komponens felületek elkészítése
+Elkészítettem az ErrorInterceptor-t, ami a ErrorResponse esetén értesíti a felhasználót a hibáról. Ehhez telepítettem egy külső könyvtárat (HotToastAngular), mely használatával testreszabható értesítéseket küldhetek a felhasználónak. Ezt bekötöttem bejelentkezésnél és az Interceptoroknál.
+A felületi komponensek közül elkészítettem a Dropdown-t, EditGame-t, ListTeam-et és a ListPlace-t. Ezen kívül implementáltam egy sajátkészítésű Modal komponens-t, mely segítségével bármilyen popup/modal-t megtudok jeleníteni.
 
-  - Modal komponens implementálása
 
-  - Routing - LazyLoad
-
-    
 
 #### **10. hét:**
 
@@ -118,18 +124,20 @@ Frontend környezet létrehozása, után szembesültem vele, hogy hiányzik a ba
   - SSL tesztelés, implementálás: cors fura ssl-en? + self signed certificate nem jó !
   - Docker elérhetővé tétele távolról
   - Update CORS policies
-
 - Frontend
-
+- Routing - LazyLoad
   - GitHub pages - GitHub workflow
-
-  - Docker elérhetővé tétele távolról
-
+- Docker elérhetővé tétele távolról
   - AdminService - első rész - admin felület bekötésének elkezdése
 
-  - HotToast Notification Library telepítése, bekötése loginnál, interceptoroknál
 
-    
+A héten Frontenden implementáltam a Routing-ot Login-Register-AdminFelület-PlaceEdit oldalak között. Ezután, hogy be tudjam mutatni elérhetővé szerettem volna tenni távolról is az oldalt. Ehhez egyik megoldásnak a Github Pages-t találtam, aminek segítségével minden push után egy workflow lefut és kiteszi az App-ot egy GitHub oldalra (https://mherczku.github.io/szititour).
+Viszont ezzel a megoldással egyenlőre két probléma is van, egyik, hogy Https Secure backend kell hozzá, mivel az oldal is Secure. A másik, hogy Routing-ot nem ismeri fel ha Url-be kapja és nem találja meg úgy az oldalt.
+Ezért saját Docker-t csináltam Frontendből is, és elérhetővé tettem távolról azt. (majd GitHub-osat is szeretném ha jól működne) http://wildfire.ddns.net:8080 (t@test.hu : 1234)
+Azért, hogy Backendet elérje, azt is elérhetővé kellet tenni távolról, valamint frissíteni a CORS Policy-kat.
+Ezek mellet elkezdtem az AdminService implementálását, így az admin felület a Game-eket már backendről kapja.
+
+
 
 #### **11. hét:**
 
