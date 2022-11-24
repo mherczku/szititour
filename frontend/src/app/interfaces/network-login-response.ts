@@ -4,5 +4,5 @@ export interface NetworkLoginResponse {
   success: boolean,
   successMessage: string,
   errorMessage: string,
-  teamDto: Team
+  team: Team
 }

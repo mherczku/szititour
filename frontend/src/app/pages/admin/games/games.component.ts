@@ -24,6 +24,7 @@ export class GamesComponent implements OnInit {
   placesModalVisible: boolean = false
 
   selectedGame: Game = {applications: [], dateEnd: "", dateStart: "", id: 0, places: [], title: ""}
+  isGameEditing: boolean = false
 
   constructor(private adminService: AdminService) { }
 
@@ -35,6 +36,13 @@ export class GamesComponent implements OnInit {
 
   editGame(g: Game) {
     this.selectedGame = g
+    this.isGameEditing = true
+    this.changeModal(this.EDIT)
+  }
+
+  openNewGameDialog() {
+    this.selectedGame = {applications: [], dateEnd: "", dateStart: "", id: 0, places: [], title: ""}
+    this.isGameEditing = false
     this.changeModal(this.EDIT)
   }
 
@@ -57,5 +65,7 @@ export class GamesComponent implements OnInit {
       }
     }
   }
+
+
 
 }

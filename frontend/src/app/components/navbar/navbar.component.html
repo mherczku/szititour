@@ -2,11 +2,12 @@
   <div class="relative flex flex-row items-center gap-5 mobile:gap-3">
 
     <img class="w-[4rem] tablet:w-[4rem] mobile:w-[3rem]" src="assets/svg/szititour.svg" alt="Logo">
-    <p class="text-size-lg">Szititour</p>
+    <p class="text-size-lg">{{title}}</p>
   </div>
 
   <div class="flex flex-row mobile:hidden tablet:block">
-    <app-buttons routerLink="/login" text="Bejelentkezés"></app-buttons>
+    <app-buttons *ngIf="!isLoggedIn" routerLink="/login" text="Bejelentkezés"></app-buttons>
+    <app-buttons (onClicked)="logout()" *ngIf="isLoggedIn" text="Kijelentkezés"></app-buttons>
   </div>
   <div class="hidden mobile:block relative -translate-x-14 -translate-y-8" style="-webkit-tap-highlight-color: transparent">
     <div class="nav-container">

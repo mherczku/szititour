@@ -46,10 +46,11 @@ function initializeAuth(authService: AuthService): Function {
   return () => new Promise<void>((resolve) => {
     const token = authService.getToken()
     if(token) {
-      console.info("token ready to auth")
+      console.warn("Token ready")
       authService.authorizeMe().subscribe()
       resolve()
     } else {
+      console.warn("No token")
       resolve()
     }
   })

@@ -5,7 +5,7 @@ import {Observable, tap} from "rxjs";
 import {AuthState} from "../interfaces/states/auth-state";
 import {Store} from "@ngrx/store";
 import {Team} from "../interfaces/team";
-import { login } from "../actions/auth.actions";
+import {login, logout} from "../actions/auth.actions";
 import {Router} from "@angular/router";
 import {NetworkLoginResponse} from "../interfaces/network-login-response";
 
@@ -15,12 +15,12 @@ export class AuthService {
 
   private baseUrl = environment.apiBaseUrl + "/auth";
 
-  constructor(private http: HttpClient, private store: Store<AuthState>, private router: Router) { }
+  constructor(private http: HttpClient, private store: Store<{auth: AuthState}>, private router: Router) { }
 
   public login(email: string, password: string): Observable<NetworkLoginResponse> {
     return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, {email: email, password: password}).pipe(tap(evt => {
       if (evt.success) {
-        const team: Team = evt.teamDto
+        const team: Team = evt.team
         this.store.dispatch(login({team: team}))
         this.router.navigateByUrl("/admin")
       }
@@ -34,11 +34,17 @@ export class AuthService {
   public authorizeMe(): Observable<NetworkLoginResponse> {
     return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`).pipe(tap(evt => {
       if (evt.success) {
-        const team: Team = evt.teamDto
+        const team: Team = evt.team
         this.store.dispatch(login({team: team}))
         this.router.navigateByUrl("/admin")
       }
     }))
+  }
+
+  logout() {
+    this.removeToken()
+    this.store.dispatch(logout())
+    this.router.navigateByUrl('/login')
   }
 
   setToken(token: string) {
@@ -52,5 +58,4 @@ export class AuthService {
   removeToken() {
     localStorage.removeItem('auth-token')
   }
-
 }

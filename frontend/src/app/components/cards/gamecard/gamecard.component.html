@@ -1,15 +1,17 @@
-<div class="relative rounded hover:scale-105 duration-300 shadow-2xl ">
+<div class="relative rounded hover:scale-105 duration-300 shadow-2xl h-full">
 
-  <div class="flex flex-col">
+  <div class="flex flex-col h-full">
     <img class="aspect-video object-cover rounded-t" src="{{game.img}}" alt="Game's image">
     <div class="p-3">
       <div class="flex flex-row gap-3">
         <p class="font-bold text-size-base">{{game.title ? game.title : "No title"}}</p>
         <app-buttons classes="min-w-[20px]" (click)="onEditClicked.emit()" iconSrc="assets/svg/edit.svg" [type]="ButtonType.iconButton"></app-buttons>
       </div>
-      <p class="text-size-min">{{game.dateStart}} - {{game.dateEnd}}</p>
+      <p class="text-size-min">{{game.dateStart | date:'short'}} - {{game.dateEnd | date:'short'}}</p>
     </div>
+    <div class="flex-grow">
 
+    </div>
     <div class="flex flex-row w-full border-t-1">
       <app-buttons (click)="onPlacesClicked.emit()" classes="border-r-1" iconSrc="assets/svg/map.svg" text="{{game.places.length}} Helyszín"
                    [type]="ButtonType.iconBlueHover"></app-buttons>
