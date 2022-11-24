@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
@@ -12,6 +12,9 @@ import {AppRoutingModule} from "./app-routing.module";
 import {HotToastModule} from "@ngneat/hot-toast";
 import {ErrorInterceptor} from "./interceptors/ErrorInterceptor";
 import {UnauthorizedInterceptor} from "./interceptors/UnauthorizedInterceptor";
+import { StoreModule } from '@ngrx/store';
+import {AuthReducer} from "./reducers/auth.reducer";
+import {AuthService} from "./services/AuthService";
 
 @NgModule({
   declarations: [
@@ -25,14 +28,29 @@ import {UnauthorizedInterceptor} from "./interceptors/UnauthorizedInterceptor";
     BrowserAnimationsModule,
     NavbarModule,
     HttpClientModule,
-    HotToastModule.forRoot()
+    HotToastModule.forRoot(),
+    StoreModule.forRoot({auth: AuthReducer}, {})
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    { provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService], multi: true }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
+}
+
+function initializeAuth(authService: AuthService): Function {
+  return () => new Promise<void>((resolve) => {
+    const token = authService.getToken()
+    if(token) {
+      console.info("token ready to auth")
+      authService.authorizeMe().subscribe()
+      resolve()
+    } else {
+      resolve()
+    }
+  })
 }
