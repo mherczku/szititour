@@ -18,12 +18,12 @@ export class ListsComponent implements OnInit {
 
   @Input() type: ListType = ListType.teams
   @Input() teams: Team[] = [
-    {id: 0, name: "Team0"},
-    {id: 1, name: "Team1"},
-    {id: 2, name: "Team2", accepted: false},
-    {id: 3, name: "Team3", accepted: true},
-    {id: 4, name: "Team4"},
-    {id: 5, name: "Team5"},
+    {id: 0, name: "Team0", email: "", admin: false},
+    {id: 1, name: "Team1", email: "", admin: false},
+    {id: 2, name: "Team2", email: "", admin: false},
+    {id: 3, name: "Team3", email: "", admin: false},
+    {id: 4, name: "Team4", email: "", admin: false},
+    {id: 5, name: "Team5", email: "", admin: false},
   ]
   @Input() places: Place[] = [
     {
