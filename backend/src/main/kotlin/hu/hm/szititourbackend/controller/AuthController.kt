@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse
 @RequestMapping("/auth")
 class AuthController @Autowired constructor(private val teamService: TeamService) {
 
-    @GetMapping()
+    @GetMapping
     fun authorize(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, response: HttpServletResponse): ResponseEntity<LoginResponse> {
 
         val verification = AuthUtils.verifyToken(token)

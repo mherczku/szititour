@@ -7,5 +7,5 @@ class LoginResponse(
     val success: Boolean = true,
     val errorMessage: String = "",
     val successMessage: String = "",
-    val teamDto: TeamDto?
+    val team: TeamDto?
 )

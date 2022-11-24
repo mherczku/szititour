@@ -14,8 +14,18 @@ class SzititourBackendApplication {
     fun corsFilter(): CorsFilter {
         val corsConfiguration = CorsConfiguration()
 
+        val allowedOrigins = listOf(
+            "http://localhost:4200",
+            "http://192.168.100.66:4200",
+            "http://192.168.2.47:4200",
+            "http://192.168.2.73:8082",
+            "http://wildfire.ddns.net:8080",
+            "https://wildfire.ddns.net:8080",
+            "https://mherczku.github.io"
+        )
+
         corsConfiguration.allowCredentials = true
-        corsConfiguration.allowedOrigins = listOf("http://localhost:4200", "http://192.168.100.66:4200", "http://192.168.2.47:4200", "http://192.168.2.73:8082", "http://wildfire.ddns.net:8080")
+        corsConfiguration.allowedOrigins = allowedOrigins
         corsConfiguration.allowedHeaders = listOf(
             "Origin", "Access-Control-Allow-Origin", "Content-Type",
             "Accept", "Authorization", "Origin, Accept", "X-Requested-With",
