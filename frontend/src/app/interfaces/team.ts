@@ -3,6 +3,11 @@
 export interface Team {
   id: number,
   name: string,
+  email: string,
   img?: string,
-  accepted?: boolean
+  admin: boolean,
+  createdAt?: Date,
+  updatedAt?: Date,
+  applications?: any[],
+  members?: string[]
 }
