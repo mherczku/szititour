@@ -22,6 +22,9 @@ MIT
 @ngneat/overview
 MIT
 
+@ngrx/store
+MIT
+
 rxjs
 Apache-2.0
                                Apache License
