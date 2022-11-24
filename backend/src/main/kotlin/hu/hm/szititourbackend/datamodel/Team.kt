@@ -1,6 +1,4 @@
 package hu.hm.szititourbackend.datamodel
-
-import hu.hm.szititourbackend.dto.ApplicationDto
 import hu.hm.szititourbackend.dto.TeamDto
 import java.sql.Timestamp
 import java.time.Instant
@@ -38,7 +36,6 @@ fun Team.convertToDto(): TeamDto {
         this.id,
         this.name,
         this.email,
-        this.password,
         this.admin,
         this.img,
         this.createdAt,
