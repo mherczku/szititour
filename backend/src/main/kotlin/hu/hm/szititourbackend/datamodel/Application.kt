@@ -12,7 +12,8 @@ class Application(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     val id: Int = 0,
-    var isAccepted: Boolean = false,
+    @Column(nullable = true)
+    var isAccepted: Boolean? = null,
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
@@ -31,7 +32,8 @@ fun Application.convertToDto(): ApplicationDto {
         this.createdAt,
         this.updatedAt,
         this.game.id,
-        this.team.id
+        this.team.id,
+        this.team.name
     )
 }
 

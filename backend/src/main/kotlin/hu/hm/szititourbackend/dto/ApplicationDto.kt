@@ -6,9 +6,10 @@ import java.time.Instant
 
 class ApplicationDto(
     val id: Int = 0,
-    val isAccepted: Boolean = false,
+    val isAccepted: Boolean? = null,
     val createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     val updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
     val gameId: Int,
-    val teamId: Int
+    val teamId: Int,
+    val teamName: String
 )

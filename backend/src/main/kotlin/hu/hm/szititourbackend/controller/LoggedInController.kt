@@ -1,6 +1,7 @@
 package hu.hm.szititourbackend.controller
 
 import hu.hm.szititourbackend.datamodel.Answer
+import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.convertToActiveDto
 import hu.hm.szititourbackend.dto.*
 import hu.hm.szititourbackend.extramodel.Response
@@ -59,6 +60,10 @@ class LoggedInController @Autowired constructor(
         if (!verification.verified) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
+        val application = teamService.getTeamsApplicationByTeamIds(verification.teamId, gameId)
+        if(application.isPresent) {
+            ResponseEntity(Response(success = false, errorMessage = "This Team has an application already"), HttpStatus.ALREADY_REPORTED)
+        }
         return try {
             applicationService.createApplication(gameId, verification.teamId)
             ResponseEntity(Response(success = true), HttpStatus.CREATED)
@@ -81,8 +86,21 @@ class LoggedInController @Autowired constructor(
             if (!application.isPresent) {
                 ResponseEntity(Response(success = false), HttpStatus.NOT_FOUND)
             }
-            applicationService.deleteApplicationById(application.get().id)
-            ResponseEntity(Response(success = true), HttpStatus.OK)
+            else {
+                val applicationGot: Application = application.get()
+                if(applicationGot.isAccepted == null) {
+                    applicationService.deleteApplicationById(application.get().id)
+                    ResponseEntity(Response(success = true), HttpStatus.OK)
+                }
+                else if(applicationGot.isAccepted!!){
+                    applicationService.deleteApplicationById(application.get().id)
+                    ResponseEntity(Response(success = true), HttpStatus.OK)
+                }
+                else {
+                    ResponseEntity(Response(success = false, errorMessage = "Cannot cancel refused application"), HttpStatus.FORBIDDEN)
+                }
+            }
+
         } catch (e: Exception) {
             ResponseEntity(Response(success = false, errorMessage = e.localizedMessage), HttpStatus.BAD_REQUEST)
         }
@@ -147,13 +165,18 @@ class LoggedInController @Autowired constructor(
 
     private fun hasTeamAcceptedApplicationToGame(teamId: Int, gameId: Int): Boolean {
         val application = teamService.getTeamsApplicationByTeamIds(teamId, gameId)
-        return (application.isPresent && application.get().isAccepted)
+        return if (application.isPresent && application.get().isAccepted != null) {
+            (application.get().isAccepted!!)
+        } else false
+
     }
 
     private fun hasTeamAcceptedApplicationToGameByQuestionId(teamId: Int, questionId: Int): Boolean {
         val gameId = questionService.getQuestionById(questionId).get().place.game.id
         val application = teamService.getTeamsApplicationByTeamIds(teamId, gameId)
-        return (application.isPresent && application.get().isAccepted)
+        return if (application.isPresent && application.get().isAccepted != null) {
+            (application.get().isAccepted!!)
+        } else false
     }
 
 }
