@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ButtonType } from 'src/app/enums/button-type';
 import {ListType} from "../../../enums/list-types";
 import {Game} from "../../../interfaces/game";
 import {AdminService} from "../../../services/AdminService";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -10,7 +11,7 @@ import {AdminService} from "../../../services/AdminService";
   templateUrl: './games.component.html',
   styleUrls: ['./games.component.css']
 })
-export class GamesComponent implements OnInit {
+export class GamesComponent implements OnInit, OnDestroy {
 
   ButtonType = ButtonType;
   ListType = ListType;
@@ -23,30 +24,43 @@ export class GamesComponent implements OnInit {
   teamsModalVisible: boolean = false
   placesModalVisible: boolean = false
 
-  selectedGame: Game = {applications: [], dateEnd: "", dateStart: "", id: 0, places: [], title: ""}
+  selectedGame: Game = {applications: [], id: 0, places: [], title: "", dateStart: new Date(), dateEnd: new Date()}
   isGameEditing: boolean = false
+
+  subscriptionGetGames?: Subscription
 
   constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
-    this.adminService.getAllGames().subscribe((res: any) => {
+    this.getGames()
+  }
+
+  getGames() {
+    this.subscriptionGetGames = this.adminService.getAllGames().subscribe((res: any) => {
       this.games = res
+      console.log(this.games)
+
     })
   }
 
   editGame(g: Game) {
-    this.selectedGame = g
     this.isGameEditing = true
-    this.changeModal(this.EDIT)
+    this.changeModal(this.EDIT, g)
   }
 
   openNewGameDialog() {
-    this.selectedGame = {applications: [], dateEnd: "", dateStart: "", id: 0, places: [], title: ""}
+    const newGame = {applications: [], id: 0, places: [], title: "", dateStart: new Date(), dateEnd: new Date()}
     this.isGameEditing = false
-    this.changeModal(this.EDIT)
+    this.changeModal(this.EDIT, newGame)
   }
 
-  changeModal(m: string) {
+  closeEditModal() {
+    this.editModalVisible = false
+    this.getGames()
+  }
+
+  changeModal(m: string, selected: Game) {
+    this.selectedGame = selected
     this.editModalVisible = false
     this.teamsModalVisible = false
     this.placesModalVisible = false
@@ -66,6 +80,7 @@ export class GamesComponent implements OnInit {
     }
   }
 
-
-
+  ngOnDestroy(): void {
+    this.subscriptionGetGames?.unsubscribe()
+  }
 }

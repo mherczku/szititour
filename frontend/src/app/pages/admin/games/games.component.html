@@ -4,8 +4,8 @@
     <div class="fixed z-10 w-[3rem] h-[3rem] text-size-base right-20 bottom-20">
       <app-buttons (onClicked)="openNewGameDialog()" classes="hover:scale-110 active:opacity-70 transition" [type]="ButtonType.iconButton" iconSrc="assets/svg/add.svg"></app-buttons>
     </div>
-    <app-gamecard [game]="game" (onPlacesClicked)="changeModal(PLACES)" (onTeamsClicked)="changeModal(TEAMS)"
-                  (onEditClicked)="editGame(game)" *ngFor="let game of games"></app-gamecard>
+    <app-gamecard [game]="game" (onPlacesClicked)="changeModal(PLACES, game)" (onTeamsClicked)="changeModal(TEAMS, game)"
+                  (onEditClicked)="editGame(game)" (onDeleted)="getGames()" *ngFor="let game of games"></app-gamecard>
   </div>
 
 </div>
@@ -13,16 +13,16 @@
 
 <!-- Edit modal -->
 <app-modal [(isDisplayed)]="editModalVisible">
-  <app-edit-game [isEdit]="isGameEditing" [game]="selectedGame"></app-edit-game>
+  <app-edit-game (onClose)="closeEditModal()" [isEdit]="isGameEditing" [game]="selectedGame"></app-edit-game>
 </app-modal>
 
-<!-- Teams modal -->
+<!-- Applications modal -->
 <app-modal classes="w-full" [(isDisplayed)]="teamsModalVisible">
-  <app-lists ></app-lists>
+  <app-lists [(applications)]="selectedGame.applications" ></app-lists>
 </app-modal>
 
 <!-- Places modal -->
 <app-modal classes="w-full" [(isDisplayed)]="placesModalVisible">
-  <app-lists  [type]="ListType.places"></app-lists>
+  <app-lists [places]="selectedGame.places" [type]="ListType.places"></app-lists>
 </app-modal>
 
