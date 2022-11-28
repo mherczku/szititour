@@ -1,31 +1,75 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Place} from "../../../interfaces/place";
+import {ActivatedRoute} from "@angular/router";
+import {AdminService} from "../../../services/AdminService";
+import {HotToastService} from "@ngneat/hot-toast";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-place',
   templateUrl: './place.component.html',
   styleUrls: ['./place.component.css']
 })
-export class PlaceComponent implements OnInit {
+export class PlaceComponent implements OnInit, OnDestroy {
 
   place: Place = {
     id: 0,
-    name: "Place1",
+    name: "Place Name",
     img: "",
-    gameId: -1,
-    address: "Budapest Test Address street 1",
-    latitude: '12,123',
-    longitude: "123.12312",
-    questions: [
-      {name: "Mi ez?", placeId: 1, type: 1, isRiddle: false, id: 0},
-      {name: "Mi ez?", placeId: 1, type: 1, isRiddle: false, id: 1}
-    ]
+    gameId: 0,
+    address: "Place Address",
+    latitude: '0',
+    longitude: "0",
+    questions: []
   }
 
-  constructor() {
+  placeId: number = 0
+  isEdit: boolean = true
+
+  subscriptionGet?: Subscription
+
+  constructor(private route: ActivatedRoute, private adminService: AdminService, private alert: HotToastService) {
   }
 
   ngOnInit(): void {
+    this.route.params.subscribe(p => {
+      const id = p['id']
+      if (id === 'new') {
+        this.isEdit = false
+        this.placeId = 0
+        this.place = {
+          id: 0,
+          name: "Place Name",
+          img: "",
+          gameId: 0,
+          address: "Place Address",
+          latitude: '0',
+          longitude: "0",
+          questions: []
+        }
+
+      } else {
+        this.placeId = id
+        this.isEdit = true
+        this.getPlace()
+      }
+
+    })
+  }
+
+  getPlace(): void {
+    this.subscriptionGet = this.adminService.getPlaceById(this.placeId).subscribe({
+      next: value => {
+        this.place = value
+      },
+      error: err => {
+        console.log(err)
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionGet?.unsubscribe()
   }
 
 }
