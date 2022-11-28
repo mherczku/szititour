@@ -1,4 +1,4 @@
 export enum ListType {
-  teams,
+  applications,
   places
 }

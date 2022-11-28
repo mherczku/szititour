@@ -1,20 +1,20 @@
-<div *ngIf="type === ListType.teams" class="flex flex-col gap-3 relative bg-white p-5 rounded shadow w-full max-h-[80vh]">
+<div *ngIf="type === ListType.applications" class="flex flex-col gap-3 relative bg-white p-5 rounded shadow w-full max-h-[80vh]">
   <p class="text-size-lg text-center w-full font-bold mb-6">Csapatok</p>
   <div class="overflow-y-auto h-fit">
-    <div *ngFor="let team of teams"
+    <div *ngFor="let application of applications"
          class="flex justify-between mobile:flex-col gap-10 p-5 pr-10 hover:border-amber-600 rounded border-1 border-transparent shadow items-center"
-         [ngClass]="[team.admin === true ? 'bg-green-200' : '', team.admin === false ? 'bg-red-200' : '']">
+         [ngClass]="[application.accepted === true ? 'bg-green-200' : '', application.accepted === false ? 'bg-red-200' : '']">
 
       <div class="flex w-fit gap-[10%] items-center">
         <img class="max-w-[50px] aspect-square rounded-[100%] object-cover max-h-[50px]"
-             src="assets/img/team-placeholder.jpg" alt="{{team.name}}">
-        <p class="text-size-base font-bold">{{team.name}}</p>
+             src="assets/img/team-placeholder.jpg" alt="{{application.teamName}}">
+        <p class="text-size-base font-bold">{{application.teamName}}</p>
       </div>
 
       <div class="flex h-full w-fit gap-[10%] items-center">
-        <app-buttons [ngClass]="team.admin !== false ? '' : 'invisible'" classes="w-[3rem] hover:opacity-70 rotate-y-180" [type]="ButtonType.iconButton"
+        <app-buttons [isDisabledProgress]="reviewing" (onClicked)="reviewApplication(application, false)" [ngClass]="application.accepted !== false ? '' : 'invisible'" classes="w-[3rem] hover:opacity-70 rotate-y-180" [type]="ButtonType.iconButton"
                      iconSrc="assets/svg/bear-red.svg"></app-buttons>
-        <app-buttons [ngClass]="team.admin !== true ? '' : 'invisible'" classes="w-[3rem] hover:opacity-70 " [type]="ButtonType.iconButton"
+        <app-buttons [isDisabledProgress]="reviewing" (onClicked)="reviewApplication(application, true)" [ngClass]="application.accepted !== true ? '' : 'invisible'" classes="w-[3rem] hover:opacity-70 " [type]="ButtonType.iconButton"
                      iconSrc="assets/svg/bear-green.svg"></app-buttons>
       </div>
     </div>
@@ -27,7 +27,11 @@
 
   <div class="h-fit overflow-y-auto">
     <app-dropdown *ngFor="let place of places" [place]="place"></app-dropdown>
+    <p *ngIf="places.length === 0" class="text-size-base bold text-center">No places yet</p>
   </div>
 
+  <div class="absolute z-10 w-[3rem] h-[3rem] text-size-base right-10 bottom-10">
+    <app-buttons routerLink="/admin-place/new" classes="hover:scale-110 active:opacity-70 transition" [type]="ButtonType.iconButton" iconSrc="assets/svg/add.svg"></app-buttons>
+  </div>
 
 </div>
