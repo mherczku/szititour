@@ -8,6 +8,8 @@ import {Team} from "../interfaces/team";
 import {login, logout} from "../actions/auth.actions";
 import {Router} from "@angular/router";
 import {NetworkLoginResponse} from "../interfaces/network-login-response";
+import {NetworkResponse} from "../interfaces/network-response";
+import {HotToastService} from "@ngneat/hot-toast";
 
 
 @Injectable({providedIn: 'root'})
@@ -15,20 +17,35 @@ export class AuthService {
 
   private baseUrl = environment.apiBaseUrl + "/auth";
 
-  constructor(private http: HttpClient, private store: Store<{auth: AuthState}>, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private store: Store<{ auth: AuthState }>,
+    private router: Router,
+    private alertService: HotToastService) {
+  }
 
   public login(email: string, password: string): Observable<NetworkLoginResponse> {
-    return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, {email: email, password: password}).pipe(tap(evt => {
+    return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, {
+      email: email,
+      password: password
+    }).pipe(tap(evt => {
       if (evt.success) {
         const team: Team = evt.team
-        this.store.dispatch(login({team: team}))
-        this.router.navigateByUrl("/admin")
+        if (team.admin) {
+          this.store.dispatch(login({team: team}))
+          this.router.navigateByUrl("/admin")
+        }
+        // todo remove when user site is ready
+        else {
+          this.alertService.warning("User site is under development... Logging out")
+          this.logout()
+        }
       }
     }))
   }
 
-  public register(email: string, password: string) /*Observable<unknown>*/ {
-    /*return this.http.post<unknown>(`${this.baseUrl}/register`, {email: email, password: password})*/
+  public register(email: string, password: string): Observable<NetworkResponse> {
+    return this.http.post<NetworkResponse>(`${this.baseUrl}/register`, {email: email, password: password})
   }
 
   public authorizeMe(): Observable<NetworkLoginResponse> {
@@ -36,7 +53,7 @@ export class AuthService {
       if (evt.success) {
         const team: Team = evt.team
         this.store.dispatch(login({team: team}))
-        this.router.navigateByUrl("/admin")
+        //this.router.navigateByUrl("/admin")
       }
     }))
   }
