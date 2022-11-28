@@ -88,11 +88,11 @@ class LoggedInController @Autowired constructor(
             }
             else {
                 val applicationGot: Application = application.get()
-                if(applicationGot.isAccepted == null) {
+                if(applicationGot.accepted == null) {
                     applicationService.deleteApplicationById(application.get().id)
                     ResponseEntity(Response(success = true), HttpStatus.OK)
                 }
-                else if(applicationGot.isAccepted!!){
+                else if(applicationGot.accepted!!){
                     applicationService.deleteApplicationById(application.get().id)
                     ResponseEntity(Response(success = true), HttpStatus.OK)
                 }
@@ -165,8 +165,8 @@ class LoggedInController @Autowired constructor(
 
     private fun hasTeamAcceptedApplicationToGame(teamId: Int, gameId: Int): Boolean {
         val application = teamService.getTeamsApplicationByTeamIds(teamId, gameId)
-        return if (application.isPresent && application.get().isAccepted != null) {
-            (application.get().isAccepted!!)
+        return if (application.isPresent && application.get().accepted != null) {
+            (application.get().accepted!!)
         } else false
 
     }
@@ -174,8 +174,8 @@ class LoggedInController @Autowired constructor(
     private fun hasTeamAcceptedApplicationToGameByQuestionId(teamId: Int, questionId: Int): Boolean {
         val gameId = questionService.getQuestionById(questionId).get().place.game.id
         val application = teamService.getTeamsApplicationByTeamIds(teamId, gameId)
-        return if (application.isPresent && application.get().isAccepted != null) {
-            (application.get().isAccepted!!)
+        return if (application.isPresent && application.get().accepted != null) {
+            (application.get().accepted!!)
         } else false
     }
 
