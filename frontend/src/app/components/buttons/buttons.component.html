@@ -11,6 +11,12 @@
     <p [ngClass]="mouseOver ? '' : ''" class="text-size-min italic">{{text}}</p>
   </div>
 
+  <div *ngSwitchCase="ButtonType.deleteButton" class="{{classes}} h-[30px] w-[30px] relative z-10 items-center flex text-size-base deleteButton"
+       [ngClass]="isDisabledBlocked ? 'opacity-60 cursor-not-allowed' : isDisabledProgress ? 'opacity-60 cursor-progress' : 'cursor-pointer'">
+    <img class="absolute hover bottom-0 left-0" src="assets/svg/delete-red.svg" alt="Delete Icon">
+    <img class="absolute noHover bottom-0 left-0" src="assets/svg/delete.svg" alt="Delete Icon">
+  </div>
+
   <div *ngSwitchCase="ButtonType.iconButton" class="{{classes}} h-full items-center flex text-size-base"
        [ngClass]="isDisabledBlocked ? 'opacity-60 cursor-not-allowed' : isDisabledProgress ? 'opacity-60 cursor-progress' : 'cursor-pointer'">
     <img class="" [src]="iconSrc" alt="Icon">

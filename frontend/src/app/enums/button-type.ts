@@ -6,4 +6,5 @@ export enum ButtonType {
   nav,
   hoverBold,
   hoverBoldTextChange,
+  deleteButton,
 }

@@ -4,6 +4,19 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+.deleteButton:hover .hover {
+  visibility: visible;
+}
+.deleteButton .hover {
+  visibility: hidden;
+}
+.deleteButton:hover .noHover {
+  visibility: hidden;
+}
+.deleteButton .noHover {
+  visibility: visible;
+}
+
 .shadowButton:hover {
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
