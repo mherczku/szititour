@@ -7,26 +7,26 @@ const routes: Routes = [
   /*{path: '', loadChildren: () => import('./pages/').then(m => m.HomeModule)},*/
   {
     path: 'register',
-    canLoad: [AuthGuard],
+    //canLoad: [AuthGuard],
     canActivateChild: [AuthGuard],
     loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterModule)
   },
   {
     path: 'login',
-    canLoad: [AuthGuard],
+    //canLoad: [AuthGuard],
     canActivateChild: [AuthGuard],
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule)
   },
   {
     path: 'admin',
-    canLoad: [AuthGuard],
+    //canLoad: [AuthGuard],
     canActivateChild: [AuthGuard],
     loadChildren: () => import('./pages/admin/games/games.module').then(m => m.GamesModule)
   },
 
   {
     path: 'admin-place/:id',
-    canLoad: [AuthGuard],
+    //canLoad: [AuthGuard],
     canActivateChild: [AuthGuard],
     loadChildren: () => import('./pages/admin/place/place.module').then(m => m.PlaceModule),
   },
@@ -35,7 +35,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled', onSameUrlNavigation: 'reload'})],
+  imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled', onSameUrlNavigation: 'ignore'})],
   exports: [RouterModule]
 })
 

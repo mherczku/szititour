@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {
-    ActivatedRouteSnapshot,
+  ActivatedRouteSnapshot,
   CanActivateChild,
   CanLoad,
   Route,
@@ -55,25 +55,13 @@ export class AuthGuard implements CanLoad, CanActivateChild {
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     const url: string = state.url
 
-    console.warn('url: ',url)
-    console.warn('loggedIN: ',this.loggedIn)
-    console.log('Mustbeloggedin: ',this.mustBeLoggedIn.indexOf(url) === -1)
-    console.log('MustbeloggedOut: ',this.mustBeLoggedOut.indexOf(url) === -1)
-
-
     return this.loggedIn ?
       this.mustBeLoggedOutStates.indexOf(url) === -1 ? true : this.router.navigate(['/admin']) :
       this.mustBeLoggedInStates.indexOf(url) === -1 ? true : this.router.navigate(['/login'])
-    }
+  }
 
   canLoad(route: Route, segments: UrlSegment[]): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     const url: string = route.path ? route.path : 'none';
-
-    console.warn('url: ',url)
-    console.warn('loggedIN: ',this.loggedIn)
-    console.log('Mustbeloggedin: ',this.mustBeLoggedIn.indexOf(url) === -1)
-    console.log('MustbeloggedOut: ',this.mustBeLoggedOut.indexOf(url) === -1)
-
 
     return this.loggedIn ?
       this.mustBeLoggedOut.indexOf(url) === -1 ? true : this.router.navigate(['/admin']) :
