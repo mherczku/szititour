@@ -1,10 +1,10 @@
-<div class="relative bg-white p-5 rounded overflow-y-auto max-h-[80vh]">
+<div class="relative bg-white p-5 rounded overflow-y-auto max-h-[80vh] flex-col flex">
   <p class="text-size-h3 text-center w-full font-bold mb-6">{{this.isEdit ? this.game.title + " szerkesztése" : "Új játék létrehozása"}}</p>
   <app-text-input [(value)]="game.title" classes="mb-4" label="Neve"></app-text-input>
-  <app-text-input [(value)]="game.dateStart" classes="mb-4" label="Kezdés dátuma"></app-text-input>
-  <app-text-input [(value)]="game.dateEnd" classes="mb-4" label="Befejezés dátuma"></app-text-input>
+  <app-date-input name="Kezdő időpont" classes="mb-4" [(date)]="game.dateStart"></app-date-input>
+  <app-date-input name="Befejező időpont" classes="mb-5" [(date)]="game.dateEnd"></app-date-input>
   <div class="w-full flex justify-between">
-    <app-buttons text="Vissza" [type]="ButtonType.simple"></app-buttons>
-    <app-buttons text="Mentés" [type]="ButtonType.simple"></app-buttons>
+    <app-buttons (onClicked)="onClose.emit()" text="Vissza" [type]="ButtonType.simple"></app-buttons>
+    <app-buttons [isDisabledProgress]="saving" (onClicked)="save()" [text]="this.isEdit ? 'Mentés' : 'Létrehozás'" [type]="ButtonType.simple"></app-buttons>
   </div>
 </div>
