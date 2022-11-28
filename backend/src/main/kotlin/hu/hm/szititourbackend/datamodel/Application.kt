@@ -17,15 +17,16 @@ class Application(
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
-    @ManyToOne
+    @ManyToOne(cascade = [CascadeType.ALL])
     val game: Game = Game(),
 
-    @ManyToOne
+    @ManyToOne(cascade = [CascadeType.ALL])
     val team: Team = Team()
 
 )
 
 fun Application.convertToDto(): ApplicationDto {
+    println("application convert to dto ${this.isAccepted}")
     return ApplicationDto(
         this.id,
         this.isAccepted,
