@@ -44,8 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 return 'Logged in'
               }
               return 'Login failed'
-            },
-            error: (e: HttpErrorResponse) => 'Something went wrong',
+            }
           }
         )
       ).subscribe((res: NetworkResponse) => {
