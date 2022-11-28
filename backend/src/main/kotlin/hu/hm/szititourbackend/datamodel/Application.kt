@@ -26,7 +26,6 @@ class Application(
 )
 
 fun Application.convertToDto(): ApplicationDto {
-    println("application convert to dto ${this.accepted}")
     return ApplicationDto(
         id = this.id,
         accepted =  this.accepted,
