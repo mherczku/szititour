@@ -35,7 +35,7 @@ import {AuthService} from "./services/AuthService";
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    { provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService], multi: true }
+    {provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService], multi: true }
   ],
   bootstrap: [AppComponent]
 })
