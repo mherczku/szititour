@@ -109,9 +109,9 @@ Elkészítettem az UnauthorizedInterceptor-t, ami a bejelentkezés felülethez n
 - Frontend:
 
   - ErrorInterceptor implementálása
-- HotToast Notification Library telepítése, bekötése loginnál, interceptoroknál
+  - HotToast Notification Library telepítése, bekötése loginnál, interceptoroknál
   - Dropdown, EditGame, List(team, place) komponens felületek elkészítése
-- Modal komponens implementálása
+  - Modal komponens implementálása
 
 Elkészítettem az ErrorInterceptor-t, ami a ErrorResponse esetén értesíti a felhasználót a hibáról. Ehhez telepítettem egy külső könyvtárat (HotToastAngular), mely használatával testreszabható értesítéseket küldhetek a felhasználónak. Ezt bekötöttem bejelentkezésnél és az Interceptoroknál.
 A felületi komponensek közül elkészítettem a Dropdown-t, EditGame-t, ListTeam-et és a ListPlace-t. Ezen kívül implementáltam egy sajátkészítésű Modal komponens-t, mely segítségével bármilyen popup/modal-t megtudok jeleníteni.
@@ -141,7 +141,33 @@ Ezek mellet elkezdtem az AdminService implementálását, így az admin felület
 
 #### **11. hét:**
 
+- Backend:
+  - AuthorizeMe Endpoint elkészítése
+  - SSL fix/implementálás, CORS frissítése
+  - Frissítés/Fix docker java verzió problémák
+- Frontend:
+  - AuthActions, AuthState, AuthReducer Implementálása
+  - Auth Guard Implementálása - CanActivateChild - Route-k védelméért
+  - AuthorizeMe implementálása - AuthService frissítése- APP_INITIALIZER elkészítése (app.module)
+  - Fix interfaces - eredeti backend modellek, és hiányzó attribútumok
+
+
+
 #### **12. hét:**
+
+- Backend:
+  - Fix CascadeType problémák (game-team, game-place, game-application, team-application)
+  - Fix metódus applyForGame, updateApplication
+- Frontend:
+  - Fix interceptors, több hiba kezelés - alertek
+  - Register bekötése + hibakezelés
+  - Hiányzó Admin service metódusok implementálása 
+    - Game (create, delete, update)
+    - Application(Accept / Decline)
+  - Felületi logikák bekötése bekötése Admin - Game page
+  - PlaceEdit felület elkészítése, Place lekérés bekötése (new - új létrehozása), edittext
+
+
 
 #### **13. hét:**
 
