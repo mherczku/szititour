@@ -13,28 +13,28 @@ class Application(
     @Column(nullable = false, updatable = false)
     val id: Int = 0,
     @Column(nullable = true)
-    var isAccepted: Boolean? = null,
+    var accepted: Boolean? = null,
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne()
     val game: Game = Game(),
 
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne()
     val team: Team = Team()
 
 )
 
 fun Application.convertToDto(): ApplicationDto {
-    println("application convert to dto ${this.isAccepted}")
+    println("application convert to dto ${this.accepted}")
     return ApplicationDto(
-        this.id,
-        this.isAccepted,
-        this.createdAt,
-        this.updatedAt,
-        this.game.id,
-        this.team.id,
-        this.team.name
+        id = this.id,
+        accepted =  this.accepted,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt,
+        gameId =  this.game.id,
+        teamId =  this.team.id,
+        teamName =  this.team.name
     )
 }
 

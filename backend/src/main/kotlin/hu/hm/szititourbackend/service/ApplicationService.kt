@@ -16,12 +16,12 @@ import java.util.*
 class ApplicationService @Autowired constructor(private val applicationRepository: ApplicationRepository){
 
     fun createApplication(gameId: Int, teamId: Int) {
-        val application = Application(team = Team(id=teamId), game = Game(id = gameId), isAccepted = null)
+        val application = Application(team = Team(id=teamId), game = Game(id = gameId), accepted = null)
         addApplication(application)
     }
 
     fun addApplication(application: Application): Application {
-        application.isAccepted = null
+        application.accepted = null
         application.createdAt = Timestamp(System.currentTimeMillis())
         application.updatedAt = Timestamp(System.currentTimeMillis())
         return applicationRepository.save(application)
