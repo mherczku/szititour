@@ -25,7 +25,7 @@ class Game(
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
 
-    @OneToMany(mappedBy = "game", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST])
     @Fetch(FetchMode.JOIN)
     val places: MutableList<Place> = mutableListOf(),
 
