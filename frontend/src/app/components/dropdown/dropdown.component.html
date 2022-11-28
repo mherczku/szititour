@@ -5,9 +5,9 @@
 
     <div class="flex w-fit gap-[10%] items-center">
       <img class="max-w-[30%] aspect-video rounded object-cover max-h-[50px]"
-           src="assets/img/sample.jpg" alt="{{place.name}}">
-      <p class="text-size-base font-bold">{{place.name}}</p>
-      <app-buttons *ngIf="open" (click)="$event.stopPropagation()" classes="min-w-[18px]" routerLink="/admin-place/1" iconSrc="assets/svg/edit.svg" [type]="ButtonType.iconButton"></app-buttons>
+           [src]="place.img" alt="{{place.name}}">
+      <p class="text-size-base font-bold min-w-max">{{place.name}}</p>
+      <app-buttons *ngIf="open" (click)="$event.stopPropagation()" classes="min-w-[18px]" routerLink="/admin-place/{{place.id}}" iconSrc="assets/svg/edit.svg" [type]="ButtonType.iconButton"></app-buttons>
     </div>
 
     <img class="cursor-pointer" [ngClass]="open ? 'rotate-180' : ''" src="assets/svg/anchor-down-black.svg"
@@ -23,7 +23,7 @@
         <p class="text-size-base font-bold">Címe: </p>
         <p class="text-size-base">{{place.address}}</p>
       </div>
-      <img class="object-contain max-h-[300px] aspect-video" src="assets/img/sample.jpg" alt="{{place.name}}">
+      <img class="object-contain max-h-[300px] aspect-video" [src]="place.img" alt="{{place.name}}">
       <div *ngFor="let question of place.questions" class="flex flex-col gap-3">
         <div class="flex gap-1 mobile:flex-col">
           <p class="text-size-base font-bold">Kérdés {{place.questions.indexOf(question) + 1}}: </p>
