@@ -1,11 +1,12 @@
 import {Place} from "./place";
+import {Application} from "./application";
 
 export interface Game {
   id: number,
   title: string,
-  dateStart: string,
-  dateEnd: string,
+  dateStart: Date,
+  dateEnd: Date,
   img?: string,
   places: Place[],
-  applications: string[]
+  applications: Application[]
 }
