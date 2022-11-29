@@ -151,7 +151,8 @@ Ezek mellet elkezdtem az AdminService implementálását, így az admin felület
   - AuthorizeMe implementálása - AuthService frissítése- APP_INITIALIZER elkészítése (app.module)
   - Fix interfaces - eredeti backend modellek, és hiányzó attribútumok
 
-
+A hét a Frontend biztonságossá tételével ment el. Ehhez Backenden kellet egy két módosítás, egy új endpoint, egy nem self signed certificate, cors frissítések. Docker implementáción is módosítottam, hogy újabb java verziójú image-t használjon, mivel a régivel lett pár probléma.
+Frontenden elkészítettem az AuthAction-öket, AuthState-t, AuthReducer-t, AuthService-be megírtam az új authorizeMe függvényt. Ezeket felhasználva elkészítettem és bekötöttem az AuthGuard-ot, és az Initializer-t. Menet közben implentáltam a hiányzó Backendes modelekket, attribútumokat.
 
 #### **12. hét:**
 
@@ -166,6 +167,9 @@ Ezek mellet elkezdtem az AdminService implementálását, így az admin felület
     - Application(Accept / Decline)
   - Felületi logikák bekötése bekötése Admin - Game page
   - PlaceEdit felület elkészítése, Place lekérés bekötése (new - új létrehozása), edittext
+
+Folytattam az admin felület összekötését a Backend-el. Ehhez Backenden kisebb módosításokat kellett végeznem, mivel problémák voltak a CascadeType-okkal. Emellett Backenden javítottam a játékra jelentkezésen és a játék frissítésen is. Ezek után az admin oldalt jól be tudtam kötni.
+Implementáltam a hiányzó regisztráció bekötést és az ehhez tartozó hibakezeléseket. Belépés után most már lehet felvenni / módosítani / törölni játékot, illetve a csapatok jelentkezését elutasítani vagy elfogadni. Ezenkívül befejeztem a helyszíneknek a szerkesztési felületét, és ehhez elkezdtem megírni a felületi logikáját, valamint elkezdtem összekötni a Backend végpontokkal.
 
 
 
