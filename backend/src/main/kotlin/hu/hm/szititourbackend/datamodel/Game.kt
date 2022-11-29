@@ -29,7 +29,7 @@ class Game(
     @Fetch(FetchMode.JOIN)
     val places: MutableList<Place> = mutableListOf(),
 
-    @OneToMany(mappedBy = "game", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST])
     val applications: MutableList<Application> = mutableListOf(),
 
     )
