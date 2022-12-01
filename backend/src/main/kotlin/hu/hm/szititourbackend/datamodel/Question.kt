@@ -14,10 +14,10 @@ class Question(
     val id: Int = 0,
     val name: String = "",
     val type: QuestionType = QuestionType.shortText,
-    val isRiddle: Boolean = false,
+    val riddle: Boolean = false,
     val img: String = "",
 
-    @OneToMany(mappedBy = "question", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "question", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val answers: MutableList<Answer> = mutableListOf(),
 
     @ManyToOne
@@ -30,7 +30,7 @@ fun Question.convertToDtoNoAnswers(): QuestionDtoNoAnswers {
         this.id,
         this.name,
         this.type,
-        this.isRiddle,
+        this.riddle,
         this.img,
         this.place.id
     )
@@ -41,7 +41,7 @@ fun Question.convertToDto(): QuestionDto {
         this.id,
         this.name,
         this.type,
-        this.isRiddle,
+        this.riddle,
         this.img,
         this.answers.convertToDto(),
         this.place.id

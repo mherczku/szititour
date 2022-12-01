@@ -3,8 +3,6 @@ package hu.hm.szititourbackend.datamodel
 import hu.hm.szititourbackend.dto.GameActiveDto
 import hu.hm.szititourbackend.dto.GameDto
 import hu.hm.szititourbackend.dto.GameOnlyBasicDto
-import org.hibernate.annotations.Fetch
-import org.hibernate.annotations.FetchMode
 import java.sql.Timestamp
 import java.time.Instant
 import javax.persistence.*
@@ -16,6 +14,7 @@ class Game(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     val id: Int = 0,
+    @Column(unique = true)
     val title: String = "",
     val dateStart: Timestamp = Timestamp(Instant.now().epochSecond),
     val dateEnd: Timestamp = Timestamp(Instant.now().epochSecond),
@@ -25,11 +24,10 @@ class Game(
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
 
-    @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST])
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val places: MutableList<Place> = mutableListOf(),
 
-    @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST])
+    @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val applications: MutableList<Application> = mutableListOf(),
 
     )

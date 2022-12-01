@@ -2,9 +2,12 @@ package hu.hm.szititourbackend.controller
 import hu.hm.szititourbackend.dto.GameDto
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.convertToDto
+import hu.hm.szititourbackend.extramodel.Response
 import hu.hm.szititourbackend.service.GameService
 import hu.hm.szititourbackend.util.AuthUtils
+import org.hibernate.exception.ConstraintViolationException
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -15,13 +18,17 @@ import java.util.*
 class GameController @Autowired constructor(private val gameService: GameService) {
 
     @PostMapping()
-    fun addGame(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody game: Game): ResponseEntity<GameDto> {
+    fun addGame(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody game: Game): ResponseEntity<*> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
+            return ResponseEntity<Response>(HttpStatus.UNAUTHORIZED)
         }
-        val newGame = gameService.addGame(game)
-        return ResponseEntity(newGame.convertToDto(), HttpStatus.CREATED)
+        return try {
+            val newGame = gameService.addGame(game)
+            ResponseEntity(newGame.convertToDto(), HttpStatus.CREATED)
+        } catch (ex: DataIntegrityViolationException){
+            ResponseEntity(Response(false, errorMessage = "This game title is already taken"), HttpStatus.BAD_REQUEST)
+        }
     }
 
     @GetMapping("/{id}")
@@ -48,12 +55,19 @@ class GameController @Autowired constructor(private val gameService: GameService
     }
 
     @PutMapping
-    fun updateGame(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody game: Game): ResponseEntity<GameDto> {
+    fun updateGame(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody game: Game): ResponseEntity<*> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
+            return ResponseEntity<Response>(HttpStatus.UNAUTHORIZED)
         }
-        return ResponseEntity(gameService.updateGame(game).convertToDto(), HttpStatus.OK)
+        try {
+            return ResponseEntity(gameService.updateGame(game).convertToDto(), HttpStatus.OK)
+        } catch (ex: Exception){
+            if(ex is ConstraintViolationException) {
+                return ResponseEntity(Response(false, errorMessage = ex.message.toString()), HttpStatus.BAD_REQUEST)
+            }
+            return ResponseEntity(Response(false, errorMessage = ex.message.toString()), HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
     @DeleteMapping("/{id}")

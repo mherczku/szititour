@@ -9,5 +9,5 @@ class PlaceDto(
     val latitude: String = "",
     val longitude: String = "",
     val questions: MutableList<QuestionDto> = mutableListOf(),
-    val gameId: Int
+    val gameId: Int = 0
 )

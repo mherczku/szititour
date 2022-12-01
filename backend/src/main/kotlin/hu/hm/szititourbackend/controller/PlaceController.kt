@@ -14,15 +14,30 @@ import java.util.*
 @RequestMapping("/places")
 class PlaceController @Autowired constructor(private val placeService: PlaceService) {
 
-    @PostMapping()
-    fun addPlace(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody place: Place): ResponseEntity<Place> {
+    /*@PostMapping()
+    fun addPlace(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody place: Place): ResponseEntity<PlaceDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
         val newPlace = placeService.addPlace(place)
-        return ResponseEntity(newPlace, HttpStatus.CREATED)
+        return ResponseEntity(newPlace.convertToDto(), HttpStatus.CREATED)
+    }*/
+
+    @PostMapping()
+    fun addPlaceToGame(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody placeDto: PlaceDto): ResponseEntity<PlaceDto> {
+        val verification = AuthUtils.verifyToken(token)
+        if (!verification.verified || !verification.isAdmin) {
+            return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        }
+        val newPlace = placeService.addPlaceToGame(placeDto)
+        if(!newPlace.isPresent) {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+        return ResponseEntity(newPlace.get().convertToDto(), HttpStatus.CREATED)
     }
+
+
 
     @GetMapping("/{id}")
     fun getPlaceById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<PlaceDto?> {
@@ -48,7 +63,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
     }
 
     @PutMapping
-    fun updatePlace(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody place: Place): ResponseEntity<PlaceDto> {
+    fun updatePlace(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody place: PlaceDto): ResponseEntity<PlaceDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)

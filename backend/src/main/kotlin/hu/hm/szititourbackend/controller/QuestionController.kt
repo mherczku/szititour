@@ -15,13 +15,16 @@ import java.util.*
 class QuestionController @Autowired constructor(private val questionService: QuestionService) {
 
     @PostMapping()
-    fun addQuestion(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody question: Question): ResponseEntity<QuestionDto> {
+    fun addQuestion(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody question: QuestionDto): ResponseEntity<QuestionDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
-        val newQuestion = questionService.addQuestion(question)
-        return ResponseEntity(newQuestion.convertToDto(), HttpStatus.CREATED)
+        val newQuestion = questionService.addQuestionToPlace(question)
+        if(!newQuestion.isPresent) {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+        return ResponseEntity(newQuestion.get().convertToDto(), HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
@@ -48,7 +51,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
     }
 
     @PutMapping
-    fun updateQuestion(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody question: Question): ResponseEntity<QuestionDto> {
+    fun updateQuestion(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody question: QuestionDto): ResponseEntity<QuestionDto> {
         val verification = AuthUtils.verifyToken(token)
         if (!verification.verified || !verification.isAdmin) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)

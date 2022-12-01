@@ -2,8 +2,6 @@ package hu.hm.szititourbackend.datamodel
 
 import hu.hm.szititourbackend.dto.PlaceActiveDto
 import hu.hm.szititourbackend.dto.PlaceDto
-import org.hibernate.annotations.Fetch
-import org.hibernate.annotations.FetchMode
 import javax.persistence.*
 
 @Entity
@@ -19,8 +17,7 @@ class Place(
     val latitude: String = "",
     val longitude: String = "",
 
-    @OneToMany(mappedBy = "place", cascade = [CascadeType.ALL])
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "place", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val questions: MutableList<Question> = mutableListOf(),
     // 0. question is the riddle to the next place
 
