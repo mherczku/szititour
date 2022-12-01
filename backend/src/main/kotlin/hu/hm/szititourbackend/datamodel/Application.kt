@@ -28,12 +28,12 @@ class Application(
 fun Application.convertToDto(): ApplicationDto {
     return ApplicationDto(
         id = this.id,
-        accepted =  this.accepted,
+        accepted = this.accepted,
         createdAt = this.createdAt,
         updatedAt = this.updatedAt,
-        gameId =  this.game.id,
-        teamId =  this.team.id,
-        teamName =  this.team.name
+        gameId = this.game.id,
+        teamId = this.team.id,
+        teamName = this.team.name
     )
 }
 
