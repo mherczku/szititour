@@ -1,4 +1,4 @@
-<div class="relative p-10 bg-smoke mobile:p-5">
+<div class="relative p-10 bg-smoke box-border mobile:p-5">
 
   <div class="grid grid-cols-4 tablet:grid-cols-2 gap-6 mobile:grid-cols-1 relative">
     <div class="fixed z-10 w-[3rem] h-[3rem] text-size-base right-20 bottom-20">
@@ -23,6 +23,6 @@
 
 <!-- Places modal -->
 <app-modal classes="w-full" [(isDisplayed)]="placesModalVisible">
-  <app-lists [places]="selectedGame.places" [type]="ListType.places"></app-lists>
+  <app-lists [gameIdForPlacesList]="selectedGame.id" [places]="selectedGame.places" [type]="ListType.places"></app-lists>
 </app-modal>
 

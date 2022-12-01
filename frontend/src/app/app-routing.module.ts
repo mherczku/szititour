@@ -25,7 +25,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'admin-place/:id',
+    path: 'admin-place/:gameId/:placeId',
     canLoad: [AuthGuard],
     canActivateChild: [AuthGuard],
     loadChildren: () => import('./pages/admin/place/place.module').then(m => m.PlaceModule),

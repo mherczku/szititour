@@ -4,7 +4,7 @@ export interface Question {
   id: number,
   name: string,
   type: QuestionType,
-  isRiddle: boolean,
+  riddle: boolean,
   img?: string,
   placeId: number
 }

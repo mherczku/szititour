@@ -26,7 +26,6 @@ export class EditGameComponent implements OnInit, OnDestroy {
   }
   @Output() onClose: EventEmitter<unknown> = new EventEmitter<unknown>()
 
-  title: string = this.isEdit ? this.game.title + " szerkesztése" : "Új játék létrehozása"
   saving: boolean = false;
   subscriptionSave?: Subscription
 
@@ -55,7 +54,7 @@ export class EditGameComponent implements OnInit, OnDestroy {
               this.onClose.emit()
             }
           },
-          error: err => {
+          error: _err => {
             this.saving = false
           }
         })
@@ -71,7 +70,7 @@ export class EditGameComponent implements OnInit, OnDestroy {
               this.onClose.emit()
             }
           },
-          error: err => {
+          error: _err => {
             this.saving = false
           }
         })

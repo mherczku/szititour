@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { ButtonType } from 'src/app/enums/button-type';
+import {ButtonType} from 'src/app/enums/button-type';
 import {ListType} from "../../../enums/list-types";
 import {Game} from "../../../interfaces/game";
 import {AdminService} from "../../../services/AdminService";
@@ -29,7 +29,8 @@ export class GamesComponent implements OnInit, OnDestroy {
 
   subscriptionGetGames?: Subscription
 
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService) {
+  }
 
   ngOnInit(): void {
     this.getGames()
@@ -38,8 +39,6 @@ export class GamesComponent implements OnInit, OnDestroy {
   getGames() {
     this.subscriptionGetGames = this.adminService.getAllGames().subscribe((res: any) => {
       this.games = res
-      console.log(this.games)
-
     })
   }
 
@@ -60,7 +59,7 @@ export class GamesComponent implements OnInit, OnDestroy {
   }
 
   changeModal(m: string, selected: Game) {
-    this.selectedGame = selected
+    this.selectedGame = {...selected}
     this.editModalVisible = false
     this.teamsModalVisible = false
     this.placesModalVisible = false
@@ -83,4 +82,5 @@ export class GamesComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionGetGames?.unsubscribe()
   }
+
 }

@@ -53,7 +53,7 @@ export class AuthService {
       if (evt.success) {
         const team: Team = evt.team
         this.store.dispatch(login({team: team}))
-        //this.router.navigateByUrl("/admin")
+        this.router.navigateByUrl("/admin")
       }
     }))
   }

@@ -1,11 +1,12 @@
 import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {Observable, tap} from "rxjs";
+import {Observable} from "rxjs";
 import {Game} from "../interfaces/game";
 import {Application} from "../interfaces/application";
 import {ApplicationOriginal} from "../interfaces/application-original";
 import {Place} from "../interfaces/place";
+import {Question} from "../interfaces/question";
 
 
 @Injectable({providedIn: 'root'})
@@ -44,4 +45,29 @@ export class AdminService {
   getPlaceById(placeId: number): Observable<Place> {
     return this.http.get<Place>(`${this.baseUrl}/places/${placeId}`)
   }
+
+  addPlaceToGame(place: Place): Observable<Place> {
+    return this.http.post<Place>(`${this.baseUrl}/places/`, place)
+  }
+
+  updatePlace(place: Place): Observable<Place> {
+    return this.http.put<Place>(`${this.baseUrl}/places/`, place)
+  }
+
+  deletePlace(id: number) {
+    return this.http.delete<unknown>(`${this.baseUrl}/places/${id}`)
+  }
+
+  createQuestion(question: Question): Observable<Question>  {
+    return this.http.post<Question>(`${this.baseUrl}/questions/`, question)
+  }
+
+  updateQuestion(question: Question): Observable<Question> {
+    return this.http.put<Question>(`${this.baseUrl}/questions/`, question)
+  }
+
+  deleteQuestion(id: number) {
+    return this.http.delete<unknown>(`${this.baseUrl}/questions/${id}`)
+  }
+
 }

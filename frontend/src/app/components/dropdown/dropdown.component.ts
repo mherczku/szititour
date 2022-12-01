@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { ButtonType } from 'src/app/enums/button-type';
 import {Place} from "../../interfaces/place";
 

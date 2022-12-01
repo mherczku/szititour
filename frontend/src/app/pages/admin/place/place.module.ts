@@ -4,6 +4,7 @@ import { PlaceComponent } from './place.component';
 import {RouterModule, Routes} from "@angular/router";
 import {EditPlaceModule} from "../../../components/edit-place/edit-place.module";
 
+
 const routes: Routes = [
   {path: '', component: PlaceComponent},
 ]

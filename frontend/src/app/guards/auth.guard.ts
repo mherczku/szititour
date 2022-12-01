@@ -19,7 +19,7 @@ import {AuthState} from "../interfaces/states/auth-state";
 export class AuthGuard implements CanLoad, CanActivateChild {
   readonly mustBeLoggedIn = [
     'admin',
-    'admin-place/:id',
+    'admin-place/:gameId/:placeId',
     'profile',
     'upload'
   ]
@@ -31,7 +31,7 @@ export class AuthGuard implements CanLoad, CanActivateChild {
 
   readonly mustBeLoggedInStates = [
     '/admin',
-    '/admin-place/:id',
+    '/admin-place/:gameId/:placeId',
     '/profile',
     '/upload'
   ]

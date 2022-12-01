@@ -10,7 +10,7 @@ import {Router} from "@angular/router";
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnDestroy {
+export class RegisterComponent implements OnInit, OnDestroy {
 
   ButtonType = ButtonType;
 
@@ -19,29 +19,45 @@ export class RegisterComponent implements OnDestroy {
   passwordConfirm: string = "";
   registering: boolean = false;
 
-  subscriptionRegister? : Subscription
+  subscriptionRegister?: Subscription
 
-  constructor(private alertService: HotToastService, private authService: AuthService, private router: Router) { }
+  //registerForm!: FormGroup;
+
+  constructor(
+    private alertService: HotToastService,
+    private authService: AuthService,
+    private router: Router
+  ) {
+  }
+
+  ngOnInit(): void {
+    //this.setForm()
+  }
+
+/*  setForm() {
+    this.registerForm = this.fb.group({
+      email: ['alma', [Validators.required]],
+      lastName: [],
+      age: []
+    });
+  }*/
 
   // todo validators
   register() {
-    if(this.email !== "" && this.password !== "") {
-      if(this.password === this.passwordConfirm) {
+    if (this.email !== "" && this.password !== "") {
+      if (this.password === this.passwordConfirm) {
         this.subscriptionRegister = this.authService.register(this.email, this.password).subscribe(res => {
-          if(res.success) {
+          if (res.success) {
             this.alertService.success("Successful registration, you can login now.")
             this.router.navigateByUrl("/login")
-          }
-          else {
+          } else {
             this.alertService.error("Something went wrong: " + res.errorMessage)
           }
         })
-      }
-      else {
+      } else {
         this.alertService.warning("Password and Password Confirm are different")
       }
-    }
-    else {
+    } else {
       this.alertService.warning("Fill in all fields")
     }
   }

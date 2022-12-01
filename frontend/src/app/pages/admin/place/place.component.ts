@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Place} from "../../../interfaces/place";
 import {ActivatedRoute} from "@angular/router";
 import {AdminService} from "../../../services/AdminService";
-import {HotToastService} from "@ngneat/hot-toast";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -28,20 +27,21 @@ export class PlaceComponent implements OnInit, OnDestroy {
 
   subscriptionGet?: Subscription
 
-  constructor(private route: ActivatedRoute, private adminService: AdminService, private alert: HotToastService) {
+  constructor(private route: ActivatedRoute, private adminService: AdminService) {
   }
 
   ngOnInit(): void {
     this.route.params.subscribe(p => {
-      const id = p['id']
-      if (id === 'new') {
+      const placeId = p['placeId']
+      const gameId = p['gameId']
+      if (placeId === 'new') {
         this.isEdit = false
         this.placeId = 0
         this.place = {
           id: 0,
           name: "Place Name",
           img: "",
-          gameId: 0,
+          gameId: gameId,
           address: "Place Address",
           latitude: '0',
           longitude: "0",
@@ -49,7 +49,7 @@ export class PlaceComponent implements OnInit, OnDestroy {
         }
 
       } else {
-        this.placeId = id
+        this.placeId = placeId
         this.isEdit = true
         this.getPlace()
       }
@@ -62,8 +62,7 @@ export class PlaceComponent implements OnInit, OnDestroy {
       next: value => {
         this.place = value
       },
-      error: err => {
-        console.log(err)
+      error: _err => {
       }
     })
   }

@@ -4,7 +4,6 @@ import {Place} from 'src/app/interfaces/place';
 import {ListType} from "../../enums/list-types";
 import {Application} from "../../interfaces/application";
 import {AdminService} from "../../services/AdminService";
-import {HotToastService} from "@ngneat/hot-toast";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -25,6 +24,7 @@ export class ListsComponent implements OnInit, OnDestroy {
   @Input() type: ListType = ListType.applications
   @Input() applications: Application[] = []
   @Input() places: Place[] = []
+  @Input() gameIdForPlacesList: number = 0
 
   @Output() applicationsChange: EventEmitter<Application[]> = new EventEmitter<Application[]>()
 
@@ -32,7 +32,7 @@ export class ListsComponent implements OnInit, OnDestroy {
 
   subscriptionReview?: Subscription
 
-  constructor(private adminService: AdminService, private alert: HotToastService) {
+  constructor(private adminService: AdminService) {
   }
 
   ngOnInit(): void {
@@ -46,7 +46,7 @@ export class ListsComponent implements OnInit, OnDestroy {
         this.applications[foundIndex] = value;
         this.reviewing = false
       },
-      error: err => {
+      error: _err => {
         this.reviewing = false
       }
     })

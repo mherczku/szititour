@@ -19,7 +19,7 @@
 
   <div *ngSwitchCase="ButtonType.iconButton" class="{{classes}} h-full items-center flex text-size-base"
        [ngClass]="isDisabledBlocked ? 'opacity-60 cursor-not-allowed' : isDisabledProgress ? 'opacity-60 cursor-progress' : 'cursor-pointer'">
-    <img class="" [src]="iconSrc" alt="Icon">
+    <img class="h-full aspect-square" [src]="iconSrc" alt="Icon">
   </div>
 
   <div *ngSwitchCase="ButtonType.simple"
