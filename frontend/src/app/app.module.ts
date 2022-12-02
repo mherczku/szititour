@@ -15,6 +15,7 @@ import {UnauthorizedInterceptor} from "./interceptors/UnauthorizedInterceptor";
 import { StoreModule } from '@ngrx/store';
 import {AuthReducer} from "./reducers/auth.reducer";
 import {AuthService} from "./services/AuthService";
+import {Team} from "./interfaces/team";
 
 @NgModule({
   declarations: [
@@ -47,8 +48,18 @@ function initializeAuth(authService: AuthService): Function {
     const token = authService.getToken()
     if(token) {
       console.warn("Token ready")
-      authService.authorizeMe().subscribe()
-      resolve()
+      authService.authorizeMe().subscribe({
+        next: value => {
+          if (value.success) {
+            const team: Team = value.team
+            authService.dispatchLogin(team)
+          }
+          resolve()
+        },
+        error: _err => {
+          resolve()
+        }
+      })
     } else {
       console.warn("No token")
       resolve()

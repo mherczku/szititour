@@ -49,13 +49,7 @@ export class AuthService {
   }
 
   public authorizeMe(): Observable<NetworkLoginResponse> {
-    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`).pipe(tap(evt => {
-      if (evt.success) {
-        const team: Team = evt.team
-        this.store.dispatch(login({team: team}))
-        this.router.navigateByUrl("/admin")
-      }
-    }))
+    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`)
   }
 
   logout() {
@@ -74,5 +68,9 @@ export class AuthService {
 
   removeToken() {
     localStorage.removeItem('auth-token')
+  }
+
+  dispatchLogin(team: Team) {
+    this.store.dispatch(login({team: team}))
   }
 }
