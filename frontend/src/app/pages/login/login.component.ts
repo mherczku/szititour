@@ -5,7 +5,6 @@ import {ButtonType} from "../../enums/button-type";
 import {NetworkResponse} from "../../interfaces/network-response";
 import {Router} from "@angular/router";
 import {HotToastService} from "@ngneat/hot-toast";
-import {HttpErrorResponse} from "@angular/common/http";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -32,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   login() {
     if (this.email === 't') {
       this.email = "t@test.hu"
-      this.password = "1234"
+      this.password = "T12345678"
     }
     this.subscriptionLogin = this.authService.login(this.email, this.password)
       .pipe(
