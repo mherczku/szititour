@@ -7,6 +7,7 @@ import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.extramodel.Response
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.AuthUtils
+import hu.hm.szititourbackend.util.PasswordUtils
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DataIntegrityViolationException
@@ -46,7 +47,7 @@ class AuthController @Autowired constructor(private val teamService: TeamService
         val t = teamService.getTeamByEmail(email = credentials.email)
         if (t.isPresent) {
             val team = t.get()
-            if (team.password == credentials.password) {
+            if (PasswordUtils.comparePassword(credentials.password, team.password)) {
                 val token = AuthUtils.createToken(team.id, team.admin)
                 response.addHeader(AuthUtils.TOKEN_NAME, "Bearer $token")
                 return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
@@ -64,7 +65,12 @@ class AuthController @Autowired constructor(private val teamService: TeamService
         }
         if (Utils.validateEmail(credentials.email) && Utils.validatePassword(credentials.password)) {
             try {
-                teamService.addTeam(Team(email = credentials.email, password = credentials.password))
+                teamService.addTeam(
+                    Team(
+                        email = credentials.email,
+                        password = PasswordUtils.encryptPassword(credentials.password)
+                    )
+                )
             } catch (e: DataIntegrityViolationException) {
                 return ResponseEntity(Response(false, "Email is already in use", ""), HttpStatus.BAD_REQUEST)
             }

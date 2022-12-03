@@ -1,4 +1,5 @@
 package hu.hm.szititourbackend.datamodel
+
 import hu.hm.szititourbackend.dto.TeamDto
 import java.sql.Timestamp
 import java.time.Instant
@@ -11,6 +12,7 @@ class Team(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     val id: Int = 0,
+    @Column(unique = true)
     var name: String = "",
     @Column(unique = true)
     val email: String = "",
