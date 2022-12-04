@@ -23,14 +23,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
 
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	/*implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")*/
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation("io.springfox:springfox-boot-starter:3.0.0")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	implementation ("com.auth0:java-jwt:4.0.0")
 }
 
 tasks.withType<KotlinCompile> {

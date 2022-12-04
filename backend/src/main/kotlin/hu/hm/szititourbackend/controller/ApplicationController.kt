@@ -3,33 +3,26 @@ import hu.hm.szititourbackend.dto.ApplicationDto
 import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.service.ApplicationService
-import hu.hm.szititourbackend.util.AuthUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/applications")
 class ApplicationController @Autowired constructor(private val applicationService: ApplicationService) {
 
     @PostMapping()
-    fun addApplication(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody application: Application): ResponseEntity<ApplicationDto> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+    fun addApplication(@RequestBody application: Application): ResponseEntity<ApplicationDto> {
         val newApplication = applicationService.addApplication(application)
         return ResponseEntity(newApplication.convertToDto(), HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
-    fun getApplicationById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<ApplicationDto?> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+    fun getApplicationById(@PathVariable id: Int): ResponseEntity<ApplicationDto?> {
         val application: Optional<Application> = applicationService.getApplicationById(id)
         if (!application.isPresent) {
             return ResponseEntity(null, HttpStatus.NOT_FOUND)
@@ -38,30 +31,18 @@ class ApplicationController @Autowired constructor(private val applicationServic
     }
 
     @GetMapping
-    fun getAllApplications(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?): ResponseEntity<List<ApplicationDto>> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+    fun getAllApplications(): ResponseEntity<List<ApplicationDto>> {
         val applications: List<ApplicationDto> = applicationService.getAllApplications()
         return ResponseEntity<List<ApplicationDto>>(applications, HttpStatus.OK)
     }
 
     @PutMapping
-    fun updateApplication(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody application: Application): ResponseEntity<ApplicationDto> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+    fun updateApplication(@RequestBody application: Application): ResponseEntity<ApplicationDto> {
         return ResponseEntity(applicationService.updateApplication(application).convertToDto(), HttpStatus.OK)
     }
 
     @DeleteMapping("/{id}")
-    fun deleteApplicationById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+    fun deleteApplicationById(@PathVariable id: Int): ResponseEntity<Nothing> {
         return try {
             applicationService.deleteApplicationById(id)
             ResponseEntity(null, HttpStatus.OK)

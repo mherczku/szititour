@@ -5,35 +5,35 @@ import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.convertToActiveDto
 import hu.hm.szititourbackend.dto.*
 import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.security.SecurityService
+import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
 import hu.hm.szititourbackend.service.*
-import hu.hm.szititourbackend.util.AuthUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@PreAuthorize("hasRole('ROLE_USER')")
 @RequestMapping("/user")
 class LoggedInController @Autowired constructor(
     private val teamService: TeamService,
     private val gameService: GameService,
     private val applicationService: ApplicationService,
     private val questionService: QuestionService,
-    private val answerService: AnswerService
+    private val answerService: AnswerService,
+    private val securityService: SecurityService
 ) {
 
     // AVAILABLE ONLY FOR LOGGED-IN USERS:
 
     @PostMapping("update")
     fun updateProfile(
-        @RequestHeader(AuthUtils.TOKEN_NAME) token: String?,
+        @RequestHeader(TOKEN_NAME) token: String,
         @RequestBody profileUpdate: TeamUpdateProfileDto
     ): ResponseEntity<TeamDto> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
-
+        val verification = securityService.verifyToken(token)
         val updatedTeam = teamService.updateTeamProfile(verification.teamId, profileUpdate)
         if (!updatedTeam.isPresent) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
@@ -42,24 +42,17 @@ class LoggedInController @Autowired constructor(
     }
 
     @GetMapping("games")
-    fun getAllAvailableGames(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?): ResponseEntity<List<GameOnlyBasicDto>> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+    fun getAllAvailableGames(): ResponseEntity<List<GameOnlyBasicDto>> {
         return ResponseEntity(gameService.getAllAvailableGames(), HttpStatus.OK)
     }
 
 
     @PostMapping("apply")
     fun applyForGame(
-        @RequestHeader(AuthUtils.TOKEN_NAME) token: String?,
+        @RequestHeader(TOKEN_NAME) token: String,
         @RequestBody gameId: Int
     ): ResponseEntity<Response> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+        val verification = securityService.verifyToken(token)
         val application = teamService.getTeamsApplicationByTeamIds(verification.teamId, gameId)
         if(application.isPresent) {
             ResponseEntity(Response(success = false, errorMessage = "This Team has an application already"), HttpStatus.ALREADY_REPORTED)
@@ -74,13 +67,10 @@ class LoggedInController @Autowired constructor(
 
     @PostMapping("cancel")
     fun cancelApplicationForGame(
-        @RequestHeader(AuthUtils.TOKEN_NAME) token: String?,
+        @RequestHeader(TOKEN_NAME) token: String,
         @RequestBody gameId: Int
     ): ResponseEntity<Response> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+        val verification = securityService.verifyToken(token)
         return try {
             val application = teamService.getTeamsApplicationByTeamIds(verification.teamId, gameId)
             if (!application.isPresent) {
@@ -114,13 +104,10 @@ class LoggedInController @Autowired constructor(
 
     @PostMapping("activegame")
     fun getGameData(
-        @RequestHeader(AuthUtils.TOKEN_NAME) token: String?,
+        @RequestHeader(TOKEN_NAME) token: String,
         @RequestBody gameId: Int
     ): ResponseEntity<GameActiveDto> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+        val verification = securityService.verifyToken(token)
         try {
             if (hasTeamAcceptedApplicationToGame(verification.teamId, gameId)) {
                 val game = gameService.getGameById(gameId)
@@ -137,14 +124,11 @@ class LoggedInController @Autowired constructor(
 
     @PostMapping("answer/{questionId}")
     fun answerQuestion(
-        @RequestHeader(AuthUtils.TOKEN_NAME) token: String?,
+        @RequestHeader(TOKEN_NAME) token: String,
         @PathVariable questionId: Int,
         answer: Answer
     ): ResponseEntity<Response> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+        val verification = securityService.verifyToken(token)
         try {
             if (hasTeamAcceptedApplicationToGameByQuestionId(verification.teamId, questionId)) {
                 val question = questionService.getQuestionById(questionId)

@@ -3,33 +3,26 @@ import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.TeamDto
 import hu.hm.szititourbackend.service.TeamService
-import hu.hm.szititourbackend.util.AuthUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/teams")
 class TeamController @Autowired constructor(private val teamService: TeamService) {
 
     @PostMapping()
-    fun addTeam(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody team: Team): ResponseEntity<TeamDto> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+    fun addTeam(@RequestBody team: Team): ResponseEntity<TeamDto> {
         val newTeam = teamService.addTeam(team)
         return ResponseEntity(newTeam.convertToDto(), HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
-    fun getTeamById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<TeamDto?> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+    fun getTeamById(@PathVariable id: Int): ResponseEntity<TeamDto?> {
         val team: Optional<Team> = teamService.getTeamById(id)
         if (!team.isPresent) {
             return ResponseEntity(null, HttpStatus.NOT_FOUND)
@@ -38,30 +31,18 @@ class TeamController @Autowired constructor(private val teamService: TeamService
     }
 
     @GetMapping
-    fun getAllTeams(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?): ResponseEntity<List<TeamDto>> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+    fun getAllTeams(): ResponseEntity<List<TeamDto>> {
         val teams: MutableList<Team> = teamService.getAllTeam()
         return ResponseEntity(teams.convertToDto(), HttpStatus.OK)
     }
 
     @PutMapping
-    fun updateTeam(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @RequestBody team: Team): ResponseEntity<TeamDto> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+    fun updateTeam(@RequestBody team: Team): ResponseEntity<TeamDto> {
         return ResponseEntity(teamService.updateTeam(team).convertToDto(), HttpStatus.OK)
     }
 
     @DeleteMapping("/{id}")
-    fun deleteTeamById(@RequestHeader(AuthUtils.TOKEN_NAME) token: String?, @PathVariable id: Int): ResponseEntity<Nothing> {
-        val verification = AuthUtils.verifyToken(token)
-        if (!verification.verified || !verification.isAdmin) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+    fun deleteTeamById(@PathVariable id: Int): ResponseEntity<Nothing> {
         return try {
             teamService.deleteTeamById(id)
             ResponseEntity(null, HttpStatus.OK)

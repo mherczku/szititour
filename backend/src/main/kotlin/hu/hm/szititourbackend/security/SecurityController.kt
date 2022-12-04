@@ -1,15 +1,14 @@
-package hu.hm.szititourbackend.controller
-/*
+package hu.hm.szititourbackend.security
+
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.extramodel.LoginData
 import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
 import hu.hm.szititourbackend.service.TeamService
-import hu.hm.szititourbackend.util.AuthUtils
 import hu.hm.szititourbackend.util.PasswordUtils
 import hu.hm.szititourbackend.util.Utils
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,16 +16,19 @@ import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@RequestMapping("/authOld")
-class AuthController @Autowired constructor(private val teamService: TeamService) {
+@RequestMapping("/auth")
+class SecurityController(private val teamService: TeamService, private val securityService: SecurityService) {
 
     @GetMapping
     fun authorize(
-        @RequestHeader(AuthUtils.TOKEN_NAME) token: String?,
+        @RequestHeader(TOKEN_NAME) token: String?,
         response: HttpServletResponse
     ): ResponseEntity<LoginResponse> {
 
-        val verification = AuthUtils.verifyToken(token)
+        if(token == null){
+            return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        }
+        val verification = securityService.verifyToken(token)
         if (!verification.verified) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
@@ -45,11 +47,12 @@ class AuthController @Autowired constructor(private val teamService: TeamService
             return ResponseEntity(LoginResponse(false, "Email or password is empty", "", null), HttpStatus.BAD_REQUEST)
         }
         val t = teamService.getTeamByEmail(email = credentials.email)
+
         if (t.isPresent) {
             val team = t.get()
             if (PasswordUtils.comparePassword(credentials.password, team.password)) {
-                val token = AuthUtils.createToken(team.id, team.admin)
-                response.addHeader(AuthUtils.TOKEN_NAME, "Bearer $token")
+                val token = securityService.generateToken(team = team)
+                response.addHeader(TOKEN_NAME, "Bearer $token")
                 return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
             }
             return ResponseEntity(LoginResponse(false, "Email or password is wrong", "", null), HttpStatus.UNAUTHORIZED)
@@ -68,7 +71,8 @@ class AuthController @Autowired constructor(private val teamService: TeamService
                 teamService.addTeam(
                     Team(
                         email = credentials.email,
-                        password = PasswordUtils.encryptPassword(credentials.password)
+                        password = PasswordUtils.encryptPassword(credentials.password),
+                        name = credentials.email.split('@')[0]
                     )
                 )
             } catch (e: DataIntegrityViolationException) {
@@ -79,4 +83,6 @@ class AuthController @Autowired constructor(private val teamService: TeamService
             return ResponseEntity(Response(false, "Email or password is invalid", ""), HttpStatus.BAD_REQUEST)
         }
     }
-}*/
+
+
+}

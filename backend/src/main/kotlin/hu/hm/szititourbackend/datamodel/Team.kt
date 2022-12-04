@@ -1,6 +1,7 @@
 package hu.hm.szititourbackend.datamodel
 
 import hu.hm.szititourbackend.dto.TeamDto
+import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_USER
 import java.sql.Timestamp
 import java.time.Instant
 import javax.persistence.*
@@ -18,6 +19,7 @@ class Team(
     val email: String = "",
     var password: String = "",
     var admin: Boolean = false,
+    val role: String = ROLE_USER,
     var img: String = "",
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),

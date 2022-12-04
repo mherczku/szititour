@@ -36,4 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 /src/main/resources/keystore/backend.p12
-/src/main/resources/keystore/backend.p12
+/src/main/resources/cert/private.pem
+/src/main/resources/cert/public.pem
