@@ -15,7 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@PreAuthorize("hasRole('ROLE_USER')")
+@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 @RequestMapping("/user")
 class LoggedInController @Autowired constructor(
     private val teamService: TeamService,
@@ -54,8 +54,11 @@ class LoggedInController @Autowired constructor(
     ): ResponseEntity<Response> {
         val verification = securityService.verifyToken(token)
         val application = teamService.getTeamsApplicationByTeamIds(verification.teamId, gameId)
-        if(application.isPresent) {
-            ResponseEntity(Response(success = false, errorMessage = "This Team has an application already"), HttpStatus.ALREADY_REPORTED)
+        if (application.isPresent) {
+            ResponseEntity(
+                Response(success = false, errorMessage = "This Team has an application already"),
+                HttpStatus.ALREADY_REPORTED
+            )
         }
         return try {
             applicationService.createApplication(gameId, verification.teamId)
@@ -75,19 +78,19 @@ class LoggedInController @Autowired constructor(
             val application = teamService.getTeamsApplicationByTeamIds(verification.teamId, gameId)
             if (!application.isPresent) {
                 ResponseEntity(Response(success = false), HttpStatus.NOT_FOUND)
-            }
-            else {
+            } else {
                 val applicationGot: Application = application.get()
-                if(applicationGot.accepted == null) {
+                if (applicationGot.accepted == null) {
                     applicationService.deleteApplicationById(application.get().id)
                     ResponseEntity(Response(success = true), HttpStatus.OK)
-                }
-                else if(applicationGot.accepted!!){
+                } else if (applicationGot.accepted!!) {
                     applicationService.deleteApplicationById(application.get().id)
                     ResponseEntity(Response(success = true), HttpStatus.OK)
-                }
-                else {
-                    ResponseEntity(Response(success = false, errorMessage = "Cannot cancel refused application"), HttpStatus.FORBIDDEN)
+                } else {
+                    ResponseEntity(
+                        Response(success = false, errorMessage = "Cannot cancel refused application"),
+                        HttpStatus.FORBIDDEN
+                    )
                 }
             }
 

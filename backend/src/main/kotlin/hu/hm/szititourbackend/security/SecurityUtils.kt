@@ -37,7 +37,7 @@ class SecurityService(private val jwtEncoder: JwtEncoder, private val jwtDecoder
         if(bearerToken.isNullOrEmpty()) {
             return VerificationResponse(verified = false, errorMessage = "Empty Token")
         }
-        val token = bearerToken.substring(7)
+        val token = bearerToken.replace("Bearer ", "")
         return try {
             val jwt: Jwt = jwtDecoder.decode(token)
             val role: String = jwt.getClaim(CLAIM_ROLE)

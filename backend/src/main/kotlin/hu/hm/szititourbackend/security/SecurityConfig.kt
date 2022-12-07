@@ -47,15 +47,16 @@ class SecurityConfig2(
             .csrf().disable()
             .authorizeRequests()
             .antMatchers("/auth/**").permitAll()
+            .antMatchers("/resources/**").permitAll()
             .antMatchers("/swagger-ui/**").permitAll()
             .antMatchers("/v2/api-docs").permitAll()
             .antMatchers("/swagger-resources/**").permitAll()
             .anyRequest().authenticated()
             .and()
-            .oauth2ResourceServer(Customizer { httpSecurityOAuth2ResourceServerConfigurer: OAuth2ResourceServerConfigurer<HttpSecurity?> ->
+            .oauth2ResourceServer { httpSecurityOAuth2ResourceServerConfigurer: OAuth2ResourceServerConfigurer<HttpSecurity?> ->
                 httpSecurityOAuth2ResourceServerConfigurer.jwt()
                     .jwtAuthenticationConverter(jwtAuthConverter())
-            })
+            }
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .userDetailsService(securityUserDetailService)

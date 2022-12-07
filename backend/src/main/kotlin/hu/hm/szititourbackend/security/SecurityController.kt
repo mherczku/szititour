@@ -19,19 +19,15 @@ import javax.servlet.http.HttpServletResponse
 @RequestMapping("/auth")
 class SecurityController(private val teamService: TeamService, private val securityService: SecurityService) {
 
+    //!//  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
+
     @GetMapping
     fun authorize(
-        @RequestHeader(TOKEN_NAME) token: String?,
+        @RequestHeader(TOKEN_NAME) token: String,
         response: HttpServletResponse
     ): ResponseEntity<LoginResponse> {
 
-        if(token == null){
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
         val verification = securityService.verifyToken(token)
-        if (!verification.verified) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
 
         val t = teamService.getTeamById(verification.teamId)
         return if (t.isPresent) {

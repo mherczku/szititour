@@ -6,6 +6,8 @@ import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.TeamDto
 import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
 import hu.hm.szititourbackend.repository.TeamRepository
+import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_USER
+import hu.hm.szititourbackend.util.PasswordUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -29,7 +31,7 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
 
         val updateTeam = updateTeamOptional.get()
         updateTeam.img = teamUpdateProfileDto.img ?: updateTeam.img
-        updateTeam.password = teamUpdateProfileDto.password ?: updateTeam.password
+        updateTeam.password = teamUpdateProfileDto.password ?: PasswordUtils.encryptPassword(updateTeam.password)
         updateTeam.name = teamUpdateProfileDto.name ?: updateTeam.name
         updateTeam.members = teamUpdateProfileDto.members?.toMutableList() ?: updateTeam.members
 
@@ -37,7 +39,7 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
     }
 
     fun addTeam(team: Team): Team {
-        team.admin = false
+        team.role = ROLE_USER
         team.createdAt = Timestamp(System.currentTimeMillis())
         team.updatedAt = Timestamp(System.currentTimeMillis())
         return teamRepository.save(team)
@@ -52,7 +54,7 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
     }
 
     fun updateTeam(team: Team): Team {
-        team.admin = false
+        team.role = ROLE_USER
         team.updatedAt = Timestamp(System.currentTimeMillis())
         return teamRepository.save(team)
     }

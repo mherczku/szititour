@@ -18,8 +18,7 @@ class Team(
     @Column(unique = true)
     val email: String = "",
     var password: String = "",
-    var admin: Boolean = false,
-    val role: String = ROLE_USER,
+    var role: String = ROLE_USER,
     var img: String = "",
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
@@ -37,15 +36,15 @@ class Team(
 
 fun Team.convertToDto(): TeamDto {
     return TeamDto(
-        this.id,
-        this.name,
-        this.email,
-        this.admin,
-        this.img,
-        this.createdAt,
-        this.updatedAt,
-        this.applications.convertToDto(),
-        this.members
+        id = this.id,
+        name = this.name,
+        email = this.email,
+        img = this.img,
+        role = this.role,
+        createdAt =  this.createdAt,
+        updatedAt =  this.updatedAt,
+        applications =  this.applications.convertToDto(),
+        members =  this.members
     )
 }
 

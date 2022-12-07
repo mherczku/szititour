@@ -9,6 +9,13 @@ object Utils {
     private val AZLETTER: Pattern = Pattern.compile("[A-z]", Pattern.CASE_INSENSITIVE)
     private val SPECIALCHARACTERS: Pattern = Pattern.compile("[!+#&@A-z0-9]\$", Pattern.LITERAL)
 
+    const val imageDirectory = "images"
+    const val imageDirectoryTeams = "images/teams"
+    const val imageDirectoryGames = "images/games"
+    const val imageDirectoryPlaces = "images/places"
+    const val imageDirectoryQuestions = "images/questions"
+    const val imageDirectoryAnswers = "images/answers"
+
     fun validateEmail(email: String): Boolean {
         return EMAIL_REGEX_PATTERN.matcher(email).find()
     }
