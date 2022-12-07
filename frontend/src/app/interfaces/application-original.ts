@@ -13,7 +13,7 @@ export interface TeamOriginal {
   id: number,
   name?: string,
   email?: string,
-  admin?: boolean,
+  role?: 'ROLE_ADMIN' | 'ROLE_USER',
   img?: string,
   createdAt?: Date,
   updatedAt?: Date,

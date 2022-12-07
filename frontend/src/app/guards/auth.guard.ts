@@ -20,7 +20,7 @@ import {Team} from "../interfaces/team";
 export class AuthGuard implements CanLoad, CanActivateChild, CanActivate {
 
   private team?: Team
-  private currentTeamRole = ""
+  private currentTeamRole: 'ROLE_ADMIN' | 'ROLE_USER' | 'ROLE_GUEST' = 'ROLE_GUEST'
 
   public constructor(
     private store: Store<{ auth: AuthState }>,
@@ -28,7 +28,7 @@ export class AuthGuard implements CanLoad, CanActivateChild, CanActivate {
   ) {
     this.store.subscribe((state: { auth: AuthState }) => {
       this.team = state.auth.team ?? undefined
-      this.currentTeamRole = state.auth.team ? state.auth.team?.admin ? 'admin' : 'user' : 'guest'
+      this.currentTeamRole = state.auth.team ? state.auth.team?.role : 'ROLE_GUEST'
       console.warn("ROLE: ", this.currentTeamRole)
     })
   }
@@ -36,7 +36,7 @@ export class AuthGuard implements CanLoad, CanActivateChild, CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     if (this.currentTeamRole) {
       if (route.data?.['roles'] && route.data?.['roles'].indexOf(this.currentTeamRole) === -1) {
-        this.currentTeamRole === "admin" ? this.router.navigate(['/admin']) : this.currentTeamRole === "user" ? this.router.navigate(['/home']) /* todo user page */ : this.router.navigate(['/login'])
+        this.currentTeamRole === "ROLE_ADMIN" ? this.router.navigate(['/admin']) : this.currentTeamRole === "ROLE_USER" ? this.router.navigate(['/home']) /* todo user page */ : this.router.navigate(['/login'])
         return false;
       }
       return true;
@@ -48,7 +48,7 @@ export class AuthGuard implements CanLoad, CanActivateChild, CanActivate {
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     if (this.currentTeamRole) {
       if (childRoute.data?.['roles'] && childRoute.data?.['roles'].indexOf(this.currentTeamRole) === -1) {
-        this.currentTeamRole === "admin" ? this.router.navigate(['/admin']) : this.currentTeamRole === "user" ? this.router.navigate(['/home']) /* todo user page */ : this.router.navigate(['/login'])
+        this.currentTeamRole === "ROLE_ADMIN" ? this.router.navigate(['/admin']) : this.currentTeamRole === "ROLE_USER" ? this.router.navigate(['/home']) /* todo user page */ : this.router.navigate(['/login'])
         return false;
       }
       return true;
@@ -63,7 +63,7 @@ export class AuthGuard implements CanLoad, CanActivateChild, CanActivate {
       // here we need to use the passed object role
       if (route.data?.['roles'] && route.data?.['roles'].indexOf(this.currentTeamRole) === -1) {
         // role not authorised so redirect to home page
-        this.currentTeamRole === "admin" ? this.router.navigate(['/admin']) : this.currentTeamRole === "user" ? this.router.navigate(['/home']) /* todo user page */ : this.router.navigate(['/login'])
+        this.currentTeamRole === "ROLE_ADMIN" ? this.router.navigate(['/admin']) : this.currentTeamRole === "ROLE_USER" ? this.router.navigate(['/home']) /* todo user page */ : this.router.navigate(['/login'])
         return false;
       }
       // authorised so return true

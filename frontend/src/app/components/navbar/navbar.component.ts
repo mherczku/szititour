@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     this.store.subscribe(state => {
       this.isLoggedIn = state.auth.isLoggedIn
-      this.isAdmin = state.auth.team? state.auth.team.admin : false
+      this.isAdmin = state.auth.team? state.auth.team.role === "ROLE_ADMIN" : false
       this.title = this.isAdmin ? 'Szititour Admin' : 'Szititour'
     })
   }

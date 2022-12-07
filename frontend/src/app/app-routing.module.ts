@@ -8,20 +8,20 @@ const routes: Routes = [
   {
     path: 'register',
     canActivateChild: [AuthGuard],
-    data: {roles: ['guest']},
+    data: {roles: ['ROLE_GUEST']},
     loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterModule)
   },
   {
     path: 'login',
     canActivateChild: [AuthGuard],
-    data: {roles: ['guest']},
+    data: {roles: ['ROLE_GUEST']},
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule)
   },
   {
     path: 'admin',
     canLoad: [AuthGuard],
     canActivateChild: [AuthGuard],
-    data: {roles: ['admin']},
+    data: {roles: ['ROLE_ADMIN']},
     loadChildren: () => import('./pages/admin/games/games.module').then(m => m.GamesModule)
   },
 

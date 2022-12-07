@@ -5,7 +5,7 @@ export interface Team {
   name: string,
   email: string,
   img?: string,
-  admin: boolean,
+  role: 'ROLE_ADMIN' | 'ROLE_USER',
   createdAt?: Date,
   updatedAt?: Date,
   applications?: any[],

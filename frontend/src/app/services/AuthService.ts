@@ -31,7 +31,7 @@ export class AuthService {
     }).pipe(tap(evt => {
       if (evt.success) {
         const team: Team = evt.team
-        if (team.admin) {
+        if (team.role === "ROLE_ADMIN") {
           this.store.dispatch(login({team: team}))
           this.router.navigateByUrl("/admin")
         }

@@ -2,7 +2,7 @@
 
   <div class="relative flex flex-col h-full">
     <div class="relative">
-      <img class="aspect-video object-cover rounded-t" src="{{game.img}}" alt="Game's image">
+      <img class="aspect-video object-cover rounded-t" src="{{game.img | imgSrc}}" alt="Game's image">
       <div class="absolute top-0 right-0 p-1 z-20">
         <app-buttons [isDisabledProgress]="deleting" (onClicked)="deleteGame()" class="absolute right-0 top-0 bg-white rounded p-1" [type]="ButtonType.deleteButton"></app-buttons>
       </div>

@@ -20,8 +20,19 @@ export class AdminService {
     return this.http.get<unknown>(`${this.baseUrl}/games`)
   }
 
-  createGame(newGame: Game): Observable<Game> {
+  createGame2(newGame: Game): Observable<Game> {
     return this.http.post<Game>(`${this.baseUrl}/games`, newGame)
+  }
+
+  createGame(newGame: Game, image: File | undefined): Observable<Game> {
+    const formData: FormData = new FormData()
+    formData.append('gameStart', newGame.dateStart.valueOf().toString())
+    formData.append('gameEnd', newGame.dateEnd.valueOf().toString())
+    formData.append('gameTitle', newGame.title)
+    if(image) {
+      formData.append('image', image)
+    }
+    return this.http.post<Game>(`${this.baseUrl}/games/image`, formData)
   }
 
   updateGame(game: Game): Observable<Game> {

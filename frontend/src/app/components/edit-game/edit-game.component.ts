@@ -14,6 +14,8 @@ export class EditGameComponent implements OnInit, OnDestroy {
 
   ButtonType = ButtonType;
 
+  file?: File
+
   @Input() isEdit: boolean = true
   @Input() game: Game = {
     applications: [],
@@ -62,7 +64,7 @@ export class EditGameComponent implements OnInit, OnDestroy {
 
       //create new
       else {
-        this.subscriptionSave = this.adminService.createGame(this.game).subscribe({
+        this.subscriptionSave = this.adminService.createGame(this.game, this.file).subscribe({
           next: (res) => {
             if (res) {
               this.alert.success(`${res.title} successfully created`)
@@ -79,5 +81,9 @@ export class EditGameComponent implements OnInit, OnDestroy {
       this.alert.warning("Game must have a name")
     }
 
+  }
+
+  setFile(event: any) {
+    this.file = event.target.files[0]
   }
 }

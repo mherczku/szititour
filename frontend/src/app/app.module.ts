@@ -1,6 +1,5 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-
 import {AppComponent} from './app.component';
 import {GridImageComponent} from './components/grid-image/grid-image.component';
 import {LoginFormComponent} from './components/login-form/login-form.component';
@@ -12,7 +11,7 @@ import {AppRoutingModule} from "./app-routing.module";
 import {HotToastModule} from "@ngneat/hot-toast";
 import {ErrorInterceptor} from "./interceptors/ErrorInterceptor";
 import {UnauthorizedInterceptor} from "./interceptors/UnauthorizedInterceptor";
-import { StoreModule } from '@ngrx/store';
+import {StoreModule} from '@ngrx/store';
 import {AuthReducer} from "./reducers/auth.reducer";
 import {AuthService} from "./services/AuthService";
 import {Team} from "./interfaces/team";
@@ -21,7 +20,7 @@ import {Team} from "./interfaces/team";
   declarations: [
     AppComponent,
     GridImageComponent,
-    LoginFormComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,
@@ -36,8 +35,9 @@ import {Team} from "./interfaces/team";
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    {provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService], multi: true }
+    {provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService], multi: true}
   ],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
@@ -46,7 +46,7 @@ export class AppModule {
 function initializeAuth(authService: AuthService): Function {
   return () => new Promise<void>((resolve) => {
     const token = authService.getToken()
-    if(token) {
+    if (token) {
       console.warn("Token ready")
       authService.authorizeMe().subscribe({
         next: value => {
