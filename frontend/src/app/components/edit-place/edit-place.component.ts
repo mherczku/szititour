@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Place} from "../../interfaces/place";
 import {TextInputType} from "../../enums/text-input-type";
 import {ButtonType} from "../../enums/button-type";
@@ -22,6 +22,11 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
   @Input() isEdit: boolean = false
   @Input() place!: Place
   @Output() placeChange: EventEmitter<Place> = new EventEmitter<Place>()
+
+  @ViewChild('fileInput')
+  fileInput?: ElementRef
+
+  file?: File
 
   editModalVisible: boolean = false;
   isEditQuestion: boolean = false;
@@ -54,13 +59,19 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
     }
   }
 
+  setFile(event: any) {
+    this.file = event.target.files[0]
+  }
+
   savePlace() {
     if (this.isEdit) {
       this.saving = true
-      this.subscriptionSave = this.adminService.updatePlace(this.place).subscribe({
+      this.subscriptionSave = this.adminService.updatePlace(this.place, this.file).subscribe({
         next: value => {
-          this.alert.success(`${value.name} place Successfully updated`)
+          this.alert.success(`${value.name} helyszín sikeresen frissítve`)
           this.saving = false
+          this.place = value
+          this.fileInput?.nativeElement.value ? this.fileInput.nativeElement.value = null : undefined
         },
         error: _err => {
           this.saving = false
@@ -68,9 +79,9 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
       })
     } else {
       this.saving = true
-      this.subscriptionSave = this.adminService.addPlaceToGame(this.place).subscribe({
+      this.subscriptionSave = this.adminService.addPlaceToGame(this.place, this.file).subscribe({
         next: value => {
-          this.alert.success(`${value.name} place Successfully created`)
+          this.alert.success(`${value.name} helyszín sikeresen létrehozva`)
           this.saving = false
           this.router.navigateByUrl(`/admin-place/${value.gameId}/${value.id}`)
         },
@@ -82,12 +93,12 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
   }
 
   deletePlace() {
-    const sure = window.confirm(`Are you sure to delete ${this.place.name}?`)
+    const sure = window.confirm(`Biztos törlöd a ${this.place.name} helyszínt?`)
     if (sure) {
       this.deleting = true
       this.subscriptionDelete = this.adminService.deletePlace(this.place.id).subscribe({
         next: _value => {
-          this.alert.success(`${this.place.name} place Successfully deleted`)
+          this.alert.success(`${this.place.name} helyszín sikeresen törölve`)
           this.deleting = false
           this.router.navigateByUrl("/admin")
         },
@@ -145,5 +156,4 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
     this.subscriptionSave?.unsubscribe()
     this.subscriptionDelete?.unsubscribe()
   }
-
 }

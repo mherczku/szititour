@@ -165,3 +165,29 @@ img:before {
     border: 1px solid lawngreen;
   }
 }
+
+.input_container {
+  width: inherit;
+  border: 1px solid #e5e5e5;
+}
+.simpleFileInput {
+  width: inherit;
+
+  &::file-selector-button {
+    background-color: #fff;
+    color: #000;
+    border: 0;
+    border-right: 1px solid #e5e5e5;
+    padding: 5px 10px;
+    margin-right: 20px;
+    transition: .5s;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #eee;
+      border: 0px;
+      border-right: 1px solid #e5e5e5;
+    }
+  }
+}
+

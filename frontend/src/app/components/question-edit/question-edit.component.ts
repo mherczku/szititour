@@ -1,4 +1,15 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {Question} from "../../interfaces/question";
 import {QuestionType} from "../../enums/question-type";
 import {ButtonType} from "../../enums/button-type";
@@ -11,9 +22,12 @@ import {HotToastService} from "@ngneat/hot-toast";
   templateUrl: './question-edit.component.html',
   styleUrls: ['./question-edit.component.sass']
 })
-export class QuestionEditComponent implements OnInit, OnDestroy {
+export class QuestionEditComponent implements OnInit, OnChanges, OnDestroy {
 
   ButtonType = ButtonType;
+
+  @ViewChild('fileInput')
+  fileInput?: ElementRef
 
   @Input() isEdit: boolean = false;
   @Input() question: Question = {
@@ -31,20 +45,27 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   subscriptionSave?: Subscription
   subscriptionDelete?: Subscription
 
+  file?: File
+
   constructor(private adminService: AdminService, private alert: HotToastService) {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.fileInput?.nativeElement.value ? this.fileInput.nativeElement.value = null : undefined
   }
 
   ngOnInit(): void {
   }
 
   save() {
-    if(this.isEdit){
+    if (this.isEdit) {
       console.log(this.question.riddle, "saving")
       this.saving = true
-      this.subscriptionSave = this.adminService.updateQuestion(this.question).subscribe({
+      this.subscriptionSave = this.adminService.updateQuestion(this.question, this.file).subscribe({
         next: value => {
-          this.alert.success(`Question successfully updated`)
+          this.alert.success(`Kérdés sikeresen frissítve`)
           this.saving = false
+          this.fileInput?.nativeElement.value ? this.fileInput.nativeElement.value = null : undefined
           this.onExit.emit({action: "update", question: value})
         },
         error: err => {
@@ -53,10 +74,11 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       })
     } else {
       this.saving = true
-      this.subscriptionSave = this.adminService.createQuestion(this.question).subscribe({
+      this.subscriptionSave = this.adminService.createQuestion(this.question, this.file).subscribe({
         next: value => {
-          this.alert.success(`Question successfully created`)
+          this.alert.success(`Kérdés sikeresen létrehozva`)
           this.saving = false
+          this.fileInput?.nativeElement.value ? this.fileInput.nativeElement.value = null : undefined
           this.onExit.emit({action: "create", question: value})
         },
         error: err => {
@@ -67,12 +89,12 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    const sure = window.confirm("Are you sure to delete this question?")
-    if(sure) {
+    const sure = window.confirm("Biztos törlöd ezt a kérdést?")
+    if (sure) {
       this.deleting = true
       this.subscriptionDelete = this.adminService.deleteQuestion(this.question.id).subscribe({
         next: value => {
-          this.alert.success(`Question successfully deleted`)
+          this.alert.success(`Kérdés sikeresen törölve`)
           this.deleting = false
           this.onExit.emit({action: "delete", question: this.question})
         },
@@ -86,5 +108,9 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionSave?.unsubscribe()
     this.subscriptionDelete?.unsubscribe()
+  }
+
+  setFile(event: any) {
+    this.file = event.target.files[0]
   }
 }

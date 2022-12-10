@@ -10,6 +10,7 @@ import {Place} from "../../interfaces/place";
 export class DropdownComponent implements OnInit {
 
   @Input() place: Place = {id: -1, name: "TestPlace", img: "", gameId: -1, address: "", latitude: '', longitude: "", questions: []}
+  @Input() number!: number
 
   open: boolean = false
 

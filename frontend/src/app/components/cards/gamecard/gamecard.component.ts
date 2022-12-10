@@ -30,13 +30,13 @@ export class GamecardComponent implements OnInit, OnDestroy {
   }
 
   deleteGame() {
-    const sure = window.confirm(`Are you sure to delete ${this.game.title}?`)
+    const sure = window.confirm(`Biztos törlöd a ${this.game.title} játékot?`)
     if(sure){
       this.deleting = true
       this.subscriptionDelete = this.adminService.deleteGame(this.game.id).subscribe({
         next: res => {
           this.deleting = false
-          this.alert.success(`${this.game.title} successfully deleted`)
+          this.alert.success(`${this.game.title} sikeresen törölve`)
           this.onDeleted.emit()
         },
         error: err => {

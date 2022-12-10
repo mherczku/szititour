@@ -4,7 +4,7 @@
   <div class="flex w-full justify-between items-center">
 
     <div class="flex w-fit max-w-full gap-[10%] items-center">
-      <p class="text-size-base font-bold flex-wrap w-fit">{{question.name}}</p>
+      <p class="text-size-base font-bold whitespace-nowrap">{{number}}. Kérdés</p>
       <app-buttons *ngIf="open" (click)="$event.stopPropagation(); openEditDialog()" classes="min-w-[18px]" iconSrc="assets/svg/edit.svg" [type]="ButtonType.iconButton"></app-buttons>
     </div>
 
@@ -18,14 +18,18 @@
        [ngClass]="open ? 'h-fit mt-5' : 'h-0'">
     <div *ngIf="open" class="flex flex-col gap-4">
       <div class="flex gap-2 mobile:flex-col">
-        <p class="text-size-base font-bold">Riddle:</p>
-        <p class="text-size-base">{{question.riddle ? 'true' : "false"}}</p>
+        <p class="text-size-base font-bold">Kérdés:</p>
+        <p class="text-size-base">{{question.name}}</p>
       </div>
       <div class="flex gap-2 mobile:flex-col">
-        <p class="text-size-base font-bold">Type:</p>
+        <p class="text-size-base font-bold">Rejtvény:</p>
+        <p class="text-size-base">{{question.riddle ? 'igen' : "nem"}}</p>
+      </div>
+      <div class="flex gap-2 mobile:flex-col">
+        <p class="text-size-base font-bold">Típusa:</p>
         <p class="text-size-base">{{question.type}}</p>
       </div>
-      <img class="object-contain max-h-[300px] aspect-video" [src]="question.img" alt="">
+      <img class="object-contain max-h-[300px] aspect-video" [src]="question.img | imgSrc" alt="">
     </div>
 
   </div>

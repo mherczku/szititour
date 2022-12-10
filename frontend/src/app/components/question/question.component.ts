@@ -12,6 +12,7 @@ export class QuestionComponent implements OnInit {
   ButtonType = ButtonType;
 
   @Input() question!: Question
+  @Input() number!: number
   @Output() onEditPressed: EventEmitter<unknown> = new EventEmitter()
   open: boolean = false;
 

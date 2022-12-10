@@ -1,24 +1,26 @@
 <div class="relative bg-white p-5 rounded overflow-y-auto max-h-[80vh] flex-col gap-2 flex">
   <p class="text-size-h3 text-center w-full font-bold mb-6">{{this.isEdit ? "Kérdés szerkesztése" : "Kérdés létrehozása"}}</p>
-  <label class="text-size-base">Name:</label>
+  <label class="text-size-base">Kérdés:</label>
   <input [(ngModel)]="question.name" type="text" class="simpleInput">
   <div class="flex gap-2">
-    <label class="text-size-base">Riddle:</label>
+    <label class="text-size-base">Rejtvény?:</label>
     <input [checked]="question.riddle" (change)="question.riddle = !question.riddle" type="checkbox">
   </div>
   <div class="flex gap-2">
-    <label class="text-size-base">Question Type:</label>
+    <label class="text-size-base">Kérdés típusa:</label>
     <select [(ngModel)]="question.type">
-      <option value="0">Short Text</option>
-      <option value="1">Long Text</option>
-      <option value="2">Number</option>
-      <option value="3">Image</option>
-      <option value="4">Year</option>
+      <option value="shortText">Rövid szöveg</option>
+      <option value="longText">Hosszú szöveg</option>
+      <option value="number">Szám</option>
+      <option value="imgOnly">Kép</option>
+      <option value="year">Évszám</option>
     </select>
   </div>
   <div class="flex gap-2">
-    <label class="text-size-base">Image:</label>
-    <input type="file" accept="image/*">
+    <label class="text-size-base">Kép:</label>
+    <div class="input_container">
+      <input class="simpleFileInput text-size-min" #fileInput type="file" accept="image/png, image/jpeg" (change)="setFile($event)">
+    </div>
   </div>
 
   <div class="w-full flex justify-between">

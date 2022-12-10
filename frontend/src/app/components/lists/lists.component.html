@@ -26,12 +26,12 @@
   <p class="text-size-lg text-center w-full font-bold mb-6">Helyszínek</p>
 
   <div class="h-fit overflow-y-auto">
-    <app-dropdown *ngFor="let place of places" [place]="place"></app-dropdown>
+    <app-dropdown *ngFor="let place of places; let index = index" [number]="index + 1" [place]="place"></app-dropdown>
     <p *ngIf="places.length === 0" class="text-size-base bold text-center">No places yet</p>
   </div>
 
   <div class="absolute z-10 w-[3rem] h-[3rem] text-size-base right-10 bottom-10">
-    <app-buttons routerLink="/admin-place/{{gameIdForPlacesList}}/new" classes="hover:scale-110 active:opacity-70 transition" [type]="ButtonType.iconButton" iconSrc="assets/svg/add.svg"></app-buttons>
+    <app-buttons routerLink="/admin/place/{{gameIdForPlacesList}}/new" classes="hover:scale-110 active:opacity-70 transition" [type]="ButtonType.iconButton" iconSrc="assets/svg/add.svg"></app-buttons>
   </div>
 
 </div>

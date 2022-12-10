@@ -3,12 +3,14 @@
   <app-text-input [(value)]="game.title" classes="mb-4" label="Neve"></app-text-input>
   <app-date-input name="Kezdő időpont" classes="mb-4" [(date)]="game.dateStart"></app-date-input>
   <app-date-input name="Befejező időpont" classes="mb-4" [(date)]="game.dateEnd"></app-date-input>
-  <div class="flex gap-2 mb-5">
-    <label class="text-size-base">Image:</label>
-    <input type="file" accept="image/*" (change)="setFile($event)">
+  <div class="flex gap-2 mb-5 items-center">
+    <label class="text-size-base">Kép:</label>
+    <div class="input_container">
+      <input class="simpleFileInput text-size-min" #fileInput type="file" accept="image/png, image/jpeg" (change)="setFile($event)">
+    </div>
   </div>
   <div class="w-full flex justify-between">
-    <app-buttons (onClicked)="onClose.emit()" text="Vissza" [type]="ButtonType.simple"></app-buttons>
+    <app-buttons (onClicked)="close()" text="Vissza" [type]="ButtonType.simple"></app-buttons>
     <app-buttons [isDisabledProgress]="saving" (onClicked)="save()" [text]="this.isEdit ? 'Mentés' : 'Létrehozás'" [type]="ButtonType.simple"></app-buttons>
   </div>
 </div>

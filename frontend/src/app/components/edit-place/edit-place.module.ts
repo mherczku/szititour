@@ -6,6 +6,7 @@ import {ButtonsModule} from "../buttons/buttons.module";
 import {QuestionModule} from "../question/question.module";
 import {ModalModule} from "../modal/modal.module";
 import {QuestionEditModule} from "../question-edit/question-edit.module";
+import {ImgSrcModule} from "../../pipes/img-src/img-src.module";
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import {QuestionEditModule} from "../question-edit/question-edit.module";
     ButtonsModule,
     QuestionModule,
     ModalModule,
-    QuestionEditModule
+    QuestionEditModule,
+    ImgSrcModule
   ]
 })
 export class EditPlaceModule {

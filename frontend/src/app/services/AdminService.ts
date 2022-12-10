@@ -20,14 +20,12 @@ export class AdminService {
     return this.http.get<unknown>(`${this.baseUrl}/games`)
   }
 
-  createGame2(newGame: Game): Observable<Game> {
-    return this.http.post<Game>(`${this.baseUrl}/games`, newGame)
-  }
-
-  createGame(newGame: Game, image: File | undefined): Observable<Game> {
+  createGame(newGame: Game, image: File | undefined = undefined): Observable<Game> {
+    const dateStartNumber: number =  isNaN(Date.parse(newGame.dateStart.valueOf().toString())) ? newGame.dateStart.valueOf() : Date.parse(newGame.dateStart.valueOf().toString())
+    const dateEndNumber: number = isNaN(Date.parse(newGame.dateEnd.valueOf().toString())) ? newGame.dateEnd.valueOf() : Date.parse(newGame.dateEnd.valueOf().toString())
     const formData: FormData = new FormData()
-    formData.append('gameStart', newGame.dateStart.valueOf().toString())
-    formData.append('gameEnd', newGame.dateEnd.valueOf().toString())
+    formData.append('gameStart', dateStartNumber.toString())
+    formData.append('gameEnd', dateEndNumber.toString())
     formData.append('gameTitle', newGame.title)
     if(image) {
       formData.append('image', image)
@@ -35,8 +33,17 @@ export class AdminService {
     return this.http.post<Game>(`${this.baseUrl}/games/image`, formData)
   }
 
-  updateGame(game: Game): Observable<Game> {
-    return this.http.put<Game>(`${this.baseUrl}/games`, game)
+  updateGame(game: Game, image: File | undefined = undefined): Observable<Game> {
+    const formData: FormData = new FormData()
+    formData.append('gameStart', game.dateStart.valueOf().toString())
+    formData.append('gameEnd', game.dateEnd.valueOf().toString())
+    formData.append('gameTitle', game.title)
+    formData.append('gameId', game.id.toString())
+    formData.append('currentImage', game.img ?? "")
+    if(image) {
+      formData.append('image', image)
+    }
+    return this.http.put<Game>(`${this.baseUrl}/games`, formData)
   }
 
   deleteGame(id: number): Observable<unknown> {
@@ -57,24 +64,56 @@ export class AdminService {
     return this.http.get<Place>(`${this.baseUrl}/places/${placeId}`)
   }
 
-  addPlaceToGame(place: Place): Observable<Place> {
-    return this.http.post<Place>(`${this.baseUrl}/places/`, place)
+  addPlaceToGame(place: Place, image: File | undefined = undefined): Observable<Place> {
+    const formData: FormData = new FormData()
+    formData.append('name', place.name)
+    formData.append('address', place.address)
+    formData.append('gameId', place.gameId.toString())
+    if(image) {
+      formData.append('image', image)
+    }
+    return this.http.post<Place>(`${this.baseUrl}/places/`, formData)
   }
 
-  updatePlace(place: Place): Observable<Place> {
-    return this.http.put<Place>(`${this.baseUrl}/places/`, place)
+  updatePlace(place: Place, image: File | undefined = undefined): Observable<Place> {
+    const formData: FormData = new FormData()
+    formData.append('name', place.name)
+    formData.append('address', place.address)
+    formData.append('placeId', place.id.toString())
+    formData.append('currentImage', place.img ?? "")
+    if(image) {
+      formData.append('image', image)
+    }
+    return this.http.put<Place>(`${this.baseUrl}/places/`, formData)
   }
 
   deletePlace(id: number) {
     return this.http.delete<unknown>(`${this.baseUrl}/places/${id}`)
   }
 
-  createQuestion(question: Question): Observable<Question>  {
-    return this.http.post<Question>(`${this.baseUrl}/questions/`, question)
+  createQuestion(question: Question, image: File | undefined = undefined): Observable<Question>  {
+    const formData: FormData = new FormData()
+    formData.append('name', question.name)
+    formData.append('type', question.type.toString())
+    formData.append('riddle', question.riddle ? 'true' : 'false')
+    formData.append('placeId', question.placeId.toString())
+    if(image) {
+      formData.append('image', image)
+    }
+    return this.http.post<Question>(`${this.baseUrl}/questions/`, formData)
   }
 
-  updateQuestion(question: Question): Observable<Question> {
-    return this.http.put<Question>(`${this.baseUrl}/questions/`, question)
+  updateQuestion(question: Question, image: File | undefined = undefined): Observable<Question> {
+    const formData: FormData = new FormData()
+    formData.append('name', question.name)
+    formData.append('currentImage', question.img ?? "")
+    formData.append('type', question.type.toString())
+    formData.append('riddle', question.riddle ? 'true' : 'false')
+    formData.append('questionId', question.id.toString())
+    if(image) {
+      formData.append('image', image)
+    }
+    return this.http.put<Question>(`${this.baseUrl}/questions/`, formData)
   }
 
   deleteQuestion(id: number) {

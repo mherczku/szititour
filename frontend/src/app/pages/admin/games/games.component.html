@@ -1,7 +1,7 @@
 <div class="relative p-10 bg-smoke box-border mobile:p-5">
 
   <div class="grid grid-cols-4 tablet:grid-cols-2 gap-6 mobile:grid-cols-1 relative">
-    <div class="fixed z-10 w-[3rem] h-[3rem] text-size-base right-20 bottom-20">
+    <div class="fixed z-10 w-[3rem] h-[3rem] text-size-base right-20 bottom-20 mobile:right-10 mobile:bottom-10">
       <app-buttons (onClicked)="openNewGameDialog()" classes="hover:scale-110 active:opacity-70 transition" [type]="ButtonType.iconButton" iconSrc="assets/svg/add.svg"></app-buttons>
     </div>
     <app-gamecard [game]="game" (onPlacesClicked)="changeModal(PLACES, game)" (onTeamsClicked)="changeModal(TEAMS, game)"
@@ -18,7 +18,7 @@
 
 <!-- Applications modal -->
 <app-modal classes="w-full" [(isDisplayed)]="teamsModalVisible">
-  <app-lists [(applications)]="selectedGame.applications" ></app-lists>
+  <app-lists [(applications)]="selectedGame.applications"></app-lists>
 </app-modal>
 
 <!-- Places modal -->

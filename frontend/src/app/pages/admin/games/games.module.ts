@@ -30,7 +30,7 @@ const routes: Routes = [
     ButtonsModule,
     ListsModule,
     EditGameModule,
-    EditPlaceModule,
+    EditPlaceModule
   ],
   exports: [GamesComponent]
 })

@@ -13,10 +13,10 @@ export class PlaceComponent implements OnInit, OnDestroy {
 
   place: Place = {
     id: 0,
-    name: "Place Name",
+    name: "Helyszín neve",
     img: "",
     gameId: 0,
-    address: "Place Address",
+    address: "Helyszín címe",
     latitude: '0',
     longitude: "0",
     questions: []
@@ -39,10 +39,10 @@ export class PlaceComponent implements OnInit, OnDestroy {
         this.placeId = 0
         this.place = {
           id: 0,
-          name: "Place Name",
+          name: "Helyszín neve",
           img: "",
           gameId: gameId,
-          address: "Place Address",
+          address: "Helyszín címe",
           latitude: '0',
           longitude: "0",
           questions: []

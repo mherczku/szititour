@@ -1,3 +1,4 @@
+/*
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlaceComponent } from './place.component';
@@ -20,3 +21,4 @@ const routes: Routes = [
   ]
 })
 export class PlaceModule { }
+*/

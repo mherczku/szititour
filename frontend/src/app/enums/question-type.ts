@@ -1,7 +1,7 @@
 export enum QuestionType {
-  shortText,
-  longText,
-  number,
-  imgOnly,
-  year
+  shortText = 'shortText',
+  longText = 'longText',
+  number = 'number',
+  imgOnly = 'imgOnly',
+  year = 'year'
 }
