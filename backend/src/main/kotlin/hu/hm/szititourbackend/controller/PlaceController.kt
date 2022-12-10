@@ -1,4 +1,5 @@
 package hu.hm.szititourbackend.controller
+
 import hu.hm.szititourbackend.datamodel.Place
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.PlaceDto
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import java.util.*
 
 @RestController
@@ -15,19 +17,30 @@ import java.util.*
 @RequestMapping("/places")
 class PlaceController @Autowired constructor(private val placeService: PlaceService) {
 
-    /*@PostMapping()
-    fun addPlace(@RequestBody place: Place): ResponseEntity<PlaceDto> {
-        val newPlace = placeService.addPlace(place)
-        return ResponseEntity(newPlace.convertToDto(), HttpStatus.CREATED)
-    }*/
-
     @PostMapping()
-    fun addPlaceToGame(@RequestBody placeDto: PlaceDto): ResponseEntity<PlaceDto> {
-        val newPlace = placeService.addPlaceToGame(placeDto)
-        if(!newPlace.isPresent) {
+    fun addPlaceToGame(
+        @RequestParam("image") file: MultipartFile?,
+        @RequestParam("gameId") gameId: String,
+        @RequestParam("name") name: String,
+        @RequestParam("address") address: String,
+    ): ResponseEntity<PlaceDto> {
+
+        val placeDto = PlaceDto(
+            gameId = gameId.toInt(),
+            name = name,
+            address = address
+        )
+
+        val createdPlace: Optional<Place> = if (file != null) {
+            placeService.addPlaceToGameWithImage(placeDto, file)
+        } else {
+            placeService.addPlaceToGame(placeDto)
+        }
+
+        if (!createdPlace.isPresent) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
-        return ResponseEntity(newPlace.get().convertToDto(), HttpStatus.CREATED)
+        return ResponseEntity(createdPlace.get().convertToDto(), HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
@@ -46,8 +59,27 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
     }
 
     @PutMapping
-    fun updatePlace( @RequestBody place: PlaceDto): ResponseEntity<PlaceDto> {
-        return ResponseEntity(placeService.updatePlace(place).convertToDto(), HttpStatus.OK)
+    fun updatePlace(
+        @RequestParam("image") file: MultipartFile?,
+        @RequestParam("placeId") placeId: String,
+        @RequestParam("currentImage") img: String,
+        @RequestParam("name") name: String,
+        @RequestParam("address") address: String,
+    ): ResponseEntity<PlaceDto> {
+
+        val placeDto = PlaceDto(
+            id = placeId.toInt(),
+            name = name,
+            address = address,
+            img = img
+        )
+
+        val updatedPlace: Place = if (file != null) {
+            placeService.updatePlaceToGameWithImage(placeDto, file)
+        } else {
+            placeService.updatePlace(placeDto)
+        }
+        return ResponseEntity(updatedPlace.convertToDto(), HttpStatus.OK)
     }
 
     @DeleteMapping("/{id}")

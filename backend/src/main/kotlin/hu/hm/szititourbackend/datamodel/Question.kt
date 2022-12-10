@@ -12,10 +12,10 @@ class Question(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     val id: Int = 0,
-    val name: String = "",
-    val type: QuestionType = QuestionType.shortText,
-    val riddle: Boolean = false,
-    val img: String = "",
+    var name: String = "",
+    var type: QuestionType = QuestionType.shortText,
+    var riddle: Boolean = false,
+    var img: String = "",
 
     @OneToMany(mappedBy = "question", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val answers: MutableList<Answer> = mutableListOf(),

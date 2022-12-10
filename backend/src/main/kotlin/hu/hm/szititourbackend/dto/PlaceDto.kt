@@ -4,7 +4,7 @@ package hu.hm.szititourbackend.dto
 class PlaceDto(
     val id: Int = 0,
     val name: String = "",
-    val img: String = "",
+    var img: String = "",
     val address: String = "",
     val latitude: String = "",
     val longitude: String = "",

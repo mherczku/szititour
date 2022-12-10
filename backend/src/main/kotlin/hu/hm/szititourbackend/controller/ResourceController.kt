@@ -10,6 +10,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.*
+import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
 import javax.servlet.http.HttpServletResponse
@@ -35,22 +36,22 @@ class ResourceController @Autowired constructor(
 
             val paths = imagePath.split('-')
 
-            val directory = when (paths[0]) {
-                "games" -> Utils.imageDirectoryGames
-                "teams" -> Utils.imageDirectoryTeams
-                "answers" -> Utils.imageDirectoryAnswers
-                "places" -> Utils.imageDirectoryPlaces
-                "questions" -> Utils.imageDirectoryQuestions
-                else -> ""
-            }
+            val directory = Utils.getImageDirectoryFromName(paths[0])
 
             if (directory == "") {
+
                 throw Exception("Image resource not found - directory not exist")
             }
 
             val filename = paths[1]
             val extension = StringUtils.getFilenameExtension(imagePath)
             val path: Path = Paths.get("$directory/$filename")
+
+            val image = File(path.toUri())
+            if (!image.exists()) {
+                return ResponseEntity(HttpStatus.NOT_FOUND)
+            }
+
             val urlRes = UrlResource(path.toUri())
             val contentType: MediaType = if (extension == "jpg") MediaType.IMAGE_JPEG else MediaType.IMAGE_PNG
 

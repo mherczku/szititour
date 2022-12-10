@@ -11,9 +11,9 @@ class Place(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     val id: Int = 0,
-    val name: String = "",
-    val img: String = "",
-    val address: String = "",
+    var name: String = "",
+    var img: String = "",
+    var address: String = "",
     val latitude: String = "",
     val longitude: String = "",
 

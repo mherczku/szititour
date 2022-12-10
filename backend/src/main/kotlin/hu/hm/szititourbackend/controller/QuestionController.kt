@@ -1,13 +1,16 @@
 package hu.hm.szititourbackend.controller
+
 import hu.hm.szititourbackend.datamodel.Question
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.QuestionDto
+import hu.hm.szititourbackend.enum.QuestionType
 import hu.hm.szititourbackend.service.QuestionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import java.util.*
 
 @RestController
@@ -16,12 +19,30 @@ import java.util.*
 class QuestionController @Autowired constructor(private val questionService: QuestionService) {
 
     @PostMapping()
-    fun addQuestion(@RequestBody question: QuestionDto): ResponseEntity<QuestionDto> {
-        val newQuestion = questionService.addQuestionToPlace(question)
-        if(!newQuestion.isPresent) {
+    fun addQuestion(
+        @RequestParam("image") file: MultipartFile?,
+        @RequestParam("placeId") placeId: String,
+        @RequestParam("type") type: String,
+        @RequestParam("name") name: String,
+        @RequestParam("riddle") riddle: String
+    ): ResponseEntity<QuestionDto> {
+        val questionDto = QuestionDto(
+            name = name,
+            placeId = placeId.toInt(),
+            type = QuestionType.valueOf(type),
+            riddle = riddle == "true"
+        )
+
+        val createdQuestion: Optional<Question> = if (file != null) {
+            questionService.addQuestionToPlaceWithImage(questionDto, file)
+        } else {
+            questionService.addQuestionToPlace(questionDto)
+        }
+
+        if (!createdQuestion.isPresent) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
-        return ResponseEntity(newQuestion.get().convertToDto(), HttpStatus.CREATED)
+        return ResponseEntity(createdQuestion.get().convertToDto(), HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
@@ -40,8 +61,29 @@ class QuestionController @Autowired constructor(private val questionService: Que
     }
 
     @PutMapping
-    fun updateQuestion(@RequestBody question: QuestionDto): ResponseEntity<QuestionDto> {
-        return ResponseEntity(questionService.updateQuestion(question).convertToDto(), HttpStatus.OK)
+    fun updateQuestion(
+        @RequestParam("image") file: MultipartFile?,
+        @RequestParam("questionId") questionId: String,
+        @RequestParam("currentImage") img: String,
+        @RequestParam("type") type: String,
+        @RequestParam("name") name: String,
+        @RequestParam("riddle") riddle: String
+    ): ResponseEntity<QuestionDto> {
+
+        val questionDto = QuestionDto(
+            name = name,
+            id = questionId.toInt(),
+            type = QuestionType.valueOf(type),
+            riddle = riddle == "true",
+            img = img
+        )
+        val updatedQuestion: Question = if (file != null) {
+            questionService.updateQuestionWithImage(questionDto, file)
+        } else {
+            questionService.updateQuestion(questionDto)
+        }
+
+        return ResponseEntity(updatedQuestion.convertToDto(), HttpStatus.OK)
     }
 
     @DeleteMapping("/{id}")

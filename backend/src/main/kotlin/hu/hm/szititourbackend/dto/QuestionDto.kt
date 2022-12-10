@@ -10,7 +10,7 @@ class QuestionDto(
     val name: String = "",
     val type: QuestionType = QuestionType.shortText,
     val riddle: Boolean = false,
-    val img: String = "",
+    var img: String = "",
 
     val answers: MutableList<AnswerDto> = mutableListOf(),
     val placeId: Int = 0
