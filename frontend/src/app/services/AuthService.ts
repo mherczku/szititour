@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
 import {AuthState} from "../interfaces/states/auth-state";
 import {Store} from "@ngrx/store";
@@ -25,10 +25,14 @@ export class AuthService {
   }
 
   public login(email: string, password: string): Observable<NetworkLoginResponse> {
-    return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, {
-      email: email,
-      password: password
-    }).pipe(tap(evt => {
+
+    const usernamePassword = `${email}:${password}`
+    const encoded = btoa(usernamePassword)
+    const authHeader = `Basic ${encoded}`
+    const headers = new HttpHeaders()
+      .set('Authorization', authHeader)
+
+    return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, null, {headers: headers}).pipe(tap(evt => {
       if (evt.success) {
         const team: Team = evt.team
         if (team.role === "ROLE_ADMIN") {
