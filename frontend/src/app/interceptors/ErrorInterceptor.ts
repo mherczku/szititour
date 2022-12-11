@@ -18,7 +18,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
-      catchError((err: any, caught: any) => {
+      catchError((err: any, _caught: any) => {
         if (err instanceof HttpErrorResponse) {
           if (err?.error?.errorMessage) {
             this.toastService.error(err.error.errorMessage)
@@ -31,10 +31,6 @@ export class ErrorInterceptor implements HttpInterceptor {
               }
               case HttpStatusCode.RequestTimeout: {
                 this.toastService.error("Request Timed Out")
-                break;
-              }
-              case HttpStatusCode.Unauthorized: {
-                this.toastService.error("Unauthorized request")
                 break;
               }
               case HttpStatusCode.BadRequest: {
