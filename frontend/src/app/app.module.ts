@@ -14,6 +14,7 @@ import {UnauthorizedInterceptor} from "./interceptors/UnauthorizedInterceptor";
 import {StoreModule} from '@ngrx/store';
 import {AuthReducer} from "./reducers/auth.reducer";
 import {AuthService} from "./services/AuthService";
+import {interval, map, raceWith} from "rxjs";
 import {Team} from "./interfaces/team";
 
 @NgModule({
@@ -48,11 +49,15 @@ function initializeAuth(authService: AuthService): Function {
     const token = authService.getToken()
     if (token) {
       console.warn("Token ready")
-      authService.authorizeMe().subscribe({
+
+      const oneSec = interval(1000).pipe(map(() => {return {success: false, team: null} }));
+      authService.authorizeMe().pipe(raceWith(oneSec)).subscribe({
         next: value => {
           if (value.success) {
-            const team: Team = value.team
-            authService.dispatchLogin(team)
+            if(value.team) {
+              const team: Team = value.team
+              authService.dispatchLogin(team)
+            }
           }
           resolve()
         },
