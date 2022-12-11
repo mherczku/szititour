@@ -12,6 +12,7 @@ import hu.hm.szititourbackend.util.Utils
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 
@@ -38,23 +39,19 @@ class SecurityController(private val teamService: TeamService, private val secur
     }
 
     @PostMapping("login")
-    fun login(@RequestBody credentials: LoginData, response: HttpServletResponse): ResponseEntity<LoginResponse> {
-        if (credentials.email.isNullOrEmpty() || credentials.password.isNullOrEmpty()) {
-            return ResponseEntity(LoginResponse(false, "Email or password is empty", "", null), HttpStatus.BAD_REQUEST)
-        }
-        val t = teamService.getTeamByEmail(email = credentials.email)
+    fun login(authentication: Authentication, response: HttpServletResponse): ResponseEntity<LoginResponse> {
+        val t = teamService.getTeamByEmail(email = authentication.name)
 
-        if (t.isPresent) {
+        return if (t.isPresent) {
             val team = t.get()
-            if (PasswordUtils.comparePassword(credentials.password, team.password)) {
-                val token = securityService.generateToken(team = team)
-                response.addHeader(TOKEN_NAME, "Bearer $token")
-                return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
-            }
-            return ResponseEntity(LoginResponse(false, "Email or password is wrong", "", null), HttpStatus.UNAUTHORIZED)
+            val token = securityService.generateToken(team = team)
+            response.addHeader(TOKEN_NAME, "Bearer $token")
+            ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
+
         } else {
-            return ResponseEntity(LoginResponse(false, "User not found", "", null), HttpStatus.NOT_FOUND)
+            ResponseEntity(LoginResponse(false, "User not found", "", null), HttpStatus.NOT_FOUND)
         }
+
     }
 
     @PostMapping("register")
