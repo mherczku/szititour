@@ -4,6 +4,7 @@ import hu.hm.szititourbackend.datamodel.Question
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.QuestionDto
 import hu.hm.szititourbackend.enum.QuestionType
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.QuestionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -40,7 +41,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
         }
 
         if (!createdQuestion.isPresent) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
+            throw CustomException("Creation unsuccessful", HttpStatus.BAD_REQUEST)
         }
         return ResponseEntity(createdQuestion.get().convertToDto(), HttpStatus.CREATED)
     }
@@ -49,7 +50,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
     fun getQuestionById(@PathVariable id: Int): ResponseEntity<QuestionDto?> {
         val question: Optional<Question> = questionService.getQuestionById(id)
         if (!question.isPresent) {
-            return ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Question not found", HttpStatus.NOT_FOUND)
         }
         return ResponseEntity(question.get().convertToDto(), HttpStatus.OK)
     }
@@ -92,7 +93,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
             questionService.deleteQuestionById(id)
             ResponseEntity(null, HttpStatus.OK)
         } catch (e: Exception) {
-            ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Question not found", HttpStatus.NOT_FOUND)
         }
     }
 }

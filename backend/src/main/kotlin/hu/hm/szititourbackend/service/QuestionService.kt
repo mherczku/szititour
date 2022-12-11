@@ -2,10 +2,12 @@ package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.datamodel.Question
 import hu.hm.szititourbackend.dto.QuestionDto
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.PlaceRepository
 import hu.hm.szititourbackend.repository.QuestionRepository
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
@@ -27,7 +29,7 @@ class QuestionService @Autowired constructor(
             Optional.of(addedQuestion.get())
         } catch (e: Exception) {
             Utils.deleteImage(imagePath)
-            Optional.empty()
+            throw e
         }
     }
 
@@ -76,7 +78,7 @@ class QuestionService @Autowired constructor(
     fun updateQuestion(questionDto: QuestionDto): Question {
         val optional = questionRepository.findById(questionDto.id)
         if (!optional.isPresent) {
-            throw Exception("Question not exist")
+            throw CustomException("Question not exist", HttpStatus.NOT_FOUND)
         }
         val question = optional.get()
         question.type = questionDto.type

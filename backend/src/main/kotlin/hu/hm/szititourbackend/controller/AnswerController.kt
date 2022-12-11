@@ -2,6 +2,7 @@ package hu.hm.szititourbackend.controller
 import hu.hm.szititourbackend.datamodel.Answer
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.AnswerDto
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.AnswerService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -25,7 +26,7 @@ class AnswerController @Autowired constructor(private val answerService: AnswerS
     fun getAnswerById(@PathVariable id: Int): ResponseEntity<AnswerDto?> {
         val answer: Optional<Answer> = answerService.getAnswerById(id)
         if (!answer.isPresent) {
-            return ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Answer not found", HttpStatus.NOT_FOUND)
         }
         return ResponseEntity(answer.get().convertToDto(), HttpStatus.OK)
     }
@@ -47,7 +48,7 @@ class AnswerController @Autowired constructor(private val answerService: AnswerS
             answerService.deleteAnswerById(id)
             ResponseEntity(null, HttpStatus.OK)
         } catch (e: Exception) {
-            ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Answer not found", HttpStatus.NOT_FOUND)
         }
     }
 }

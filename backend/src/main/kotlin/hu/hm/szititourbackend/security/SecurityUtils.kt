@@ -34,7 +34,7 @@ class SecurityService(private val jwtEncoder: JwtEncoder, private val jwtDecoder
     }
 
     fun verifyToken(bearerToken: String): VerificationResponse {
-        if(bearerToken.isNullOrEmpty()) {
+        if (bearerToken.isNullOrEmpty()) {
             return VerificationResponse(verified = false, errorMessage = "Empty Token")
         }
         val token = bearerToken.replace("Bearer ", "")

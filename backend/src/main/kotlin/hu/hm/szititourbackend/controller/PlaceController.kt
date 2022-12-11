@@ -3,6 +3,7 @@ package hu.hm.szititourbackend.controller
 import hu.hm.szititourbackend.datamodel.Place
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.PlaceDto
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.PlaceService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -38,7 +39,8 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
         }
 
         if (!createdPlace.isPresent) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
+            throw CustomException("Creation unsuccessful", HttpStatus.BAD_REQUEST)
+
         }
         return ResponseEntity(createdPlace.get().convertToDto(), HttpStatus.CREATED)
     }
@@ -47,7 +49,8 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
     fun getPlaceById(@PathVariable id: Int): ResponseEntity<PlaceDto?> {
         val place: Optional<Place> = placeService.getPlaceById(id)
         if (!place.isPresent) {
-            return ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Place not found", HttpStatus.NOT_FOUND)
+
         }
         return ResponseEntity(place.get().convertToDto(), HttpStatus.OK)
     }
@@ -88,7 +91,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
             placeService.deletePlaceById(id)
             ResponseEntity(null, HttpStatus.OK)
         } catch (e: Exception) {
-            ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Place not found", HttpStatus.NOT_FOUND)
         }
     }
 }

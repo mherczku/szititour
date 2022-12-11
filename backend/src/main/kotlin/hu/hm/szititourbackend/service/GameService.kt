@@ -3,9 +3,11 @@ package hu.hm.szititourbackend.service
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.convertToBasicDto
 import hu.hm.szititourbackend.dto.GameOnlyBasicDto
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.GameRepository
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
@@ -46,7 +48,7 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
     fun updateGameWithImage(game: Game, file: MultipartFile): Game {
         val optional = gameRepository.findByTitle(game.title)
         if (optional.isPresent && optional.get().id != game.id) {
-            throw Exception("Game name already taken")
+            throw CustomException("Game name already taken", HttpStatus.BAD_REQUEST)
         }
         val updated = updateGame(game)
         val imagePath = Utils.saveImage(file, Utils.imageDirectoryGamesName, updated.img)
@@ -57,7 +59,7 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
     fun updateGame(game: Game): Game {
         val exist = gameRepository.existsById(game.id)
         if (!exist) {
-            throw Exception("Game not exist")
+            throw CustomException("Game not exist", HttpStatus.NOT_FOUND)
         }
         game.updatedAt = Timestamp(System.currentTimeMillis())
         return gameRepository.save(game)

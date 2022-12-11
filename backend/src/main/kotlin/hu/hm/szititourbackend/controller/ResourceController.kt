@@ -1,5 +1,6 @@
 package hu.hm.szititourbackend.controller
 
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
 import hu.hm.szititourbackend.util.Utils
@@ -39,8 +40,7 @@ class ResourceController @Autowired constructor(
             val directory = Utils.getImageDirectoryFromName(paths[0])
 
             if (directory == "") {
-
-                throw Exception("Image resource not found - directory not exist")
+                throw CustomException("Image resource not found - directory not exist", HttpStatus.BAD_REQUEST)
             }
 
             val filename = paths[1]
@@ -49,7 +49,7 @@ class ResourceController @Autowired constructor(
 
             val image = File(path.toUri())
             if (!image.exists()) {
-                return ResponseEntity(HttpStatus.NOT_FOUND)
+                throw CustomException("Image not found", HttpStatus.NOT_FOUND)
             }
 
             val urlRes = UrlResource(path.toUri())
@@ -64,7 +64,7 @@ class ResourceController @Autowired constructor(
 
         }*/
         else {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
+            throw CustomException("Verification unsuccessful", HttpStatus.FORBIDDEN)
         }
     }
 

@@ -1,6 +1,8 @@
 package hu.hm.szititourbackend.util
 
+import hu.hm.szititourbackend.exception.CustomException
 import net.bytebuddy.utility.RandomString
+import org.springframework.http.HttpStatus
 import org.springframework.util.StringUtils
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
@@ -63,7 +65,7 @@ object Utils {
         val directoryToSavePath = getImageDirectoryFromName(directoryToSaveName)
 
         if (directoryToSavePath == "") {
-            throw Exception("Image resource not found - directory not exist")
+            throw CustomException("Image resource not found - directory not exist", HttpStatus.NOT_FOUND)
         }
 
         var imagePath = ""
@@ -85,7 +87,7 @@ object Utils {
             Files.write(fileNameAndPath, file.bytes)
             imagePath = "$directoryToSaveName-$newFileName.$extension"
         } else {
-            throw Exception("Image format must be png or jpg")
+            throw CustomException("Image format must be png or jpg", HttpStatus.BAD_REQUEST)
         }
         return imagePath
     }

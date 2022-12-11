@@ -3,10 +3,12 @@ package hu.hm.szititourbackend.service
 import hu.hm.szititourbackend.datamodel.Place
 import hu.hm.szititourbackend.dto.PlaceDto
 import hu.hm.szititourbackend.dto.convertToQuestions
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.GameRepository
 import hu.hm.szititourbackend.repository.PlaceRepository
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
@@ -27,7 +29,7 @@ class PlaceService @Autowired constructor(
             Optional.of(addedPlaceOptional.get())
         } catch (e: Exception) {
             Utils.deleteImage(imagePath)
-            Optional.empty()
+            throw e
         }
     }
 
@@ -77,7 +79,7 @@ class PlaceService @Autowired constructor(
     fun updatePlace(placeDto: PlaceDto): Place {
         val optional = placeRepository.findById(placeDto.id)
         if (!optional.isPresent) {
-            throw Exception("Place not exist")
+            throw CustomException("Place not exist", HttpStatus.NOT_FOUND)
         }
         val place = optional.get()
         place.img = placeDto.img

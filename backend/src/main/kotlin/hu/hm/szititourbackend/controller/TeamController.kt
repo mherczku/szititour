@@ -2,6 +2,7 @@ package hu.hm.szititourbackend.controller
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.TeamDto
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.TeamService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -25,7 +26,7 @@ class TeamController @Autowired constructor(private val teamService: TeamService
     fun getTeamById(@PathVariable id: Int): ResponseEntity<TeamDto?> {
         val team: Optional<Team> = teamService.getTeamById(id)
         if (!team.isPresent) {
-            return ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Team not found", HttpStatus.NOT_FOUND)
         }
         return ResponseEntity(team.get().convertToDto(), HttpStatus.OK)
     }
@@ -47,7 +48,7 @@ class TeamController @Autowired constructor(private val teamService: TeamService
             teamService.deleteTeamById(id)
             ResponseEntity(null, HttpStatus.OK)
         } catch (e: Exception) {
-            ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Team not found", HttpStatus.NOT_FOUND)
         }
     }
 }

@@ -4,6 +4,7 @@ import hu.hm.szititourbackend.datamodel.Answer
 import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.convertToActiveDto
 import hu.hm.szititourbackend.dto.*
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.Response
 import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
@@ -36,7 +37,7 @@ class LoggedInController @Autowired constructor(
         val verification = securityService.verifyToken(token)
         val updatedTeam = teamService.updateTeamProfile(verification.teamId, profileUpdate)
         if (!updatedTeam.isPresent) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
+            throw CustomException("Profile update unsuccessful", HttpStatus.BAD_REQUEST)
         }
         return ResponseEntity(updatedTeam.get(), HttpStatus.OK)
     }
@@ -46,7 +47,6 @@ class LoggedInController @Autowired constructor(
         return ResponseEntity(gameService.getAllAvailableGames(), HttpStatus.OK)
     }
 
-
     @PostMapping("apply")
     fun applyForGame(
         @RequestHeader(TOKEN_NAME) token: String,
@@ -55,17 +55,10 @@ class LoggedInController @Autowired constructor(
         val verification = securityService.verifyToken(token)
         val application = teamService.getTeamsApplicationByTeamIds(verification.teamId, gameId)
         if (application.isPresent) {
-            ResponseEntity(
-                Response(success = false, errorMessage = "This Team has an application already"),
-                HttpStatus.ALREADY_REPORTED
-            )
+            throw CustomException("This Team has an application already", HttpStatus.ALREADY_REPORTED)
         }
-        return try {
-            applicationService.createApplication(gameId, verification.teamId)
-            ResponseEntity(Response(success = true), HttpStatus.CREATED)
-        } catch (e: Exception) {
-            ResponseEntity(Response(success = false, errorMessage = e.localizedMessage), HttpStatus.BAD_REQUEST)
-        }
+        applicationService.createApplication(gameId, verification.teamId)
+        return ResponseEntity(Response(success = true), HttpStatus.CREATED)
     }
 
     @PostMapping("cancel")
@@ -74,28 +67,20 @@ class LoggedInController @Autowired constructor(
         @RequestBody gameId: Int
     ): ResponseEntity<Response> {
         val verification = securityService.verifyToken(token)
-        return try {
-            val application = teamService.getTeamsApplicationByTeamIds(verification.teamId, gameId)
-            if (!application.isPresent) {
-                ResponseEntity(Response(success = false), HttpStatus.NOT_FOUND)
+        val application = teamService.getTeamsApplicationByTeamIds(verification.teamId, gameId)
+        if (!application.isPresent) {
+            throw CustomException("Application not found", HttpStatus.NOT_FOUND)
+        } else {
+            val applicationGot: Application = application.get()
+            if (applicationGot.accepted == null) {
+                applicationService.deleteApplicationById(application.get().id)
+                return ResponseEntity(Response(success = true), HttpStatus.OK)
+            } else if (applicationGot.accepted!!) {
+                applicationService.deleteApplicationById(application.get().id)
+                return ResponseEntity(Response(success = true), HttpStatus.OK)
             } else {
-                val applicationGot: Application = application.get()
-                if (applicationGot.accepted == null) {
-                    applicationService.deleteApplicationById(application.get().id)
-                    ResponseEntity(Response(success = true), HttpStatus.OK)
-                } else if (applicationGot.accepted!!) {
-                    applicationService.deleteApplicationById(application.get().id)
-                    ResponseEntity(Response(success = true), HttpStatus.OK)
-                } else {
-                    ResponseEntity(
-                        Response(success = false, errorMessage = "Cannot cancel refused application"),
-                        HttpStatus.FORBIDDEN
-                    )
-                }
+                throw CustomException("Cannot cancel refused application", HttpStatus.FORBIDDEN)
             }
-
-        } catch (e: Exception) {
-            ResponseEntity(Response(success = false, errorMessage = e.localizedMessage), HttpStatus.BAD_REQUEST)
         }
     }
 
@@ -111,18 +96,15 @@ class LoggedInController @Autowired constructor(
         @RequestBody gameId: Int
     ): ResponseEntity<GameActiveDto> {
         val verification = securityService.verifyToken(token)
-        try {
-            if (hasTeamAcceptedApplicationToGame(verification.teamId, gameId)) {
-                val game = gameService.getGameById(gameId)
-                if (!game.isPresent) {
-                    return ResponseEntity(HttpStatus.NOT_FOUND)
-                }
-                return ResponseEntity(game.get().convertToActiveDto(), HttpStatus.OK)
+
+        if (hasTeamAcceptedApplicationToGame(verification.teamId, gameId)) {
+            val game = gameService.getGameById(gameId)
+            if (!game.isPresent) {
+                throw CustomException("Game not found", HttpStatus.NOT_FOUND)
             }
-            return ResponseEntity(HttpStatus.FORBIDDEN)
-        } catch (e: Exception) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
+            return ResponseEntity(game.get().convertToActiveDto(), HttpStatus.OK)
         }
+        throw CustomException("Your application has not been accepted yet", HttpStatus.FORBIDDEN)
     }
 
     @PostMapping("answer/{questionId}")
@@ -132,22 +114,16 @@ class LoggedInController @Autowired constructor(
         answer: Answer
     ): ResponseEntity<Response> {
         val verification = securityService.verifyToken(token)
-        try {
-            if (hasTeamAcceptedApplicationToGameByQuestionId(verification.teamId, questionId)) {
-                val question = questionService.getQuestionById(questionId)
-                if (!question.isPresent) {
-                    return ResponseEntity(
-                        Response(success = false, errorMessage = "No question found with the given ID"),
-                        HttpStatus.NOT_FOUND
-                    )
-                }
-                answerService.createAnswer(answer, verification.teamId, question.get())
-                return ResponseEntity(Response(success = true), HttpStatus.CREATED)
+
+        if (hasTeamAcceptedApplicationToGameByQuestionId(verification.teamId, questionId)) {
+            val question = questionService.getQuestionById(questionId)
+            if (!question.isPresent) {
+                throw CustomException("Question not found", HttpStatus.NOT_FOUND)
             }
-            return ResponseEntity(HttpStatus.FORBIDDEN)
-        } catch (e: Exception) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
+            answerService.createAnswer(answer, verification.teamId, question.get())
+            return ResponseEntity(Response(success = true), HttpStatus.CREATED)
         }
+        throw CustomException("Your application has not been accepted yet or game not started", HttpStatus.FORBIDDEN)
     }
 
     private fun hasTeamAcceptedApplicationToGame(teamId: Int, gameId: Int): Boolean {
@@ -155,7 +131,6 @@ class LoggedInController @Autowired constructor(
         return if (application.isPresent && application.get().accepted != null) {
             (application.get().accepted!!)
         } else false
-
     }
 
     private fun hasTeamAcceptedApplicationToGameByQuestionId(teamId: Int, questionId: Int): Boolean {

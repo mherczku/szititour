@@ -2,6 +2,7 @@ package hu.hm.szititourbackend.controller
 import hu.hm.szititourbackend.dto.ApplicationDto
 import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.convertToDto
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.ApplicationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -25,7 +26,7 @@ class ApplicationController @Autowired constructor(private val applicationServic
     fun getApplicationById(@PathVariable id: Int): ResponseEntity<ApplicationDto?> {
         val application: Optional<Application> = applicationService.getApplicationById(id)
         if (!application.isPresent) {
-            return ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Application not found", HttpStatus.NOT_FOUND)
         }
         return ResponseEntity(application.get().convertToDto(), HttpStatus.OK)
     }
@@ -47,7 +48,7 @@ class ApplicationController @Autowired constructor(private val applicationServic
             applicationService.deleteApplicationById(id)
             ResponseEntity(null, HttpStatus.OK)
         } catch (e: Exception) {
-            ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Application not found", HttpStatus.NOT_FOUND)
         }
     }
 }

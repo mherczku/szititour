@@ -2,6 +2,7 @@ package hu.hm.szititourbackend.security
 
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.LoginData
 import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.extramodel.Response
@@ -27,14 +28,13 @@ class SecurityController(private val teamService: TeamService, private val secur
         @RequestHeader(TOKEN_NAME) token: String,
         response: HttpServletResponse
     ): ResponseEntity<LoginResponse> {
-
         val verification = securityService.verifyToken(token)
 
         val t = teamService.getTeamById(verification.teamId)
         return if (t.isPresent) {
             ResponseEntity(LoginResponse(true, "", "", t.get().convertToDto()), HttpStatus.OK)
         } else {
-            ResponseEntity(LoginResponse(false, "User not found", "", null), HttpStatus.UNAUTHORIZED)
+            throw CustomException("User not found", HttpStatus.UNAUTHORIZED)
         }
     }
 
@@ -49,7 +49,7 @@ class SecurityController(private val teamService: TeamService, private val secur
             ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
 
         } else {
-            ResponseEntity(LoginResponse(false, "User not found", "", null), HttpStatus.NOT_FOUND)
+            throw CustomException("User not found", HttpStatus.NOT_FOUND)
         }
 
     }
@@ -57,7 +57,7 @@ class SecurityController(private val teamService: TeamService, private val secur
     @PostMapping("register")
     fun register(@RequestBody credentials: LoginData): ResponseEntity<Response> {
         if (credentials.email.isNullOrEmpty() || credentials.password.isNullOrEmpty()) {
-            return ResponseEntity(Response(false, "Email or password is empty"), HttpStatus.BAD_REQUEST)
+            throw CustomException("Email or password is empty", HttpStatus.BAD_REQUEST)
         }
         if (Utils.validateEmail(credentials.email) && Utils.validatePassword(credentials.password)) {
             try {
@@ -69,13 +69,12 @@ class SecurityController(private val teamService: TeamService, private val secur
                     )
                 )
             } catch (e: DataIntegrityViolationException) {
-                return ResponseEntity(Response(false, "Email is already in use", ""), HttpStatus.BAD_REQUEST)
+                throw CustomException("Email is already in use", HttpStatus.BAD_REQUEST)
             }
             return ResponseEntity(Response(true, "", "Register Successful"), HttpStatus.CREATED)
         } else {
-            return ResponseEntity(Response(false, "Email or password is invalid", ""), HttpStatus.BAD_REQUEST)
+            throw CustomException("Email or password is invalid", HttpStatus.BAD_REQUEST)
         }
     }
-
 
 }

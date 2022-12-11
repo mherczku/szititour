@@ -3,7 +3,7 @@ package hu.hm.szititourbackend.controller
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.GameDto
-import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.GameService
 import org.hibernate.exception.ConstraintViolationException
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,12 +22,12 @@ import java.util.*
 class GameController @Autowired constructor(private val gameService: GameService) {
 
     @PostMapping()
-    fun addGame(@RequestBody game: Game): ResponseEntity<*> {
+    fun addGame(@RequestBody game: Game): ResponseEntity<GameDto> {
         return try {
             val newGame = gameService.addGame(game)
             ResponseEntity(newGame.convertToDto(), HttpStatus.CREATED)
         } catch (ex: DataIntegrityViolationException) {
-            ResponseEntity(Response(false, errorMessage = "This game title is already taken"), HttpStatus.BAD_REQUEST)
+            throw CustomException("This game title is already taken", HttpStatus.BAD_REQUEST)
         }
     }
 
@@ -37,7 +37,7 @@ class GameController @Autowired constructor(private val gameService: GameService
         @RequestParam("gameTitle") gameTitle: String,
         @RequestParam("gameStart") gameStart: String,
         @RequestParam("gameEnd") gameEnd: String
-    ): ResponseEntity<*> {
+    ): ResponseEntity<GameDto> {
 
         return try {
 
@@ -58,7 +58,7 @@ class GameController @Autowired constructor(private val gameService: GameService
 
             ResponseEntity(createdGame.convertToDto(), HttpStatus.CREATED)
         } catch (ex: DataIntegrityViolationException) {
-            ResponseEntity(Response(false, errorMessage = "This game title is already taken"), HttpStatus.BAD_REQUEST)
+            throw CustomException("This game title is already taken", HttpStatus.BAD_REQUEST)
         }
     }
 
@@ -66,7 +66,8 @@ class GameController @Autowired constructor(private val gameService: GameService
     fun getGameById(@PathVariable id: Int): ResponseEntity<GameDto?> {
         val game: Optional<Game> = gameService.getGameById(id)
         if (!game.isPresent) {
-            return ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Game not found", HttpStatus.NOT_FOUND)
+
         }
         return ResponseEntity(game.get().convertToDto(), HttpStatus.OK)
     }
@@ -85,7 +86,7 @@ class GameController @Autowired constructor(private val gameService: GameService
         @RequestParam("gameTitle") gameTitle: String,
         @RequestParam("gameStart") gameStart: String,
         @RequestParam("gameEnd") gameEnd: String
-    ): ResponseEntity<*> {
+    ): ResponseEntity<GameDto> {
         try {
 
             val dateEnd = Timestamp(gameEnd.toLong())
@@ -108,12 +109,9 @@ class GameController @Autowired constructor(private val gameService: GameService
             return ResponseEntity(gameService.updateGame(updatedGame).convertToDto(), HttpStatus.OK)
         } catch (ex: Exception) {
             if (ex is ConstraintViolationException) {
-                return ResponseEntity(Response(false, errorMessage = ex.message.toString()), HttpStatus.BAD_REQUEST)
+                throw CustomException("This game title is already taken", HttpStatus.BAD_REQUEST)
             }
-            return ResponseEntity(
-                Response(false, errorMessage = ex.message.toString()),
-                HttpStatus.INTERNAL_SERVER_ERROR
-            )
+            throw ex
         }
     }
 
@@ -123,7 +121,7 @@ class GameController @Autowired constructor(private val gameService: GameService
             gameService.deleteGameById(id)
             ResponseEntity(null, HttpStatus.OK)
         } catch (e: Exception) {
-            ResponseEntity(null, HttpStatus.NOT_FOUND)
+            throw CustomException("Game not found", HttpStatus.NOT_FOUND)
         }
     }
 }
