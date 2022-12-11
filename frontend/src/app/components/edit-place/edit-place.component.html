@@ -1,5 +1,5 @@
-<div class="w-full bg-white shadow-2xl rounded flex flex-col p-5 gap-2 h-full max-h-[75vh] mobile:max-h-max">
-  <div class="flex w-full mobile:flex-col justify-between gap-2 h-[90%]">
+<div class="w-full bg-white shadow-2xl rounded flex flex-col p-5 gap-2 ">
+  <div class="flex w-full mobile:flex-col justify-between gap-2 ">
     <div class="w-[45%] flex flex-col p-5 mobile:w-full">
       <p class="text-size-lg mb-5 bold">Helyszín információk:</p>
       <app-text-input classes="w-fit mb-5" [(value)]="place.name" [label]="'Neve:'"
@@ -16,7 +16,7 @@
         <img class="aspect-video border-1 max-h-[30vh] object-contain" [src]="place.img | imgSrc" alt="place image">
       </div>
     </div>
-    <div class="w-[45%] p-5 mobile:w-full rounded border-kon-blue mobile:border-transparent border-1 h-[100%] overflow-y-auto">
+    <div class="w-[45%] p-5 max-h-[75vh] mobile:w-full rounded border-kon-blue mobile:border-transparent border-1 overflow-y-auto">
       <div class="flex gap-2 mb-2 items-center">
         <p class="text-size-lg bold">Kérdések:</p>
         <app-buttons (onClicked)="openNewQuestionDialog()" [isDisabledBlocked]="!isEdit"
@@ -28,7 +28,7 @@
   </div>
 
   <div class="flex justify-between w-full">
-    <app-buttons [type]="ButtonType.simple" text="Törlés" classes="bg-red-600 hover:bg-red-800" (onClicked)="deletePlace()"
+    <app-buttons [type]="ButtonType.simple" [isDisabledBlocked]="!isEdit" text="Törlés" classes="bg-red-600 hover:bg-red-800" (onClicked)="deletePlace()"
                  [isDisabledProgress]="deleting"></app-buttons>
 
     <app-buttons [type]="ButtonType.simple" [text]="isEdit ? 'Mentés' : 'Létrehozás'" (onClicked)="savePlace()"

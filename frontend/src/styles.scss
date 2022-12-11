@@ -190,4 +190,8 @@ img:before {
     }
   }
 }
+.disableSelectAndTap {
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
 

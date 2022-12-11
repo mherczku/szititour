@@ -1,18 +1,18 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ImgSrcPipe} from "./img-src.pipe";
+import {QuestionTypePipe} from "./question-type.pipe";
 
 
 @NgModule({
   declarations: [
-    ImgSrcPipe
+    QuestionTypePipe
   ],
   imports: [
     CommonModule
   ],
   exports: [
-    ImgSrcPipe
+    QuestionTypePipe
   ]
 })
-export class ImgSrcModule {
+export class QuestionTypePipeModule {
 }

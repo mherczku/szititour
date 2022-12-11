@@ -10,7 +10,7 @@
       <app-buttons *ngIf="open" (click)="$event.stopPropagation()" classes="min-w-[18px]" routerLink="/admin/place/{{place.gameId}}/{{place.id}}" iconSrc="assets/svg/edit.svg" [type]="ButtonType.iconButton"></app-buttons>
     </div>
 
-    <img class="cursor-pointer" [ngClass]="open ? 'rotate-180' : ''" src="assets/svg/anchor-down-black.svg"
+    <img class="cursor-pointer disableSelectAndTap" [ngClass]="open ? 'rotate-180' : ''" src="assets/svg/anchor-down-black.svg"
          alt="Dropdown">
 
   </div>

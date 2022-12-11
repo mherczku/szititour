@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './navbar.component';
 import {ButtonsModule} from "../buttons/buttons.module";
 import {RouterModule} from "@angular/router";
+import {FormsModule} from "@angular/forms";
 
 
 
@@ -16,7 +17,8 @@ import {RouterModule} from "@angular/router";
     imports: [
         CommonModule,
         ButtonsModule,
-        RouterModule
+        RouterModule,
+        FormsModule
     ]
 })
 export class NavbarModule { }

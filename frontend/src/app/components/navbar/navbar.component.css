@@ -60,3 +60,46 @@
 .nav-container input[type="checkbox"]:checked ~ .hamburger-lines .line3 {
   transform: rotate(-45deg);
 }
+
+.mobileMenu {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  transition-duration: 0.5s;
+}
+
+.darkPart {
+  width: 40%;
+  transition: background-color;
+  transition-duration: 0.1s;
+  transition-delay: 0s;
+}
+.animateDarkPart {
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: background-color !important;
+  transition-duration: 0.3s !important;
+  transition-delay: 0.6s !important;
+}
+.whitePart {
+  transform: translateX(100vw);
+  transition-duration: 0.5s;
+  gap: 1rem;
+  width: 60%;
+  background-color: rgb(255, 255, 255);
+  padding: 20vh 5% 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.whitePartOpen {
+  transition-duration: 0.5s;
+  transition-delay: 0.2s !important;
+  transform: translateX(0);
+}
+
+.mobileNavItem {
+  cursor: pointer;
+}

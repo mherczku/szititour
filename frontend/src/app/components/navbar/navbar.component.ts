@@ -13,6 +13,7 @@ export class NavbarComponent implements OnInit {
   isLoggedIn: boolean = false
   isAdmin: boolean = false
   title: string = 'Szititour'
+  isMobileMenuOpen: boolean = false;
 
   constructor(private store: Store<{auth: AuthState}>, private authService: AuthService) { }
 
@@ -22,6 +23,18 @@ export class NavbarComponent implements OnInit {
       this.isAdmin = state.auth.team? state.auth.team.role === "ROLE_ADMIN" : false
       this.title = this.isAdmin ? 'Szititour Admin' : 'Szititour'
     })
+  }
+
+  changeIsMobileMenuOpen(event: boolean) {
+    if(event) {
+      document.body.style.overflow = 'hidden'
+      window.scroll(0, 0)
+    }
+    else {
+
+      document.body.style.overflow = 'auto'
+    }
+    this.isMobileMenuOpen = event
   }
 
   logout() {

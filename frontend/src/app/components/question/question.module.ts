@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { QuestionComponent } from './question.component';
 import {ButtonsModule} from "../buttons/buttons.module";
 import {ImgSrcModule} from "../../pipes/img-src/img-src.module";
+import {QuestionTypePipeModule} from "../../pipes/question-type-pipe/question-type-pipe.module";
 
 
 
@@ -16,7 +17,8 @@ import {ImgSrcModule} from "../../pipes/img-src/img-src.module";
     imports: [
         CommonModule,
         ButtonsModule,
-        ImgSrcModule
+        ImgSrcModule,
+        QuestionTypePipeModule
     ]
 })
 export class QuestionModule { }
