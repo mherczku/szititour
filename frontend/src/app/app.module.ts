@@ -16,6 +16,8 @@ import {AuthReducer} from "./reducers/auth.reducer";
 import {AuthService} from "./services/AuthService";
 import {timeout} from "rxjs";
 import {Team} from "./interfaces/team";
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,13 @@ import {Team} from "./interfaces/team";
     NavbarModule,
     HttpClientModule,
     HotToastModule.forRoot(),
-    StoreModule.forRoot({auth: AuthReducer}, {})
+    StoreModule.forRoot({auth: AuthReducer}, {}),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
