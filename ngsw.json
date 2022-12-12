@@ -1,0 +1,129 @@
+{
+  "configVersion": 1,
+  "timestamp": 1670876933511,
+  "index": "https://mherczku.github.io/szititour/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "https://mherczku.github.io/szititour/662.f7ce451c884988f6.js",
+        "https://mherczku.github.io/szititour/861.7606f1a1ccebf13a.js",
+        "https://mherczku.github.io/szititour/956.198b759dad6c50e0.js",
+        "https://mherczku.github.io/szititour/common.54f07d15d75b983a.js",
+        "https://mherczku.github.io/szititour/favicon.ico",
+        "https://mherczku.github.io/szititour/index.html",
+        "https://mherczku.github.io/szititour/main.9cc016bdb44be5e5.js",
+        "https://mherczku.github.io/szititour/manifest.webmanifest",
+        "https://mherczku.github.io/szititour/polyfills.69c0a5a90607ffdc.js",
+        "https://mherczku.github.io/szititour/runtime.73486382d0e85e35.js",
+        "https://mherczku.github.io/szititour/styles.22e78bfadb5eda8b.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "https://mherczku.github.io/szititour/assets/gif/map.gif",
+        "https://mherczku.github.io/szititour/assets/icons/icon-128x128.png",
+        "https://mherczku.github.io/szititour/assets/icons/icon-144x144.png",
+        "https://mherczku.github.io/szititour/assets/icons/icon-152x152.png",
+        "https://mherczku.github.io/szititour/assets/icons/icon-192x192.png",
+        "https://mherczku.github.io/szititour/assets/icons/icon-384x384.png",
+        "https://mherczku.github.io/szititour/assets/icons/icon-512x512.png",
+        "https://mherczku.github.io/szititour/assets/icons/icon-72x72.png",
+        "https://mherczku.github.io/szititour/assets/icons/icon-96x96.png",
+        "https://mherczku.github.io/szititour/assets/img/image404.png",
+        "https://mherczku.github.io/szititour/assets/img/sample.jpg",
+        "https://mherczku.github.io/szititour/assets/img/team-placeholder.jpg",
+        "https://mherczku.github.io/szititour/assets/js/gh-pages-patch.js",
+        "https://mherczku.github.io/szititour/assets/svg/accept.svg",
+        "https://mherczku.github.io/szititour/assets/svg/add.svg",
+        "https://mherczku.github.io/szititour/assets/svg/anchor-down-black.svg",
+        "https://mherczku.github.io/szititour/assets/svg/bear-green.svg",
+        "https://mherczku.github.io/szititour/assets/svg/bear-red.svg",
+        "https://mherczku.github.io/szititour/assets/svg/delete-red.svg",
+        "https://mherczku.github.io/szititour/assets/svg/delete.svg",
+        "https://mherczku.github.io/szititour/assets/svg/edit.svg",
+        "https://mherczku.github.io/szititour/assets/svg/map.svg",
+        "https://mherczku.github.io/szititour/assets/svg/remove.svg",
+        "https://mherczku.github.io/szititour/assets/svg/szititour.svg",
+        "https://mherczku.github.io/szititour/assets/svg/team.svg",
+        "https://mherczku.github.io/szititour/assets/svg/team2.svg",
+        "https://mherczku.github.io/szititour/assets/svg/tick.svg",
+        "https://mherczku.github.io/szititour/image404.843a8a0e814c73b5.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "https://mherczku.github.io/szititour/662.f7ce451c884988f6.js": "00967893a879470ede99cecd5dfb2064b690b057",
+    "https://mherczku.github.io/szititour/861.7606f1a1ccebf13a.js": "48fe107cf6bc59ae0d79e294bd11de53ee194d1d",
+    "https://mherczku.github.io/szititour/956.198b759dad6c50e0.js": "08e4bb47eba4514790ce94c96926fcdfb89231cb",
+    "https://mherczku.github.io/szititour/assets/gif/map.gif": "f01b3851c9f34ccee03b8c498c720a366187635a",
+    "https://mherczku.github.io/szititour/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
+    "https://mherczku.github.io/szititour/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
+    "https://mherczku.github.io/szititour/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
+    "https://mherczku.github.io/szititour/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
+    "https://mherczku.github.io/szititour/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
+    "https://mherczku.github.io/szititour/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
+    "https://mherczku.github.io/szititour/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
+    "https://mherczku.github.io/szititour/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
+    "https://mherczku.github.io/szititour/assets/img/image404.png": "d3241c89707c050053c5db6d02179e5362d8f9ab",
+    "https://mherczku.github.io/szititour/assets/img/sample.jpg": "b3bf0a0fea41e4f91e057ddc06b556dcda8adda1",
+    "https://mherczku.github.io/szititour/assets/img/team-placeholder.jpg": "f1a60bbb7e4e2f8a66a0d0cdaca4650b21ab4429",
+    "https://mherczku.github.io/szititour/assets/js/gh-pages-patch.js": "4f252c7b113f655b39b3bb4a19de884fc6d027f8",
+    "https://mherczku.github.io/szititour/assets/svg/accept.svg": "b14d1d4b3fc667ae81a9b4a7ccddeebc47301692",
+    "https://mherczku.github.io/szititour/assets/svg/add.svg": "037027ae51fec62cd73e8ccf6810d216d2d79e9f",
+    "https://mherczku.github.io/szititour/assets/svg/anchor-down-black.svg": "0e85da123b797adaf7430a9663cca183e78ff7bc",
+    "https://mherczku.github.io/szititour/assets/svg/bear-green.svg": "eec18753a2214f7583cea56269da3dfb454b4353",
+    "https://mherczku.github.io/szititour/assets/svg/bear-red.svg": "09f3d514a98cb5cdce178ca032cda47dfd3bca08",
+    "https://mherczku.github.io/szititour/assets/svg/delete-red.svg": "de23e829c158ccc50928630186944fd106256aaa",
+    "https://mherczku.github.io/szititour/assets/svg/delete.svg": "8cdba31ca56a626c47e90b1526b0f8675069dba1",
+    "https://mherczku.github.io/szititour/assets/svg/edit.svg": "650f73c105aee580baf839a527f8968c170474d7",
+    "https://mherczku.github.io/szititour/assets/svg/map.svg": "6794bce8eeb2e7a097a0912b342efa20825cd44e",
+    "https://mherczku.github.io/szititour/assets/svg/remove.svg": "5b3395dbe9bf252beb726ded5cdf9374ffd8799f",
+    "https://mherczku.github.io/szititour/assets/svg/szititour.svg": "3fa58b2dd60e055400e7019cde7fe9d39a795d51",
+    "https://mherczku.github.io/szititour/assets/svg/team.svg": "d62e30f7a13217fa828a01a710b4733877d151c4",
+    "https://mherczku.github.io/szititour/assets/svg/team2.svg": "02fda01627009881e1b43ba93b0de4d6df07360b",
+    "https://mherczku.github.io/szititour/assets/svg/tick.svg": "e5b388949b58419097f915567e5ef3d626f57d40",
+    "https://mherczku.github.io/szititour/common.54f07d15d75b983a.js": "2f610fca6e34d837e04054b93eef85a3d5d2a859",
+    "https://mherczku.github.io/szititour/favicon.ico": "603733b7a2834cef1ea5de89c98a79f44d9d4df1",
+    "https://mherczku.github.io/szititour/image404.843a8a0e814c73b5.png": "d3241c89707c050053c5db6d02179e5362d8f9ab",
+    "https://mherczku.github.io/szititour/index.html": "8296b43bf9ddd209605ee88f122cb2e994dfa379",
+    "https://mherczku.github.io/szititour/main.9cc016bdb44be5e5.js": "7da95a9595adebc09dc8370c68c868cb57c5675c",
+    "https://mherczku.github.io/szititour/manifest.webmanifest": "6c95b75a59faa8402113db31b080d2c44a0e01e2",
+    "https://mherczku.github.io/szititour/polyfills.69c0a5a90607ffdc.js": "22e08a110de8c9fcd4bdfacda71e24fe758649d7",
+    "https://mherczku.github.io/szititour/runtime.73486382d0e85e35.js": "c8d979110b08f2e737989a75f08b2db2216d2fe5",
+    "https://mherczku.github.io/szititour/styles.22e78bfadb5eda8b.css": "9efb91660294f7dba0e5394583570f3e4b203c69"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
