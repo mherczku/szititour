@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*
 import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
-import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/resources")
@@ -27,8 +26,7 @@ class ResourceController @Autowired constructor(
     @GetMapping("/images")
     fun getResource(
         @RequestParam(TOKEN_NAME) token: String,
-        @RequestParam("image") imagePath: String,
-        response: HttpServletResponse
+        @RequestParam("image") imagePath: String
     ): ResponseEntity<UrlResource> {
 
         val verification = securityService.verifyToken(token)
