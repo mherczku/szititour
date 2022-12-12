@@ -8,13 +8,13 @@ import {NavbarModule} from "./components/navbar/navbar.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptors/AuthInterceptor";
 import {AppRoutingModule} from "./app-routing.module";
-import {HotToastModule} from "@ngneat/hot-toast";
+import {HotToastModule, HotToastService} from "@ngneat/hot-toast";
 import {ErrorInterceptor} from "./interceptors/ErrorInterceptor";
 import {UnauthorizedInterceptor} from "./interceptors/UnauthorizedInterceptor";
 import {StoreModule} from '@ngrx/store';
 import {AuthReducer} from "./reducers/auth.reducer";
 import {AuthService} from "./services/AuthService";
-import {interval, map, raceWith} from "rxjs";
+import {timeout} from "rxjs";
 import {Team} from "./interfaces/team";
 
 @NgModule({
@@ -36,7 +36,7 @@ import {Team} from "./interfaces/team";
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    {provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService], multi: true}
+    {provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService, HotToastService], multi: true}
   ],
   exports: [],
   bootstrap: [AppComponent]
@@ -44,14 +44,13 @@ import {Team} from "./interfaces/team";
 export class AppModule {
 }
 
-function initializeAuth(authService: AuthService): Function {
+function initializeAuth(authService: AuthService, alert: HotToastService): Function {
   return () => new Promise<void>((resolve) => {
     const token = authService.getToken()
     if (token) {
       console.warn("Token ready")
-
-      const oneSec = interval(1000).pipe(map(() => {return {success: false, team: null} }));
-      authService.authorizeMe().pipe(raceWith(oneSec)).subscribe({
+      const timeoutLimit = 1500;
+      authService.authorizeMe().pipe(timeout(timeoutLimit)).subscribe({
         next: value => {
           if (value.success) {
             if(value.team) {
@@ -62,6 +61,9 @@ function initializeAuth(authService: AuthService): Function {
           resolve()
         },
         error: _err => {
+          if(_err.name === 'TimeOutError') {
+            alert.error(`Request timeout, server might be down`)
+          }
           resolve()
         }
       })
