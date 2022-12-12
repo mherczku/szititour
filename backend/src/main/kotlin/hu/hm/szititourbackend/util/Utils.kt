@@ -73,6 +73,12 @@ object Utils {
         if (!directoryImages.exists()) {
             directoryImages.mkdir()
         }
+
+        val directoryImagesTemp = File("images/temp")
+        if (!directoryImagesTemp.exists()) {
+            directoryImagesTemp.mkdir()
+        }
+
         val directoryToSave = File(directoryToSavePath)
         if (!directoryToSave.exists()) {
             directoryToSave.mkdir()
@@ -81,10 +87,21 @@ object Utils {
         val extension = StringUtils.getFilenameExtension(file.originalFilename)
         if (extension == "jpg" || extension == "png") {
             val newFileName = RandomString.make(8)
-            val fileNames = StringBuilder()
             val fileNameAndPath: Path = Paths.get(directoryToSavePath, "$newFileName.$extension")
-            fileNames.append(file.originalFilename)
-            Files.write(fileNameAndPath, file.bytes)
+            val newFile = fileNameAndPath.toFile()
+            val tempPath: Path = Paths.get("images/temp")
+            val tempFile = kotlin.io.path.createTempFile(directory = tempPath).toFile()
+
+            try {
+                Files.write(tempFile.toPath(), file.bytes)
+                ImageCompressor.compressImage(tempFile, newFile)
+                tempFile.delete()
+            } catch(ex: Exception) {
+                newFile.delete()
+                tempFile.delete()
+                throw CustomException("This png does not support compression, please try with another or use jpg", HttpStatus.BAD_REQUEST)
+            }
+
             imagePath = "$directoryToSaveName-$newFileName.$extension"
         } else {
             throw CustomException("Image format must be png or jpg", HttpStatus.BAD_REQUEST)

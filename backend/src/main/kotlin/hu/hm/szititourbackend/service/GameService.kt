@@ -32,9 +32,14 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
 
     fun addGameWithImage(newGame: Game, file: MultipartFile): Game {
         val addedGame = addGame(newGame)
-        val imagePath = Utils.saveImage(file, Utils.imageDirectoryGamesName)
-        addedGame.img = imagePath
-        return updateGame(addedGame)
+        try {
+            val imagePath = Utils.saveImage(file, Utils.imageDirectoryGamesName)
+            addedGame.img = imagePath
+            return updateGame(addedGame)
+        } catch (ex: Exception) {
+            deleteGameById(addedGame.id)
+            throw ex
+        }
     }
 
     fun getAllGames(): MutableList<Game> {
