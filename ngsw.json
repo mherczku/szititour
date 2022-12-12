@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1670876933511,
+  "timestamp": 1670878442117,
   "index": "https://mherczku.github.io/szititour/index.html",
   "assetGroups": [
     {
@@ -102,7 +102,7 @@
     "https://mherczku.github.io/szititour/image404.843a8a0e814c73b5.png": "d3241c89707c050053c5db6d02179e5362d8f9ab",
     "https://mherczku.github.io/szititour/index.html": "8296b43bf9ddd209605ee88f122cb2e994dfa379",
     "https://mherczku.github.io/szititour/main.9cc016bdb44be5e5.js": "7da95a9595adebc09dc8370c68c868cb57c5675c",
-    "https://mherczku.github.io/szititour/manifest.webmanifest": "6c95b75a59faa8402113db31b080d2c44a0e01e2",
+    "https://mherczku.github.io/szititour/manifest.webmanifest": "3a5fc62db382bf4c00db657fe853969f66e2f1a3",
     "https://mherczku.github.io/szititour/polyfills.69c0a5a90607ffdc.js": "22e08a110de8c9fcd4bdfacda71e24fe758649d7",
     "https://mherczku.github.io/szititour/runtime.73486382d0e85e35.js": "c8d979110b08f2e737989a75f08b2db2216d2fe5",
     "https://mherczku.github.io/szititour/styles.22e78bfadb5eda8b.css": "9efb91660294f7dba0e5394583570f3e4b203c69"
