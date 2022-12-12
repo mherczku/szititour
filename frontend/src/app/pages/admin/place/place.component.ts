@@ -7,7 +7,13 @@ import {Subscription} from "rxjs";
 @Component({
   selector: 'app-place',
   templateUrl: './place.component.html',
-  styleUrls: ['./place.component.css']
+  styleUrls: ['./place.component.css'],
+  styles: [`
+    :host {
+      display: flex;
+      flex-grow: 1;
+    }
+  `],
 })
 export class PlaceComponent implements OnInit, OnDestroy {
 

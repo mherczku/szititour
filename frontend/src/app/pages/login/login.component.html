@@ -6,8 +6,9 @@
 
     <app-text-input  [(value)]="email" classes="mb-5" placeholder="Add meg az e-mail címed" label="E-mail"></app-text-input>
     <app-text-input [(value)]="password" classes="mb-5" [password]="true" placeholder="Add meg a jelszavad" label="Jelszó"></app-text-input>
-    <p *ngIf="error !== ''" class="text-size-min text-red-600">{{error}}</p>
+<!--
     <app-buttons classes="mb-5" [type]="ButtonType.hoverBold" text="Elfelejtetted a jelszavad?"></app-buttons>
+-->
 
     <div class="flex justify-between items-center">
       <app-buttons routerLink="/register" classes="hover:pr-12" [type]="ButtonType.hoverBoldTextChange" textHover="Regisztrálj!" text="Még nincs fiókod?"></app-buttons>

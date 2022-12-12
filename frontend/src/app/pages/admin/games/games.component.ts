@@ -9,7 +9,13 @@ import {Subscription} from "rxjs";
 @Component({
   selector: 'app-games',
   templateUrl: './games.component.html',
-  styleUrls: ['./games.component.css']
+  styleUrls: ['./games.component.css'],
+  styles: [`
+    :host {
+      display: flex;
+      flex-grow: 1;
+    }
+  `],
 })
 export class GamesComponent implements OnInit, OnDestroy {
 
