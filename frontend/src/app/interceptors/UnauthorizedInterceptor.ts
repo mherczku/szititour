@@ -26,12 +26,10 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
       catchError((err: any) => {
         if(err instanceof HttpErrorResponse) {
           if(err.status === HttpStatusCode.Unauthorized) {
-            this.toastService.error("Unauthorized request")
-            //this.tokenService.removeToken()
-            this.authService.removeToken()
-            //this.store.dispatch(logout())
-            //this.router.navigate(['/login'])
-            // return of()
+            if(this.authService.getToken() !== null) {
+              this.toastService.error("Unauthorized request")
+            }
+            this.authService.logout()
           }
         }
         return throwError(() => err);

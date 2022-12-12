@@ -37,21 +37,24 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(
         this.toastService.observe(
           {
-            loading: 'Logging in...',
+            loading: 'Bejelentkezés...',
             success: (s) => {
-              if(s.success){
-                return 'Logged in'
+              if (s.success) {
+                return 'Sikeres bejelentkezés'
               }
-              return 'Login failed'
+              return 'Sikertelen bejelentkezés'
+            },
+            error: _arg => {
+              return 'Hibás email vagy jelszó'
             }
           }
         )
       ).subscribe((res: NetworkResponse) => {
-      if (res.success) {
-      } else {
-        this.error = res.errorMessage
-      }
-    })
+        if (res.success) {
+        } else {
+          this.error = res.errorMessage
+        }
+      })
 
   }
 
