@@ -34,9 +34,11 @@ export class AdminService {
   }
 
   updateGame(game: Game, image: File | undefined = undefined): Observable<Game> {
+    const dateStartNumber: number =  isNaN(Date.parse(game.dateStart.valueOf().toString())) ? game.dateStart.valueOf() : Date.parse(game.dateStart.valueOf().toString())
+    const dateEndNumber: number = isNaN(Date.parse(game.dateEnd.valueOf().toString())) ? game.dateEnd.valueOf() : Date.parse(game.dateEnd.valueOf().toString())
     const formData: FormData = new FormData()
-    formData.append('gameStart', game.dateStart.valueOf().toString())
-    formData.append('gameEnd', game.dateEnd.valueOf().toString())
+    formData.append('gameStart', dateStartNumber.toString())
+    formData.append('gameEnd', dateEndNumber.toString())
     formData.append('gameTitle', game.title)
     formData.append('gameId', game.id.toString())
     formData.append('currentImage', game.img ?? "")
