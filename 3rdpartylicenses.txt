@@ -16,9 +16,6 @@ MIT
 @angular/router
 MIT
 
-@angular/service-worker
-MIT
-
 @ngneat/hot-toast
 MIT
 
