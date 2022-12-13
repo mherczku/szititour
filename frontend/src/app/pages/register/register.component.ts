@@ -48,17 +48,17 @@ export class RegisterComponent implements OnInit, OnDestroy {
       if (this.password === this.passwordConfirm) {
         this.subscriptionRegister = this.authService.register(this.email, this.password).subscribe(res => {
           if (res.success) {
-            this.alertService.success("Successful registration, you can login now.")
+            this.alertService.success("Sikeres regisztráció, bejelentkezhetsz")
             this.router.navigateByUrl("/login")
           } else {
-            this.alertService.error("Something went wrong: " + res.errorMessage)
+            this.alertService.error("Hiba történt: " + res.errorMessage)
           }
         })
       } else {
-        this.alertService.warning("Password and Password Confirm are different")
+        this.alertService.warning("Jelszavak különböznek")
       }
     } else {
-      this.alertService.warning("Fill in all fields")
+      this.alertService.warning("Minden mező kitöltése kötelező")
     }
   }
 

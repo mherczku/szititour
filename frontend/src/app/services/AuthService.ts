@@ -41,7 +41,7 @@ export class AuthService {
         }
         // todo remove when user site is ready
         else {
-          this.alertService.warning("User site is under development... Logging out")
+          this.alertService.warning("Felhasználói oldal fejlesztés alatt... Kijelentkezés")
           this.logout()
         }
       }

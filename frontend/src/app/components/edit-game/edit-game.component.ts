@@ -82,42 +82,49 @@ export class EditGameComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   save() {
+    const dateStartNumber: number =  isNaN(Date.parse(this.game.dateStart.valueOf().toString())) ? this.game.dateStart.valueOf() : Date.parse(this.game.dateStart.valueOf().toString())
+    const dateEndNumber: number = isNaN(Date.parse(this.game.dateEnd.valueOf().toString())) ? this.game.dateEnd.valueOf() : Date.parse(this.game.dateEnd.valueOf().toString())
 
-    if (this.game.title !== "") {
-      // edit
-      this.saving = true
-      if (this.isEdit) {
-        this.subscriptionSave = this.adminService.updateGame(this.game, this.file).subscribe({
-          next: (res) => {
-            if (res) {
-              this.alert.success(`${res.title} sikeresen frissítve`)
+    console.log(dateEndNumber, '>' ,dateStartNumber, dateEndNumber > dateStartNumber)
+    if(dateEndNumber > dateStartNumber) {
+      if (this.game.title !== "") {
+        // edit
+        this.saving = true
+        if (this.isEdit) {
+          this.subscriptionSave = this.adminService.updateGame(this.game, this.file).subscribe({
+            next: (res) => {
+              if (res) {
+                this.alert.success(`${res.title} sikeresen frissítve`)
+                this.saving = false
+                this.close()
+              }
+            },
+            error: _err => {
               this.saving = false
-              this.close()
             }
-          },
-          error: _err => {
-            this.saving = false
-          }
-        })
-      }
+          })
+        }
 
-      //create new
-      else {
-        this.subscriptionSave = this.adminService.createGame(this.game, this.file).subscribe({
-          next: (res) => {
-            if (res) {
-              this.alert.success(`${res.title} sikeresen létrehozva`)
+        //create new
+        else {
+          this.subscriptionSave = this.adminService.createGame(this.game, this.file).subscribe({
+            next: (res) => {
+              if (res) {
+                this.alert.success(`${res.title} sikeresen létrehozva`)
+                this.saving = false
+                this.close()
+              }
+            },
+            error: _err => {
               this.saving = false
-              this.close()
             }
-          },
-          error: _err => {
-            this.saving = false
-          }
-        })
+          })
+        }
+      } else {
+        this.alert.warning("A játéknak kell egy név")
       }
     } else {
-      this.alert.warning("A játéknak kell egy név")
+      this.alert.warning("A játék vége nem lehet a kezdete előtt")
     }
 
   }
