@@ -44,7 +44,7 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
     - A szervezőket is ez az osztály reprezentálja azzal a különbséggel, hogy az ő esetükben az "isAdmin" változó  értéke "true".
 
 
-![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/szititour-backend.png)
+![szititour-backend](https://raw.githubusercontent.com/mherczku/szititour/main/images/szititour-backend.jpg)
 
 
 

@@ -130,10 +130,9 @@ A felületi komponensek közül elkészítettem a Dropdown-t, EditGame-t, ListTe
 - Docker elérhetővé tétele távolról
   - AdminService - első rész - admin felület bekötésének elkezdése
 
-
 A héten Frontenden implementáltam a Routing-ot Login-Register-AdminFelület-PlaceEdit oldalak között. Ezután, hogy be tudjam mutatni elérhetővé szerettem volna tenni távolról is az oldalt. Ehhez egyik megoldásnak a Github Pages-t találtam, aminek segítségével minden push után egy workflow lefut és kiteszi az App-ot egy GitHub oldalra (https://mherczku.github.io/szititour).
 Viszont ezzel a megoldással egyenlőre két probléma is van, egyik, hogy Https Secure backend kell hozzá, mivel az oldal is Secure. A másik, hogy Routing-ot nem ismeri fel ha Url-be kapja és nem találja meg úgy az oldalt.
-Ezért saját Docker-t csináltam Frontendből is, és elérhetővé tettem távolról azt. (majd GitHub-osat is szeretném ha jól működne) http://wildfire.ddns.net:8080 (t@test.hu : 1234)
+Ezért saját Docker-t csináltam Frontendből is, és elérhetővé tettem távolról azt. (majd GitHub-osat is szeretném ha jól működne)
 Azért, hogy Backendet elérje, azt is elérhetővé kellet tenni távolról, valamint frissíteni a CORS Policy-kat.
 Ezek mellet elkezdtem az AdminService implementálását, így az admin felület a Game-eket már backendről kapja.
 
@@ -175,7 +174,34 @@ Implementáltam a hiányzó regisztráció bekötést és az ehhez tartozó hiba
 
 #### **13. hét:**
 
+- Backend:
+  - Fix CascadeType problémák (question-places, places-games)
+  - Képfeltöltés / elérés (Resource Controller)
+- Frontend:
+  - Hiányzó admin felületi funkciók implementálása (kérdések helyszínek kezelése)
+  - Elmaradt összekötések bekötése
+  - Input validásáok elkészítése
+  - Hibakezelés javítása
+  - Kép feltöltés / elérés implementálás (imgSrc pipe)
+
+Implementáltal a hiányzó admin felületi elemeket, ezeket összekötöttem Backendel, javítva a CascadeType-okat ahol szükséges volt. Ahol hiányzott még az input validálás ott azt javítottam, hibakezeléseket. Végig néztem, hogy mindenhol magyarul legyenek a statikus szövegek. Ezek mellet implementáltam a kép kezelést, frontenden és backenden is. 
+
 #### **14. hét:**
 
+- Backend:
+  - Spring Security implementálása (most sikerrel)
+  - Role-ok, BasicAuth
+  - Jelszó titkosítás
+  - Exception Handler implementálása - hiba kezelés és kommunikálása frontend felé praktikusan
+  - Kép tömörítés implementálása
+- Frontend:
+  - Backendes változtatások implementálása frontenden is
+  - Dátum validáció
+  - Design hibák javítása
+  - Github page 404es hiba javítása
+- Prezentáció
+- Dokumentáció
 
+A félév közben időhiány miatt hátra maradt feladatokat pótoltam, mint a Spring Security implementálása, most már több háttér utánanézés után sikerült is. Implementálta, hogy a jelszavakat titkosítva tárolja az adatbázis, és a hiba kezelést is kiszerveztem egy AdviceController-be. Valamint a képek tömörítésére is írtam egy függvényt, hogy ne nagy formátumban foglalja a helyet.
+Frontenden a Service-eket módosítottam, hogy szinkronban legyenek a Backend módosításokkal. Javítottam sok kisebb hibát, amiket találtam, és implementáltam a hiányzó dátum validációt. Valamint a Github-os deployment-ben volt egy útvonal probléma, azt fixáltam. Valamint előkészítettem az alkalmazást a bemutatásra és elkészítettem a prezentációt, dokumentációt.
 
