@@ -4,14 +4,17 @@
 
     <p class="text-size-h1 font-bold mb-10">Bejelentkezés</p>
 
-    <app-text-input  [(value)]="email" classes="mb-5" placeholder="Add meg az e-mail címed" label="E-mail"></app-text-input>
-    <app-text-input [(value)]="password" classes="mb-5" [password]="true" placeholder="Add meg a jelszavad" label="Jelszó"></app-text-input>
-<!--
-    <app-buttons classes="mb-5" [type]="ButtonType.hoverBold" text="Elfelejtetted a jelszavad?"></app-buttons>
--->
+    <app-text-input [(value)]="email" classes="mb-5" label="E-mail"
+                    placeholder="Add meg az e-mail címed"></app-text-input>
+    <app-text-input [(value)]="password" [password]="true" classes="mb-5" label="Jelszó"
+                    placeholder="Add meg a jelszavad"></app-text-input>
+    <!--
+        <app-buttons classes="mb-5" [type]="ButtonType.hoverBold" text="Elfelejtetted a jelszavad?"></app-buttons>
+    -->
 
     <div class="flex justify-between items-center">
-      <app-buttons routerLink="/register" classes="hover:pr-12" [type]="ButtonType.hoverBoldTextChange" textHover="Regisztrálj!" text="Még nincs fiókod?"></app-buttons>
+      <app-buttons [type]="ButtonType.hoverBoldTextChange" classes="hover:pr-12" routerLink="/register"
+                   text="Még nincs fiókod?" textHover="Regisztrálj!"></app-buttons>
       <app-buttons (click)="login()" classes="" text="Bejelentkezés"></app-buttons>
     </div>
   </div>

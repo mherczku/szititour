@@ -4,17 +4,21 @@
 
     <p class="text-size-h1 font-bold mb-10">Regisztráció</p>
 
-<!--
-    <app-text-input [(value)]="email" classes="mb-5" placeholder="Add meg az e-mail címed" label="E-mail *"></app-text-input>
--->
+    <!--
+        <app-text-input [(value)]="email" classes="mb-5" placeholder="Add meg az e-mail címed" label="E-mail *"></app-text-input>
+    -->
     <label class="text-size-base mb-2">E-mail *</label>
     <input [(ngModel)]="email" class="simpleInput mb-5" placeholder="Add meg az e-mail címed">
-    <app-text-input [(value)]="password" classes="mb-5" [password]="true" placeholder="Adj meg egy jelszót" label="Jelszó *"></app-text-input>
-    <app-text-input [(value)]="passwordConfirm" classes="mb-5" [password]="true" placeholder="Add meg még egyszer" label="Jelszó még egyszer *"></app-text-input>
+    <app-text-input [(value)]="password" [password]="true" classes="mb-5" label="Jelszó *"
+                    placeholder="Adj meg egy jelszót"></app-text-input>
+    <app-text-input [(value)]="passwordConfirm" [password]="true" classes="mb-5" label="Jelszó még egyszer *"
+                    placeholder="Add meg még egyszer"></app-text-input>
 
     <div class="flex justify-between items-center">
-      <app-buttons routerLink="/login" classes="hover:pr-12" [type]="ButtonType.hoverBoldTextChange" textHover="Lépj be!" text="Már van fiókod?"></app-buttons>
-      <app-buttons [isDisabledProgress]="registering" (onClicked)="register()" classes="" text="Regisztrálás"></app-buttons>
+      <app-buttons [type]="ButtonType.hoverBoldTextChange" classes="hover:pr-12" routerLink="/login"
+                   text="Már van fiókod?" textHover="Lépj be!"></app-buttons>
+      <app-buttons (onClicked)="register()" [isDisabledProgress]="registering" classes=""
+                   text="Regisztrálás"></app-buttons>
     </div>
   </div>
 

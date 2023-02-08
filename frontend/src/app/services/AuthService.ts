@@ -12,7 +12,7 @@ import {NetworkResponse} from "../interfaces/network-response";
 import {HotToastService} from "@ngneat/hot-toast";
 
 
-@Injectable({providedIn: 'root'})
+@Injectable({providedIn: "root"})
 export class AuthService {
 
   private baseUrl = environment.apiBaseUrl + "/auth";
@@ -26,55 +26,55 @@ export class AuthService {
 
   public login(email: string, password: string): Observable<NetworkLoginResponse> {
 
-    const usernamePassword = `${email}:${password}`
-    const encoded = btoa(usernamePassword)
-    const authHeader = `Basic ${encoded}`
+    const usernamePassword = `${email}:${password}`;
+    const encoded = btoa(usernamePassword);
+    const authHeader = `Basic ${encoded}`;
     const headers = new HttpHeaders()
-      .set('Authorization', authHeader)
+      .set("Authorization", authHeader);
 
     return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, null, {headers: headers}).pipe(tap(evt => {
       if (evt.success) {
-        const team: Team = evt.team
+        const team: Team = evt.team;
         if (team.role === "ROLE_ADMIN") {
-          this.store.dispatch(login({team: team}))
-          this.router.navigateByUrl("/admin")
+          this.store.dispatch(login({team: team}));
+          this.router.navigateByUrl("/admin");
         }
         // todo remove when user site is ready
         else {
-          this.alertService.warning("Felhasználói oldal fejlesztés alatt... Kijelentkezés")
-          this.logout()
+          this.alertService.warning("Felhasználói oldal fejlesztés alatt... Kijelentkezés");
+          this.logout();
         }
       }
-    }))
+    }));
   }
 
   public register(email: string, password: string): Observable<NetworkResponse> {
-    return this.http.post<NetworkResponse>(`${this.baseUrl}/register`, {email: email, password: password})
+    return this.http.post<NetworkResponse>(`${this.baseUrl}/register`, {email: email, password: password});
   }
 
   public authorizeMe(): Observable<NetworkLoginResponse> {
-    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`)
+    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`);
   }
 
   logout() {
-    this.removeToken()
-    this.store.dispatch(logout())
-    this.router.navigateByUrl('/login')
+    this.removeToken();
+    this.store.dispatch(logout());
+    this.router.navigateByUrl("/login");
   }
 
   setToken(token: string) {
-    localStorage.setItem('auth-token', token)
+    localStorage.setItem("auth-token", token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('auth-token')
+    return localStorage.getItem("auth-token");
   }
 
   removeToken() {
-    localStorage.removeItem('auth-token')
+    localStorage.removeItem("auth-token");
   }
 
   dispatchLogin(team: Team) {
-    this.store.dispatch(login({team: team}))
+    this.store.dispatch(login({team: team}));
   }
 }

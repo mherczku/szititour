@@ -1,9 +1,9 @@
-import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {AppComponent} from './app.component';
-import {GridImageComponent} from './components/grid-image/grid-image.component';
-import {LoginFormComponent} from './components/login-form/login-form.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {APP_INITIALIZER, NgModule} from "@angular/core";
+import {BrowserModule} from "@angular/platform-browser";
+import {AppComponent} from "./app.component";
+import {GridImageComponent} from "./components/grid-image/grid-image.component";
+import {LoginFormComponent} from "./components/login-form/login-form.component";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NavbarModule} from "./components/navbar/navbar.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptors/AuthInterceptor";
@@ -11,7 +11,7 @@ import {AppRoutingModule} from "./app-routing.module";
 import {HotToastModule, HotToastService} from "@ngneat/hot-toast";
 import {ErrorInterceptor} from "./interceptors/ErrorInterceptor";
 import {UnauthorizedInterceptor} from "./interceptors/UnauthorizedInterceptor";
-import {StoreModule} from '@ngrx/store';
+import {StoreModule} from "@ngrx/store";
 import {AuthReducer} from "./reducers/auth.reducer";
 import {AuthService} from "./services/AuthService";
 import {timeout} from "rxjs";
@@ -46,30 +46,30 @@ export class AppModule {
 
 function initializeAuth(authService: AuthService, alert: HotToastService): Function {
   return () => new Promise<void>((resolve) => {
-    const token = authService.getToken()
+    const token = authService.getToken();
     if (token) {
-      console.warn("Token ready")
+      console.warn("Token ready");
       const timeoutLimit = 1500;
       authService.authorizeMe().pipe(timeout(timeoutLimit)).subscribe({
         next: value => {
           if (value.success) {
             if(value.team) {
-              const team: Team = value.team
-              authService.dispatchLogin(team)
+              const team: Team = value.team;
+              authService.dispatchLogin(team);
             }
           }
-          resolve()
+          resolve();
         },
         error: _err => {
-          if(_err.name === 'TimeOutError') {
-            alert.error(`Request timeout, server might be down`)
+          if(_err.name === "TimeOutError") {
+            alert.error("Request timeout, server might be down");
           }
-          resolve()
+          resolve();
         }
-      })
+      });
     } else {
-      console.warn("No token")
-      resolve()
+      console.warn("No token");
+      resolve();
     }
-  })
+  });
 }

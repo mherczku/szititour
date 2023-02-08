@@ -1,5 +1,4 @@
 export interface ApplicationOriginal {
-
   id: number,
   accepted?: boolean,
   createdAt?: Date,
@@ -9,11 +8,10 @@ export interface ApplicationOriginal {
 }
 
 export interface TeamOriginal {
-
   id: number,
   name?: string,
   email?: string,
-  role?: 'ROLE_ADMIN' | 'ROLE_USER',
+  role?: "ROLE_ADMIN" | "ROLE_USER",
   img?: string,
   createdAt?: Date,
   updatedAt?: Date,
@@ -23,7 +21,6 @@ export interface TeamOriginal {
 }
 
 export interface GameOriginal {
-
   id: number,
   title?: string,
   dateStart?: Date,

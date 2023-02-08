@@ -1,34 +1,29 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {ButtonType} from "../../enums/button-type";
 
 @Component({
-  selector: 'app-buttons',
-  templateUrl: './buttons.component.html',
-  styleUrls: ['./buttons.component.css']
+  selector: "app-buttons",
+  templateUrl: "./buttons.component.html",
+  styleUrls: ["./buttons.component.css"]
 })
-export class ButtonsComponent implements OnInit {
+export class ButtonsComponent {
 
-  @Input() text: string = "Click here"
-  @Input() textHover: string = "Click here hovered"
-  @Input() classes: string = ""
-  @Input() type: ButtonType = ButtonType.simple
-  @Input() iconSrc: string = ""
-  @Input() isDisabledProgress: boolean = false
-  @Input() isDisabledBlocked: boolean = false
+  @Input() text = "Click here";
+  @Input() textHover = "Click here hovered";
+  @Input() classes = "";
+  @Input() type: ButtonType = ButtonType.simple;
+  @Input() iconSrc = "";
+  @Input() isDisabledProgress = false;
+  @Input() isDisabledBlocked = false;
 
-  @Output() onClicked: EventEmitter<any> = new EventEmitter<any>()
+  @Output() onClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
 
-  ButtonType = ButtonType
+  ButtonType = ButtonType;
   mouseOver = false;
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-  onClick($event: MouseEvent) {
+  onClick() {
     if(!this.isDisabledBlocked && !this.isDisabledProgress){
-      this.onClicked.emit()
+      this.onClicked.emit();
     }
   }
 

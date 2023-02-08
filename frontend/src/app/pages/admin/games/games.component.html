@@ -2,10 +2,12 @@
 
   <div class="grid grid-cols-4 tablet:grid-cols-2 gap-6 mobile:grid-cols-1 relative">
     <div class="fixed z-10 w-[3rem] h-[3rem] text-size-base right-20 bottom-20 mobile:right-10 mobile:bottom-10">
-      <app-buttons (onClicked)="openNewGameDialog()" classes="hover:scale-110 active:opacity-70 transition" [type]="ButtonType.iconButton" iconSrc="assets/svg/add.svg"></app-buttons>
+      <app-buttons (onClicked)="openNewGameDialog()" [type]="ButtonType.iconButton"
+                   classes="hover:scale-110 active:opacity-70 transition" iconSrc="assets/svg/add.svg"></app-buttons>
     </div>
-    <app-gamecard [game]="game" (onPlacesClicked)="changeModal(PLACES, game)" (onTeamsClicked)="changeModal(TEAMS, game)"
-                  (onEditClicked)="editGame(game)" (onDeleted)="getGames()" *ngFor="let game of games"></app-gamecard>
+    <app-gamecard (onDeleted)="getGames()" (onEditClicked)="editGame(game)"
+                  (onPlacesClicked)="changeModal(PLACES, game)"
+                  (onTeamsClicked)="changeModal(TEAMS, game)" *ngFor="let game of games" [game]="game"></app-gamecard>
   </div>
 
 </div>
@@ -13,16 +15,17 @@
 
 <!-- Edit modal -->
 <app-modal [(isDisplayed)]="editModalVisible">
-  <app-edit-game (onClose)="closeEditModal()" [isEdit]="isGameEditing" [game]="selectedGame"></app-edit-game>
+  <app-edit-game (onClose)="closeEditModal()" [game]="selectedGame" [isEdit]="isGameEditing"></app-edit-game>
 </app-modal>
 
 <!-- Applications modal -->
-<app-modal classes="w-full" [(isDisplayed)]="teamsModalVisible">
+<app-modal [(isDisplayed)]="teamsModalVisible" classes="w-full">
   <app-lists [(applications)]="selectedGame.applications"></app-lists>
 </app-modal>
 
 <!-- Places modal -->
-<app-modal classes="w-full" [(isDisplayed)]="placesModalVisible">
-  <app-lists [gameIdForPlacesList]="selectedGame.id" [places]="selectedGame.places" [type]="ListType.places"></app-lists>
+<app-modal [(isDisplayed)]="placesModalVisible" classes="w-full">
+  <app-lists [gameIdForPlacesList]="selectedGame.id" [places]="selectedGame.places"
+             [type]="ListType.places"></app-lists>
 </app-modal>
 

@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  _apiBaseUrl: 'https://localhost:8080',
-  apiBaseUrl: 'https://wildfire.ddns.net:8091'
+  _apiBaseUrl: "https://localhost:8080",
+  apiBaseUrl: "https://wildfire.ddns.net:8091"
 };
 
 /*

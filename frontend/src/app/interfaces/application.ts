@@ -1,4 +1,3 @@
-
 export interface Application {
   id: number,
   teamId: number,

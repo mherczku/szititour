@@ -1,8 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { EditPlaceComponent } from "./edit-place.component";
 
-import { EditPlaceComponent } from './edit-place.component';
-
-describe('EditPlaceComponent', () => {
+describe("EditPlaceComponent", () => {
   let component: EditPlaceComponent;
   let fixture: ComponentFixture<EditPlaceComponent>;
 
@@ -17,7 +16,7 @@ describe('EditPlaceComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,14 +1,14 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RegisterComponent } from './register.component';
+import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {RegisterComponent} from "./register.component";
 import {RouterModule, Routes} from "@angular/router";
 import {TextInputModule} from "../../components/inputs/text-input/text-input.module";
 import {ButtonsModule} from "../../components/buttons/buttons.module";
 import {FormsModule} from "@angular/forms";
 
 const routes: Routes = [
-  {path: '', component: RegisterComponent},
-]
+  {path: "", component: RegisterComponent},
+];
 
 @NgModule({
   declarations: [
@@ -23,4 +23,5 @@ const routes: Routes = [
   ],
   exports: [RegisterComponent]
 })
-export class RegisterModule { }
+export class RegisterModule {
+}

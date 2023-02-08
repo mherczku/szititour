@@ -1,8 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { QuestionEditComponent } from "./question-edit.component";
 
-import { QuestionEditComponent } from './question-edit.component';
-
-describe('QuestionEditComponent', () => {
+describe("QuestionEditComponent", () => {
   let component: QuestionEditComponent;
   let fixture: ComponentFixture<QuestionEditComponent>;
 
@@ -17,7 +16,7 @@ describe('QuestionEditComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

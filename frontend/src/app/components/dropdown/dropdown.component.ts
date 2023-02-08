@@ -1,28 +1,23 @@
-import {Component, Input, OnInit} from '@angular/core';
-import { ButtonType } from 'src/app/enums/button-type';
+import {Component, Input} from "@angular/core";
+import { ButtonType } from "src/app/enums/button-type";
 import {Place} from "../../interfaces/place";
 
 @Component({
-  selector: 'app-dropdown',
-  templateUrl: './dropdown.component.html',
-  styleUrls: ['./dropdown.component.css']
+  selector: "app-dropdown",
+  templateUrl: "./dropdown.component.html",
+  styleUrls: ["./dropdown.component.css"]
 })
-export class DropdownComponent implements OnInit {
+export class DropdownComponent {
 
-  @Input() place: Place = {id: -1, name: "TestPlace", img: "", gameId: -1, address: "", latitude: '', longitude: "", questions: []}
-  @Input() number!: number
+  @Input() place: Place = {id: -1, name: "TestPlace", img: "", gameId: -1, address: "", latitude: "", longitude: "", questions: []};
+  @Input() number!: number;
 
-  open: boolean = false
+  open = false;
 
   ButtonType = ButtonType;
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
   toggle($event: MouseEvent) {
-    this.open = !this.open
-    $event.stopPropagation()
+    this.open = !this.open;
+    $event.stopPropagation();
   }
 }

@@ -1,8 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { EditGameComponent } from "./edit-game.component";
 
-import { EditGameComponent } from './edit-game.component';
-
-describe('EditGameComponent', () => {
+describe("EditGameComponent", () => {
   let component: EditGameComponent;
   let fixture: ComponentFixture<EditGameComponent>;
 
@@ -19,7 +18,7 @@ describe('EditGameComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

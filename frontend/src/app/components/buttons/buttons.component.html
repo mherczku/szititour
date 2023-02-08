@@ -1,5 +1,5 @@
 <div [ngSwitch]="type"
-     (click)="onClick($event)">
+     (click)="onClick()">
 
   <p *ngSwitchCase="ButtonType.green"
      class="p-2 text-size-base bg-green-600 p-2 !text-white shadowButton rounded {{classes}}">{{text}}

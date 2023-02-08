@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { DropdownComponent } from './dropdown.component';
+import { DropdownComponent } from "./dropdown.component";
 
-describe('DropdownComponent', () => {
+describe("DropdownComponent", () => {
   let component: DropdownComponent;
   let fixture: ComponentFixture<DropdownComponent>;
 
@@ -19,7 +19,7 @@ describe('DropdownComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

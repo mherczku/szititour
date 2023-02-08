@@ -1,6 +1,6 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {GamesComponent} from './games.component';
+import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {GamesComponent} from "./games.component";
 import {RouterModule, Routes} from "@angular/router";
 import {GamecardModule} from "../../../components/cards/gamecard/gamecard.module";
 import {ModalModule} from "../../../components/modal/modal.module";
@@ -12,9 +12,9 @@ import {PlaceComponent} from "../place/place.component";
 import {EditPlaceModule} from "../../../components/edit-place/edit-place.module";
 
 const routes: Routes = [
-  {path: '', component: GamesComponent},
-  {path: 'place/:gameId/:placeId', component: PlaceComponent}
-]
+  {path: "", component: GamesComponent},
+  {path: "place/:gameId/:placeId", component: PlaceComponent}
+];
 
 @NgModule({
   declarations: [

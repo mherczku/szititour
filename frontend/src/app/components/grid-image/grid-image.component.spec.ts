@@ -1,8 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { GridImageComponent } from "./grid-image.component";
 
-import { GridImageComponent } from './grid-image.component';
-
-describe('GridImageComponent', () => {
+describe("GridImageComponent", () => {
   let component: GridImageComponent;
   let fixture: ComponentFixture<GridImageComponent>;
 
@@ -19,7 +18,7 @@ describe('GridImageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

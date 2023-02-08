@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 
 
-@Injectable({providedIn: 'root'})
+@Injectable({providedIn: "root"})
 export class UserService {
 
   private baseUrl = environment.apiBaseUrl + "/user";
@@ -12,7 +12,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   public getGames(): Observable<unknown> {
-    return this.http.get<unknown>(`${this.baseUrl}/games`)
+    return this.http.get<unknown>(`${this.baseUrl}/games`);
   }
 
 }
