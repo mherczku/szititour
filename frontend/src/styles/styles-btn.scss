@@ -1,0 +1,29 @@
+@import 'styles-variables';
+
+.btn {
+  @extend .text-size-base;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+}
+
+.btn-simple {
+  @extend .btn;
+
+
+  padding: 0.75rem 1rem;
+  background: $m-blue;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  color: white;
+  transition: all;
+
+  &:hover {
+    background: $m-green;
+  }
+}
