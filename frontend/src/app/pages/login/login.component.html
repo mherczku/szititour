@@ -13,9 +13,8 @@
     -->
 
     <div class="flex justify-between items-center">
-      <app-buttons [type]="ButtonType.hoverBoldTextChange" classes="hover:pr-12" routerLink="/register"
-                   text="Még nincs fiókod?" textHover="Regisztrálj!"></app-buttons>
-      <app-buttons (click)="login()" classes="" text="Bejelentkezés"></app-buttons>
+      <a #button1 class="btn-hover-bold" title="Még nincs fiókod?" (mouseenter)="button1.innerText = 'Regisztrálj!'" (mouseleave)="button1.innerText = 'Még nincs fiókod?'" routerLink="/register">Még nincs fiókod?</a>
+      <button (click)="login()" class="btn-simple">Bejelentkezés</button>
     </div>
   </div>
 

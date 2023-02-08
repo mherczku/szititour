@@ -24,7 +24,7 @@
   </div>
 
   <div class="w-full flex justify-between">
-    <app-buttons classes="bg-red-600 hover:bg-red-700" (onClicked)="delete()" [isDisabledBlocked]="!isEdit" [isDisabledProgress]="deleting" text="Delete" [type]="ButtonType.simple"></app-buttons>
-    <app-buttons [isDisabledProgress]="saving" (onClicked)="save()" [text]="this.isEdit ? 'Mentés' : 'Létrehozás'" [type]="ButtonType.simple"></app-buttons>
+    <button class="btn-simple-red" (click)="delete()" [disabled]="!isEdit || deleting">Törlés</button>
+    <button [disabled]="saving" (click)="save()">{{this.isEdit ? 'Mentés' : 'Létrehozás'}}</button>
   </div>
 </div>

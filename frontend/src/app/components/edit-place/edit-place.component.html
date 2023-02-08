@@ -28,11 +28,9 @@
   </div>
 
   <div class="flex justify-between w-full">
-    <app-buttons [type]="ButtonType.simple" [isDisabledBlocked]="!isEdit" text="Törlés" classes="bg-red-600 hover:bg-red-800" (onClicked)="deletePlace()"
-                 [isDisabledProgress]="deleting"></app-buttons>
-
-    <app-buttons [type]="ButtonType.simple" [text]="isEdit ? 'Mentés' : 'Létrehozás'" (onClicked)="savePlace()"
-                 [isDisabledProgress]="saving"></app-buttons>
+    <button class="btn-simple-red" [disabled]="!isEdit || deleting" (click)="deletePlace()"></button>
+    <button class="btn-simple" (click)="savePlace()"
+                 [disabled]="saving">{{isEdit ? 'Mentés' : 'Létrehozás'}}</button>
   </div>
 
   <!-- Edit modal -->

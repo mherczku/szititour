@@ -11,7 +11,7 @@ export class ButtonsComponent {
   @Input() text = "Click here";
   @Input() textHover = "Click here hovered";
   @Input() classes = "";
-  @Input() type: ButtonType = ButtonType.simple;
+  @Input() type: ButtonType = ButtonType.green;
   @Input() iconSrc = "";
   @Input() isDisabledProgress = false;
   @Input() isDisabledBlocked = false;

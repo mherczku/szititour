@@ -15,10 +15,8 @@
                     placeholder="Add meg még egyszer"></app-text-input>
 
     <div class="flex justify-between items-center">
-      <app-buttons [type]="ButtonType.hoverBoldTextChange" classes="hover:pr-12" routerLink="/login"
-                   text="Már van fiókod?" textHover="Lépj be!"></app-buttons>
-      <app-buttons (onClicked)="register()" [isDisabledProgress]="registering" classes=""
-                   text="Regisztrálás"></app-buttons>
+      <a #button1 class="btn-hover-bold" title="Még nincs fiókod?" (mouseenter)="button1.innerText = 'Lépj be!'" (mouseleave)="button1.innerText = 'Már van fiókod?'" routerLink="/login">Még nincs fiókod?</a>
+      <button (click)="register()" [disabled]="registering" class="btn-simple">Regisztrálás</button>
     </div>
   </div>
 

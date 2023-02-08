@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="w-full flex justify-between">
-    <app-buttons (onClicked)="close()" text="Vissza" [type]="ButtonType.simple"></app-buttons>
-    <app-buttons [isDisabledProgress]="saving" (onClicked)="save()" [text]="this.isEdit ? 'Mentés' : 'Létrehozás'" [type]="ButtonType.simple"></app-buttons>
+    <button (click)="close()" class="btn-simple">Vissza</button>
+    <button [disabled]="saving" class="btn-simple" (click)="save()">{{this.isEdit ? 'Mentés' : 'Létrehozás'}}</button>
   </div>
 </div>

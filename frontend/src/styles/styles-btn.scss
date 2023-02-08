@@ -27,3 +27,32 @@
     background: $m-green;
   }
 }
+
+.btn-simple-red {
+  @extend .btn-simple;
+  background: #CD2A00;
+
+  &:hover {
+    background: #ed2f02;
+  }
+}
+
+.btn-hover-bold {
+  $string: var(--btn-string);
+  @extend .btn;
+  color: $m-green;
+
+  &::before {
+    @extend .text-size-base;
+    content: attr(title);
+    display: block;
+    font-weight: 600;
+    overflow: hidden;
+    height: 0;
+    visibility: hidden;
+  }
+
+  &:hover {
+    font-weight: 600;
+  }
+}
