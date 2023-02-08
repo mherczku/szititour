@@ -27,10 +27,10 @@
   <div class="mobileMenu" [ngClass]="isMobileMenuOpen ? 'z-[100]' : 'z-[-1]'" >
     <div class="darkPart" (click)="changeIsMobileMenuOpen(false)" [ngClass]="isMobileMenuOpen ? 'animateDarkPart' : ''"></div>
     <div class="whitePart" [ngClass]="isMobileMenuOpen ? 'whitePartOpen' : ''">
-      <p *ngIf="isLoggedIn" routerLink="/home" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Főoldal</p>
-      <p *ngIf="isLoggedIn && isAdmin" routerLink="/admin" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Admin Panel</p>
-      <p *ngIf="isLoggedIn" (click)="changeIsMobileMenuOpen(false); logout()" class=" font-semibold text-size-lg cursor-pointer">Kijelentkezés</p>
-      <p *ngIf="!isLoggedIn" routerLink="/login" class=" font-semibold text-size-lg cursor-pointer">Bejelentkezés</p>
+      <a *ngIf="isLoggedIn" routerLink="/home" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Főoldal</a>
+      <a *ngIf="isLoggedIn && isAdmin" routerLink="/admin" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Admin Panel</a>
+      <a *ngIf="isLoggedIn" (click)="changeIsMobileMenuOpen(false); logout()" class=" font-semibold text-size-lg cursor-pointer">Kijelentkezés</a>
+      <a *ngIf="!isLoggedIn" routerLink="/login" class=" font-semibold text-size-lg cursor-pointer">Bejelentkezés</a>
     </div>
   </div>
 
