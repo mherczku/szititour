@@ -8,8 +8,8 @@
 
 
   <div class="flex flex-row mobile:hidden tablet:block">
-    <app-buttons *ngIf="!isLoggedIn" routerLink="/login" text="Bejelentkezés"></app-buttons>
-    <app-buttons (onClicked)="logout()" *ngIf="isLoggedIn" text="Kijelentkezés"></app-buttons>
+    <a class="btn-simple" *ngIf="!isLoggedIn" routerLink="/login">Bejelentkezés</a>
+    <button class="btn-simple" (click)="logout()" *ngIf="isLoggedIn">Kijelentkezés</button>
   </div>
 
   <div class="hidden z-[101] mobile:block relative -translate-x-14 -translate-y-8 disableSelectAndTap">
