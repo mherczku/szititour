@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Question} from "../../interfaces/question";
-import {ButtonType} from "../../enums/button-type";
 
 @Component({
   selector: "app-question",
@@ -8,8 +7,6 @@ import {ButtonType} from "../../enums/button-type";
   styleUrls: ["./question.component.sass"]
 })
 export class QuestionComponent {
-  ButtonType = ButtonType;
-
   @Input() question!: Question;
   @Input() number!: number;
   @Output() onEditPressed: EventEmitter<unknown> = new EventEmitter();

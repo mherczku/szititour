@@ -37,7 +37,7 @@
   }
 }
 
-.btn-hover-bold {
+.btn-hover-bold-textChange {
   $string: var(--btn-string);
   @extend .btn;
   color: $m-green;
@@ -53,6 +53,16 @@
   }
 
   &:hover {
+    font-weight: 600;
+  }
+}
+
+.btn-hover-bold {
+  @extend .btn;
+  color: $m-blue;
+
+  &:hover {
+    color: $m-blue;
     font-weight: 600;
   }
 }

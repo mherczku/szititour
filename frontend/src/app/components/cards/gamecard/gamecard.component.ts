@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from "@angular/core";
-import { ButtonType } from "src/app/enums/button-type";
 import {Game} from "../../../interfaces/game";
 import {HotToastService} from "@ngneat/hot-toast";
 import {AdminService} from "../../../services/AdminService";
@@ -18,8 +17,6 @@ export class GamecardComponent implements OnDestroy {
   @Output() onTeamsClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
   @Output() onPlacesClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
   @Output() onDeleted: EventEmitter<unknown> = new EventEmitter<unknown>();
-
-  ButtonType = ButtonType;
 
   deleting = false;
   subscriptionDelete?: Subscription;

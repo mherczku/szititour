@@ -9,7 +9,6 @@ import {
   SimpleChanges,
   ViewChild
 } from "@angular/core";
-import {ButtonType} from "../../enums/button-type";
 import {Game} from "../../interfaces/game";
 import {Subscription} from "rxjs";
 import {AdminService} from "../../services/AdminService";
@@ -21,8 +20,6 @@ import {HotToastService} from "@ngneat/hot-toast";
   styleUrls: ["./edit-game.component.css"]
 })
 export class EditGameComponent implements OnChanges, OnDestroy {
-
-  ButtonType = ButtonType;
 
   file?: File;
 

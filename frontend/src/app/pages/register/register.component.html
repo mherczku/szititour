@@ -15,7 +15,7 @@
                     placeholder="Add meg még egyszer"></app-text-input>
 
     <div class="flex justify-between items-center">
-      <a #button1 class="btn-hover-bold" title="Még nincs fiókod?" (mouseenter)="button1.innerText = 'Lépj be!'" (mouseleave)="button1.innerText = 'Már van fiókod?'" routerLink="/login">Még nincs fiókod?</a>
+      <a #button1 class="btn-hover-bold-textChange" title="Még nincs fiókod?" (mouseenter)="button1.innerText = 'Lépj be!'" (mouseleave)="button1.innerText = 'Már van fiókod?'" routerLink="/login">Még nincs fiókod?</a>
       <button (click)="register()" [disabled]="registering" class="btn-simple">Regisztrálás</button>
     </div>
   </div>

@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {ButtonType} from "src/app/enums/button-type";
 import {ListType} from "../../../enums/list-types";
 import {Game} from "../../../interfaces/game";
 import {AdminService} from "../../../services/AdminService";
@@ -18,8 +17,6 @@ import {Subscription} from "rxjs";
   `],
 })
 export class GamesComponent implements OnInit, OnDestroy {
-
-  ButtonType = ButtonType;
   ListType = ListType;
 
   games: Game[] = [];

@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import { ButtonType } from "src/app/enums/button-type";
 import {TextInputType} from "../../../enums/text-input-type";
 
 @Component({
@@ -21,7 +20,6 @@ export class TextInputComponent implements OnInit {
   editing = false;
 
   TextInputType = TextInputType;
-  ButtonType = ButtonType;
 
   ngOnInit(): void {
     if(this.password) {

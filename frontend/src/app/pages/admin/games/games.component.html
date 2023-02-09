@@ -2,7 +2,7 @@
 
   <div class="grid grid-cols-4 tablet:grid-cols-2 gap-6 mobile:grid-cols-1 relative">
     <div class="fixed z-10 w-[3rem] h-[3rem] text-size-base right-20 bottom-20 mobile:right-10 mobile:bottom-10">
-      <app-buttons (onClicked)="openNewGameDialog()" [type]="ButtonType.iconButton"
+      <app-buttons (onClicked)="openNewGameDialog()" type="icon"
                    classes="hover:scale-110 active:opacity-70 transition" iconSrc="assets/svg/add.svg"></app-buttons>
     </div>
     <app-gamecard (onDeleted)="getGames()" (onEditClicked)="editGame(game)"

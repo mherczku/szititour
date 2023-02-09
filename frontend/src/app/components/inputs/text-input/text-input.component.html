@@ -13,8 +13,8 @@
            class="neumorphism-2 border-1 focus:border-green-500 hover:border-green-500 bg-transparent text-size-base outline-0 w-full"
            [type]="inputType" [placeholder]="placeholder">
     <p *ngIf="!editing" class="text-size-base w-full">{{value}}</p>
-    <app-buttons classes="min-w-[20px]" *ngIf="!editing" (onClicked)="editing = !editing" iconSrc="assets/svg/edit.svg" [type]="ButtonType.iconButton"></app-buttons>
-    <app-buttons classes="min-w-[30px]" *ngIf="editing" (onClicked)="editing = !editing" iconSrc="assets/svg/tick.svg" [type]="ButtonType.iconButton"></app-buttons>
+    <app-buttons classes="min-w-[20px]" *ngIf="!editing" (onClicked)="editing = !editing" iconSrc="assets/svg/edit.svg" type="icon"></app-buttons>
+    <app-buttons classes="min-w-[30px]" *ngIf="editing" (onClicked)="editing = !editing" iconSrc="assets/svg/tick.svg" type="icon"></app-buttons>
 
   </div>
 

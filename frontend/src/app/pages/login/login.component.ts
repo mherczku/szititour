@@ -1,7 +1,6 @@
 import {Component, OnDestroy} from "@angular/core";
 import {AuthService} from "../../services/AuthService";
 import {UserService} from "../../services/UserService";
-import {ButtonType} from "../../enums/button-type";
 import {NetworkResponse} from "../../interfaces/network-response";
 import {Router} from "@angular/router";
 import {HotToastService} from "@ngneat/hot-toast";
@@ -13,9 +12,6 @@ import {Subscription} from "rxjs";
   styleUrls: ["./login.component.css"]
 })
 export class LoginComponent implements OnDestroy {
-
-  ButtonType = ButtonType;
-
   email = "";
   password = "";
   error = "";

@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from "@angular/core";
-import {ButtonType} from "../../enums/button-type";
 import {Place} from "src/app/interfaces/place";
 import {ListType} from "../../enums/list-types";
 import {Application} from "../../interfaces/application";
@@ -18,7 +17,6 @@ import {Subscription} from "rxjs";
 })
 export class ListsComponent implements OnDestroy {
 
-  ButtonType = ButtonType;
   ListType = ListType;
 
   @Input() type: ListType = ListType.applications;

@@ -11,7 +11,6 @@ import {
 } from "@angular/core";
 import {Question} from "../../interfaces/question";
 import {QuestionType} from "../../enums/question-type";
-import {ButtonType} from "../../enums/button-type";
 import {Subscription} from "rxjs";
 import {AdminService} from "../../services/AdminService";
 import {HotToastService} from "@ngneat/hot-toast";
@@ -22,8 +21,6 @@ import {HotToastService} from "@ngneat/hot-toast";
   styleUrls: ["./question-edit.component.sass"]
 })
 export class QuestionEditComponent implements OnChanges, OnDestroy {
-
-  ButtonType = ButtonType;
 
   @ViewChild("fileInput")
   fileInput?: ElementRef;

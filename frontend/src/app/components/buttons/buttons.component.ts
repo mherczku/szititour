@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
-import {ButtonType} from "../../enums/button-type";
 
 @Component({
   selector: "app-buttons",
@@ -11,14 +10,11 @@ export class ButtonsComponent {
   @Input() text = "Click here";
   @Input() textHover = "Click here hovered";
   @Input() classes = "";
-  @Input() type: ButtonType = ButtonType.green;
+  @Input() type: "icon" | "delete" | "blueIcon" = "icon";
   @Input() iconSrc = "";
   @Input() isDisabledProgress = false;
   @Input() isDisabledBlocked = false;
-
   @Output() onClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
-
-  ButtonType = ButtonType;
   mouseOver = false;
 
   onClick() {

@@ -1,5 +1,4 @@
 import {Component, Input} from "@angular/core";
-import { ButtonType } from "src/app/enums/button-type";
 import {Place} from "../../interfaces/place";
 
 @Component({
@@ -13,8 +12,6 @@ export class DropdownComponent {
   @Input() number!: number;
 
   open = false;
-
-  ButtonType = ButtonType;
 
   toggle($event: MouseEvent) {
     this.open = !this.open;

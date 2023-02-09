@@ -21,14 +21,14 @@
         <p class="text-size-lg bold">Kérdések:</p>
         <app-buttons (onClicked)="openNewQuestionDialog()" [isDisabledBlocked]="!isEdit"
                      classes="aspect-square w-[30px] hover:scale-110 active:opacity-70 transition"
-                     [type]="ButtonType.iconButton" iconSrc="assets/svg/add.svg"></app-buttons>
+                     type="icon" iconSrc="assets/svg/add.svg"></app-buttons>
       </div>
       <app-question [question]="question" [number]="index + 1" (onEditPressed)="openEditQuestionDialog(question)" *ngFor="let question of place.questions; let index = index"></app-question>
     </div>
   </div>
 
   <div class="flex justify-between w-full">
-    <button class="btn-simple-red" [disabled]="!isEdit || deleting" (click)="deletePlace()"></button>
+    <button class="btn-simple-red" [disabled]="!isEdit || deleting" (click)="deletePlace()">Törlés</button>
     <button class="btn-simple" (click)="savePlace()"
                  [disabled]="saving">{{isEdit ? 'Mentés' : 'Létrehozás'}}</button>
   </div>

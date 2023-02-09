@@ -1,5 +1,4 @@
 import {Component, OnDestroy} from "@angular/core";
-import {ButtonType} from "../../enums/button-type";
 import {HotToastService} from "@ngneat/hot-toast";
 import {AuthService} from "../../services/AuthService";
 import {Subscription} from "rxjs";
@@ -11,9 +10,6 @@ import {Router} from "@angular/router";
   styleUrls: ["./register.component.css"]
 })
 export class RegisterComponent implements OnDestroy {
-
-  ButtonType = ButtonType;
-
   email = "";
   password = "";
   passwordConfirm = "";
