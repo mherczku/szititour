@@ -9,7 +9,7 @@ import {
   SimpleChanges,
   ViewChild
 } from "@angular/core";
-import {Game} from "../../interfaces/game";
+import {Game} from "../../types/game";
 import {Subscription} from "rxjs";
 import {AdminService} from "../../services/AdminService";
 import {HotToastService} from "@ngneat/hot-toast";

@@ -1,11 +1,11 @@
 import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from "@angular/core";
-import {Place} from "../../interfaces/place";
+import {Place} from "../../types/place";
 import {TextInputType} from "../../enums/text-input-type";
 import {Subscription} from "rxjs";
 import {AdminService} from "../../services/AdminService";
 import {HotToastService} from "@ngneat/hot-toast";
 import {Router} from "@angular/router";
-import {Question} from "../../interfaces/question";
+import {Question} from "../../types/question";
 import {QuestionType} from "../../enums/question-type";
 
 @Component({

@@ -1,6 +1,6 @@
 import {Team} from "./team";
 
-export interface NetworkLoginResponse {
+export type NetworkLoginResponse = {
   success: boolean,
   successMessage: string,
   errorMessage: string,

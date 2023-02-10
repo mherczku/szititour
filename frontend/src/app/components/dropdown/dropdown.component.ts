@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {Place} from "../../interfaces/place";
+import {Place} from "../../types/place";
 
 @Component({
   selector: "app-dropdown",

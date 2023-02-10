@@ -1,4 +1,4 @@
-export interface NetworkResponse {
+export type NetworkResponse = {
   success: boolean,
   successMessage: string,
   errorMessage: string,

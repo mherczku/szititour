@@ -11,8 +11,8 @@ import {
 } from "@angular/router";
 import {Observable} from "rxjs";
 import {Store} from "@ngrx/store";
-import {AuthState} from "../interfaces/states/auth-state";
-import {Team} from "../interfaces/team";
+import {AuthState} from "../types/states/auth-state";
+import {Team} from "../types/team";
 
 @Injectable({
   providedIn: "root"

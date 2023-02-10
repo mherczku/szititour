@@ -9,7 +9,7 @@ import {
   SimpleChanges,
   ViewChild
 } from "@angular/core";
-import {Question} from "../../interfaces/question";
+import {Question} from "../../types/question";
 import {QuestionType} from "../../enums/question-type";
 import {Subscription} from "rxjs";
 import {AdminService} from "../../services/AdminService";

@@ -1,4 +1,4 @@
-export interface ApplicationOriginal {
+export type ApplicationOriginal = {
   id: number,
   accepted?: boolean,
   createdAt?: Date,
@@ -7,7 +7,7 @@ export interface ApplicationOriginal {
   team: TeamOriginal
 }
 
-export interface TeamOriginal {
+export type TeamOriginal = {
   id: number,
   name?: string,
   email?: string,
@@ -20,7 +20,7 @@ export interface TeamOriginal {
   members?: string[]
 }
 
-export interface GameOriginal {
+export type GameOriginal = {
   id: number,
   title?: string,
   dateStart?: Date,

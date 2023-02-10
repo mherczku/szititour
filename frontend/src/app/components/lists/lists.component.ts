@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from "@angular/core";
-import {Place} from "src/app/interfaces/place";
+import {Place} from "src/app/types/place";
 import {ListType} from "../../enums/list-types";
-import {Application} from "../../interfaces/application";
+import {Application} from "../../types/application";
 import {AdminService} from "../../services/AdminService";
 import {Subscription} from "rxjs";
 

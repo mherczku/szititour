@@ -2,11 +2,11 @@ import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Game} from "../interfaces/game";
-import {Application} from "../interfaces/application";
-import {ApplicationOriginal} from "../interfaces/application-original";
-import {Place} from "../interfaces/place";
-import {Question} from "../interfaces/question";
+import {Game} from "../types/game";
+import {Application} from "../types/application";
+import {ApplicationOriginal} from "../types/application-original";
+import {Place} from "../types/place";
+import {Question} from "../types/question";
 
 
 @Injectable({providedIn: "root"})

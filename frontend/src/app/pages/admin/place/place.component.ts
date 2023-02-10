@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {Place} from "../../../interfaces/place";
+import {Place} from "../../../types/place";
 import {ActivatedRoute} from "@angular/router";
 import {AdminService} from "../../../services/AdminService";
 import {Subscription} from "rxjs";

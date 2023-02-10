@@ -1,4 +1,4 @@
-export interface Application {
+export type Application = {
   id: number,
   teamId: number,
   gameId: number,

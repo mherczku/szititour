@@ -13,7 +13,7 @@ import {StoreModule} from "@ngrx/store";
 import {AuthReducer} from "./reducers/auth.reducer";
 import {AuthService} from "./services/AuthService";
 import {timeout} from "rxjs";
-import {Team} from "./interfaces/team";
+import {Team} from "./types/team";
 import {Modal2Component} from "./components/modal2/modal2.component";
 import {HostDirective} from "./directives/hostDirective";
 

@@ -2,13 +2,13 @@ import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
-import {AuthState} from "../interfaces/states/auth-state";
+import {AuthState} from "../types/states/auth-state";
 import {Store} from "@ngrx/store";
-import {Team} from "../interfaces/team";
+import {Team} from "../types/team";
 import {login, logout} from "../actions/auth.actions";
 import {Router} from "@angular/router";
-import {NetworkLoginResponse} from "../interfaces/network-login-response";
-import {NetworkResponse} from "../interfaces/network-response";
+import {NetworkLoginResponse} from "../types/network-login-response";
+import {NetworkResponse} from "../types/network-response";
 import {HotToastService} from "@ngneat/hot-toast";
 
 

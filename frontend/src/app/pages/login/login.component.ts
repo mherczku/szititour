@@ -1,7 +1,7 @@
 import {Component, OnDestroy} from "@angular/core";
 import {AuthService} from "../../services/AuthService";
 import {UserService} from "../../services/UserService";
-import {NetworkResponse} from "../../interfaces/network-response";
+import {NetworkResponse} from "../../types/network-response";
 import {Router} from "@angular/router";
 import {HotToastService} from "@ngneat/hot-toast";
 import {Subscription} from "rxjs";

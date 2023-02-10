@@ -1,6 +1,6 @@
 import {Question} from "./question";
 
-export interface Place {
+export type Place = {
   id: number,
   name: string,
   img?: string,

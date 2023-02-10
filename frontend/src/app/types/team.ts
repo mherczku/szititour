@@ -1,4 +1,4 @@
-export interface Team {
+export type Team = {
   id: number,
   name: string,
   email: string,

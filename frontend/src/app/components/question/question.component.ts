@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
-import {Question} from "../../interfaces/question";
+import {Question} from "../../types/question";
 
 @Component({
   selector: "app-question",

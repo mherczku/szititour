@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ListType} from "../../../enums/list-types";
-import {Game} from "../../../interfaces/game";
+import {Game} from "../../../types/game";
 import {AdminService} from "../../../services/AdminService";
 import {Subscription} from "rxjs";
 

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from "@angular/core";
-import {Game} from "../../../interfaces/game";
+import {Game} from "../../../types/game";
 import {HotToastService} from "@ngneat/hot-toast";
 import {AdminService} from "../../../services/AdminService";
 import {Subscription} from "rxjs";
