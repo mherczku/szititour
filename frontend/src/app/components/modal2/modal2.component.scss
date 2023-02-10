@@ -1,0 +1,27 @@
+.host-container {
+  background: rgba(0, 0, 0, 0.31);
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.content-container {
+  height: fit-content;
+  max-width: 80%;
+  width: fit-content;
+  background: whitesmoke;
+  margin: 1rem;
+  border: 1px solid black;
+  border-radius: 5px;
+  z-index: 10001;
+}
+
+.hidden-host {
+  visibility: hidden;
+}

@@ -14,10 +14,14 @@ import {AuthReducer} from "./reducers/auth.reducer";
 import {AuthService} from "./services/AuthService";
 import {timeout} from "rxjs";
 import {Team} from "./interfaces/team";
+import {Modal2Component} from "./components/modal2/modal2.component";
+import {HostDirective} from "./directives/hostDirective";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HostDirective,
+    Modal2Component
   ],
   imports: [
     BrowserModule,
@@ -26,7 +30,7 @@ import {Team} from "./interfaces/team";
     NavbarModule,
     HttpClientModule,
     HotToastModule.forRoot(),
-    StoreModule.forRoot({auth: AuthReducer}, {})
+    StoreModule.forRoot({auth: AuthReducer}, {}),
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
@@ -34,7 +38,8 @@ import {Team} from "./interfaces/team";
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService, HotToastService], multi: true}
   ],
-  exports: [],
+  exports: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
