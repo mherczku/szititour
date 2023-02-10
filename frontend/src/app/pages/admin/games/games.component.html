@@ -13,11 +13,6 @@
 </div>
 
 
-<!-- Edit modal -->
-<app-modal [(isDisplayed)]="editModalVisible">
-  <app-edit-game (onClose)="closeEditModal()" [game]="selectedGame" [isEdit]="isGameEditing"></app-edit-game>
-</app-modal>
-
 <!-- Applications modal -->
 <app-modal [(isDisplayed)]="teamsModalVisible" classes="w-full">
   <app-lists [(applications)]="selectedGame.applications"></app-lists>

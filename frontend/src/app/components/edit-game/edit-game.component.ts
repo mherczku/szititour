@@ -13,6 +13,7 @@ import {Game} from "../../types/game";
 import {Subscription} from "rxjs";
 import {AdminService} from "../../services/AdminService";
 import {HotToastService} from "@ngneat/hot-toast";
+import {ModalService} from "../../services/ModalService";
 
 @Component({
   selector: "app-edit-game",
@@ -38,11 +39,19 @@ export class EditGameComponent implements OnChanges, OnDestroy {
   };
   @Output() onClose: EventEmitter<unknown> = new EventEmitter<unknown>();
 
+  public setGame(data: {game: Game, isEdit: boolean}) {
+    this.game = data.game;
+    this.isEdit = data.isEdit;
+  }
+
 
   saving = false;
   subscriptionSave?: Subscription;
 
-  constructor(private adminService: AdminService, private alert: HotToastService) {
+  constructor(private adminService: AdminService, private alert: HotToastService, private modalS: ModalService) {
+    const a = this.modalS.getExtra() as {game: Game, isEdit: boolean};
+    if(a !== undefined)
+      this.setGame(a);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

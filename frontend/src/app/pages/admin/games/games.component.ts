@@ -1,8 +1,10 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit, Type} from "@angular/core";
 import {ListType} from "../../../enums/list-types";
 import {Game} from "../../../types/game";
 import {AdminService} from "../../../services/AdminService";
 import {Subscription} from "rxjs";
+import {ModalService} from "../../../services/ModalService";
+import {EditGameComponent} from "../../../components/edit-game/edit-game.component";
 
 
 @Component({
@@ -32,7 +34,7 @@ export class GamesComponent implements OnInit, OnDestroy {
 
   subscriptionGetGames?: Subscription;
 
-  constructor(private adminService: AdminService) {
+  constructor(private adminService: AdminService, private modalService: ModalService) {
   }
 
   ngOnInit(): void {
@@ -46,14 +48,14 @@ export class GamesComponent implements OnInit, OnDestroy {
   }
 
   editGame(g: Game) {
-    this.isGameEditing = true;
-    this.changeModal(this.EDIT, g);
+    this.modalService.open(EditGameComponent as Type<Component>,{game: g, isEdit: true});
+    //this.isGameEditing = true;
+    //this.changeModal(this.EDIT, g);
   }
 
   openNewGameDialog() {
     const newGame = {applications: [], id: 0, places: [], title: "", dateStart: new Date(), dateEnd: new Date()};
-    this.isGameEditing = false;
-    this.changeModal(this.EDIT, newGame);
+    this.modalService.open(EditGameComponent as Type<Component>,{game: newGame, isEdit: false});
   }
 
   closeEditModal() {

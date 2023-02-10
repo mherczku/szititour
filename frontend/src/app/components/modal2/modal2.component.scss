@@ -4,7 +4,7 @@
   height: 100vh;
   position: absolute;
   top: 0;
-  z-index: 10000;
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +19,7 @@
   margin: 1rem;
   border: 1px solid black;
   border-radius: 5px;
-  z-index: 10001;
+  z-index: 1001;
 }
 
 .hidden-host {
