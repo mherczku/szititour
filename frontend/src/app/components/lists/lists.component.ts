@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from "@angular/core";
 import {Place} from "src/app/types/place";
-import {ListType} from "../../enums/list-types";
 import {Application} from "../../types/application";
 import {AdminService} from "../../services/AdminService";
 import {Subscription} from "rxjs";
@@ -16,10 +15,7 @@ import {Subscription} from "rxjs";
   `],
 })
 export class ListsComponent implements OnDestroy {
-
-  ListType = ListType;
-
-  @Input() type: ListType = ListType.applications;
+  @Input() type: "applications" | "places" = "applications";
   @Input() applications: Application[] = [];
   @Input() places: Place[] = [];
   @Input() gameIdForPlacesList = 0;

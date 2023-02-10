@@ -1,6 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from "@angular/core";
 import {Place} from "../../types/place";
-import {TextInputType} from "../../enums/text-input-type";
 import {Subscription} from "rxjs";
 import {AdminService} from "../../services/AdminService";
 import {HotToastService} from "@ngneat/hot-toast";
@@ -14,8 +13,6 @@ import {QuestionType} from "../../enums/question-type";
   styleUrls: ["./edit-place.component.css"]
 })
 export class EditPlaceComponent implements OnInit, OnDestroy {
-  TextInputType = TextInputType;
-
   @Input() isEdit = false;
   @Input() place!: Place;
   @Output() placeChange: EventEmitter<Place> = new EventEmitter<Place>();

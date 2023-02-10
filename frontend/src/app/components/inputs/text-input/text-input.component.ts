@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {TextInputType} from "../../../enums/text-input-type";
 
 @Component({
   selector: "app-text-input",
@@ -12,15 +11,12 @@ export class TextInputComponent implements OnInit {
   @Input() label = "Label:";
   @Input() classes = "";
   @Input() password = false;
-  @Input() type: TextInputType = TextInputType.label;
+  @Input() type: "label" | "editable" = "editable";
   @Input() value = "";
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
 
   inputType = "text";
   editing = false;
-
-  TextInputType = TextInputType;
-
   ngOnInit(): void {
     if(this.password) {
       this.inputType = "password";

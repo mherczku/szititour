@@ -61,6 +61,7 @@ export class EditGameComponent implements OnChanges, OnDestroy {
   close() {
     this.resetFields();
     this.onClose.emit();
+    this.modalS.close();
   }
 
   resetFields() {

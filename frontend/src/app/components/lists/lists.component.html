@@ -1,4 +1,4 @@
-<div *ngIf="type === ListType.applications" class="flex flex-col gap-3 relative bg-white p-5 rounded shadow w-full max-h-[80vh]">
+<div *ngIf="type === 'applications'" class="flex flex-col gap-3 relative bg-white p-5 rounded shadow w-full max-h-[80vh]">
   <p class="text-size-lg text-center w-full font-bold mb-6">Csapatok</p>
   <div class="overflow-y-auto h-fit">
     <div *ngFor="let application of applications"
@@ -22,7 +22,7 @@
 
 </div>
 
-<div *ngIf="type === ListType.places" class="flex flex-col gap-3 relative bg-white p-5 h-[80vh] h-full rounded shadow w-full">
+<div *ngIf="type === 'places'" class="flex flex-col gap-3 relative bg-white p-5 h-[80vh] h-full rounded shadow w-full">
   <p class="text-size-lg text-center w-full font-bold mb-6">Helyszínek</p>
 
   <div class="h-fit overflow-y-auto">

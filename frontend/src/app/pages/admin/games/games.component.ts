@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit, Type} from "@angular/core";
-import {ListType} from "../../../enums/list-types";
 import {Game} from "../../../types/game";
 import {AdminService} from "../../../services/AdminService";
 import {Subscription} from "rxjs";
@@ -19,8 +18,6 @@ import {EditGameComponent} from "../../../components/edit-game/edit-game.compone
   `],
 })
 export class GamesComponent implements OnInit, OnDestroy {
-  ListType = ListType;
-
   games: Game[] = [];
   EDIT = "EDIT";
   TEAMS = "TEAMS";

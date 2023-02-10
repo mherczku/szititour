@@ -1,13 +1,13 @@
 <div [ngSwitch]="type">
 
-  <div *ngSwitchCase="TextInputType.label" class="relative flex flex-col gap-2 {{classes}}">
+  <div *ngSwitchCase="'label'" class="relative flex flex-col gap-2 {{classes}}">
     <label class="text-size-base">{{label}}</label>
     <input [ngModel]="value" (ngModelChange)="valueChange.emit($event)"
            class="neumorphism-2 border-1 focus:border-green-500 hover:border-green-500 bg-transparent text-size-base outline-0 w-full"
            [type]="inputType" [placeholder]="placeholder">
   </div>
 
-  <div *ngSwitchCase="TextInputType.editableP" class="relative place-items-center flex gap-3 {{classes}}">
+  <div *ngSwitchCase="'editable'" class="relative place-items-center flex gap-3 {{classes}}">
     <label class="text-size-base">{{label}}</label>
     <input *ngIf="editing" [ngModel]="value" (ngModelChange)="valueChange.emit($event)"
            class="neumorphism-2 border-1 focus:border-green-500 hover:border-green-500 bg-transparent text-size-base outline-0 w-full"
