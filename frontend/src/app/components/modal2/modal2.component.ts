@@ -1,12 +1,13 @@
-import {Component, OnInit, Type, ViewChild} from "@angular/core";
+import {ChangeDetectorRef, Component, Type, ViewChild} from "@angular/core";
 import {Observable, of} from "rxjs";
-import {ModalData, ModalService} from "../../services/ModalService";
+import {ModalData} from "../../services/ModalService";
 import {HostDirective} from "../../directives/hostDirective";
 
 @Component({
   selector: "app-modal2",
   template: `
-    <div [ngClass]="(display$ | async)?.visible ? '' : 'hidden-host'" (click)="close()" class="host-container">
+    <div [ngClass]="display_.visible ? '' : 'hidden-host'" id="ngx-modal-host-container" (click)="close()"
+         class="host-container">
       <div (click)="$event.stopPropagation()" class="content-container">
         <ng-template host></ng-template>
       </div>
@@ -14,25 +15,36 @@ import {HostDirective} from "../../directives/hostDirective";
   `,
   styleUrls: ["./modal2.component.scss"]
 })
-export class Modal2Component implements OnInit {
+export class Modal2Component {
   display$: Observable<ModalData> = of({component: undefined, visible: false});
+
+  display_: ModalData = {visible: false};
+
   @ViewChild(HostDirective, {static: true}) host!: HostDirective;
+  private closeCallback?: () => void;
 
-  constructor(private modalService: ModalService) { }
+  constructor(private cdr: ChangeDetectorRef) {
+  }
 
-  ngOnInit() {
-    this.display$ = this.modalService.watch();
-    this.display$.subscribe( data => {
-      if(data.visible) {
+  setCloseCallback(callback: () => void) {
+    this.closeCallback = callback;
+  }
+
+  setDisplay(ds: Observable<ModalData>) {
+    console.log({ds});
+    this.display$ = ds;
+    this.display$.subscribe(data => {
+      console.log("ds changed", {ds}, this.display_.visible);
+      this.display_ = data;
+      this.cdr.detectChanges();
+      if (data.visible) {
         this.open(data.component);
-      } else {
       }
     });
   }
 
-
   open(component?: Type<Component>) {
-    if(component !== undefined) {
+    if (component !== undefined) {
       const viewContainerRef = this.host.viewContainerRef;
       viewContainerRef.clear();
       viewContainerRef.createComponent<Component>(component);
@@ -40,8 +52,8 @@ export class Modal2Component implements OnInit {
   }
 
   close() {
+    this.closeCallback?.();
     this.host.viewContainerRef.clear();
-    this.modalService.close();
   }
 
 }

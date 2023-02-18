@@ -11,7 +11,7 @@ export class TextInputComponent implements OnInit {
   @Input() label = "Label:";
   @Input() classes = "";
   @Input() password = false;
-  @Input() type: "label" | "editable" = "editable";
+  @Input() type: "label" | "editable" = "label";
   @Input() value = "";
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
 
