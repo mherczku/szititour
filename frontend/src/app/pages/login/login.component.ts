@@ -5,6 +5,7 @@ import {NetworkResponse} from "../../types/network-response";
 import {Router} from "@angular/router";
 import {HotToastService} from "@ngneat/hot-toast";
 import {Subscription} from "rxjs";
+import {ModalService} from "../../services/ModalService";
 
 @Component({
   selector: "app-login",
