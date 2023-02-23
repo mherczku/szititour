@@ -3,6 +3,8 @@ import {HotToastService} from "@ngneat/hot-toast";
 import {AuthService} from "../../services/AuthService";
 import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {confirmPassword} from "../../validators/same-pass.validator";
 
 @Component({
   selector: "app-register",
@@ -10,48 +12,33 @@ import {Router} from "@angular/router";
   styleUrls: ["./register.component.css"]
 })
 export class RegisterComponent implements OnDestroy {
-  email = "";
-  password = "";
-  passwordConfirm = "";
-  registering = false;
-
   subscriptionRegister?: Subscription;
-
-  //registerForm!: FormGroup;
+  registerForm!: FormGroup;
 
   constructor(
     private alertService: HotToastService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder
   ) {
+    this.registerForm = this.fb.group({
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required]],
+      confirmPassword: ["", [Validators.required, confirmPassword()]],
+    });
   }
 
-  /*  setForm() {
-      this.registerForm = this.fb.group({
-        email: ['alma', [Validators.required]],
-        lastName: [],
-        age: []
-      });
-    }*/
-
-  // todo validators
   register() {
-    if (this.email !== "" && this.password !== "") {
-      if (this.password === this.passwordConfirm) {
-        this.subscriptionRegister = this.authService.register(this.email, this.password).subscribe(res => {
-          if (res.success) {
-            this.alertService.success("Sikeres regisztráció, bejelentkezhetsz");
-            this.router.navigateByUrl("/login");
-          } else {
-            this.alertService.error("Hiba történt: " + res.errorMessage);
-          }
-        });
+    this.subscriptionRegister = this.authService.register(this.registerForm.value.email, this.registerForm.value.password).subscribe(res => {
+      if (res.success) {
+        this.alertService.success("Sikeres regisztráció, bejelentkezhetsz");
+        this.registerForm.reset();
+        this.router.navigateByUrl("/login");
       } else {
-        this.alertService.warning("Jelszavak különböznek");
+        this.alertService.error("Hiba történt: " + res.errorMessage);
       }
-    } else {
-      this.alertService.warning("Minden mező kitöltése kötelező");
-    }
+    });
+    this.registerForm.reset();
   }
 
   ngOnDestroy(): void {

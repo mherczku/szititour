@@ -4,19 +4,17 @@
 
     <p class="text-size-h1 font-bold mb-10">Bejelentkezés</p>
 
-    <app-text-input [(value)]="email" classes="mb-5" label="E-mail"
-                    placeholder="Add meg az e-mail címed"></app-text-input>
-    <app-text-input [(value)]="password" [password]="true" classes="mb-5" label="Jelszó"
-                    placeholder="Add meg a jelszavad"></app-text-input>
-    <!--
-        <app-buttons classes="mb-5" [type]="ButtonType.hoverBold" text="Elfelejtetted a jelszavad?"></app-buttons>
-    -->
+    <form name="login">
+      <label class="text-size-base block mb-2">E-mail</label>
+      <input tabindex="1" autofocus [(ngModel)]="email" name="szititourLoginEmail" type="email" class="simpleInput mb-5" placeholder="E-mail cím">
+      <label class="text-size-base block mb-2">Jelszó</label>
+      <input tabindex="2" [(ngModel)]="password" name="szititourLoginPassword" type="password" class="simpleInput mb-5" placeholder="Jelszó">
 
-    <div class="flex justify-between items-center">
-      <a #button1 class="btn-hover-bold-textChange" title="Még nincs fiókod?" (mouseenter)="button1.innerText = 'Regisztrálj!'" (mouseleave)="button1.innerText = 'Még nincs fiókod?'" routerLink="/register">Még nincs fiókod?</a>
-      <button (click)="login()" class="btn-simple">Bejelentkezés</button>
-    </div>
+      <div class="flex justify-between items-center">
+        <a #button1 class="btn-hover-bold-textChange" title="Még nincs fiókod?" (mouseenter)="button1.innerText = 'Regisztrálj!'" (mouseleave)="button1.innerText = 'Még nincs fiókod?'" routerLink="/register">Még nincs fiókod?</a>
+        <button (click)="login()"  tabindex="3" class="btn-simple">Bejelentkezés</button>
+      </div>
+
+    </form>
   </div>
-
-
 </div>

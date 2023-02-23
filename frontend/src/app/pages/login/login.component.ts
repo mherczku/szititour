@@ -5,7 +5,6 @@ import {NetworkResponse} from "../../types/network-response";
 import {Router} from "@angular/router";
 import {HotToastService} from "@ngneat/hot-toast";
 import {Subscription} from "rxjs";
-import {ModalService} from "../../services/ModalService";
 
 @Component({
   selector: "app-login",
@@ -23,7 +22,7 @@ export class LoginComponent implements OnDestroy {
   }
 
   login() {
-    if (this.email === "t") {
+    if (this.email === "t" || this.email === "t@test.hu") {
       this.email = "t@test.hu";
       this.password = "T12345678";
     }

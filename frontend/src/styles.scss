@@ -6,6 +6,7 @@
 @import "styles/styles-btn";
 @import "styles/styles-variables";
 @import "styles/styles-typograhy";
+@import "styles/styles-inputs";
 
 .container {
   width: 100%;
@@ -54,49 +55,6 @@ img:before {
   background-image: url("assets/img/image404.png");
 }
 
-.simpleInput {
-  /*neumorphism-2 border-1 focus:border-green-500 hover:border-green-500 bg-transparent text-size-base outline-0 w-full*/
-  background: transparent;
-  padding: 10px;
-  border-radius: 5px;
-  background: #f5f5f5;
-  box-shadow:  2px 2px 5px #626262,
-  -2px -2px 5px #ffffff;
-
-  @extend .text-size-base;
-  outline: none;
-  width: 100%;
-  border: 1px solid transparent;
-
-  &:hover, &:focus {
-    border: 1px solid lawngreen;
-  }
-}
-
-.input_container {
-  width: 100%;
-  border: 1px solid #e5e5e5;
-}
-.simpleFileInput {
-  width: inherit;
-
-  &::file-selector-button {
-    background-color: #fff;
-    color: #000;
-    border: 0;
-    border-right: 1px solid #e5e5e5;
-    padding: 5px 10px;
-    margin-right: 20px;
-    transition: .5s;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #eee;
-      border: 0;
-      border-right: 1px solid #e5e5e5;
-    }
-  }
-}
 .disableSelectAndTap {
   user-select: none;
   -webkit-tap-highlight-color: transparent;

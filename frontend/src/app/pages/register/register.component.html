@@ -4,20 +4,23 @@
 
     <p class="text-size-h1 font-bold mb-10">Regisztráció</p>
 
-    <!--
-        <app-text-input [(value)]="email" classes="mb-5" placeholder="Add meg az e-mail címed" label="E-mail *"></app-text-input>
-    -->
-    <label class="text-size-base mb-2">E-mail *</label>
-    <input [(ngModel)]="email" class="simpleInput mb-5" placeholder="Add meg az e-mail címed">
-    <app-text-input [(value)]="password" [password]="true" classes="mb-5" label="Jelszó *"
-                    placeholder="Adj meg egy jelszót"></app-text-input>
-    <app-text-input [(value)]="passwordConfirm" [password]="true" classes="mb-5" label="Jelszó még egyszer *"
-                    placeholder="Add meg még egyszer"></app-text-input>
+    <form [formGroup]="registerForm">
+      <label class="text-size-base mb-2 block">E-mail *</label>
+      <input tabindex="1" autofocus required formControlName="email" class="simpleInput mb-5" type="email" placeholder="Add meg az e-mail címed">
 
-    <div class="flex justify-between items-center">
-      <a #button1 class="btn-hover-bold-textChange" title="Még nincs fiókod?" (mouseenter)="button1.innerText = 'Lépj be!'" (mouseleave)="button1.innerText = 'Már van fiókod?'" routerLink="/login">Még nincs fiókod?</a>
-      <button (click)="register()" [disabled]="registering" class="btn-simple">Regisztrálás</button>
-    </div>
+      <label class="text-size-base mb-2 block">Jelszó *</label>
+      <input tabindex="2" required formControlName="password" class="simpleInput mb-5" type="password" placeholder="Adj meg egy jelszót">
+
+      <label class="text-size-base mb-2 block">Jelszó mégegyszer *</label>
+      <input tabindex="3" required formControlName="confirmPassword" class="simpleInput mb-5" type="password" placeholder="Add meg még egyszer">
+
+      <div class="flex justify-between items-center">
+        <a #button1 class="btn-hover-bold-textChange" title="Még nincs fiókod?" (mouseenter)="button1.innerText = 'Lépj be!'" (mouseleave)="button1.innerText = 'Már van fiókod?'" routerLink="/login">Még nincs fiókod?</a>
+        <button (click)="register()" type="submit" tabindex="4" [disabled]="!registerForm.valid" class="btn-simple">Regisztrálás</button>
+      </div>
+    </form>
+
+
   </div>
 
 

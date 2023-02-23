@@ -4,6 +4,7 @@ import {LoginComponent} from "./login.component";
 import {RouterModule, Routes} from "@angular/router";
 import {TextInputModule} from "../../components/inputs/text-input/text-input.module";
 import {ButtonsModule} from "../../components/buttons/buttons.module";
+import {FormsModule} from "@angular/forms";
 
 const routes: Routes = [
   {path: "", component: LoginComponent},
@@ -13,12 +14,13 @@ const routes: Routes = [
   declarations: [
     LoginComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    TextInputModule,
-    ButtonsModule,
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        TextInputModule,
+        ButtonsModule,
+        FormsModule,
+    ],
   exports: [LoginComponent]
 })
 export class LoginModule {
