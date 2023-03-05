@@ -43,8 +43,9 @@ class LoggedInController @Autowired constructor(
     }
 
     @GetMapping("games")
-    fun getAllAvailableGames(): ResponseEntity<List<GameOnlyBasicDto>> {
-        return ResponseEntity(gameService.getAllAvailableGames(), HttpStatus.OK)
+    fun getAllAvailableGames(@RequestHeader(TOKEN_NAME) token: String): ResponseEntity<List<GameOnlyBasicDto>> {
+        val verification = securityService.verifyToken(token)
+        return ResponseEntity(gameService.getAllAvailableGames(verification.teamId), HttpStatus.OK)
     }
 
     @PostMapping("apply")
@@ -55,7 +56,7 @@ class LoggedInController @Autowired constructor(
         val verification = securityService.verifyToken(token)
         val application = teamService.getTeamsApplicationByTeamIds(verification.teamId, gameId)
         if (application.isPresent) {
-            throw CustomException("This Team has an application already", HttpStatus.ALREADY_REPORTED)
+            throw CustomException("This Team has an application already", HttpStatus.BAD_REQUEST)
         }
         applicationService.createApplication(gameId, verification.teamId)
         return ResponseEntity(Response(success = true), HttpStatus.CREATED)

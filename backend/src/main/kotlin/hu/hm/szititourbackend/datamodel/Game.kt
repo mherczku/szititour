@@ -54,7 +54,7 @@ fun MutableList<Game>.convertToDto(): MutableList<GameDto> {
     return dtos
 }
 
-fun Game.convertToBasicDto(): GameOnlyBasicDto {
+fun Game.convertToBasicDto(teamId: Int): GameOnlyBasicDto {
     return GameOnlyBasicDto(
         this.id,
         this.title,
@@ -62,14 +62,15 @@ fun Game.convertToBasicDto(): GameOnlyBasicDto {
         this.dateEnd,
         this.img,
         this.createdAt,
-        this.updatedAt
+        this.updatedAt,
+        userApplied = this.applications.any { it.team.id == teamId }
     )
 }
 
-fun MutableList<Game>.convertToBasicDto(): MutableList<GameOnlyBasicDto> {
+fun MutableList<Game>.convertToBasicDto(teamId: Int): MutableList<GameOnlyBasicDto> {
     val dtos = mutableListOf<GameOnlyBasicDto>()
     this.forEach {
-        dtos.add(it.convertToBasicDto())
+        dtos.add(it.convertToBasicDto(teamId))
     }
     return dtos
 }

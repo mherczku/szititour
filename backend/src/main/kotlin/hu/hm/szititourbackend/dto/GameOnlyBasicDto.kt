@@ -15,4 +15,6 @@ class GameOnlyBasicDto(
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
+    var userApplied: Boolean = false
+
     )

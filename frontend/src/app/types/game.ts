@@ -8,5 +8,6 @@ export type Game = {
   dateEnd: Date,
   img?: string,
   places: Place[],
-  applications: Application[]
+  applications: Application[],
+  userApplied?: boolean
 }

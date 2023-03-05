@@ -34,7 +34,6 @@ export class Modal2Component {
     console.log({ds});
     this.display$ = ds;
     this.display$.subscribe(data => {
-      console.log("ds changed", {ds}, this.display_.visible);
       this.display_ = data;
       this.cdr.detectChanges();
       if (data.visible) {

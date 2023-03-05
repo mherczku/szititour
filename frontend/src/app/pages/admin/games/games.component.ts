@@ -3,7 +3,7 @@ import {Game} from "../../../types/game";
 import {AdminService} from "../../../services/AdminService";
 import {Subscription} from "rxjs";
 import {ModalService} from "../../../services/ModalService";
-import {EditGameComponent} from "../../../components/edit-game/edit-game.component";
+import {EditGameComponent} from "../../../components/admin/edit-game/edit-game.component";
 
 
 @Component({

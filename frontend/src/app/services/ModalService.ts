@@ -29,6 +29,8 @@ export class ModalService {
       .resolveComponentFactory(Modal2Component)
       .create(this.injector);
 
+    this.appRef.attachView(componentRef.hostView);
+
     componentRef.instance.setCloseCallback(() => {
       this.close();
     });

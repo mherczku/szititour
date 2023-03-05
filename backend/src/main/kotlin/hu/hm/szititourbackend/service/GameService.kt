@@ -18,10 +18,10 @@ import java.util.*
 @Transactional
 class GameService @Autowired constructor(private val gameRepository: GameRepository) {
 
-    fun getAllAvailableGames(): MutableList<GameOnlyBasicDto> {
+    fun getAllAvailableGames(teamId: Int): MutableList<GameOnlyBasicDto> {
         val games = gameRepository.findAll()
         val filtered = games.filter { it.dateStart >= Timestamp(System.currentTimeMillis()) }
-        return filtered.toMutableList().convertToBasicDto()
+        return filtered.toMutableList().convertToBasicDto(teamId)
     }
 
     fun addGame(game: Game): Game {
