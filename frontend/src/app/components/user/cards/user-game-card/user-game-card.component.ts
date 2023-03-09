@@ -29,9 +29,9 @@ export class UserGameCardComponent {
   }
 
   applyBtnClicked() {
-    if (this.game.userApplied) {
+    if (this.game.applicationState) {
       this.cancelApplicationForGame();
-    } else if (!this.game.userApplied) {
+    } else if (!this.game.applicationState) {
       this.applyForGame();
     }
   }
@@ -41,9 +41,9 @@ export class UserGameCardComponent {
       next: value => {
         console.log(value);
         if (value.success) {
-          this.game.userApplied = true;
+          this.game.applicationState = "applied";
         } else {
-          this.game.userApplied = true;
+          this.game.applicationState = "applied";
         }
         this.cd.markForCheck();
       },
@@ -57,7 +57,7 @@ export class UserGameCardComponent {
     this.userService.cancelApplicationForGame(this.game.id).pipe(takeUntil(this.destroy$)).subscribe({
       next: value => {
         if (value.success) {
-          this.game.userApplied = false;
+          this.game.applicationState = "none";
         }
         this.cd.markForCheck();
       },

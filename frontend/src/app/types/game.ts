@@ -9,5 +9,5 @@ export type Game = {
   img?: string,
   places: Place[],
   applications: Application[],
-  userApplied?: boolean
+  applicationState?: "accepted" | "applied" | "declined" | "none"
 }
