@@ -103,28 +103,29 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
     - Bejelentkezés
     - Regisztráció
     - Elfelejtett jelszó
-    - Profil
+    - Profil / Profil módosítás
     - Leendő játékok + Jelentkezés / Lejelentkezés
-    - Aktív játék - Helyszínek
-    - Aktív játék kérdések + Válasz beküldése
-    - 
+    - Aktív játék - Helyszínek +
+    - Aktív játék kvíz felület
+    ![szititour22](https://user-images.githubusercontent.com/61518890/224153421-3fc8ec95-692a-476c-aa55-315b926ac292.png)
 
 
 
 
 
 
-## Ütemterv:
+
+## Ütemterv 1:
 
 1. Specifikáció
 2. Backend UML
-3. Frontend MockUps (tervek)
-4. Backend Implementáció
+3. Frontend MockUps (Admin) (tervek)
+4. Backend Implementáció (Admin) 
    1. Adatmodellek
    2. Skeleton
    3. Repository
    4. Service
    5. Controller
-5. Frontend Implementáció
+5. Frontend Implementáció (Admin) 
    1. SiteBuild
    2. Frontend Logika implementálása - összekötés Backend-el
