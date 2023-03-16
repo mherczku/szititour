@@ -3,6 +3,7 @@ package hu.hm.szititourbackend.datamodel
 import hu.hm.szititourbackend.dto.GameActiveDto
 import hu.hm.szititourbackend.dto.GameDto
 import hu.hm.szititourbackend.dto.GameOnlyBasicDto
+import hu.hm.szititourbackend.enum.UserApplicationStatus
 import java.sql.Timestamp
 import java.time.Instant
 import javax.persistence.*
@@ -19,6 +20,7 @@ class Game(
     val dateStart: Timestamp = Timestamp(Instant.now().epochSecond),
     val dateEnd: Timestamp = Timestamp(Instant.now().epochSecond),
     var img: String = "",
+    var active: Boolean = false,
 
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
@@ -30,19 +32,23 @@ class Game(
     @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val applications: MutableList<Application> = mutableListOf(),
 
-    )
+    @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
+    val teamGameStatuses: MutableList<TeamGameStatus> = mutableListOf()
+
+)
 
 fun Game.convertToDto(): GameDto {
     return GameDto(
-        this.id,
-        this.title,
-        this.dateStart,
-        this.dateEnd,
-        this.img,
-        this.createdAt,
-        this.updatedAt,
-        this.places.convertToDto(),
-        this.applications.convertToDto()
+        id = this.id,
+        title = this.title,
+        dateStart = this.dateStart,
+        dateEnd = this.dateEnd,
+        img = this.img,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt,
+        places = this.places.convertToDto(),
+        applications = this.applications.convertToDto(),
+        active = this.active
     )
 }
 
@@ -55,6 +61,15 @@ fun MutableList<Game>.convertToDto(): MutableList<GameDto> {
 }
 
 fun Game.convertToBasicDto(teamId: Int): GameOnlyBasicDto {
+    var userStatus = UserApplicationStatus.none
+    val application = this.applications.find { it.team.id == teamId }
+    if (application !== null) {
+        userStatus = when (application.accepted) {
+            null -> UserApplicationStatus.applied
+            true -> UserApplicationStatus.accepted
+            false -> UserApplicationStatus.declined
+        }
+    }
     return GameOnlyBasicDto(
         this.id,
         this.title,
@@ -63,7 +78,7 @@ fun Game.convertToBasicDto(teamId: Int): GameOnlyBasicDto {
         this.img,
         this.createdAt,
         this.updatedAt,
-        userApplied = this.applications.any { it.team.id == teamId }
+        userApplied = userStatus
     )
 }
 
