@@ -5,8 +5,10 @@ import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.TeamDto
 import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
+import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.repository.TeamRepository
 import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_USER
+import hu.hm.szititourbackend.util.LocationUtils
 import hu.hm.szititourbackend.util.PasswordUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -16,7 +18,7 @@ import java.util.*
 
 @Service
 @Transactional
-class TeamService @Autowired constructor(private val teamRepository: TeamRepository) {
+class TeamService @Autowired constructor(private val teamRepository: TeamRepository, private val statusRepository: TeamGameStatusRepository) {
 
     fun getTeamByEmail(email: String): Optional<Team> {
         return teamRepository.findByEmail(email)
@@ -69,5 +71,27 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
             return Optional.empty()
         }
         return Optional.ofNullable(team.get().applications.find { it.game.id == gameId })
+    }
+
+    fun updateGameStatus(gameId: Int, theTeam: Team) {
+        val gameStatus = theTeam.teamGameStatuses.find { it.game.id == gameId }
+        if(gameStatus !== null && gameStatus.game.active){
+            for (i in 0 until gameStatus.placeStatuses.size){
+                val placeStatus = gameStatus.placeStatuses[i]
+                if(!placeStatus.reached){
+                    val place = gameStatus.game.places.find { it.id == placeStatus.placeId }
+                    if(place !== null) {
+                        val distanceInMeter = LocationUtils.getDistance(place.latitude, place.longitude, theTeam.lastLatitude, theTeam.lastLongitude)
+                        if(distanceInMeter <= 50) {
+                            placeStatus.reached = true
+                            placeStatus.reachedAt = Timestamp(System.currentTimeMillis())
+                            gameStatus.updatedAt = Timestamp(System.currentTimeMillis())
+                            this.statusRepository.save(gameStatus)
+                            return
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -118,5 +118,4 @@ object Utils {
         return (password.length >= 8 && NUMBER.matcher(password).find() && AZLETTER.matcher(password)
             .find() && !password.contains(" "))
     }
-
 }
