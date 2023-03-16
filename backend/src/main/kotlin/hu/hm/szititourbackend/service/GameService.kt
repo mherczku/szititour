@@ -2,6 +2,8 @@ package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.convertToBasicDto
+import hu.hm.szititourbackend.datamodel.convertToDto
+import hu.hm.szititourbackend.dto.GameDto
 import hu.hm.szititourbackend.dto.GameOnlyBasicDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.GameRepository
@@ -76,5 +78,16 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
             Utils.deleteImage(game.get().img)
         }
         return gameRepository.deleteById(id)
+    }
+
+    fun changeActivation(gameId: Int, activation: Boolean): GameDto {
+        val game = gameRepository.findById(gameId)
+        if(game.isPresent) {
+            val g = game.get()
+            g.active = activation
+            return gameRepository.save(g).convertToDto()
+        } else {
+            throw CustomException("Game not found", HttpStatus.NOT_FOUND)
+        }
     }
 }

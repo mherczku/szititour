@@ -78,6 +78,16 @@ class GameController @Autowired constructor(private val gameService: GameService
         return ResponseEntity<List<GameDto>>(games.convertToDto(), HttpStatus.OK)
     }
 
+    @PutMapping("activate/{id}")
+    fun activateGame(@PathVariable("id") gameId: Int): ResponseEntity<GameDto> {
+        return ResponseEntity(gameService.changeActivation(gameId, true), HttpStatus.OK)
+    }
+
+    @PutMapping("deactivate/{id}")
+    fun deactivateGame(@PathVariable("id") gameId: Int): ResponseEntity<GameDto> {
+        return ResponseEntity(gameService.changeActivation(gameId, false), HttpStatus.OK)
+    }
+
     @PutMapping
     fun updateGame(
         @RequestParam("image") file: MultipartFile?,
