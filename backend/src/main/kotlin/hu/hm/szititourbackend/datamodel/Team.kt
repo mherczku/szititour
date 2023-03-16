@@ -23,11 +23,17 @@ class Team(
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
+    var lastLatitude: Double = 0.0,
+    var lastLongitude: Double = 0.0,
+
     @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
     val answers: MutableList<Answer> = mutableListOf(),
 
     @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
     val applications: MutableList<Application> = mutableListOf(),
+
+    @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
+    val teamGameStatuses: MutableList<TeamGameStatus> = mutableListOf(),
 
     @ElementCollection
     var members: MutableList<String> = mutableListOf()

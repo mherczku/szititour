@@ -14,8 +14,8 @@ class Place(
     var name: String = "",
     var img: String = "",
     var address: String = "",
-    val latitude: String = "",
-    val longitude: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
 
     @OneToMany(mappedBy = "place", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val questions: MutableList<Question> = mutableListOf(),
@@ -25,6 +25,7 @@ class Place(
     val game: Game = Game()
 
 )
+
 
 fun Place.convertToDto(): PlaceDto {
     return PlaceDto(

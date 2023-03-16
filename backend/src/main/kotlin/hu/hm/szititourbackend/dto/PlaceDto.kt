@@ -6,8 +6,8 @@ class PlaceDto(
     val name: String = "",
     var img: String = "",
     val address: String = "",
-    val latitude: String = "",
-    val longitude: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
     val questions: MutableList<QuestionDto> = mutableListOf(),
     val gameId: Int = 0
 )
