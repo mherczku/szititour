@@ -65,7 +65,7 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
         return teamRepository.deleteById(id)
     }
 
-    fun getTeamsApplicationByTeamIds(teamId: Int, gameId: Int): Optional<Application> {
+    fun getTeamsApplicationByTeamId(teamId: Int, gameId: Int): Optional<Application> {
         val team = this.getTeamById(teamId)
         if (!team.isPresent) {
             return Optional.empty()
@@ -76,19 +76,18 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
     fun updateGameStatus(gameId: Int, theTeam: Team) {
         val gameStatus = theTeam.teamGameStatuses.find { it.game.id == gameId }
         if(gameStatus !== null && gameStatus.game.active){
-            for (i in 0 until gameStatus.placeStatuses.size){
-                val placeStatus = gameStatus.placeStatuses[i]
-                if(!placeStatus.reached){
-                    val place = gameStatus.game.places.find { it.id == placeStatus.placeId }
-                    if(place !== null) {
-                        val distanceInMeter = LocationUtils.getDistance(place.latitude, place.longitude, theTeam.lastLatitude, theTeam.lastLongitude)
-                        if(distanceInMeter <= 50) {
-                            placeStatus.reached = true
-                            placeStatus.reachedAt = Timestamp(System.currentTimeMillis())
-                            gameStatus.updatedAt = Timestamp(System.currentTimeMillis())
-                            this.statusRepository.save(gameStatus)
-                            return
-                        }
+
+            if(gameStatus.placeStatuses.size > gameStatus.nextUnreachedPlaceIndex) {
+                val placeStatus = gameStatus.placeStatuses[gameStatus.nextUnreachedPlaceIndex]
+                val place = gameStatus.game.places.find { it.id == placeStatus.placeId }
+                if(place !== null) {
+                    val distanceInMeter = LocationUtils.getDistance(place.latitude, place.longitude, theTeam.lastLatitude, theTeam.lastLongitude)
+                    if(distanceInMeter <= 50) {
+                        placeStatus.reached = true
+                        gameStatus.nextUnreachedPlaceIndex = gameStatus.nextUnreachedPlaceIndex + 1
+                        placeStatus.reachedAt = Timestamp(System.currentTimeMillis())
+                        gameStatus.updatedAt = Timestamp(System.currentTimeMillis())
+                        this.statusRepository.save(gameStatus)
                     }
                 }
             }

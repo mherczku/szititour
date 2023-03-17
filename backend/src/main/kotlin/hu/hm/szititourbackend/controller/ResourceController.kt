@@ -21,7 +21,7 @@ class ResourceController @Autowired constructor(
     private val securityService: SecurityService,
 ) {
 
-    //!//  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
+    /**!  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY **/
 
     @GetMapping("/images")
     fun getResource(

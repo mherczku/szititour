@@ -21,6 +21,7 @@ class TeamGameStatus(
 
     @ElementCollection
     var placeStatuses: MutableList<PlaceStatus> = mutableListOf<PlaceStatus>(),
+    var nextUnreachedPlaceIndex: Int = 1,
 
     @ManyToOne()
     val game: Game = Game(),

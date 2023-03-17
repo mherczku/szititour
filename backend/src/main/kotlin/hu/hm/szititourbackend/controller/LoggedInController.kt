@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
-import java.sql.Timestamp
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
@@ -23,7 +23,8 @@ class LoggedInController @Autowired constructor(
     private val applicationService: ApplicationService,
     private val questionService: QuestionService,
     private val answerService: AnswerService,
-    private val securityService: SecurityService
+    private val securityService: SecurityService,
+    private val loggedInService: LoggedInService
 ) {
 
     // AVAILABLE ONLY FOR LOGGED-IN USERS:
@@ -53,7 +54,7 @@ class LoggedInController @Autowired constructor(
         @RequestBody gameId: Int
     ): ResponseEntity<Response> {
         val verification = securityService.verifyToken(token)
-        val application = teamService.getTeamsApplicationByTeamIds(verification.teamId, gameId)
+        val application = teamService.getTeamsApplicationByTeamId(verification.teamId, gameId)
         if (application.isPresent) {
             throw CustomException("This Team has an application already", HttpStatus.BAD_REQUEST)
         }
@@ -67,7 +68,7 @@ class LoggedInController @Autowired constructor(
         @RequestBody gameId: Int
     ): ResponseEntity<Response> {
         val verification = securityService.verifyToken(token)
-        val application = teamService.getTeamsApplicationByTeamIds(verification.teamId, gameId)
+        val application = teamService.getTeamsApplicationByTeamId(verification.teamId, gameId)
         if (!application.isPresent) {
             throw CustomException("Application not found", HttpStatus.NOT_FOUND)
         } else {
@@ -97,21 +98,17 @@ class LoggedInController @Autowired constructor(
     ): ResponseEntity<GameActiveDto> {
         val verification = securityService.verifyToken(token)
 
-        if (hasTeamAcceptedApplicationToGame(verification.teamId, gameId)) {
-            val game = gameService.getGameById(gameId)
-            if (!game.isPresent) {
-                throw CustomException("Game not found", HttpStatus.NOT_FOUND)
-            } else {
-                val theGame = game.get()
-                if (theGame.active) {
-                    return ResponseEntity(game.get().convertToActiveDto(), HttpStatus.OK)
-                } else {
-                    throw CustomException("This game is not active yet", HttpStatus.FORBIDDEN)
-                }
-            }
+        checkTeamAcceptedApplicationToGame(verification.teamId, gameId)
+        val game = gameService.getGameById(gameId)
+        if (!game.isPresent) {
+            throw CustomException("Game not found", HttpStatus.NOT_FOUND)
+        } else {
+            val theGame = game.get()
+            checkGameActive(theGame)
+            return ResponseEntity(game.get().convertToActiveDto(), HttpStatus.OK)
         }
-        throw CustomException("Your application has not been accepted yet", HttpStatus.FORBIDDEN)
     }
+
 
     @GetMapping("status/{gameId}")
     fun getTeamGameStatus(
@@ -119,41 +116,8 @@ class LoggedInController @Autowired constructor(
         @PathVariable gameId: Int
     ): ResponseEntity<TeamGameStatusDto> {
         val verification = securityService.verifyToken(token)
-
-        if (hasTeamAcceptedApplicationToGame(verification.teamId, gameId)) {
-            val game = gameService.getGameById(gameId)
-            if (!game.isPresent) {
-                throw CustomException("Game not found", HttpStatus.NOT_FOUND)
-            } else {
-                val theGame = game.get()
-                if (theGame.active) {
-                    val status = theGame.teamGameStatuses.find { it.team.id == verification.teamId }
-                    if (status !== null) {
-                        return ResponseEntity(status.convertToDto(), HttpStatus.OK)
-                    } else {
-                        println("WARNING ----> No status for ${theGame.id} - ${verification.teamId}")
-                        val statuses = mutableListOf<PlaceStatus>()
-                        theGame.places.forEach {
-                            statuses.add(PlaceStatus(it.id, false, Timestamp(System.currentTimeMillis())))
-                        }
-                        statuses.first().reached = true
-                        theGame.teamGameStatuses.add(
-                            TeamGameStatus(
-                                game = theGame,
-                                team = Team(id = verification.teamId),
-                                createdAt = Timestamp(System.currentTimeMillis()),
-                                updatedAt = Timestamp(System.currentTimeMillis()),
-                                placeStatuses = statuses
-                            )
-                        )
-                    }
-
-                } else {
-                    throw CustomException("This game is not active yet", HttpStatus.FORBIDDEN)
-                }
-            }
-        }
-        throw CustomException("Your application is not accepted", HttpStatus.FORBIDDEN)
+        checkTeamAcceptedApplicationToGame(verification.teamId, gameId)
+        return ResponseEntity(loggedInService.getTeamGameStatus(gameId, verification.teamId), HttpStatus.OK)
 
     }
 
@@ -165,37 +129,36 @@ class LoggedInController @Autowired constructor(
 
         val verification = securityService.verifyToken(token)
 
-        if (hasTeamAcceptedApplicationToGame(verification.teamId, answers.gameId)) {
-            val game = gameService.getGameById(answers.gameId)
-            if (!game.isPresent) {
-                throw CustomException("Game not found", HttpStatus.NOT_FOUND)
-            } else {
-                val theGame = game.get()
-                if (theGame.active) {
-                    answers.questionAnswers.forEach { answer ->
-                        val question = questionService.getQuestionById(answer.questionId)
-                        if (question.isPresent) {
-                            answerService.createAnswer(
-                                Answer(
-                                    answerBoolean = answer.answer.answerBoolean,
-                                    answerNumber = answer.answer.answerNumber,
-                                    answerText = answer.answer.answerText,
-                                    img = answer.answer.img
-                                ),
-                                question = question.get(),
-                                teamId = verification.teamId
-                            )
-                        } else {
-                            throw CustomException("Question not exist", HttpStatus.BAD_REQUEST)
-                        }
-                    }
+        checkTeamAcceptedApplicationToGame(verification.teamId, gameId = answers.gameId)
+        val game = gameService.getGameById(answers.gameId)
+        if (!game.isPresent) {
+            throw CustomException("Game not found", HttpStatus.NOT_FOUND)
+        } else {
+            val theGame = game.get()
+            checkGameActive(theGame)
+            answers.questionAnswers.forEach { answer ->
+                val question = questionService.getQuestionById(answer.questionId)
+                if (question.isPresent) {
+                    answerService.createAnswer(
+                        Answer(
+                            answerBoolean = answer.answer.answerBoolean,
+                            answerNumber = answer.answer.answerNumber,
+                            answerText = answer.answer.answerText,
+                            img = answer.answer.img
+                        ),
+                        question = question.get(),
+                        teamId = verification.teamId
+                    )
+
                 } else {
-                    throw CustomException("This game is not active yet", HttpStatus.FORBIDDEN)
+                    throw CustomException("Question not exist", HttpStatus.BAD_REQUEST)
                 }
             }
+            return ResponseEntity(
+                loggedInService.getTeamGameStatus(theGame.id, verification.teamId),
+                HttpStatus.OK
+            )
         }
-        throw CustomException("Your application is not accepted", HttpStatus.FORBIDDEN)
-
     }
 
     @PostMapping("answer/{questionId}")
@@ -203,33 +166,37 @@ class LoggedInController @Autowired constructor(
         @RequestHeader(TOKEN_NAME) token: String,
         @PathVariable questionId: Int,
         @RequestBody answer: Answer
-    ): ResponseEntity<Response> {
+    ): ResponseEntity<TeamGameStatusDto> {
         val verification = securityService.verifyToken(token)
 
-        if (hasTeamAcceptedApplicationToGameByQuestionId(verification.teamId, questionId)) {
-            val question = questionService.getQuestionById(questionId)
-            if (!question.isPresent) {
-                throw CustomException("Question not found", HttpStatus.NOT_FOUND)
-            }
-            answerService.createAnswer(answer, verification.teamId, question.get())
-            return ResponseEntity(Response(success = true), HttpStatus.CREATED)
+        return ResponseEntity(
+            loggedInService.answerQuestion(verification.teamId, questionId, answer),
+            HttpStatus.OK
+        )
+    }
+
+    @PostMapping("answer/{questionId}/image")
+    fun answerQuestionWithImage(
+        @RequestHeader(TOKEN_NAME) token: String,
+        @RequestParam("image") file: MultipartFile,
+        @PathVariable questionId: Int,
+    ): ResponseEntity<TeamGameStatusDto> {
+
+        val verification = securityService.verifyToken(token)
+        return ResponseEntity(loggedInService.answerWithImage(questionId, verification.teamId, file), HttpStatus.OK)
+    }
+
+    private fun checkTeamAcceptedApplicationToGame(teamId: Int, gameId: Int) {
+        val application = teamService.getTeamsApplicationByTeamId(teamId, gameId)
+        if (!application.isPresent || application.get().accepted == null || !application.get().accepted!!) {
+            throw CustomException("Your application is not accepted", HttpStatus.FORBIDDEN)
         }
-        throw CustomException("Your application has not been accepted yet or game not started", HttpStatus.FORBIDDEN)
     }
 
-    private fun hasTeamAcceptedApplicationToGame(teamId: Int, gameId: Int): Boolean {
-        val application = teamService.getTeamsApplicationByTeamIds(teamId, gameId)
-        return if (application.isPresent && application.get().accepted != null) {
-            (application.get().accepted!!)
-        } else false
-    }
-
-    private fun hasTeamAcceptedApplicationToGameByQuestionId(teamId: Int, questionId: Int): Boolean {
-        val gameId = questionService.getQuestionById(questionId).get().place.game.id
-        val application = teamService.getTeamsApplicationByTeamIds(teamId, gameId)
-        return if (application.isPresent && application.get().accepted != null) {
-            (application.get().accepted!!)
-        } else false
+    private fun checkGameActive(game: Game) {
+        if (!game.active) {
+            throw CustomException("This game is not active", HttpStatus.FORBIDDEN)
+        }
     }
 
 }

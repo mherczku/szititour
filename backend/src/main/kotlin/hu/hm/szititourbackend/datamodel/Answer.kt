@@ -13,7 +13,7 @@ class Answer(
     val answerText: String = "",
     val answerBoolean: Boolean = false,
     val answerNumber : Int = 0,
-    val img: String = "",
+    var img: String = "",
     var correct: Boolean? = null,
 
     @ManyToOne
