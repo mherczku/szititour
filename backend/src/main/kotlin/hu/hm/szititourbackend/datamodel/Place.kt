@@ -57,10 +57,12 @@ fun Place.convertToActiveDto(): PlaceActiveDto {
     )
 }
 
-fun MutableList<Place>.convertToActiveDto(): MutableList<PlaceActiveDto> {
+fun MutableList<Place>.convertToActiveDto(status: TeamGameStatus): MutableList<PlaceActiveDto> {
     val dtos = mutableListOf<PlaceActiveDto>()
-    this.forEach {
-        dtos.add(it.convertToActiveDto())
+    this.forEach { place ->
+        if (status.placeStatuses.find { it.placeId == place.id }?.reached == true) {
+            dtos.add(place.convertToActiveDto())
+        }
     }
     return dtos
 }
