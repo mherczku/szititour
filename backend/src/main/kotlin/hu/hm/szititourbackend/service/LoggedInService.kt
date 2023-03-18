@@ -64,7 +64,7 @@ class LoggedInService @Autowired constructor(
             answerRepository.save(updateAnswer)
             getTeamGameStatus(updateAnswer.question.place.game.id, teamId)
         } else {
-            val newAnswer: Answer = Answer(
+            val newAnswer = Answer(
                 team = Team(id = teamId),
                 question = Question(id = questionId),
                 img = imagePath,
@@ -102,6 +102,8 @@ class LoggedInService @Autowired constructor(
             val gameOptional = gameRepository.findById(theGameId)
             if (gameOptional.isPresent) {
                 checkGameActive(gameOptional.get())
+            } else {
+                throw CustomException("Game not exist", HttpStatus.NOT_FOUND)
             }
         }
         val application = teamService.getTeamsApplicationByTeamId(teamId, theGameId)
