@@ -54,6 +54,12 @@ class LoggedInController @Autowired constructor(
         @RequestBody gameId: Int
     ): ResponseEntity<Response> {
         val verification = securityService.verifyToken(token)
+        val game = gameService.getGameById(gameId)
+        if(game.isPresent){
+            if(game.get().active) {
+                throw CustomException("Cannot apply for an active game", HttpStatus.FORBIDDEN)
+            }
+        }
         val application = teamService.getTeamsApplicationByTeamId(verification.teamId, gameId)
         if (application.isPresent) {
             throw CustomException("This Team has an application already", HttpStatus.BAD_REQUEST)
@@ -73,6 +79,9 @@ class LoggedInController @Autowired constructor(
             throw CustomException("Application not found", HttpStatus.NOT_FOUND)
         } else {
             val applicationGot: Application = application.get()
+            if(applicationGot.game.active) {
+                throw CustomException("Cannot cancel application for an active game", HttpStatus.FORBIDDEN)
+            }
             if (applicationGot.accepted == null) {
                 applicationService.deleteApplicationById(application.get().id)
                 return ResponseEntity(Response(success = true), HttpStatus.OK)
@@ -91,10 +100,10 @@ class LoggedInController @Autowired constructor(
 
     // AVAILABLE ONLY FOR USERS WITH VALID APPLICATION FOR "THE" GAME WHICH IS ACTIVE:
 
-    @PostMapping("activegame")
+    @GetMapping("activegame/{gameId}")
     fun getGameData(
         @RequestHeader(TOKEN_NAME) token: String,
-        @RequestBody gameId: Int
+        @PathVariable gameId: Int
     ): ResponseEntity<GameActiveDto> {
         val verification = securityService.verifyToken(token)
 

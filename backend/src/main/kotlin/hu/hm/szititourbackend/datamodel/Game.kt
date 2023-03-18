@@ -80,7 +80,8 @@ fun Game.convertToBasicDto(teamId: Int): GameOnlyBasicDto {
         this.img,
         this.createdAt,
         this.updatedAt,
-        userApplied = userStatus
+        userApplied = userStatus,
+        active = this.active
     )
 }
 
