@@ -50,10 +50,21 @@ fun MutableList<Place>.convertToDto(): MutableList<PlaceDto> {
 
 fun Place.convertToActiveDto(): PlaceActiveDto {
     return PlaceActiveDto(
-        this.id,
-        this.name,
-        this.img,
-        this.questions.convertToDtoNoAnswers()
+        id = this.id,
+        selectable = true,
+        name = this.name,
+        img = this.img,
+        questions = this.questions.convertToDtoNoAnswers()
+    )
+}
+
+fun Place.convertToActiveNotReachedDto(): PlaceActiveDto {
+    return PlaceActiveDto(
+        id = this.id,
+        selectable = false,
+        name = this.name,
+        img = "",
+        questions = mutableListOf()
     )
 }
 
@@ -62,6 +73,8 @@ fun MutableList<Place>.convertToActiveDto(status: TeamGameStatus): MutableList<P
     this.forEach { place ->
         if (status.placeStatuses.find { it.placeId == place.id }?.reached == true) {
             dtos.add(place.convertToActiveDto())
+        } else {
+            dtos.add(place.convertToActiveNotReachedDto())
         }
     }
     return dtos
