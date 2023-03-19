@@ -2,6 +2,7 @@ package hu.hm.szititourbackend.datamodel
 
 import hu.hm.szititourbackend.dto.PlaceActiveDto
 import hu.hm.szititourbackend.dto.PlaceDto
+import hu.hm.szititourbackend.dto.TeamGameStatusDto
 import javax.persistence.*
 
 @Entity
@@ -68,7 +69,7 @@ fun Place.convertToActiveNotReachedDto(): PlaceActiveDto {
     )
 }
 
-fun MutableList<Place>.convertToActiveDto(status: TeamGameStatus): MutableList<PlaceActiveDto> {
+fun MutableList<Place>.convertToActiveDto(status: TeamGameStatusDto): MutableList<PlaceActiveDto> {
     val dtos = mutableListOf<PlaceActiveDto>()
     this.forEach { place ->
         if (status.placeStatuses.find { it.placeId == place.id }?.reached == true) {

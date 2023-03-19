@@ -3,6 +3,7 @@ package hu.hm.szititourbackend.datamodel
 import hu.hm.szititourbackend.dto.GameActiveDto
 import hu.hm.szititourbackend.dto.GameDto
 import hu.hm.szititourbackend.dto.GameOnlyBasicDto
+import hu.hm.szititourbackend.dto.TeamGameStatusDto
 import hu.hm.szititourbackend.enum.UserApplicationStatus
 import hu.hm.szititourbackend.exception.CustomException
 import org.springframework.http.HttpStatus
@@ -93,10 +94,8 @@ fun MutableList<Game>.convertToBasicDto(teamId: Int): MutableList<GameOnlyBasicD
     return dtos
 }
 
-fun Game.convertToActiveDto(teamId: Int): GameActiveDto {
-    val status = this.teamGameStatuses.find { it.team.id == teamId }
-        ?: throw CustomException("No game status for this teamid", HttpStatus.BAD_REQUEST)
-    return GameActiveDto(
+fun Game.convertToActiveDto(statusDto: TeamGameStatusDto): GameActiveDto {
+   return GameActiveDto(
         this.id,
         this.title,
         this.dateStart,
@@ -104,6 +103,6 @@ fun Game.convertToActiveDto(teamId: Int): GameActiveDto {
         this.img,
         this.createdAt,
         this.updatedAt,
-        this.places.convertToActiveDto(status)
+        this.places.convertToActiveDto(statusDto)
     )
 }

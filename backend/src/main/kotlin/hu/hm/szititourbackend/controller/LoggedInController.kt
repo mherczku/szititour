@@ -114,7 +114,7 @@ class LoggedInController @Autowired constructor(
         } else {
             val theGame = game.get()
             checkGameActive(theGame)
-            return ResponseEntity(game.get().convertToActiveDto(verification.teamId), HttpStatus.OK)
+            return ResponseEntity(game.get().convertToActiveDto(loggedInService.getTeamGameStatus(theGame.id, verification.teamId)), HttpStatus.OK)
         }
     }
 
