@@ -74,13 +74,13 @@ fun Game.convertToBasicDto(teamId: Int): GameOnlyBasicDto {
         }
     }
     return GameOnlyBasicDto(
-        this.id,
-        this.title,
-        this.dateStart,
-        this.dateEnd,
-        this.img,
-        this.createdAt,
-        this.updatedAt,
+        id = this.id,
+        title = this.title,
+        dateStart = this.dateStart,
+        dateEnd = this.dateEnd,
+        img = this.img,
+        createdAt= this.createdAt,
+        updatedAt = this.updatedAt,
         userApplied = userStatus,
         active = this.active
     )

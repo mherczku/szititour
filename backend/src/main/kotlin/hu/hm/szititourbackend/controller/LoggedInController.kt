@@ -49,26 +49,25 @@ class LoggedInController @Autowired constructor(
     fun applyForGame(
         @RequestHeader(TOKEN_NAME) token: String,
         @RequestBody gameId: Int
-    ): ResponseEntity<Response> {
+    ): ResponseEntity<GameOnlyBasicDto> {
         val verification = securityService.verifyToken(token)
         val game = gameService.getGameById(gameId)
         if (game.active) {
             throw CustomException("Cannot apply for an active game", HttpStatus.FORBIDDEN)
         }
-
         val application = teamService.getTeamsApplicationByTeamId(verification.teamId, gameId)
         if (application != null) {
             throw CustomException("This Team has an application already", HttpStatus.BAD_REQUEST)
         }
-        applicationService.createApplication(gameId, verification.teamId)
-        return ResponseEntity(Response(success = true), HttpStatus.CREATED)
+        val newApplication = applicationService.createApplication(gameId, verification.teamId)
+        return ResponseEntity(gameService.getGameById(newApplication.game.id).convertToBasicDto(verification.teamId), HttpStatus.CREATED)
     }
 
     @PostMapping("cancel")
     fun cancelApplicationForGame(
         @RequestHeader(TOKEN_NAME) token: String,
         @RequestBody gameId: Int
-    ): ResponseEntity<Response> {
+    ): ResponseEntity<GameOnlyBasicDto> {
         val verification = securityService.verifyToken(token)
         val application = teamService.getTeamsApplicationByTeamId(verification.teamId, gameId)
         if (application == null) {
@@ -77,12 +76,13 @@ class LoggedInController @Autowired constructor(
             if (application.game.active) {
                 throw CustomException("Cannot cancel application for an active game", HttpStatus.FORBIDDEN)
             }
+            println("a- $application")
             if (application.accepted == null) {
                 applicationService.deleteApplicationById(application.id)
-                return ResponseEntity(Response(success = true), HttpStatus.OK)
+                return ResponseEntity(application.game.convertToBasicDto(verification.teamId), HttpStatus.OK)
             } else if (application.accepted!!) {
                 applicationService.deleteApplicationById(application.id)
-                return ResponseEntity(Response(success = true), HttpStatus.OK)
+                return ResponseEntity(application.game.convertToBasicDto(verification.teamId), HttpStatus.OK)
             } else {
                 throw CustomException("Cannot cancel refused application", HttpStatus.FORBIDDEN)
             }
