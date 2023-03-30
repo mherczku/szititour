@@ -16,24 +16,21 @@ import java.util.*
 @RequestMapping("/applications")
 class ApplicationController @Autowired constructor(private val applicationService: ApplicationService) {
 
-    @PostMapping()
+    /*@PostMapping()
     fun addApplication(@RequestBody application: Application): ResponseEntity<ApplicationDto> {
         val newApplication = applicationService.addApplication(application)
         return ResponseEntity(newApplication.convertToDto(), HttpStatus.CREATED)
-    }
+    }*/
 
     @GetMapping("/{id}")
     fun getApplicationById(@PathVariable id: Int): ResponseEntity<ApplicationDto?> {
-        val application: Optional<Application> = applicationService.getApplicationById(id)
-        if (!application.isPresent) {
-            throw CustomException("Application not found", HttpStatus.NOT_FOUND)
-        }
-        return ResponseEntity(application.get().convertToDto(), HttpStatus.OK)
+        val application: Application = applicationService.getApplicationById(id)
+        return ResponseEntity(application.convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping
     fun getAllApplications(): ResponseEntity<List<ApplicationDto>> {
-        val applications: List<ApplicationDto> = applicationService.getAllApplications()
+        val applications: List<ApplicationDto> = applicationService.getAllApplications().convertToDto()
         return ResponseEntity<List<ApplicationDto>>(applications, HttpStatus.OK)
     }
 

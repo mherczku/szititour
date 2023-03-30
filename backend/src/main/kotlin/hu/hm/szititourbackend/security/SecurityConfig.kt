@@ -53,6 +53,7 @@ class SecurityConfig2(
             .antMatchers("/swagger-ui/**").permitAll()
             .antMatchers("/v2/api-docs").permitAll()
             .antMatchers("/swagger-resources/**").permitAll()
+            //.antMatchers("/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .oauth2ResourceServer { httpSecurityOAuth2ResourceServerConfigurer: OAuth2ResourceServerConfigurer<HttpSecurity?> ->

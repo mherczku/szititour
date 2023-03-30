@@ -5,12 +5,14 @@ import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.TeamDto
 import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.repository.TeamRepository
 import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_USER
 import hu.hm.szititourbackend.util.LocationUtils
 import hu.hm.szititourbackend.util.PasswordUtils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
@@ -20,24 +22,24 @@ import java.util.*
 @Transactional
 class TeamService @Autowired constructor(private val teamRepository: TeamRepository, private val statusRepository: TeamGameStatusRepository) {
 
-    fun getTeamByEmail(email: String): Optional<Team> {
-        return teamRepository.findByEmail(email)
+    fun getTeamByEmail(email: String): Team {
+        val team = teamRepository.findByEmail(email)
+        if(team.isPresent) {
+            return team.get()
+        } else {
+            throw CustomException("Team not found", HttpStatus.NOT_FOUND)
+        }
     }
 
-    fun updateTeamProfile(teamId: Int, teamUpdateProfileDto: TeamUpdateProfileDto): Optional<TeamDto> {
+    fun updateTeamProfile(teamId: Int, teamUpdateProfileDto: TeamUpdateProfileDto): Team {
 
-        val updateTeamOptional = teamRepository.findById(teamId)
-        if (!updateTeamOptional.isPresent) {
-            return Optional.empty()
-        }
-
-        val updateTeam = updateTeamOptional.get()
+        val updateTeam = getTeamById(teamId)
         updateTeam.img = teamUpdateProfileDto.img ?: updateTeam.img
         updateTeam.password = teamUpdateProfileDto.password ?: PasswordUtils.encryptPassword(updateTeam.password)
         updateTeam.name = teamUpdateProfileDto.name ?: updateTeam.name
         updateTeam.members = teamUpdateProfileDto.members?.toMutableList() ?: updateTeam.members
 
-        return Optional.of(this.updateTeam(updateTeam).convertToDto())
+        return this.updateTeam(updateTeam)
     }
 
     fun addTeam(team: Team): Team {
@@ -51,8 +53,13 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
         return teamRepository.findAll()
     }
 
-    fun getTeamById(id: Int): Optional<Team> {
-        return teamRepository.findById(id)
+    fun getTeamById(id: Int): Team {
+        val team =  teamRepository.findById(id)
+        if(team.isPresent) {
+            return team.get()
+        } else {
+            throw CustomException("Team not found", HttpStatus.NOT_FOUND)
+        }
     }
 
     fun updateTeam(team: Team): Team {
@@ -62,15 +69,13 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
     }
 
     fun deleteTeamById(id: Int) {
+        val team = getTeamById(id)
         return teamRepository.deleteById(id)
     }
 
-    fun getTeamsApplicationByTeamId(teamId: Int, gameId: Int): Optional<Application> {
+    fun getTeamsApplicationByTeamId(teamId: Int, gameId: Int): Application? {
         val team = this.getTeamById(teamId)
-        if (!team.isPresent) {
-            return Optional.empty()
-        }
-        return Optional.ofNullable(team.get().applications.find { it.game.id == gameId })
+        return team.applications.find { it.game.id == gameId }
     }
 
     fun updateGameStatus(gameId: Int, theTeam: Team) {

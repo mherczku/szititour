@@ -1,6 +1,7 @@
 package hu.hm.szititourbackend.exception
 
 import hu.hm.szititourbackend.extramodel.Response
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -21,6 +22,11 @@ class MyExceptionHandler {
             Response(errorMessage = ex.message.toString(), success = false),
             HttpStatus.INTERNAL_SERVER_ERROR
         )
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    fun handleCustomException(ex: DataIntegrityViolationException): ResponseEntity<Response> {
+        return ResponseEntity<Response>(Response(errorMessage = "Game title is already taken", success = false), HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(UsernameNotFoundException::class)

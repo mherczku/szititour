@@ -4,7 +4,6 @@ import hu.hm.szititourbackend.datamodel.Place
 import hu.hm.szititourbackend.dto.PlaceDto
 import hu.hm.szititourbackend.dto.convertToQuestions
 import hu.hm.szititourbackend.exception.CustomException
-import hu.hm.szititourbackend.repository.GameRepository
 import hu.hm.szititourbackend.repository.PlaceRepository
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,43 +11,39 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
-import java.util.*
 
 @Service
 @Transactional
 class PlaceService @Autowired constructor(
     private val placeRepository: PlaceRepository,
-    private val gameRepository: GameRepository
+    private val gameService: GameService
 ) {
-    fun addPlaceToGameWithImage(placeDto: PlaceDto, file: MultipartFile): Optional<Place> {
+    fun addPlaceToGameWithImage(placeDto: PlaceDto, file: MultipartFile): Place {
         var imagePath = ""
         return try {
             imagePath = Utils.saveImage(file, Utils.imageDirectoryPlacesName)
             placeDto.img = imagePath
-            val addedPlaceOptional = addPlaceToGame(placeDto)
-            Optional.of(addedPlaceOptional.get())
+            addPlaceToGame(placeDto)
         } catch (e: Exception) {
             Utils.deleteImage(imagePath)
             throw e
         }
     }
 
-    fun addPlaceToGame(placeDto: PlaceDto): Optional<Place> {
-        val gameOptional = gameRepository.findById(placeDto.gameId)
-        return if (gameOptional.isPresent) {
-            val newPlace = Place(
-                game = gameOptional.get(),
-                address = placeDto.address,
-                img = placeDto.img,
-                latitude = placeDto.latitude,
-                longitude = placeDto.longitude,
-                name = placeDto.name,
-                questions = placeDto.questions.convertToQuestions()
-            )
-            Optional.of(placeRepository.save(newPlace))
-        } else {
-            Optional.empty()
-        }
+    fun addPlaceToGame(placeDto: PlaceDto): Place {
+        val game = gameService.getGameById(placeDto.gameId)
+
+        val newPlace = Place(
+            game = game,
+            address = placeDto.address,
+            img = placeDto.img,
+            latitude = placeDto.latitude,
+            longitude = placeDto.longitude,
+            name = placeDto.name,
+            questions = placeDto.questions.convertToQuestions()
+        )
+        return placeRepository.save(newPlace)
+
     }
 
     fun addPlace(place: Place): Place {
@@ -59,8 +54,13 @@ class PlaceService @Autowired constructor(
         return placeRepository.findAll()
     }
 
-    fun getPlaceById(id: Int): Optional<Place> {
-        return placeRepository.findById(id)
+    fun getPlaceById(id: Int): Place {
+        val place = placeRepository.findById(id)
+        if (place.isPresent) {
+            return place.get()
+        } else {
+            throw CustomException("Place not found", HttpStatus.NOT_FOUND)
+        }
     }
 
     fun updatePlaceToGameWithImage(placeDto: PlaceDto, file: MultipartFile): Place {
@@ -77,11 +77,7 @@ class PlaceService @Autowired constructor(
     }
 
     fun updatePlace(placeDto: PlaceDto): Place {
-        val optional = placeRepository.findById(placeDto.id)
-        if (!optional.isPresent) {
-            throw CustomException("Place not exist", HttpStatus.NOT_FOUND)
-        }
-        val place = optional.get()
+        val place = getPlaceById(placeDto.id)
         place.img = placeDto.img
         place.address = placeDto.address
         place.name = placeDto.name
@@ -89,10 +85,8 @@ class PlaceService @Autowired constructor(
     }
 
     fun deletePlaceById(id: Int) {
-        val place = placeRepository.findById(id)
-        if (place.isPresent) {
-            Utils.deleteImage(place.get().img)
-        }
+        val place = getPlaceById(id)
+        Utils.deleteImage(place.img)
         return placeRepository.deleteById(id)
     }
 }

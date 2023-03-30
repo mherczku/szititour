@@ -34,25 +34,18 @@ class QuestionController @Autowired constructor(private val questionService: Que
             riddle = riddle == "true"
         )
 
-        val createdQuestion: Optional<Question> = if (file != null) {
+        val createdQuestion: Question = if (file != null) {
             questionService.addQuestionToPlaceWithImage(questionDto, file)
         } else {
             questionService.addQuestionToPlace(questionDto)
         }
-
-        if (!createdQuestion.isPresent) {
-            throw CustomException("Creation unsuccessful", HttpStatus.BAD_REQUEST)
-        }
-        return ResponseEntity(createdQuestion.get().convertToDto(), HttpStatus.CREATED)
+        return ResponseEntity(createdQuestion.convertToDto(), HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
     fun getQuestionById(@PathVariable id: Int): ResponseEntity<QuestionDto?> {
-        val question: Optional<Question> = questionService.getQuestionById(id)
-        if (!question.isPresent) {
-            throw CustomException("Question not found", HttpStatus.NOT_FOUND)
-        }
-        return ResponseEntity(question.get().convertToDto(), HttpStatus.OK)
+        val question: Question = questionService.getQuestionById(id)
+        return ResponseEntity(question.convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping
@@ -83,7 +76,6 @@ class QuestionController @Autowired constructor(private val questionService: Que
         } else {
             questionService.updateQuestion(questionDto)
         }
-
         return ResponseEntity(updatedQuestion.convertToDto(), HttpStatus.OK)
     }
 

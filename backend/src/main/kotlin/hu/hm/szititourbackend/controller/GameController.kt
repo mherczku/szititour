@@ -3,11 +3,8 @@ package hu.hm.szititourbackend.controller
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.GameDto
-import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.GameService
-import org.hibernate.exception.ConstraintViolationException
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -23,12 +20,8 @@ class GameController @Autowired constructor(private val gameService: GameService
 
     @PostMapping()
     fun addGame(@RequestBody game: Game): ResponseEntity<GameDto> {
-        return try {
-            val newGame = gameService.addGame(game)
-            ResponseEntity(newGame.convertToDto(), HttpStatus.CREATED)
-        } catch (ex: DataIntegrityViolationException) {
-            throw CustomException("This game title is already taken", HttpStatus.BAD_REQUEST)
-        }
+        val newGame = gameService.addGame(game)
+        return ResponseEntity(newGame.convertToDto(), HttpStatus.CREATED)
     }
 
     @PostMapping("/image")
@@ -39,37 +32,26 @@ class GameController @Autowired constructor(private val gameService: GameService
         @RequestParam("gameEnd") gameEnd: String
     ): ResponseEntity<GameDto> {
 
-        return try {
+        val dateEnd = Timestamp(gameEnd.toLong())
+        val dateStart = Timestamp(gameStart.toLong())
 
-            val dateEnd = Timestamp(gameEnd.toLong())
-            val dateStart = Timestamp(gameStart.toLong())
-
-            val game = Game(
-                title = gameTitle,
-                dateEnd = dateEnd,
-                dateStart = dateStart
-            )
-
-            val createdGame: Game = if (file != null) {
-                gameService.addGameWithImage(game, file)
-            } else {
-                gameService.addGame(game)
-            }
-
-            ResponseEntity(createdGame.convertToDto(), HttpStatus.CREATED)
-        } catch (ex: DataIntegrityViolationException) {
-            throw CustomException("This game title is already taken", HttpStatus.BAD_REQUEST)
+        val game = Game(
+            title = gameTitle,
+            dateEnd = dateEnd,
+            dateStart = dateStart
+        )
+        val createdGame: Game = if (file != null) {
+            gameService.addGameWithImage(game, file)
+        } else {
+            gameService.addGame(game)
         }
+        return ResponseEntity(createdGame.convertToDto(), HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
     fun getGameById(@PathVariable id: Int): ResponseEntity<GameDto?> {
-        val game: Optional<Game> = gameService.getGameById(id)
-        if (!game.isPresent) {
-            throw CustomException("Game not found", HttpStatus.NOT_FOUND)
-
-        }
-        return ResponseEntity(game.get().convertToDto(), HttpStatus.OK)
+        val game: Game = gameService.getGameById(id)
+        return ResponseEntity(game.convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping
@@ -80,12 +62,12 @@ class GameController @Autowired constructor(private val gameService: GameService
 
     @PutMapping("activate/{id}")
     fun activateGame(@PathVariable("id") gameId: Int): ResponseEntity<GameDto> {
-        return ResponseEntity(gameService.changeActivation(gameId, true), HttpStatus.OK)
+        return ResponseEntity(gameService.changeActivation(gameId, true).convertToDto(), HttpStatus.OK)
     }
 
     @PutMapping("deactivate/{id}")
     fun deactivateGame(@PathVariable("id") gameId: Int): ResponseEntity<GameDto> {
-        return ResponseEntity(gameService.changeActivation(gameId, false), HttpStatus.OK)
+        return ResponseEntity(gameService.changeActivation(gameId, false).convertToDto(), HttpStatus.OK)
     }
 
     @PutMapping
@@ -97,41 +79,30 @@ class GameController @Autowired constructor(private val gameService: GameService
         @RequestParam("gameStart") gameStart: String,
         @RequestParam("gameEnd") gameEnd: String
     ): ResponseEntity<GameDto> {
-        try {
 
-            val dateEnd = Timestamp(gameEnd.toLong())
-            val dateStart = Timestamp(gameStart.toLong())
+        val dateEnd = Timestamp(gameEnd.toLong())
+        val dateStart = Timestamp(gameStart.toLong())
 
-            val game = Game(
-                id = gameId.toInt(),
-                title = gameTitle,
-                dateEnd = dateEnd,
-                dateStart = dateStart,
-                img = img
-            )
-
-            val updatedGame: Game = if (file != null) {
-                gameService.updateGameWithImage(game, file)
-            } else {
-                gameService.updateGame(game)
-            }
-
-            return ResponseEntity(gameService.updateGame(updatedGame).convertToDto(), HttpStatus.OK)
-        } catch (ex: Exception) {
-            if (ex is ConstraintViolationException) {
-                throw CustomException("This game title is already taken", HttpStatus.BAD_REQUEST)
-            }
-            throw ex
+        val game = Game(
+            id = gameId.toInt(),
+            title = gameTitle,
+            dateEnd = dateEnd,
+            dateStart = dateStart,
+            img = img
+        )
+        val updatedGame: Game = if (file != null) {
+            gameService.updateGameWithImage(game, file)
+        } else {
+            gameService.updateGame(game)
         }
+
+        return ResponseEntity(gameService.updateGame(updatedGame).convertToDto(), HttpStatus.OK)
     }
+
 
     @DeleteMapping("/{id}")
     fun deleteGameById(@PathVariable id: Int): ResponseEntity<Nothing> {
-        return try {
-            gameService.deleteGameById(id)
-            ResponseEntity(null, HttpStatus.OK)
-        } catch (e: Exception) {
-            throw CustomException("Game not found", HttpStatus.NOT_FOUND)
-        }
+        gameService.deleteGameById(id)
+        return ResponseEntity(null, HttpStatus.OK)
     }
 }

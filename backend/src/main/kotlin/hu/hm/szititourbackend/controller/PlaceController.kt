@@ -32,27 +32,18 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
             address = address
         )
 
-        val createdPlace: Optional<Place> = if (file != null) {
+        val createdPlace: Place = if (file != null) {
             placeService.addPlaceToGameWithImage(placeDto, file)
         } else {
             placeService.addPlaceToGame(placeDto)
         }
-
-        if (!createdPlace.isPresent) {
-            throw CustomException("Creation unsuccessful", HttpStatus.BAD_REQUEST)
-
-        }
-        return ResponseEntity(createdPlace.get().convertToDto(), HttpStatus.CREATED)
+        return ResponseEntity(createdPlace.convertToDto(), HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
     fun getPlaceById(@PathVariable id: Int): ResponseEntity<PlaceDto?> {
-        val place: Optional<Place> = placeService.getPlaceById(id)
-        if (!place.isPresent) {
-            throw CustomException("Place not found", HttpStatus.NOT_FOUND)
-
-        }
-        return ResponseEntity(place.get().convertToDto(), HttpStatus.OK)
+        val place: Place = placeService.getPlaceById(id)
+        return ResponseEntity(place.convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping
