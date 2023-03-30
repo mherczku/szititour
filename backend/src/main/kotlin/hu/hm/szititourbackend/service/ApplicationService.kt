@@ -24,11 +24,7 @@ class ApplicationService @Autowired constructor(private val applicationRepositor
         application.accepted = null
         application.createdAt = Timestamp(System.currentTimeMillis())
         application.updatedAt = Timestamp(System.currentTimeMillis())
-        val applicationTemp = applicationRepository.save(application)
-        /*println(" before ${applicationTemp.game.title}")
-        applicationRepository.flush()
-        println(" after ${applicationTemp.game.title}")*/
-        return applicationTemp // getApplicationById(applicationTemp.id)
+        return applicationRepository.save(application)
     }
 
     fun getAllApplications(): MutableList<Application> {
@@ -55,7 +51,6 @@ class ApplicationService @Autowired constructor(private val applicationRepositor
     }
 
     fun deleteApplicationById(id: Int) {
-        println("deleting $id")
         return applicationRepository.deleteByIdCustom(id)
     }
 

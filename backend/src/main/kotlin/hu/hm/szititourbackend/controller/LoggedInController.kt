@@ -76,7 +76,6 @@ class LoggedInController @Autowired constructor(
             if (application.game.active) {
                 throw CustomException("Cannot cancel application for an active game", HttpStatus.FORBIDDEN)
             }
-            println("a- $application")
             if (application.accepted == null) {
                 applicationService.deleteApplicationById(application.id)
                 return ResponseEntity(application.game.convertToBasicDto(verification.teamId), HttpStatus.OK)
