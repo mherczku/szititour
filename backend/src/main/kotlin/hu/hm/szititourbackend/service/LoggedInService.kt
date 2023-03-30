@@ -77,22 +77,14 @@ class LoggedInService @Autowired constructor(
 
     fun answerQuestion(teamId: Int, questionId: Int, answer: Answer): TeamGameStatusDto {
         checkApplicationAndGameActive(teamId, null, null, questionId)
-        val question = checkQuestionExist(questionId)
+        val question = questionService.getQuestionById(questionId)
         answerService.createAnswer(answer, teamId, question)
         return getTeamGameStatus(question.place.game.id, teamId)
     }
 
-    private fun checkQuestionExist(questionId: Int): Question {
-        val question = questionService.getQuestionById(questionId)
-        if (!question.isPresent) {
-            throw CustomException("Question not found", HttpStatus.NOT_FOUND)
-        }
-        return question.get()
-    }
-
     private fun checkApplicationAndGameActive(teamId: Int, gameId: Int?, game: Game? = null, questionId: Int? = null) {
         val theGameId: Int =
-            game?.id ?: gameId ?: questionId?.let { questionService.getQuestionById(it).get().place.game.id }
+            game?.id ?: gameId ?: questionId?.let { questionService.getQuestionById(it).place.game.id }
             ?: throw CustomException(
                 "Game and GameId and QuestionId cannot be null at the same time",
                 HttpStatus.BAD_REQUEST
@@ -107,7 +99,7 @@ class LoggedInService @Autowired constructor(
             }
         }
         val application = teamService.getTeamsApplicationByTeamId(teamId, theGameId)
-        if (!application.isPresent || application.get().accepted == null || !application.get().accepted!!) {
+        if (application?.accepted == null || !application.accepted!!) {
             throw CustomException("Your application is not accepted", HttpStatus.FORBIDDEN)
         }
     }
