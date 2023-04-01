@@ -39,6 +39,14 @@
     background: #ed2f02;
   }
 }
+.btn-simple-green {
+  @extend .btn-simple;
+  background: #00c407;
+
+  &:hover {
+    background: #0fbf16;
+  }
+}
 
 .btn-hover-bold-textChange {
   $string: var(--btn-string);
