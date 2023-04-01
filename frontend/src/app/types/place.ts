@@ -1,4 +1,4 @@
-import {Question} from "./question";
+import {Question, QuestionNoAnswer} from "./question";
 
 export type Place = {
   id: number,
@@ -9,4 +9,12 @@ export type Place = {
   longitude: string,
   questions: Question[],
   gameId: number
+}
+
+export type ActivePlace = {
+  id: number,
+  selectable: boolean,
+  name: string,
+  img?: string,
+  questions: QuestionNoAnswer[],
 }

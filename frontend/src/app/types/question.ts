@@ -8,3 +8,12 @@ export type Question = {
   img?: string,
   placeId: number
 }
+
+export type QuestionNoAnswer = {
+  id: number,
+  name: string,
+  type: QuestionType,
+  riddle: boolean,
+  img?: string,
+  placeId: number
+}

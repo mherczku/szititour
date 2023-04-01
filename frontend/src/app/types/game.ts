@@ -1,4 +1,4 @@
-import {Place} from "./place";
+import {ActivePlace, Place} from "./place";
 import {Application} from "./application";
 
 export type Game = {
@@ -9,5 +9,15 @@ export type Game = {
   img?: string,
   places: Place[],
   applications: Application[],
-  applicationState?: "accepted" | "applied" | "declined" | "none"
+  userApplied?: "accepted" | "applied" | "declined" | "none",
+  active: boolean
+}
+
+export type ActiveGame = {
+  id: number,
+  title: string,
+  dateStart: Date,
+  dateEnd: Date,
+  img?: string,
+  places: ActivePlace[],
 }
