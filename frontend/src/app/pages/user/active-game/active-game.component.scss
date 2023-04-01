@@ -1,0 +1,11 @@
+.holder-places {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 20px 30px;
+  scroll-behavior: smooth;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

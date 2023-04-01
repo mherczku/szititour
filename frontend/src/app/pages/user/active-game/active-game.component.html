@@ -1,1 +1,4 @@
 <p>active-game works!</p>
+<div class="holder-places">
+  <app-place-card [selected]="selectedPlace === place" (click)="selectPlace(place)" *ngFor="let place of (activeGame$ | async)?.places; let i = index" [place]="place" [index]="i"></app-place-card>
+</div>

@@ -4,11 +4,13 @@ import {ActivatedRoute} from "@angular/router";
 import {ActiveGameService} from "../../../services/ActiveGameService";
 import {Observable} from "rxjs";
 import {ActiveGame} from "../../../types/game";
+import {PlaceCardComponent} from "../../../components/user/place-card/place-card.component";
+import {ActivePlace} from "../../../types/place";
 
 @Component({
   selector: "app-active-game",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PlaceCardComponent],
   templateUrl: "./active-game.component.html",
   styleUrls: ["./active-game.component.scss"]
 })
@@ -18,16 +20,20 @@ export class ActiveGameComponent implements OnInit {
   }
 
   activeGame$?: Observable<ActiveGame>;
+  selectedPlace?: ActivePlace;
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       const id = params["id"];
       if (id) {
-        this.activeGameService.getActiveGameData(id).subscribe(res => {
-          console.log(res)
-        })
+        this.activeGame$ = this.activeGameService.getActiveGameData(id);
       }
     });
   }
 
+  selectPlace(place: ActivePlace) {
+    if(place.selectable) {
+      this.selectedPlace = place;
+    }
+  }
 }
