@@ -20,7 +20,7 @@ class Place(
 
     @OneToMany(mappedBy = "place", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val questions: MutableList<Question> = mutableListOf(),
-    // 0. question is the riddle to the next place
+    // last question is the riddle to the next place
 
     @ManyToOne
     val game: Game = Game()

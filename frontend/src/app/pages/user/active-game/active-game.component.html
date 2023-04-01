@@ -2,3 +2,9 @@
 <div class="holder-places">
   <app-place-card [selected]="selectedPlace === place" (click)="selectPlace(place)" *ngFor="let place of (activeGame$ | async)?.places; let i = index" [place]="place" [index]="i"></app-place-card>
 </div>
+
+<div class="holder-questions">
+
+  <app-question-card *ngFor="let question of selectedPlace?.questions; let i = index" [index]="i" [question]="question"></app-question-card>
+
+</div>

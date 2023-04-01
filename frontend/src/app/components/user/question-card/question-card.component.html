@@ -1,0 +1,16 @@
+<div class="holder-question">
+
+  <p class="text-size-h3 question-title">Kérdés {{index + 1}}</p>
+  <div class="question-body">
+    <p class="text-size-base">{{question.name}}</p>
+
+    <ng-container [ngSwitch]="question.type">
+      <input *ngSwitchCase="QuestionType.imgOnly" type="file">
+      <input *ngSwitchCase="QuestionType.longText" placeholder="Válasz" type="text">
+      <input *ngSwitchCase="QuestionType.shortText" placeholder="Válasz" type="text">
+      <input *ngSwitchCase="QuestionType.number" placeholder="0" type="number">
+      <input *ngSwitchCase="QuestionType.year" placeholder="0" type="number">
+    </ng-container>
+
+  </div>
+</div>
