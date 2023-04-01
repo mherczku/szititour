@@ -37,7 +37,8 @@ export class EditGameComponent implements OnChanges, OnDestroy {
     places: [],
     title: "alma",
     dateStart: new Date(),
-    dateEnd: new Date()
+    dateEnd: new Date(),
+    active: false
   };
   @Output() onClose: EventEmitter<unknown> = new EventEmitter<unknown>();
 
@@ -75,7 +76,8 @@ export class EditGameComponent implements OnChanges, OnDestroy {
       places: [],
       title: "",
       dateStart: new Date(),
-      dateEnd: new Date()
+      dateEnd: new Date(),
+      active: false
     };
     this.file = undefined;
     this.fileInput?.nativeElement?.value ? this.fileInput.nativeElement.value = null : undefined;

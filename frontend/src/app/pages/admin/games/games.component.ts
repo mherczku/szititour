@@ -26,7 +26,7 @@ export class GamesComponent implements OnInit, OnDestroy {
   teamsModalVisible = false;
   placesModalVisible = false;
 
-  selectedGame: Game = {applications: [], id: 0, places: [], title: "", dateStart: new Date(), dateEnd: new Date()};
+  selectedGame: Game = {applications: [], id: 0, places: [], active: false, title: "", dateStart: new Date(), dateEnd: new Date()};
   isGameEditing = false;
 
   subscriptionGetGames?: Subscription;

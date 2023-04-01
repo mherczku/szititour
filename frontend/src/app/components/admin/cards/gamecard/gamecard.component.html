@@ -3,14 +3,22 @@
   <div class="relative flex flex-col h-full">
     <div class="relative">
       <img class="aspect-video object-cover w-full rounded-t" src="{{game.img | imgSrc}}" alt="Game's image">
+
+      <label class="switch" (click)="changeGameActivation()">
+        <input [disabled]="true" [ngModel]="game.active" type="checkbox">
+        <span class="slider round"></span>
+      </label>
+
       <div class="absolute top-0 right-0 p-1 z-20">
-        <app-buttons [isDisabledProgress]="deleting" (onClicked)="deleteGame()" class="absolute right-0 top-0 bg-white rounded p-1" type="delete"></app-buttons>
+        <app-buttons [isDisabledProgress]="deleting" (onClicked)="deleteGame()"
+                     class="absolute right-0 top-0 bg-white rounded p-1" type="delete"></app-buttons>
       </div>
     </div>
     <div class="p-3">
       <div class="flex flex-row gap-3">
         <p class="font-bold text-size-base">{{game.title ? game.title : "No title"}}</p>
-        <app-buttons classes="min-w-[20px]" (click)="onEditClicked.emit()" iconSrc="assets/svg/edit.svg" type="icon"></app-buttons>
+        <app-buttons classes="min-w-[20px]" (click)="onEditClicked.emit()" iconSrc="assets/svg/edit.svg"
+                     type="icon"></app-buttons>
       </div>
       <p class="text-size-min">{{game.dateStart | date:'short'}} - {{game.dateEnd | date:'short'}}</p>
     </div>
@@ -18,9 +26,11 @@
 
     </div>
     <div class="flex flex-row w-full border-t-1">
-      <app-buttons (click)="onPlacesClicked.emit()" classes="border-r-1" iconSrc="assets/svg/map.svg" text="{{game.places.length}} Helyszín"
+      <app-buttons (click)="onPlacesClicked.emit()" classes="border-r-1" iconSrc="assets/svg/map.svg"
+                   text="{{game.places.length}} Helyszín"
                    type="blueIcon"></app-buttons>
-      <app-buttons (click)="onTeamsClicked.emit()" iconSrc="assets/svg/team2.svg" text="{{game.applications.length}} Csapat"
+      <app-buttons (click)="onTeamsClicked.emit()" iconSrc="assets/svg/team2.svg"
+                   text="{{game.applications.length}} Csapat"
                    type="blueIcon"></app-buttons>
       <!--todo filter applications- only accepted-->
     </div>

@@ -2,7 +2,8 @@ import {Component, EventEmitter, Input, OnDestroy, Output} from "@angular/core";
 import {Game} from "../../../../types/game";
 import {HotToastService} from "@ngneat/hot-toast";
 import {AdminService} from "../../../../services/AdminService";
-import {Subscription} from "rxjs";
+import {Subject, Subscription, take, takeUntil} from "rxjs";
+import {AutoDestroy} from "../../../../decorators/autodestroy.decorator";
 
 
 @Component({
@@ -10,24 +11,34 @@ import {Subscription} from "rxjs";
   templateUrl: "./gamecard.component.html",
   styleUrls: ["./gamecard.component.css"]
 })
-export class GamecardComponent implements OnDestroy {
+export class GamecardComponent {
 
-  @Input() game: Game = {applications: [], id: 0, img: "assets/img/sample.jpg", places: [], title: "SampleTitle", dateStart: new Date(), dateEnd: new Date()};
+  @Input() game: Game = {
+    active: false,
+    applications: [],
+    id: 0,
+    img: "assets/img/sample.jpg",
+    places: [],
+    title: "SampleTitle",
+    dateStart: new Date(),
+    dateEnd: new Date()
+  };
   @Output() onEditClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
   @Output() onTeamsClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
   @Output() onPlacesClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
   @Output() onDeleted: EventEmitter<unknown> = new EventEmitter<unknown>();
 
   deleting = false;
-  subscriptionDelete?: Subscription;
+  @AutoDestroy destroy$ = new Subject();
 
-  constructor(private alert: HotToastService, private adminService: AdminService) {}
+  constructor(private alert: HotToastService, private adminService: AdminService) {
+  }
 
   deleteGame() {
     const sure = window.confirm(`Biztos törlöd a ${this.game.title} játékot?`);
-    if(sure){
+    if (sure) {
       this.deleting = true;
-      this.subscriptionDelete = this.adminService.deleteGame(this.game.id).subscribe({
+      this.adminService.deleteGame(this.game.id).pipe(takeUntil(this.destroy$)).subscribe({
         next: res => {
           this.deleting = false;
           this.alert.success(`${this.game.title} sikeresen törölve`);
@@ -45,7 +56,9 @@ export class GamecardComponent implements OnDestroy {
     //this.game.applications.filter(e => e.)
   }
 
-  ngOnDestroy(): void {
-    this.subscriptionDelete?.unsubscribe();
+  changeGameActivation() {
+    this.adminService.changeGameActivation(this.game.id, !this.game.active).pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.game = res;
+    });
   }
 }

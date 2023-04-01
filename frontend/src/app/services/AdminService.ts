@@ -122,4 +122,11 @@ export class AdminService {
     return this.http.delete<unknown>(`${this.baseUrl}/questions/${id}`);
   }
 
+  changeGameActivation(gameId: number, activate: boolean): Observable<Game> {
+    if(activate) {
+      return this.http.put<Game>(`${this.baseUrl}/games/activate/${gameId}`, null);
+    } else {
+      return this.http.put<Game>(`${this.baseUrl}/games/deactivate/${gameId}`, null);
+    }
+  }
 }
