@@ -1,5 +1,6 @@
 import {Routes} from "@angular/router";
 import {HomeComponent} from "./home/home.component";
+import {ActiveGameComponent} from "./active-game/active-game.component";
 
 
 export const USER_ROUTES: Routes = [
@@ -8,6 +9,13 @@ export const USER_ROUTES: Routes = [
     path: "home",
     component: HomeComponent
   },
+
+  {
+    path: "active/:id",
+    component: ActiveGameComponent
+  },
+
+
 
   {path: "**", redirectTo: ""},
 ];
