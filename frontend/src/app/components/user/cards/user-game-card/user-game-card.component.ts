@@ -4,11 +4,12 @@ import {Game} from "../../../../types/game";
 import {UserService} from "../../../../services/UserService";
 import {Subject, takeUntil} from "rxjs";
 import {AutoDestroy} from "../../../../decorators/autodestroy.decorator";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: "app-user-game-card",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: "./user-game-card.component.html",
   styleUrls: ["./user-game-card.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -20,7 +21,8 @@ export class UserGameCardComponent {
     dateStart: new Date(),
     id: 0,
     places: [],
-    title: "Test Title"
+    title: "Test Title",
+    active: false
   };
 
   @AutoDestroy destroy$ = new Subject();
@@ -29,10 +31,13 @@ export class UserGameCardComponent {
   }
 
   applyBtnClicked() {
-    if (this.game.applicationState) {
-      this.cancelApplicationForGame();
-    } else if (!this.game.applicationState) {
-      this.applyForGame();
+    if(!this.game.active){
+      if (this.game.userApplied === "applied" || this.game.userApplied === "accepted") {
+        this.cancelApplicationForGame();
+      } else if (this.game.userApplied === "none") {
+        this.applyForGame();
+      }
+      // todo send alert if declined or sth  now btn disabled
     }
   }
 
@@ -40,11 +45,7 @@ export class UserGameCardComponent {
     this.userService.applyForGame(this.game.id).pipe(takeUntil(this.destroy$)).subscribe({
       next: value => {
         console.log(value);
-        if (value.success) {
-          this.game.applicationState = "applied";
-        } else {
-          this.game.applicationState = "applied";
-        }
+        this.game = value;
         this.cd.markForCheck();
       },
       error: err => {
@@ -56,9 +57,8 @@ export class UserGameCardComponent {
   private cancelApplicationForGame() {
     this.userService.cancelApplicationForGame(this.game.id).pipe(takeUntil(this.destroy$)).subscribe({
       next: value => {
-        if (value.success) {
-          this.game.applicationState = "none";
-        }
+        console.log(value);
+        this.game = value;
         this.cd.markForCheck();
       },
       error: err => {
