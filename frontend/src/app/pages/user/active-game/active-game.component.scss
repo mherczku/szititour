@@ -9,3 +9,10 @@
     display: none;
   }
 }
+
+.holder-questions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
+  grid-gap: 15px;
+  place-content: center;
+}
