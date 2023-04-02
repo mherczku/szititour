@@ -74,7 +74,7 @@ fun PlaceStatus.convertToDto(team: Team, game: Game): PlaceStatusDto {
         placeId = this.placeId,
         reached = this.reached,
         reachedAt = this.reachedAt,
-        qAnswers =qAnswers
+        qAnswers = qAnswers
     )
 }
 
