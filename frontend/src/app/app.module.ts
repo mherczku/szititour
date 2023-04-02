@@ -16,6 +16,7 @@ import {timeout} from "rxjs";
 import {Team} from "./types/team";
 import {Modal2Component} from "./components/modal2/modal2.component";
 import {HostDirective} from "./directives/hostDirective";
+import {GameStateReducer} from "./reducers/game-status.reducer";
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {HostDirective} from "./directives/hostDirective";
     HttpClientModule,
     HotToastModule.forRoot(),
     StoreModule.forRoot({auth: AuthReducer}, {}),
+    StoreModule.forRoot({gameState: GameStateReducer}, {}),
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
