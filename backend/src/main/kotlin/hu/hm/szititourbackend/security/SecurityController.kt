@@ -42,8 +42,8 @@ class SecurityController(private val teamService: TeamService, private val secur
     }
 
     @PostMapping("login")
-    fun login(authentication: Authentication, response: HttpServletResponse): ResponseEntity<LoginResponse> {
-        val team = teamService.getTeamByEmail(email = authentication.name)
+    fun login(@RequestHeader("Email") email: String, authentication: Authentication, response: HttpServletResponse): ResponseEntity<LoginResponse> {
+        val team = teamService.getTeamByEmail(email = email)
         val token = securityService.generateToken(team = team)
         response.addHeader(TOKEN_NAME, "Bearer $token")
         return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
