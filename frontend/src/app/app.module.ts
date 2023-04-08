@@ -2,7 +2,7 @@ import {APP_INITIALIZER, NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {AppComponent} from "./app.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {NavbarModule} from "./components/navbar/navbar.module";
+import {NavbarModule} from "./ui/components/navbar/navbar.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptors/AuthInterceptor";
 import {AppRoutingModule} from "./app-routing.module";
@@ -10,13 +10,13 @@ import {HotToastModule, HotToastService} from "@ngneat/hot-toast";
 import {ErrorInterceptor} from "./interceptors/ErrorInterceptor";
 import {UnauthorizedInterceptor} from "./interceptors/UnauthorizedInterceptor";
 import {StoreModule} from "@ngrx/store";
-import {AuthReducer} from "./reducers/auth.reducer";
+import {AuthReducer} from "./store/reducers/auth.reducer";
 import {AuthService} from "./services/AuthService";
 import {timeout} from "rxjs";
 import {Team} from "./types/team";
-import {Modal2Component} from "./components/modal2/modal2.component";
+import {Modal2Component} from "./ui/components/modal2/modal2.component";
 import {HostDirective} from "./directives/hostDirective";
-import {GameStateReducer} from "./reducers/game-status.reducer";
+import {GameStateReducer} from "./store/reducers/game-status.reducer";
 
 @NgModule({
   declarations: [
@@ -31,8 +31,9 @@ import {GameStateReducer} from "./reducers/game-status.reducer";
     NavbarModule,
     HttpClientModule,
     HotToastModule.forRoot(),
-    StoreModule.forRoot({auth: AuthReducer}, {}),
-    StoreModule.forRoot({gameState: GameStateReducer}, {}),
+    StoreModule.forRoot({}, {}),
+    StoreModule.forFeature("game",{gameState: GameStateReducer}, {}),
+    StoreModule.forFeature("auth",{authState: AuthReducer}, {}),
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

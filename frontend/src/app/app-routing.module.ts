@@ -9,20 +9,20 @@ const routes: Routes = [
     path: "register",
     canActivateChild: [AuthGuard],
     data: {roles: ["ROLE_GUEST"]},
-    loadChildren: () => import("./pages/auth/register/register.module").then(m => m.RegisterModule)
+    loadChildren: () => import("./ui/pages/auth/register/register.module").then(m => m.RegisterModule)
   },
   {
     path: "login",
     canActivateChild: [AuthGuard],
     data: {roles: ["ROLE_GUEST"]},
-    loadChildren: () => import("./pages/auth/login/login.module").then(m => m.LoginModule)
+    loadChildren: () => import("./ui/pages/auth/login/login.module").then(m => m.LoginModule)
   },
   {
     path: "admin",
     canLoad: [AuthGuard],
     canActivateChild: [AuthGuard],
     data: {roles: ["ROLE_ADMIN"]},
-    loadChildren: () => import("./pages/admin/games/games.module").then(m => m.GamesModule)
+    loadChildren: () => import("./ui/pages/admin/games/games.module").then(m => m.GamesModule)
   },
 
    /* ...["user", "felhasznalo"].map(path => ({
@@ -35,7 +35,7 @@ const routes: Routes = [
     path: "user",
     //canActivateChild: [AuthGuard],
     data: {roles: ["ROLE_USER"]},
-    loadChildren: () => import("./pages/user/user.routes").then(r => r.USER_ROUTES)
+    loadChildren: () => import("./ui/pages/user/user.routes").then(r => r.USER_ROUTES)
   },
 
 

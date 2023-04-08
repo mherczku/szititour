@@ -8,7 +8,7 @@ import {
   Type
 } from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
-import {Modal2Component} from "../components/modal2/modal2.component";
+import {Modal2Component} from "../ui/components/modal2/modal2.component";
 
 
 export type ModalData = {

@@ -1,0 +1,37 @@
+<div class="shadow relative flex flex-row justify-between items-center py-5 px-10 tablet:px-10 mobile:px-5">
+  <div class="relative flex flex-row items-center gap-5 mobile:gap-3">
+
+    <img class="w-[4rem] tablet:w-[4rem] mobile:w-[3rem] cursor-pointer" routerLink="/home"
+         src="../../../../assets/svg/szititour.svg" alt="Logo">
+    <p routerLink="/user/home" class="text-size-lg">{{title}}</p>
+  </div>
+
+
+  <div class="flex flex-row mobile:hidden tablet:block">
+    <a class="btn-simple" *ngIf="!isLoggedIn" routerLink="/login">Bejelentkezés</a>
+    <button class="btn-simple" (click)="logout()" *ngIf="isLoggedIn">Kijelentkezés</button>
+  </div>
+
+  <div class="hidden z-[101] mobile:block relative -translate-x-14 -translate-y-8 disableSelectAndTap">
+    <div class="nav-container">
+      <input [ngModel]="isMobileMenuOpen" (ngModelChange)="changeIsMobileMenuOpen($event)" class="checkbox"
+             type="checkbox"/>
+      <div class="hamburger-lines">
+        <span class="line line1"></span>
+        <span class="line line2"></span>
+        <span class="line line3"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobileMenu" [ngClass]="isMobileMenuOpen ? 'z-[100]' : 'z-[-1]'" >
+    <div class="darkPart" (click)="changeIsMobileMenuOpen(false)" [ngClass]="isMobileMenuOpen ? 'animateDarkPart' : ''"></div>
+    <div class="whitePart" [ngClass]="isMobileMenuOpen ? 'whitePartOpen' : ''">
+      <a *ngIf="isLoggedIn" routerLink="/home" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Főoldal</a>
+      <a *ngIf="isLoggedIn && isAdmin" routerLink="/admin" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Admin Panel</a>
+      <a *ngIf="isLoggedIn" (click)="changeIsMobileMenuOpen(false); logout()" class=" font-semibold text-size-lg cursor-pointer">Kijelentkezés</a>
+      <a *ngIf="!isLoggedIn" routerLink="/login" class=" font-semibold text-size-lg cursor-pointer">Bejelentkezés</a>
+    </div>
+  </div>
+
+</div>
