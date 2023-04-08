@@ -11,24 +11,22 @@ import {
 } from "@angular/router";
 import {Observable} from "rxjs";
 import {Store} from "@ngrx/store";
-import {AuthState} from "../store/states/auth-state";
-import {Team} from "../types/team";
+import {selectLoggedInTeam} from "../store/selectors/auth.selector";
 
 @Injectable({
   providedIn: "root"
 })
 export class AuthGuard implements CanLoad, CanActivateChild, CanActivate {
 
-  private team?: Team;
+  private team = this.store.select(selectLoggedInTeam);
   private currentTeamRole: "ROLE_ADMIN" | "ROLE_USER" | "ROLE_GUEST" = "ROLE_GUEST";
 
   public constructor(
-    private store: Store<{ auth: AuthState }>,
+    private store: Store,
     private router: Router
   ) {
-    this.store.subscribe((state: { auth: AuthState }) => {
-      this.team = state.auth.team ?? undefined;
-      this.currentTeamRole = state.auth.team ? state.auth.team?.role : "ROLE_GUEST";
+    this.team.subscribe((team ) => {
+      this.currentTeamRole = team? team?.role : "ROLE_GUEST";
       console.warn("ROLE: ", this.currentTeamRole);
     });
   }

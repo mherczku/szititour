@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import {Store} from "@ngrx/store";
 import {AuthState} from "../../../store/states/auth-state";
 import {AuthService} from "../../../services/AuthService";
+import {selectIsLoggedIn, selectLoggedInTeam} from "../../../store/selectors/auth.selector";
 
 @Component({
   selector: "app-navbar",
@@ -10,19 +11,15 @@ import {AuthService} from "../../../services/AuthService";
 })
 export class NavbarComponent implements OnInit {
 
-  isLoggedIn = false;
-  isAdmin = false;
-  title = "Szititour";
+  isLoggedIn = this.store.select(selectIsLoggedIn);
+  team = this.store.select(selectLoggedInTeam);
+  //title = "Szititour";
   isMobileMenuOpen = false;
 
-  constructor(private store: Store<{auth: AuthState}>, private authService: AuthService) { }
+  constructor(private store: Store, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.store.subscribe(state => {
-      this.isLoggedIn = state.auth.isLoggedIn;
-      this.isAdmin = state.auth.team? state.auth.team.role === "ROLE_ADMIN" : false;
-      this.title = this.isAdmin ? "Szititour Admin" : "Szititour";
-    });
+
   }
 
   changeIsMobileMenuOpen(event: boolean) {

@@ -32,8 +32,8 @@ import {GameStateReducer} from "./store/reducers/game-status.reducer";
     HttpClientModule,
     HotToastModule.forRoot(),
     StoreModule.forRoot({}, {}),
-    StoreModule.forFeature("game",{gameState: GameStateReducer}, {}),
-    StoreModule.forFeature("auth",{authState: AuthReducer}, {}),
+    StoreModule.forFeature("game", GameStateReducer),
+    StoreModule.forFeature("auth", AuthReducer),
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

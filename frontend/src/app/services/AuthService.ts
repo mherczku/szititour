@@ -19,7 +19,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private store: Store<{ auth: AuthState }>,
+    private store: Store,
     private router: Router,
     private alertService: HotToastService) {
   }
@@ -30,13 +30,16 @@ export class AuthService {
     const encoded = btoa(usernamePassword);
     const authHeader = `Basic ${encoded}`;
     const headers = new HttpHeaders()
-      .set("Authorization", authHeader);
+      .set("Authorization", authHeader)
+      .set("email", email);
 
     return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, null, {headers: headers}).pipe(tap(evt => {
       if (evt.success) {
         const team: Team = evt.team;
+        console.log(evt.team, team.role === "ROLE_ADMIN")
         if (team.role === "ROLE_ADMIN") {
           this.store.dispatch(login({team: team}));
+          console.log("admin login", team)
           this.router.navigateByUrl("/admin");
         }
         // todo remove when user site is ready

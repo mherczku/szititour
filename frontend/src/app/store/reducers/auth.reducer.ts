@@ -10,12 +10,7 @@ export const initialState: AuthState = {
 export const AuthReducer = createReducer(
   initialState,
 
-  on(AuthActions.login, (state, { team }) => (
-    { ...state,
-      isLoggedIn: true,
-      team: team
-    }
-  )),
+  on(AuthActions.login, (state, { team }) => ({ team: team, isLoggedIn: true})),
 
   on(AuthActions.logout, state => (
     { ...state,
