@@ -58,7 +58,7 @@ export class QuestionCardComponent {
           break;
 
         case QuestionType.imgOnly:
-          this.currentAnswer = this._savedAnswer?.answerText ?? "";
+          //this.currentAnswer = this._savedAnswer?.answerText ?? "";
           break;
 
         case QuestionType.year:
@@ -122,7 +122,12 @@ export class QuestionCardComponent {
   }
 
   inputFileChanged($event: any) {
-    this.currentAnswer = URL.createObjectURL($event.target.files[0]);
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      this.currentAnswer = fileReader.result as string;
+    };
+    fileReader.readAsDataURL($event.target.files[0]);
+    //this.currentAnswer = URL.createObjectURL($event.target.files[0]);
     //todo next task
   }
 }
