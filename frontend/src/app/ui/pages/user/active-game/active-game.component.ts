@@ -2,11 +2,15 @@ import {Component, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import {ActiveGameService} from "../../../../services/ActiveGameService";
-import {Observable, tap} from "rxjs";
+import {Observable, Subject, take, takeUntil, tap} from "rxjs";
 import {ActiveGame} from "../../../../types/game";
 import {PlaceCardComponent} from "../../../components/user/place-card/place-card.component";
 import {ActivePlace} from "../../../../types/place";
 import {QuestionCardComponent} from "../../../components/user/question-card/question-card.component";
+import {Store} from "@ngrx/store";
+import {selectGameState, selectGameStateStatuses} from "../../../../store/selectors/game-state.selector";
+import {AnswerRequest, QuestionAnswer} from "../../../../types/requests/answer-request";
+import {AutoDestroy} from "../../../../decorators/autodestroy.decorator";
 
 @Component({
   selector: "app-active-game",
@@ -17,16 +21,22 @@ import {QuestionCardComponent} from "../../../components/user/question-card/ques
 })
 export class ActiveGameComponent implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute, private activeGameService: ActiveGameService) {
+  constructor(private activatedRoute: ActivatedRoute, private activeGameService: ActiveGameService, private store: Store) {
   }
+
+  @AutoDestroy destroy$ = new Subject();
 
   activeGame$?: Observable<ActiveGame>;
   selectedPlace?: ActivePlace;
+  teamStatus = this.store.select(selectGameStateStatuses);
+  gameId = -1;
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       const id = params["id"];
       if (id) {
+        this.gameId = id;
+        this.activeGameService.loadTeamGameStatus(id);
         this.activeGame$ = this.activeGameService.getActiveGameData(id).pipe(tap(data => {
           this.selectedPlace = data.places[0];
         }));
@@ -39,4 +49,18 @@ export class ActiveGameComponent implements OnInit {
       this.selectedPlace = place;
     }
   }
+
+  postAnswers() {
+    const answers: QuestionAnswer[] = [];
+    this.activeGameService.changedAnswers.forEach((value: AnswerRequest, key: number) => {
+      answers.push({questionId: key, answer: value});
+    });
+
+    this.activeGameService.answerQuestions(this.gameId, answers).pipe(takeUntil(this.destroy$)).subscribe((res) => {
+      this.activeGameService.changedAnswers.clear();
+    });
+  }
+
+
+
 }

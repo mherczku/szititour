@@ -13,7 +13,7 @@ export type PlaceStatusDto = {
   placeId: number
   reached: boolean
   reachedAt: Date
-  qAnswers: QAnswers[]
+  qanswers: AnswerDto[]
 }
 
 export type QAnswers = {

@@ -1,15 +1,25 @@
 <div class="holder-question">
 
   <p class="text-size-base bold question-title">Kérdés {{index + 1}}</p>
-  <div class="question-body">
-    <p class="text-size-base">{{question.name}}</p>
+  <div class="question-body" [ngClass]="{'differentAnswer' : !answerIsSame}">
+    <p class="text-size-base">{{_question.name}}</p>
+    <img class="object-contain max-h-[300px] aspect-video" *ngIf="_question.img" [src]="_question.img | imgSrc">
 
-    <ng-container [ngSwitch]="question.type">
-      <input *ngSwitchCase="QuestionType.imgOnly" type="file">
-      <input *ngSwitchCase="QuestionType.longText" placeholder="Válasz" type="text">
-      <input *ngSwitchCase="QuestionType.shortText" placeholder="Válasz" type="text">
-      <input *ngSwitchCase="QuestionType.number" placeholder="0" type="number">
-      <input *ngSwitchCase="QuestionType.year" placeholder="0" type="number">
+    <ng-container [ngSwitch]="_question.type">
+
+      <ng-container *ngSwitchCase="QuestionType.imgOnly">
+        <img id="questionImageAnswer" class="object-contain max-h-[300px] aspect-video" *ngIf="currentAnswer" [src]="currentAnswer.toString()">
+        <input (change)="inputFileChanged($event)" type="file">
+      </ng-container>
+
+      <input (ngModelChange)="changed($event)" [(ngModel)]="currentAnswer" *ngSwitchCase="QuestionType.longText"
+             placeholder="Válasz" type="text">
+      <input (ngModelChange)="changed($event)" [(ngModel)]="currentAnswer" *ngSwitchCase="QuestionType.shortText"
+             placeholder="Válasz" type="text">
+      <input (ngModelChange)="changed($event)" [(ngModel)]="currentAnswer" *ngSwitchCase="QuestionType.number"
+             placeholder="0" type="number">
+      <input (ngModelChange)="changed($event)" [(ngModel)]="currentAnswer" *ngSwitchCase="QuestionType.year"
+             placeholder="0" type="number">
     </ng-container>
 
   </div>
