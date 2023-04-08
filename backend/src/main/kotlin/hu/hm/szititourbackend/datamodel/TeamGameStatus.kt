@@ -1,5 +1,6 @@
 package hu.hm.szititourbackend.datamodel
 
+import hu.hm.szititourbackend.dto.AnswerDto
 import hu.hm.szititourbackend.dto.PlaceStatusDto
 import hu.hm.szititourbackend.dto.QAnswers
 import hu.hm.szititourbackend.dto.TeamGameStatusDto
@@ -60,14 +61,13 @@ fun PlaceStatus.convertToDto(team: Team, game: Game): PlaceStatusDto {
     val place = game.places.find { it.id == this.placeId }
         ?: throw CustomException("PlaceStatus convert error - place not found", HttpStatus.NOT_FOUND)
 
-    val qAnswers = mutableListOf<QAnswers>()
+    val qAnswers = mutableListOf<AnswerDto>()
     place.questions.forEach { question ->
-        qAnswers.add(
-            QAnswers(
-                question = question.convertToDtoNoAnswers(),
-                answer = question.answers.find { it.team.id == team.id }?.convertToDto()
+        question.answers.find { it.team.id == team.id }?.convertToDto()?.let {
+            qAnswers.add(
+                it
             )
-        )
+        }
     }
 
     return PlaceStatusDto(
