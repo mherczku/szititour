@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, ElementRef, Input, ViewChild} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {Question} from "../../../../types/question";
 import {QuestionType} from "../../../../enums/question-type";
@@ -26,6 +26,9 @@ export class QuestionCardComponent {
     this._teamStatus = value;
     this.setCurrentAnswerData();
   }
+
+  @ViewChild("questionFileInput")
+  fileInputRef: ElementRef | undefined;
 
   _question!: Question;
   _teamStatus!: TeamGameStatus | null;
@@ -60,7 +63,8 @@ export class QuestionCardComponent {
           break;
 
         case QuestionType.imgOnly:
-          //do nothing
+          this.fileInputRef?.nativeElement ? this.fileInputRef.nativeElement.value = null : undefined;
+          this.currentImg = undefined;
           break;
 
         case QuestionType.year:
@@ -76,7 +80,7 @@ export class QuestionCardComponent {
 
       case QuestionType.shortText:
         this.answerIsSame = this.currentAnswer === this._savedAnswer?.answerText;
-         break;
+        break;
 
       case QuestionType.longText:
         this.answerIsSame = this.currentAnswer === this._savedAnswer?.answerText;
@@ -126,10 +130,14 @@ export class QuestionCardComponent {
   }
 
   inputFileChanged($event: any) {
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      this.currentImg = fileReader.result as string;
-    };
-    fileReader.readAsDataURL($event.target.files[0]);
+    if ($event.target.files[0]) {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        this.currentImg = fileReader.result as string;
+        this.setIsAnswerSameAsStatus();
+      };
+      fileReader.readAsDataURL($event.target.files[0]);
+      this.activeGameService.addAnswer(this._question.id, {imgFile: $event.target.files[0]});
+    }
   }
 }

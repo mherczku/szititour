@@ -1,6 +1,6 @@
 <div class="holder-question">
 
-  <p class="text-size-base bold question-title">Kérdés {{index + 1}}</p>
+  <p class="text-size-base bold question-title">{{_question.id}} Kérdés {{index + 1}}</p>
   <div class="question-body" [ngClass]="{'differentAnswer' : !answerIsSame}">
     <p class="text-size-base">{{_question.name}}</p>
     <img class="object-contain max-h-[300px] aspect-video" *ngIf="_question.img" [src]="_question.img | imgSrc">
@@ -8,8 +8,8 @@
     <ng-container [ngSwitch]="_question.type">
 
       <ng-container *ngSwitchCase="QuestionType.imgOnly">
-        <input (change)="inputFileChanged($event)" type="file">
-        <img id="questionImageAnswer" class="object-contain max-h-[300px] aspect-video" *ngIf="currentImg || _savedAnswer?.answerText" [src]="currentImg ?? (_savedAnswer?.answerText | imgSrc)" alt="">
+        <input #questionFileInput (change)="inputFileChanged($event)" type="file">
+        <img id="questionImageAnswer" class="object-contain max-h-[300px] aspect-video" *ngIf="currentImg || _savedAnswer?.img" [src]="currentImg ?? (_savedAnswer?.img | imgSrc)" alt="">
       </ng-container>
 
       <input (ngModelChange)="changed($event)" [ngModel]="currentAnswer" *ngSwitchCase="QuestionType.longText"

@@ -13,5 +13,6 @@ export type AnswerRequest = {
   answerText?: string,
   answerBoolean?: boolean,
   answerNumber?: number,
-  img?: string
+  img?: string,
+  imgFile?: File
 }
