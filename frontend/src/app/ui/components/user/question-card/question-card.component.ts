@@ -98,7 +98,7 @@ export class QuestionCardComponent {
   }
 
   changed($event: any) {
-    //todo bug here
+    this.currentAnswer = $event;
     this.setIsAnswerSameAsStatus();
     if (!this.answerIsSame) {
       switch (this._question.type) {
@@ -122,7 +122,7 @@ export class QuestionCardComponent {
           break;
       }
     }
-    this.setIsAnswerSameAsStatus();
+    //this.setIsAnswerSameAsStatus();
   }
 
   inputFileChanged($event: any) {
