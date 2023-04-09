@@ -13,11 +13,22 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class AnswerService @Autowired constructor(private val answerRepository: AnswerRepository){
 
-    fun createAnswer(answer: Answer, teamId: Int, question: Question): Answer {
-        answer.team = Team(id = teamId)
-        answer.correct = null
-        answer.question = question
-        return addAnswer(answer)
+    fun createOrUpdateAnswer(answer: Answer, teamId: Int, question: Question): Answer {
+        val answerOptional = answerRepository.findByTeamAndQuestion(Team(id = teamId), question = question)
+        return if(answerOptional.isPresent) {
+            val answerFound = answerOptional.get()
+            answerFound.answerBoolean = answer.answerBoolean
+            answerFound.answerNumber = answer.answerNumber
+            answerFound.answerText = answer.answerText
+            answerFound.img = answer.img
+            answerFound.correct = null
+            addAnswer(answerFound)
+        } else {
+            answer.team = Team(id = teamId)
+            answer.correct = null
+            answer.question = question
+            addAnswer(answer)
+        }
     }
 
     private fun addAnswer(answer: Answer): Answer {

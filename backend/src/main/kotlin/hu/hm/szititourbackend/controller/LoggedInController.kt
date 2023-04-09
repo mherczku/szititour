@@ -3,7 +3,6 @@ package hu.hm.szititourbackend.controller
 import hu.hm.szititourbackend.datamodel.*
 import hu.hm.szititourbackend.dto.*
 import hu.hm.szititourbackend.exception.CustomException
-import hu.hm.szititourbackend.extramodel.Response
 import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
 import hu.hm.szititourbackend.service.*
@@ -139,7 +138,7 @@ class LoggedInController @Autowired constructor(
         answers.questionAnswers.forEach { answer ->
             val question = questionService.getQuestionById(answer.questionId)
 
-            answerService.createAnswer(
+            answerService.createOrUpdateAnswer(
                 Answer(
                     answerBoolean = answer.answer.answerBoolean,
                     answerNumber = answer.answer.answerNumber,
@@ -170,7 +169,6 @@ class LoggedInController @Autowired constructor(
             HttpStatus.OK
         )
     }
-
     @PostMapping("answer/{questionId}/image")
     fun answerQuestionWithImage(
         @RequestHeader(TOKEN_NAME) token: String,

@@ -10,9 +10,9 @@ class Answer(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     val id: Int = 0,
-    val answerText: String = "",
-    val answerBoolean: Boolean = false,
-    val answerNumber : Int = 0,
+    var answerText: String = "",
+    var answerBoolean: Boolean = false,
+    var answerNumber : Int = 0,
     var img: String = "",
     var correct: Boolean? = null,
 

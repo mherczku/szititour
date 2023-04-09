@@ -78,7 +78,7 @@ class LoggedInService @Autowired constructor(
     fun answerQuestion(teamId: Int, questionId: Int, answer: Answer): TeamGameStatusDto {
         checkApplicationAndGameActive(teamId, null, null, questionId)
         val question = questionService.getQuestionById(questionId)
-        answerService.createAnswer(answer, teamId, question)
+        answerService.createOrUpdateAnswer(answer, teamId, question)
         return getTeamGameStatus(question.place.game.id, teamId)
     }
 
