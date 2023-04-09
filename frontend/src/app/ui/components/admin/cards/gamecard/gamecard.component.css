@@ -1,6 +1,17 @@
 .gif {
   background-image: url("/src/assets/gif/map.gif");
 }
+
+.activeLink {
+  position: absolute;
+  top: 30px;
+  left: 5px;
+  display: inline-block;
+  width: fit-content;
+  height: fit-content;
+  cursor: pointer;
+  color: #e80000;
+}
 /* The switch - the box around the slider */
 .switch {
   position: absolute;

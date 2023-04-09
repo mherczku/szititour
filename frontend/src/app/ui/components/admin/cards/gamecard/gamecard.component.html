@@ -5,9 +5,11 @@
       <img class="aspect-video object-cover w-full rounded-t" src="{{game.img | imgSrc}}" alt="Game's image">
 
       <label class="switch" (click)="changeGameActivation()">
-        <input [disabled]="true" [ngModel]="game.active" type="checkbox">
+        <input disabled [ngModel]="game.active" type="checkbox">
         <span class="slider round"></span>
       </label>
+
+      <a *ngIf="game.active" [routerLink]="'/admin/active/' + game.id" class="activeLink text-size-base">Státusz</a>
 
       <div class="absolute top-0 right-0 p-1 z-20">
         <app-buttons [isDisabledProgress]="deleting" (onClicked)="deleteGame()"

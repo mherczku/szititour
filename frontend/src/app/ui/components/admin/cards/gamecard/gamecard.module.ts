@@ -4,6 +4,7 @@ import {GamecardComponent} from "./gamecard.component";
 import {ButtonsModule} from "../../../buttons/buttons.module";
 import {ImgSrcModule} from "../../../../../pipes/img-src/img-src.module";
 import {FormsModule} from "@angular/forms";
+import {RouterLink} from "@angular/router";
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {FormsModule} from "@angular/forms";
         CommonModule,
         ButtonsModule,
         ImgSrcModule,
-        FormsModule
+        FormsModule,
+        RouterLink
     ]
 })
 export class GamecardModule {

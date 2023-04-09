@@ -1,6 +1,7 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {AuthGuard} from "./guards/auth.guard";
+import {ActiveGameComponent} from "./ui/pages/admin/active-game/active-game.component";
 
 const routes: Routes = [
 
@@ -23,6 +24,14 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
     data: {roles: ["ROLE_ADMIN"]},
     loadChildren: () => import("./ui/pages/admin/games/games.module").then(m => m.GamesModule)
+  },
+
+  {
+    path: "admin/active/:id",
+    //canLoad: [AuthGuard],
+    //canActivateChild: [AuthGuard],
+    data: {roles: ["ROLE_ADMIN"]},
+    component: ActiveGameComponent
   },
 
    /* ...["user", "felhasznalo"].map(path => ({
