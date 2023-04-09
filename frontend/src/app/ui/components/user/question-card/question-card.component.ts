@@ -36,6 +36,8 @@ export class QuestionCardComponent {
   currentAnswer: string | number = "";
   answerIsSame = false;
 
+  currentImg?: string;
+
   constructor(private activeGameService: ActiveGameService) {
 
   }
@@ -58,7 +60,7 @@ export class QuestionCardComponent {
           break;
 
         case QuestionType.imgOnly:
-          //this.currentAnswer = this._savedAnswer?.answerText ?? "";
+          //do nothing
           break;
 
         case QuestionType.year:
@@ -85,7 +87,7 @@ export class QuestionCardComponent {
         break;
 
       case QuestionType.imgOnly:
-        this.answerIsSame = false;
+        this.answerIsSame = !this.currentImg;
         break;
 
       case QuestionType.year:
@@ -96,6 +98,7 @@ export class QuestionCardComponent {
   }
 
   changed($event: any) {
+    //todo bug here
     this.setIsAnswerSameAsStatus();
     if (!this.answerIsSame) {
       switch (this._question.type) {
@@ -119,15 +122,14 @@ export class QuestionCardComponent {
           break;
       }
     }
+    this.setIsAnswerSameAsStatus();
   }
 
   inputFileChanged($event: any) {
     const fileReader = new FileReader();
     fileReader.onload = () => {
-      this.currentAnswer = fileReader.result as string;
+      this.currentImg = fileReader.result as string;
     };
     fileReader.readAsDataURL($event.target.files[0]);
-    //this.currentAnswer = URL.createObjectURL($event.target.files[0]);
-    //todo next task
   }
 }

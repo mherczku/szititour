@@ -9,7 +9,7 @@
 
       <ng-container *ngSwitchCase="QuestionType.imgOnly">
         <input (change)="inputFileChanged($event)" type="file">
-        <img id="questionImageAnswer" class="object-contain max-h-[300px] aspect-video" *ngIf="currentAnswer || _savedAnswer?.answerText" [src]="currentAnswer.toString() ?? (_savedAnswer?.answerText ?? '' | imgSrc)">
+        <img id="questionImageAnswer" class="object-contain max-h-[300px] aspect-video" *ngIf="currentImg || _savedAnswer?.answerText" [src]="currentImg ?? (_savedAnswer?.answerText | imgSrc)" alt="">
       </ng-container>
 
       <input (ngModelChange)="changed($event)" [(ngModel)]="currentAnswer" *ngSwitchCase="QuestionType.longText"
