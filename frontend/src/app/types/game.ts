@@ -1,5 +1,6 @@
 import {ActivePlace, Place} from "./place";
 import {Application} from "./application";
+import {TeamGameStatus} from "./team-game-status";
 
 export type Game = {
   id: number,
@@ -20,4 +21,16 @@ export type ActiveGame = {
   dateEnd: Date,
   img?: string,
   places: ActivePlace[],
+}
+
+export type GameWithStatuses = {
+  id: number,
+  title: string,
+  dateStart: Date,
+  dateEnd: Date,
+  img?: string,
+  places: Place[],
+  applications: Application[],
+  active: boolean
+  teamGameStatuses: TeamGameStatus[]
 }

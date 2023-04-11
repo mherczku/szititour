@@ -1,9 +1,6 @@
 package hu.hm.szititourbackend.datamodel
 
-import hu.hm.szititourbackend.dto.GameActiveDto
-import hu.hm.szititourbackend.dto.GameDto
-import hu.hm.szititourbackend.dto.GameOnlyBasicDto
-import hu.hm.szititourbackend.dto.TeamGameStatusDto
+import hu.hm.szititourbackend.dto.*
 import hu.hm.szititourbackend.enum.UserApplicationStatus
 import hu.hm.szititourbackend.exception.CustomException
 import org.springframework.http.HttpStatus
@@ -38,7 +35,8 @@ class Game(
     @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val teamGameStatuses: MutableList<TeamGameStatus> = mutableListOf()
 
-)
+) {
+}
 
 fun Game.convertToDto(): GameDto {
     return GameDto(
@@ -55,6 +53,21 @@ fun Game.convertToDto(): GameDto {
     )
 }
 
+fun Game.convertToStatusDto(): GameWithStatusesDto {
+    return GameWithStatusesDto(
+        id = this.id,
+        title = this.title,
+        dateStart = this.dateStart,
+        dateEnd = this.dateEnd,
+        img = this.img,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt,
+        places = this.places.convertToDto(),
+        applications = this.applications.convertToDto(),
+        active = this.active,
+        teamGameStatuses = this.teamGameStatuses.convertToDto()
+    )
+}
 fun MutableList<Game>.convertToDto(): MutableList<GameDto> {
     val dtos = mutableListOf<GameDto>()
     this.forEach {

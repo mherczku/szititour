@@ -2,7 +2,9 @@ package hu.hm.szititourbackend.controller
 
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.convertToDto
+import hu.hm.szititourbackend.datamodel.convertToStatusDto
 import hu.hm.szititourbackend.dto.GameDto
+import hu.hm.szititourbackend.dto.GameWithStatusesDto
 import hu.hm.szititourbackend.service.GameService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -52,6 +54,12 @@ class GameController @Autowired constructor(private val gameService: GameService
     fun getGameById(@PathVariable id: Int): ResponseEntity<GameDto?> {
         val game: Game = gameService.getGameById(id)
         return ResponseEntity(game.convertToDto(), HttpStatus.OK)
+    }
+
+    @GetMapping("/{id}/status")
+    fun getGameWithStatusesById(@PathVariable id: Int): ResponseEntity<GameWithStatusesDto?> {
+        val game: Game = gameService.getGameById(id)
+        return ResponseEntity(game.convertToStatusDto(), HttpStatus.OK)
     }
 
     @GetMapping
