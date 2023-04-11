@@ -1,1 +1,7 @@
-<p>active-game works! {{gameData | async}}</p>
+<p>active-game admin works! {{gameData | async}}</p>
+<section class="map-container" *ngIf="apiLoaded | async">
+  <google-map [center]="center" [zoom]="zoom" [width]="'100%'">
+    <map-marker *ngFor="let markerPosition of markerPositions"
+                [position]="markerPosition" [options]="markerOptions"></map-marker>
+  </google-map>
+</section>

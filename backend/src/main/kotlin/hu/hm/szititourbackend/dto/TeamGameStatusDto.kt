@@ -12,7 +12,8 @@ class TeamGameStatusDto(
     var placeStatuses: MutableList<PlaceStatusDto> = mutableListOf<PlaceStatusDto>(),
 
     val gameId: Int = 0,
-    val teamId: Int = 0
+    val teamId: Int = 0,
+    val teamName: String = ""
 )
 
 class PlaceStatusDto (

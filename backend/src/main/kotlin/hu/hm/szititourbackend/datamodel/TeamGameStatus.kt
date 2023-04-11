@@ -45,6 +45,7 @@ fun TeamGameStatus.convertToDto(): TeamGameStatusDto {
         updatedAt = this.updatedAt,
         gameId = this.game.id,
         teamId = this.team.id,
+        teamName = this.team.name,
         placeStatuses = this.placeStatuses.convertToDto(this.team, this.game)
     )
 }
