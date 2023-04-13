@@ -1,7 +1,17 @@
 <p>active-game admin works! {{gameData | async}}</p>
 <section class="map-container" *ngIf="apiLoaded | async">
   <google-map [center]="center" [zoom]="zoom" [width]="'100%'">
-    <map-marker *ngFor="let markerPosition of markerPositions"
-                [position]="markerPosition" [options]="markerOptions"></map-marker>
+
+    <ng-container >
+      <map-marker #marker="mapMarker" (mapClick)="openInfoWindow(marker, tmarker)" *ngFor="let tmarker of gameMarkers"
+                  [position]="tmarker.position" [options]="tmarker.option"></map-marker>
+
+      <map-info-window>
+        <p>{{selectedMarker?.infoPlace?.placeName ?? selectedMarker?.infoTeam?.teamName}}</p>
+        <p>{{selectedMarker?.infoTeam?.date | date:'yyyy/MM/dd, hh:mm'}}</p>
+        <p *ngFor="let team of selectedMarker?.infoPlace?.teams">{{team.teamName}} : {{team.reached | date:'hh:mm'}}</p>
+      </map-info-window>
+
+    </ng-container>
   </google-map>
 </section>

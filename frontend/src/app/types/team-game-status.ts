@@ -7,6 +7,9 @@ export type TeamGameStatus = {
   placeStatuses: PlaceStatusDto[]
   gameId: number
   teamId: number
+  teamName: string
+  lastLatitude: number
+  lastLongitude: number
 }
 
 export type PlaceStatusDto = {

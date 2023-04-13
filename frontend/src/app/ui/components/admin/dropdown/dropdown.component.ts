@@ -8,7 +8,7 @@ import {Place} from "../../../../types/place";
 })
 export class DropdownComponent {
 
-  @Input() place: Place = {id: -1, name: "TestPlace", img: "", gameId: -1, address: "", latitude: "", longitude: "", questions: []};
+  @Input() place: Place = {id: -1, name: "TestPlace", img: "", gameId: -1, address: "", latitude: 0, longitude: 0, questions: []};
   @Input() number!: number;
 
   open = false;

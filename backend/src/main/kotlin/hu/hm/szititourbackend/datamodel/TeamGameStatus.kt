@@ -46,7 +46,9 @@ fun TeamGameStatus.convertToDto(): TeamGameStatusDto {
         gameId = this.game.id,
         teamId = this.team.id,
         teamName = this.team.name,
-        placeStatuses = this.placeStatuses.convertToDto(this.team, this.game)
+        placeStatuses = this.placeStatuses.convertToDto(this.team, this.game),
+        lastLatitude = this.team.lastLatitude,
+        lastLongitude = this.team.lastLongitude
     )
 }
 

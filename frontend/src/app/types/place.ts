@@ -5,8 +5,8 @@ export type Place = {
   name: string,
   img?: string,
   address: string,
-  latitude: string,
-  longitude: string,
+  latitude: number,
+  longitude: number,
   questions: Question[],
   gameId: number
 }

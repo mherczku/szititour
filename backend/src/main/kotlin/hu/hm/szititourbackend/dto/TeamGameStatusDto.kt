@@ -13,7 +13,9 @@ class TeamGameStatusDto(
 
     val gameId: Int = 0,
     val teamId: Int = 0,
-    val teamName: String = ""
+    val teamName: String = "",
+    val lastLatitude: Double = 0.0,
+    val lastLongitude: Double = 0.0
 )
 
 class PlaceStatusDto (

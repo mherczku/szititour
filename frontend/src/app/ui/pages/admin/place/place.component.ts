@@ -23,8 +23,8 @@ export class PlaceComponent implements OnInit, OnDestroy {
     img: "",
     gameId: 0,
     address: "Helyszín címe",
-    latitude: "0",
-    longitude: "0",
+    latitude: 0,
+    longitude: 0,
     questions: []
   };
 
@@ -49,8 +49,8 @@ export class PlaceComponent implements OnInit, OnDestroy {
           img: "",
           gameId: gameId,
           address: "Helyszín címe",
-          latitude: "0",
-          longitude: "0",
+          latitude: 0,
+          longitude: 0,
           questions: []
         };
 

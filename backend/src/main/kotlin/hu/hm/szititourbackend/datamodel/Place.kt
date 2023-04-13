@@ -63,7 +63,7 @@ fun Place.convertToActiveNotReachedDto(): PlaceActiveDto {
     return PlaceActiveDto(
         id = this.id,
         selectable = false,
-        name = this.name,
+        name = "this.name",
         img = "",
         questions = mutableListOf()
     )
