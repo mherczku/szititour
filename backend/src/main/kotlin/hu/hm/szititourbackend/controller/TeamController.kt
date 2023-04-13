@@ -24,11 +24,8 @@ class TeamController @Autowired constructor(private val teamService: TeamService
 
     @GetMapping("/{id}")
     fun getTeamById(@PathVariable id: Int): ResponseEntity<TeamDto?> {
-        val team: Optional<Team> = teamService.getTeamById(id)
-        if (!team.isPresent) {
-            throw CustomException("Team not found", HttpStatus.NOT_FOUND)
-        }
-        return ResponseEntity(team.get().convertToDto(), HttpStatus.OK)
+        val team: Team = teamService.getTeamById(id)
+        return ResponseEntity(team.convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping

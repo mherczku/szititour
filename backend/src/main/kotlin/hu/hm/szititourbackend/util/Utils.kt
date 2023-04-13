@@ -94,7 +94,8 @@ object Utils {
 
             try {
                 Files.write(tempFile.toPath(), file.bytes)
-                ImageCompressor.compressImage(tempFile, newFile)
+                Files.write(newFile.toPath(), file.bytes)
+                //ImageCompressor.compressImage(tempFile, newFile)
                 tempFile.delete()
             } catch(ex: Exception) {
                 newFile.delete()
@@ -118,5 +119,4 @@ object Utils {
         return (password.length >= 8 && NUMBER.matcher(password).find() && AZLETTER.matcher(password)
             .find() && !password.contains(" "))
     }
-
 }

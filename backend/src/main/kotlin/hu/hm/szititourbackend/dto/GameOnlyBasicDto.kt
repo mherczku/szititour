@@ -1,5 +1,6 @@
 package hu.hm.szititourbackend.dto
 
+import hu.hm.szititourbackend.enum.UserApplicationStatus
 import java.sql.Timestamp
 import java.time.Instant
 
@@ -14,5 +15,8 @@ class GameOnlyBasicDto(
 
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
+
+    var userApplied: UserApplicationStatus = UserApplicationStatus.none,
+    var active: Boolean = false
 
     )

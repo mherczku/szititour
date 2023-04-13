@@ -1,0 +1,79 @@
+@import 'styles-variables';
+
+.btn {
+  @extend .text-size-base;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
+    &:hover {
+      background: $m-blue;
+    }
+  }
+}
+
+.btn-simple {
+  @extend .btn;
+
+
+  padding: 0.75rem 1rem;
+  background: $m-blue;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  color: white;
+  transition: all;
+
+  &:hover {
+    background: $m-green;
+  }
+}
+
+.btn-simple-red {
+  @extend .btn-simple;
+  background: #CD2A00;
+
+  &:hover {
+    background: #ed2f02;
+  }
+}
+.btn-simple-green {
+  @extend .btn-simple;
+  background: #00c407;
+
+  &:hover {
+    background: #0fbf16;
+  }
+}
+
+.btn-hover-bold-textChange {
+  $string: var(--btn-string);
+  @extend .btn;
+  color: $m-green;
+
+  &::before {
+    @extend .text-size-base;
+    content: attr(title);
+    display: block;
+    font-weight: 600;
+    overflow: hidden;
+    height: 0;
+    visibility: hidden;
+  }
+
+  &:hover {
+    font-weight: 600;
+  }
+}
+
+.btn-hover-bold {
+  @extend .btn;
+  color: $m-blue;
+
+  &:hover {
+    color: $m-blue;
+    font-weight: 600;
+  }
+}

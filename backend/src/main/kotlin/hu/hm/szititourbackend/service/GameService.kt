@@ -1,8 +1,6 @@
 package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.datamodel.Game
-import hu.hm.szititourbackend.datamodel.convertToBasicDto
-import hu.hm.szititourbackend.dto.GameOnlyBasicDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.GameRepository
 import hu.hm.szititourbackend.util.Utils
@@ -12,16 +10,15 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.sql.Timestamp
-import java.util.*
 
 @Service
 @Transactional
 class GameService @Autowired constructor(private val gameRepository: GameRepository) {
 
-    fun getAllAvailableGames(): MutableList<GameOnlyBasicDto> {
+    fun getAllAvailableGames(): MutableList<Game> {
         val games = gameRepository.findAll()
-        val filtered = games.filter { it.dateStart >= Timestamp(System.currentTimeMillis()) }
-        return filtered.toMutableList().convertToBasicDto()
+        val filtered = games.filter { it.dateEnd >= Timestamp(System.currentTimeMillis()) }
+        return filtered.toMutableList()
     }
 
     fun addGame(game: Game): Game {
@@ -46,8 +43,13 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
         return gameRepository.findAll()
     }
 
-    fun getGameById(id: Int): Optional<Game> {
-        return gameRepository.findById(id)
+    fun getGameById(id: Int): Game {
+        val game = gameRepository.findById(id)
+        if (game.isPresent) {
+            return game.get()
+        } else {
+            throw CustomException("Game not found", HttpStatus.NOT_FOUND)
+        }
     }
 
     fun updateGameWithImage(game: Game, file: MultipartFile): Game {
@@ -62,19 +64,20 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
     }
 
     fun updateGame(game: Game): Game {
-        val exist = gameRepository.existsById(game.id)
-        if (!exist) {
-            throw CustomException("Game not exist", HttpStatus.NOT_FOUND)
-        }
+        getGameById(game.id)
         game.updatedAt = Timestamp(System.currentTimeMillis())
         return gameRepository.save(game)
     }
 
     fun deleteGameById(id: Int) {
-        val game = gameRepository.findById(id)
-        if (game.isPresent) {
-            Utils.deleteImage(game.get().img)
-        }
+        val game = getGameById(id)
+        Utils.deleteImage(game.img)
         return gameRepository.deleteById(id)
+    }
+
+    fun changeActivation(gameId: Int, activation: Boolean): Game {
+        val game = getGameById(gameId)
+        game.active = activation
+        return gameRepository.save(game)
     }
 }

@@ -29,29 +29,24 @@ class SecurityController(private val teamService: TeamService, private val secur
         response: HttpServletResponse
     ): ResponseEntity<LoginResponse> {
         val verification = securityService.verifyToken(token)
-
-        val t = teamService.getTeamById(verification.teamId)
-        return if (t.isPresent) {
-            ResponseEntity(LoginResponse(true, "", "", t.get().convertToDto()), HttpStatus.OK)
-        } else {
-            throw CustomException("User not found", HttpStatus.UNAUTHORIZED)
+        try {
+            val t = teamService.getTeamById(verification.teamId)
+            return ResponseEntity(LoginResponse(true, "", "", t.convertToDto()), HttpStatus.OK)
+        } catch (e: CustomException) {
+            if (e.statusCode == HttpStatus.NOT_FOUND) {
+                throw CustomException("User not found", HttpStatus.UNAUTHORIZED)
+            } else {
+                throw e
+            }
         }
     }
 
     @PostMapping("login")
-    fun login(authentication: Authentication, response: HttpServletResponse): ResponseEntity<LoginResponse> {
-        val t = teamService.getTeamByEmail(email = authentication.name)
-
-        return if (t.isPresent) {
-            val team = t.get()
-            val token = securityService.generateToken(team = team)
-            response.addHeader(TOKEN_NAME, "Bearer $token")
-            ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
-
-        } else {
-            throw CustomException("User not found", HttpStatus.NOT_FOUND)
-        }
-
+    fun login(@RequestHeader("Email") email: String, authentication: Authentication, response: HttpServletResponse): ResponseEntity<LoginResponse> {
+        val team = teamService.getTeamByEmail(email = email)
+        val token = securityService.generateToken(team = team)
+        response.addHeader(TOKEN_NAME, "Bearer $token")
+        return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
     }
 
     @PostMapping("register")

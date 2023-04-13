@@ -3,7 +3,6 @@ package hu.hm.szititourbackend.service
 import hu.hm.szititourbackend.datamodel.Question
 import hu.hm.szititourbackend.dto.QuestionDto
 import hu.hm.szititourbackend.exception.CustomException
-import hu.hm.szititourbackend.repository.PlaceRepository
 import hu.hm.szititourbackend.repository.QuestionRepository
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,43 +10,38 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
-import java.util.*
 
 @Service
 @Transactional
 class QuestionService @Autowired constructor(
     private val questionRepository: QuestionRepository,
-    private val placeRepository: PlaceRepository
+    private val placeService: PlaceService
 ) {
 
-    fun addQuestionToPlaceWithImage(questionDto: QuestionDto, file: MultipartFile): Optional<Question> {
+    fun addQuestionToPlaceWithImage(questionDto: QuestionDto, file: MultipartFile): Question {
         var imagePath = ""
         return try {
             imagePath = Utils.saveImage(file, Utils.imageDirectoryQuestionsName)
             questionDto.img = imagePath
             val addedQuestion = addQuestionToPlace(questionDto)
-            Optional.of(addedQuestion.get())
+            addedQuestion
         } catch (e: Exception) {
             Utils.deleteImage(imagePath)
             throw e
         }
     }
 
-    fun addQuestionToPlace(questionDto: QuestionDto): Optional<Question> {
-        val placeOptional = placeRepository.findById(questionDto.placeId)
-        return if (placeOptional.isPresent) {
-            val newQuestion = Question(
-                place = placeOptional.get(),
-                type = questionDto.type,
-                img = questionDto.img,
-                name = questionDto.name,
-                riddle = questionDto.riddle,
-                answers = mutableListOf()
-            )
-            Optional.of(questionRepository.save(newQuestion))
-        } else {
-            Optional.empty()
-        }
+    fun addQuestionToPlace(questionDto: QuestionDto): Question {
+        val place = placeService.getPlaceById(questionDto.placeId)
+        val newQuestion = Question(
+            place = place,
+            type = questionDto.type,
+            img = questionDto.img,
+            name = questionDto.name,
+            riddle = questionDto.riddle,
+            answers = mutableListOf()
+        )
+        return questionRepository.save(newQuestion)
     }
 
     fun addQuestion(question: Question): Question {
@@ -58,8 +52,13 @@ class QuestionService @Autowired constructor(
         return questionRepository.findAll()
     }
 
-    fun getQuestionById(id: Int): Optional<Question> {
-        return questionRepository.findById(id)
+    fun getQuestionById(id: Int): Question {
+        val question = questionRepository.findById(id)
+        if (question.isPresent) {
+            return question.get()
+        } else {
+            throw CustomException("Question not found", HttpStatus.NOT_FOUND)
+        }
     }
 
     fun updateQuestionWithImage(questionDto: QuestionDto, file: MultipartFile): Question {
@@ -76,11 +75,7 @@ class QuestionService @Autowired constructor(
     }
 
     fun updateQuestion(questionDto: QuestionDto): Question {
-        val optional = questionRepository.findById(questionDto.id)
-        if (!optional.isPresent) {
-            throw CustomException("Question not exist", HttpStatus.NOT_FOUND)
-        }
-        val question = optional.get()
+        val question = getQuestionById(questionDto.id)
         question.type = questionDto.type
         question.img = questionDto.img
         question.name = questionDto.name
@@ -89,10 +84,8 @@ class QuestionService @Autowired constructor(
     }
 
     fun deleteQuestionById(id: Int) {
-        val question = questionRepository.findById(id)
-        if (question.isPresent) {
-            Utils.deleteImage(question.get().img)
-        }
+        val question = getQuestionById(id)
+        Utils.deleteImage(question.img)
         return questionRepository.deleteById(id)
     }
 }

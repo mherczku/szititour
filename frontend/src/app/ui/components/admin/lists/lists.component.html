@@ -1,0 +1,37 @@
+<div *ngIf="type === 'applications'" class="flex flex-col gap-3 relative bg-white p-5 rounded shadow w-full max-h-[80vh]">
+  <p class="text-size-lg text-center w-full font-bold mb-6">Csapatok</p>
+  <div class="overflow-y-auto h-fit">
+    <div *ngFor="let application of applications"
+         class="flex justify-between mobile:flex-col gap-10 p-5 pr-10 hover:border-amber-600 rounded border-1 border-transparent shadow items-center"
+         [ngClass]="[application.accepted === true ? 'bg-green-200' : '', application.accepted === false ? 'bg-red-200' : '']">
+
+      <div class="flex w-fit gap-[10%] items-center">
+        <img class="max-w-[50px] aspect-square rounded-[100%] object-cover max-h-[50px]"
+             src="../../../../../assets/img/team-placeholder.jpg" alt="{{application.teamName}}">
+        <p class="text-size-base font-bold whitespace-nowrap">{{application.teamName}}</p>
+      </div>
+
+      <div class="flex h-full w-fit gap-[10%] items-center">
+        <app-buttons [isDisabledProgress]="reviewing" [isDisabledBlocked]="application.accepted === false" (onClicked)="reviewApplication(application, false)" [ngClass]="application.accepted === false ? '' : 'hover:opacity-80'" classes="w-[3rem]" type="icon"
+                     iconSrc="assets/svg/remove.svg"></app-buttons>
+        <app-buttons [isDisabledProgress]="reviewing" [isDisabledBlocked]="application.accepted === true" (onClicked)="reviewApplication(application, true)" [ngClass]="application.accepted === true ? '' : 'hover:opacity-80'" classes="w-[3rem]" type="icon"
+                     iconSrc="assets/svg/accept.svg"></app-buttons>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="type === 'places'" class="flex flex-col gap-3 relative bg-white p-5 h-[80vh] h-full rounded shadow w-full">
+  <p class="text-size-lg text-center w-full font-bold mb-6">Helyszínek</p>
+
+  <div class="h-fit overflow-y-auto">
+    <app-dropdown *ngFor="let place of places; let index = index" [number]="index + 1" [place]="place"></app-dropdown>
+    <p *ngIf="places.length === 0" class="text-size-base bold text-center">No places yet</p>
+  </div>
+
+  <div class="absolute z-10 w-[3rem] h-[3rem] text-size-base right-10 bottom-10">
+    <app-buttons routerLink="/admin/place/{{gameIdForPlacesList}}/new" classes="hover:scale-110 active:opacity-70 transition" type="icon" iconSrc="assets/svg/add.svg"></app-buttons>
+  </div>
+
+</div>

@@ -2,6 +2,7 @@ package hu.hm.szititourbackend.datamodel
 
 import hu.hm.szititourbackend.dto.PlaceActiveDto
 import hu.hm.szititourbackend.dto.PlaceDto
+import hu.hm.szititourbackend.dto.TeamGameStatusDto
 import javax.persistence.*
 
 @Entity
@@ -14,17 +15,18 @@ class Place(
     var name: String = "",
     var img: String = "",
     var address: String = "",
-    val latitude: String = "",
-    val longitude: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
 
     @OneToMany(mappedBy = "place", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val questions: MutableList<Question> = mutableListOf(),
-    // 0. question is the riddle to the next place
+    // last question is the riddle to the next place
 
     @ManyToOne
     val game: Game = Game()
 
 )
+
 
 fun Place.convertToDto(): PlaceDto {
     return PlaceDto(
@@ -49,17 +51,32 @@ fun MutableList<Place>.convertToDto(): MutableList<PlaceDto> {
 
 fun Place.convertToActiveDto(): PlaceActiveDto {
     return PlaceActiveDto(
-        this.id,
-        this.name,
-        this.img,
-        this.questions.convertToDtoNoAnswers()
+        id = this.id,
+        selectable = true,
+        name = this.name,
+        img = this.img,
+        questions = this.questions.convertToDtoNoAnswers()
     )
 }
 
-fun MutableList<Place>.convertToActiveDto(): MutableList<PlaceActiveDto> {
+fun Place.convertToActiveNotReachedDto(): PlaceActiveDto {
+    return PlaceActiveDto(
+        id = this.id,
+        selectable = false,
+        name = "this.name",
+        img = "",
+        questions = mutableListOf()
+    )
+}
+
+fun MutableList<Place>.convertToActiveDto(status: TeamGameStatusDto): MutableList<PlaceActiveDto> {
     val dtos = mutableListOf<PlaceActiveDto>()
-    this.forEach {
-        dtos.add(it.convertToActiveDto())
+    this.forEach { place ->
+        if (status.placeStatuses.find { it.placeId == place.id }?.reached == true) {
+            dtos.add(place.convertToActiveDto())
+        } else {
+            dtos.add(place.convertToActiveNotReachedDto())
+        }
     }
     return dtos
 }

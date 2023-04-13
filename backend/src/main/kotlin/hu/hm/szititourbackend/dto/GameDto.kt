@@ -11,6 +11,7 @@ class GameDto(
     val dateStart: Timestamp = Timestamp(Instant.now().epochSecond),
     val dateEnd: Timestamp = Timestamp(Instant.now().epochSecond),
     val img: String = "",
+    val active: Boolean = false,
 
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),

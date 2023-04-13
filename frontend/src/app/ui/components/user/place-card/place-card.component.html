@@ -1,0 +1,5 @@
+<div class="place-card" [ngClass]="{'selected': selected,'selectable' : place.selectable}">
+  <p class="text-size-base" [ngClass]="{'bold': place.selectable}"> Helyszín {{index+1}}</p>
+
+  <img *ngIf="place.selectable && place.img" [src]="place.img" alt="">
+</div>

@@ -1,7 +1,7 @@
-import { QuestionTypePipe } from './question-type.pipe';
+import { QuestionTypePipe } from "./question-type.pipe";
 
-describe('QuestionTypePipe', () => {
-  it('create an instance', () => {
+describe("QuestionTypePipe", () => {
+  it("create an instance", () => {
     const pipe = new QuestionTypePipe();
     expect(pipe).toBeTruthy();
   });

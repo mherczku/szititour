@@ -1,0 +1,30 @@
+<div class="relative bg-white p-5 rounded overflow-y-auto max-h-[80vh] flex-col gap-2 flex">
+  <p class="text-size-h3 text-center w-full font-bold mb-6">{{this.isEdit ? "Kérdés szerkesztése" : "Kérdés létrehozása"}}</p>
+  <label class="text-size-base">Kérdés:</label>
+  <input [(ngModel)]="question.name" type="text" class="simpleInput">
+  <div class="flex gap-2">
+    <label class="text-size-base">Rejtvény?:</label>
+    <input [checked]="question.riddle" (change)="question.riddle = !question.riddle" type="checkbox">
+  </div>
+  <div class="flex gap-2">
+    <label class="text-size-base">Kérdés típusa:</label>
+    <select [(ngModel)]="question.type">
+      <option value="shortText">Rövid szöveg</option>
+      <option value="longText">Hosszú szöveg</option>
+      <option value="number">Szám</option>
+      <option value="imgOnly">Kép</option>
+      <option value="year">Évszám</option>
+    </select>
+  </div>
+  <div class="flex gap-2">
+    <label class="text-size-base">Kép:</label>
+    <div class="input_container">
+      <input class="simpleFileInput text-size-min" #fileInput type="file" accept="image/png, image/jpeg" (change)="setFile($event)">
+    </div>
+  </div>
+
+  <div class="w-full flex justify-between">
+    <button class="btn-simple-red" (click)="delete()" [disabled]="!isEdit || deleting">Törlés</button>
+    <button [disabled]="saving" (click)="save()">{{this.isEdit ? 'Mentés' : 'Létrehozás'}}</button>
+  </div>
+</div>

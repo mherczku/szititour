@@ -1,29 +1,29 @@
-import {Pipe, PipeTransform} from '@angular/core';
+import {Pipe, PipeTransform} from "@angular/core";
 
 @Pipe({
-  name: 'questionType'
+  name: "questionType"
 })
 export class QuestionTypePipe implements PipeTransform {
 
   transform(value?: string): string {
     switch (value) {
       case "shortText":
-        return "Rövid szöveg"
+        return "Rövid szöveg";
 
       case "longText":
-        return "Hosszú szöveg"
+        return "Hosszú szöveg";
 
       case "number":
-        return "Szám"
+        return "Szám";
 
       case "imgOnly":
-        return "Kép"
+        return "Kép";
 
       case "year":
-        return "Évszám"
+        return "Évszám";
 
       default:
-        return ""
+        return "";
     }
   }
 

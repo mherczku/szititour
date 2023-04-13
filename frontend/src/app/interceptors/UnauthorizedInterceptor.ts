@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 import {
   HttpRequest,
   HttpHandler,
@@ -6,9 +6,9 @@ import {
   HttpInterceptor,
   HttpErrorResponse,
   HttpStatusCode
-} from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
-import { Router } from '@angular/router';
+} from "@angular/common/http";
+import { catchError, Observable, throwError } from "rxjs";
+import { Router } from "@angular/router";
 import {HotToastService} from "@ngneat/hot-toast";
 import {AuthService} from "../services/AuthService";
 
@@ -18,22 +18,19 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
   constructor(private router: Router, private toastService: HotToastService, private authService: AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    //const token = this.tokenService.getToken()
-
-    //if(!token) return next.handle(request)
 
     return next.handle(request).pipe(
       catchError((err: any) => {
         if(err instanceof HttpErrorResponse) {
           if(err.status === HttpStatusCode.Unauthorized) {
             if(this.authService.getToken() !== null) {
-              this.toastService.error("Unauthorized request")
+              this.toastService.error("Unauthorized request");
             }
-            this.authService.logout()
+            this.authService.logout();
           }
         }
         return throwError(() => err);
       })
-    )
+    );
   }
 }

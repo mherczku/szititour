@@ -53,6 +53,7 @@ class SecurityConfig2(
             .antMatchers("/swagger-ui/**").permitAll()
             .antMatchers("/v2/api-docs").permitAll()
             .antMatchers("/swagger-resources/**").permitAll()
+            //.antMatchers("/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .oauth2ResourceServer { httpSecurityOAuth2ResourceServerConfigurer: OAuth2ResourceServerConfigurer<HttpSecurity?> ->
@@ -106,7 +107,7 @@ class SecurityConfig2(
         corsConfiguration.allowedOrigins = allowedOrigins
         corsConfiguration.allowedHeaders = listOf(
             "Origin", "Access-Control-Allow-Origin", "Content-Type",
-            "Accept", "Authorization", "Origin, Accept", "X-Requested-With",
+            "Accept", "Authorization", "Email", "Origin, Accept", "X-Requested-With",
             "Access-Control-Request-Method", "Access-Control-Request-Headers"
         )
         corsConfiguration.exposedHeaders = listOf(

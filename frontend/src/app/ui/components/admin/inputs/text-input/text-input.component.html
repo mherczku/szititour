@@ -1,0 +1,21 @@
+<div [ngSwitch]="type">
+
+  <div *ngSwitchCase="'label'" class="relative flex flex-col gap-2 {{classes}}">
+    <label class="text-size-base">{{label}}</label>
+    <input [ngModel]="value" (ngModelChange)="valueChange.emit($event)"
+           class="neumorphism-2 border-1 focus:border-green-500 hover:border-green-500 bg-transparent text-size-base outline-0 w-full"
+           [type]="inputType" [placeholder]="placeholder">
+  </div>
+
+  <div *ngSwitchCase="'editable'" class="relative place-items-center flex gap-3 {{classes}}">
+    <label class="text-size-base">{{label}}</label>
+    <input *ngIf="editing" [ngModel]="value" (ngModelChange)="valueChange.emit($event)"
+           class="neumorphism-2 border-1 focus:border-green-500 hover:border-green-500 bg-transparent text-size-base outline-0 w-full"
+           [type]="inputType" [placeholder]="placeholder">
+    <p *ngIf="!editing" class="text-size-base w-full">{{value}}</p>
+    <app-buttons classes="min-w-[20px]" *ngIf="!editing" (onClicked)="editing = !editing" iconSrc="assets/svg/edit.svg" type="icon"></app-buttons>
+    <app-buttons classes="min-w-[30px]" *ngIf="editing" (onClicked)="editing = !editing" iconSrc="assets/svg/tick.svg" type="icon"></app-buttons>
+
+  </div>
+
+</div>

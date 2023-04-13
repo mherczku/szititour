@@ -1,0 +1,23 @@
+.holder-places {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 20px 30px;
+  scroll-behavior: smooth;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.holder-questions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
+  grid-gap: 15px;
+  place-content: center;
+}
+.section-btn {
+  margin: 1.5rem auto;
+  display: flex;
+  justify-content: center;
+}

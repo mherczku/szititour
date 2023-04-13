@@ -16,19 +16,16 @@ import java.util.*
 @RequestMapping("/answers")
 class AnswerController @Autowired constructor(private val answerService: AnswerService) {
 
-    @PostMapping()
+    /*@PostMapping()
     fun addAnswer(@RequestBody answer: Answer): ResponseEntity<AnswerDto> {
-        val newAnswer = answerService.addAnswer(answer)
+        val newAnswer = answerService.createAnswer(answer)
         return ResponseEntity(newAnswer.convertToDto(), HttpStatus.CREATED)
-    }
+    }*/
 
     @GetMapping("/{id}")
     fun getAnswerById(@PathVariable id: Int): ResponseEntity<AnswerDto?> {
-        val answer: Optional<Answer> = answerService.getAnswerById(id)
-        if (!answer.isPresent) {
-            throw CustomException("Answer not found", HttpStatus.NOT_FOUND)
-        }
-        return ResponseEntity(answer.get().convertToDto(), HttpStatus.OK)
+        val answer: Answer = answerService.getAnswerById(id)
+        return ResponseEntity(answer.convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping
