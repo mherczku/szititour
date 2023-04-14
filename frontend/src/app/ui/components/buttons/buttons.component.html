@@ -9,8 +9,8 @@
 
   <div *ngSwitchCase="'delete'" class="{{classes}} h-[30px] w-[30px] relative z-10 items-center flex text-size-base deleteButton"
        [ngClass]="isDisabledBlocked ? 'opacity-60 cursor-not-allowed' : isDisabledProgress ? 'opacity-60 cursor-progress' : 'cursor-pointer'">
-    <img class="absolute hover bottom-0 left-0" src="../../../../assets/svg/delete-red.svg" alt="Delete Icon">
-    <img class="absolute noHover bottom-0 left-0" src="../../../../assets/svg/delete.svg" alt="Delete Icon">
+    <img class="absolute hover bottom-0 left-0" src="assets/svg/delete-red.svg" alt="Delete Icon">
+    <img class="absolute noHover bottom-0 left-0" src="assets/svg/delete.svg" alt="Delete Icon">
   </div>
 
   <div *ngSwitchCase="'icon'" class="{{classes}} h-full items-center flex text-size-base"

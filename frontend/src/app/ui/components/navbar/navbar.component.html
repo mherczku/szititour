@@ -2,7 +2,7 @@
   <div class="relative flex flex-row items-center gap-5 mobile:gap-3">
 
     <img class="w-[4rem] tablet:w-[4rem] mobile:w-[3rem] cursor-pointer" routerLink="/home"
-         src="../../../../assets/svg/szititour.svg" alt="Logo">
+         src="assets/svg/szititour.svg" alt="Logo">
     <p routerLink="/user/home" class="text-size-lg">{{(team | async)?.role ==='ROLE_ADMIN' ? 'Szititour Admin' : 'Szititour'}}</p>
   </div>
 
