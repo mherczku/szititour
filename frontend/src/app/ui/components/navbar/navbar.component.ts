@@ -1,13 +1,24 @@
 import { Component, OnInit } from "@angular/core";
 import {Store} from "@ngrx/store";
-import {AuthState} from "../../../store/states/auth-state";
 import {AuthService} from "../../../services/AuthService";
 import {selectIsLoggedIn, selectLoggedInTeam} from "../../../store/selectors/auth.selector";
+import {FormsModule} from "@angular/forms";
+import {AsyncPipe, NgClass, NgIf} from "@angular/common";
+import {async} from "rxjs";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: "app-navbar",
   templateUrl: "./navbar.component.html",
-  styleUrls: ["./navbar.component.css"]
+  styleUrls: ["./navbar.component.css"],
+  imports: [
+    FormsModule,
+    NgClass,
+    NgIf,
+    RouterLink,
+    AsyncPipe
+  ],
+  standalone: true
 })
 export class NavbarComponent implements OnInit {
 
@@ -37,4 +48,5 @@ export class NavbarComponent implements OnInit {
   logout() {
     this.authService.logout();
   }
+
 }

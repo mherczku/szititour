@@ -4,12 +4,26 @@ import {HotToastService} from "@ngneat/hot-toast";
 import {AdminService} from "../../../../../services/AdminService";
 import {Subject, Subscription, take, takeUntil} from "rxjs";
 import {AutoDestroy} from "../../../../../decorators/autodestroy.decorator";
+import {FormsModule} from "@angular/forms";
+import {RouterLink} from "@angular/router";
+import {DatePipe, NgIf} from "@angular/common";
+import {ImgSrcModule} from "../../../../../pipes/img-src/img-src.module";
+import {ButtonsComponent} from "../../../buttons/buttons.component";
 
 
 @Component({
   selector: "app-gamecard",
   templateUrl: "./gamecard.component.html",
-  styleUrls: ["./gamecard.component.css"]
+  styleUrls: ["./gamecard.component.css"],
+  imports: [
+    FormsModule,
+    RouterLink,
+    DatePipe,
+    ImgSrcModule,
+    ButtonsComponent,
+    NgIf
+  ],
+  standalone: true
 })
 export class GamecardComponent {
 

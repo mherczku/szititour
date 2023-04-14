@@ -4,18 +4,31 @@ import {AdminService} from "../../../../services/AdminService";
 import {Subscription} from "rxjs";
 import {ModalService} from "../../../../services/ModalService";
 import {EditGameComponent} from "../../../components/admin/edit-game/edit-game.component";
+import {ButtonsComponent} from "../../../components/buttons/buttons.component";
+import {GamecardComponent} from "../../../components/admin/cards/gamecard/gamecard.component";
+import {ModalModule} from "../../../components/admin/modal/modal.module";
+import {ListsComponent} from "../../../components/admin/lists/lists.component";
+import {NgForOf} from "@angular/common";
 
 
 @Component({
   selector: "app-games",
   templateUrl: "./games.component.html",
   styleUrls: ["./games.component.css"],
+  standalone: true,
   styles: [`
     :host {
       display: flex;
       flex-grow: 1;
     }
   `],
+  imports: [
+    ButtonsComponent,
+    GamecardComponent,
+    ModalModule,
+    ListsComponent,
+    NgForOf
+  ]
 })
 export class GamesComponent implements OnInit, OnDestroy {
   games: Game[] = [];

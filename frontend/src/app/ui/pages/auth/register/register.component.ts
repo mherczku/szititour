@@ -2,14 +2,19 @@ import {Component, OnDestroy} from "@angular/core";
 import {HotToastService} from "@ngneat/hot-toast";
 import {AuthService} from "../../../../services/AuthService";
 import {Subscription} from "rxjs";
-import {Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Router, RouterLink} from "@angular/router";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {confirmPassword} from "../../../../validators/same-pass.validator";
 
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.css"]
+  styleUrls: ["./register.component.css"],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink
+  ],
+  standalone: true
 })
 export class RegisterComponent implements OnDestroy {
   subscriptionRegister?: Subscription;

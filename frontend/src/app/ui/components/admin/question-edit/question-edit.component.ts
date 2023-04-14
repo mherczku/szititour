@@ -14,11 +14,16 @@ import {QuestionType} from "../../../../enums/question-type";
 import {Subscription} from "rxjs";
 import {AdminService} from "../../../../services/AdminService";
 import {HotToastService} from "@ngneat/hot-toast";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: "app-question-edit",
   templateUrl: "./question-edit.component.html",
-  styleUrls: ["./question-edit.component.sass"]
+  styleUrls: ["./question-edit.component.sass"],
+  imports: [
+    FormsModule
+  ],
+  standalone: true
 })
 export class QuestionEditComponent implements OnChanges, OnDestroy {
 

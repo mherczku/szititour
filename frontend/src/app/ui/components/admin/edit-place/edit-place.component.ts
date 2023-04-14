@@ -6,11 +6,22 @@ import {HotToastService} from "@ngneat/hot-toast";
 import {Router} from "@angular/router";
 import {Question} from "../../../../types/question";
 import {QuestionType} from "../../../../enums/question-type";
+import {ButtonsComponent} from "../../buttons/buttons.component";
+import {QuestionModule} from "../question/question.module";
+import {ModalModule} from "../modal/modal.module";
+import {QuestionEditModule} from "../question-edit/question-edit.module";
 
 @Component({
   selector: "app-edit-place",
   templateUrl: "./edit-place.component.html",
-  styleUrls: ["./edit-place.component.css"]
+  styleUrls: ["./edit-place.component.css"],
+  imports: [
+    ButtonsComponent,
+    QuestionModule,
+    ModalModule,
+    QuestionEditModule
+  ],
+  standalone: true
 })
 export class EditPlaceComponent implements OnInit, OnDestroy {
   @Input() isEdit = false;

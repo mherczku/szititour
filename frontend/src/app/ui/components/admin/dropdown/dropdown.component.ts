@@ -1,10 +1,23 @@
 import {Component, Input} from "@angular/core";
 import {Place} from "../../../../types/place";
+import {ImgSrcModule} from "../../../../pipes/img-src/img-src.module";
+import {ButtonsComponent} from "../../buttons/buttons.component";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: "app-dropdown",
   templateUrl: "./dropdown.component.html",
-  styleUrls: ["./dropdown.component.css"]
+  styleUrls: ["./dropdown.component.css"],
+  imports: [
+    ImgSrcModule,
+    ButtonsComponent,
+    NgIf,
+    NgClass,
+    RouterLink,
+    NgForOf
+  ],
+  standalone: true
 })
 export class DropdownComponent {
 

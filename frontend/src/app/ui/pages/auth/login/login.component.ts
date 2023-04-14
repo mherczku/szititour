@@ -2,14 +2,20 @@ import {Component, OnDestroy} from "@angular/core";
 import {AuthService} from "../../../../services/AuthService";
 import {UserService} from "../../../../services/UserService";
 import {NetworkResponse} from "../../../../types/network-response";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {HotToastService} from "@ngneat/hot-toast";
 import {Subscription} from "rxjs";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.css"]
+  styleUrls: ["./login.component.css"],
+  imports: [
+    FormsModule,
+    RouterLink
+  ],
+  standalone: true
 })
 export class LoginComponent implements OnDestroy {
   email = "";

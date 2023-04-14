@@ -1,9 +1,16 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {NgClass, NgSwitch, NgSwitchCase} from "@angular/common";
 
 @Component({
   selector: "app-buttons",
   templateUrl: "./buttons.component.html",
-  styleUrls: ["./buttons.component.scss"]
+  styleUrls: ["./buttons.component.scss"],
+  imports: [
+    NgClass,
+    NgSwitch,
+    NgSwitchCase
+  ],
+  standalone: true
 })
 export class ButtonsComponent {
 

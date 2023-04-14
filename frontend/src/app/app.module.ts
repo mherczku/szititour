@@ -2,7 +2,6 @@ import {APP_INITIALIZER, NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {AppComponent} from "./app.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {NavbarModule} from "./ui/components/navbar/navbar.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptors/AuthInterceptor";
 import {AppRoutingModule} from "./app-routing.module";
@@ -17,6 +16,7 @@ import {Team} from "./types/team";
 import {Modal2Component} from "./ui/components/modal2/modal2.component";
 import {HostDirective} from "./directives/hostDirective";
 import {GameStateReducer} from "./store/reducers/game-status.reducer";
+import {NavbarComponent} from "./ui/components/navbar/navbar.component";
 
 @NgModule({
   declarations: [
@@ -28,12 +28,12 @@ import {GameStateReducer} from "./store/reducers/game-status.reducer";
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    NavbarModule,
     HttpClientModule,
     HotToastModule.forRoot(),
     StoreModule.forRoot({}, {}),
     StoreModule.forFeature("game", GameStateReducer),
     StoreModule.forFeature("auth", AuthReducer),
+    NavbarComponent,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

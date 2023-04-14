@@ -3,16 +3,29 @@ import {Place} from "src/app/types/place";
 import {Application} from "../../../../types/application";
 import {AdminService} from "../../../../services/AdminService";
 import {Subscription} from "rxjs";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {ButtonsComponent} from "../../buttons/buttons.component";
+import {DropdownComponent} from "../dropdown/dropdown.component";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: "app-lists",
   templateUrl: "./lists.component.html",
   styleUrls: ["./lists.component.css"],
+  standalone: true,
   styles: [`
     :host {
       width: 100%;
     }
   `],
+  imports: [
+    NgIf,
+    NgForOf,
+    NgClass,
+    ButtonsComponent,
+    DropdownComponent,
+    RouterLink
+  ]
 })
 export class ListsComponent implements OnDestroy {
   @Input() type: "applications" | "places" = "applications";

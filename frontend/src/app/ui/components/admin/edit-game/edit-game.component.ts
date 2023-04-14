@@ -15,11 +15,18 @@ import {Subscription} from "rxjs";
 import {AdminService} from "../../../../services/AdminService";
 import {HotToastService} from "@ngneat/hot-toast";
 import {ModalService} from "../../../../services/ModalService";
+import {DateInputComponent} from "../inputs/date-input/date-input.component";
+import {TextInputComponent} from "../inputs/text-input/text-input.component";
 
 @Component({
   selector: "app-edit-game",
   templateUrl: "./edit-game.component.html",
   styleUrls: ["./edit-game.component.css"],
+  standalone: true,
+  imports: [
+    DateInputComponent,
+    TextInputComponent
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditGameComponent implements OnChanges, OnDestroy {

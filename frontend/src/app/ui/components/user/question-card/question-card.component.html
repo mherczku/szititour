@@ -1,6 +1,6 @@
 <div class="holder-question">
 
-  <p class="text-size-base bold question-title">{{_question.id}} Kérdés {{index + 1}}</p>
+  <p class="text-size-base bold question-title">{{_question.riddle ? 'Rejtvény' : ''}} Kérdés {{index + 1}}</p>
   <div class="question-body" [ngClass]="{'differentAnswer' : !answerIsSame}">
     <p class="text-size-base">{{_question.name}}</p>
     <img class="object-contain max-h-[300px] aspect-video" *ngIf="_question.img" [src]="_question.img | imgSrc">

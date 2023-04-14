@@ -3,17 +3,24 @@ import {Place} from "../../../../types/place";
 import {ActivatedRoute} from "@angular/router";
 import {AdminService} from "../../../../services/AdminService";
 import {Subscription} from "rxjs";
+import {EditPlaceModule} from "../../../components/admin/edit-place/edit-place.module";
+import {EditPlaceComponent} from "../../../components/admin/edit-place/edit-place.component";
 
 @Component({
   selector: "app-place",
   templateUrl: "./place.component.html",
   styleUrls: ["./place.component.css"],
+  standalone: true,
   styles: [`
     :host {
       display: flex;
       flex-grow: 1;
     }
   `],
+  imports: [
+    EditPlaceModule,
+    EditPlaceComponent
+  ]
 })
 export class PlaceComponent implements OnInit, OnDestroy {
 

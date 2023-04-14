@@ -21,6 +21,7 @@
     flex-direction: column;
     gap: 10px;
     background: rgba(0, 255, 49, 0.11);
+    flex-grow: 1;
 
     &.differentAnswer {
       background: rgba(0, 133, 205, 0.11);
