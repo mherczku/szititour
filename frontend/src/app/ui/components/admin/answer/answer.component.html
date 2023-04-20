@@ -1,0 +1,26 @@
+<div class="answer">
+  <div class="topPart">
+    <p class="text-size-base">Válasz {{index + 1}}</p>
+    <p *ngIf="answer.questionDtoNoAnswers.riddle" class="bold text-size-base">Rejtvény</p>
+  </div>
+  <div class="bodyPart">
+    <p class="text-size-base">{{answer.questionDtoNoAnswers.name}}</p>
+    <div [ngSwitch]="answer.questionDtoNoAnswers.type">
+      <p class="text-size-base" *ngSwitchCase="QuestionType.shortText">{{answer.answerText}}</p>
+      <p class="text-size-base" *ngSwitchCase="QuestionType.longText">{{answer.answerText}}</p>
+      <p class="text-size-base" *ngSwitchCase="QuestionType.number">{{answer.answerNumber}}</p>
+      <p class="text-size-base" *ngSwitchCase="QuestionType.year">{{answer.answerNumber}}</p>
+      <img *ngSwitchCase="QuestionType.imgOnly" [src]="answer.img | imgSrc">
+    </div>
+    <p class="text-size-base">Értékelése: {{answer.correct ?? "Nem értékelt"}}</p>
+    <button class="btn-hover-bold" (click)="evaluateId = answer.id">Értékelés</button>
+  </div>
+
+</div>
+
+<div class="evaluate" *ngIf="evaluateId !== undefined" (click)="evaluateId = undefined">
+  <div class="evaluate-buttons" (click)="$event.stopPropagation()">
+    <button (click)="evaluateAnswer(false)" class="btn-simple-red">Helytelen</button>
+    <button (click)="evaluateAnswer(true)" class="btn-simple">Helyes</button>
+  </div>
+</div>

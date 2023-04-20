@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environmentSecrets = {
-  MAP_KEY: ""
+  MAP_KEY: "AIzaSyBhv70yih3MvbqTUJnS7dEaKcmgLMNC1WY"
 };
 
 /*

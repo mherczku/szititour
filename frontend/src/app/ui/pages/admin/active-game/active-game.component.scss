@@ -3,3 +3,19 @@
   overflow: hidden;
   margin: 20px;
 }
+
+.selectors {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem;
+}
+
+.answers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+}

@@ -1,0 +1,38 @@
+.answer {
+  border: 1px solid black;
+  border-radius: 8px;
+  width: fit-content;
+
+  .topPart {
+    background: rgba(0, 0, 0, 0.25);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .bodyPart {
+    padding: 10px;
+  }
+}
+
+.evaluate {
+  background: rgba(0, 0, 0, 0.25);
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .evaluate-buttons {
+    display: flex;
+    width: fit-content;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+  }
+}

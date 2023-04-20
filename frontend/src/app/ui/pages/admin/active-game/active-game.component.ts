@@ -7,18 +7,22 @@ import {ActivatedRoute} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {GoogleMapsModule, MapInfoWindow, MapMarker} from "@angular/google-maps";
 import {environmentSecrets} from "../../../../../environments/environment.secrets";
+import {FormsModule} from "@angular/forms";
+import {PlaceStatusDto, TeamGameStatus} from "../../../../types/team-game-status";
+import {AnswerComponent} from "../../../components/admin/answer/answer.component";
+import {Place} from "../../../../types/place";
 
 
 type GameMarker = {
   position: google.maps.LatLngLiteral
   option: google.maps.MarkerOptions
-  infoPlace?: {id: number, placeName: string, teams: { teamName: string, reached: Date }[] }
+  infoPlace?: { id: number, placeName: string, teams: { teamName: string, reached: Date }[] }
   infoTeam?: { teamName: string, date: Date }
 }
 
 @Component({
   standalone: true,
-  imports: [CommonModule, GoogleMapsModule],
+  imports: [CommonModule, GoogleMapsModule, FormsModule, AnswerComponent],
   templateUrl: "./active-game.component.html",
   styleUrls: ["./active-game.component.scss"]
 })
@@ -38,6 +42,10 @@ export class ActiveGameComponent implements OnInit {
   zoom = 11;
 
   selectedMarker?: GameMarker;
+  selectedTeamStatus?: TeamGameStatus;
+  selectedTeamPlace?: PlaceStatusDto;
+  private gameStatuses: TeamGameStatus[] = [];
+  private places: Place[] = []
 
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
 
@@ -65,6 +73,10 @@ export class ActiveGameComponent implements OnInit {
       const gameId: number = p["id"];
       if (gameId) {
         this.gameData = this.adminService.getGameWithStatusesById(gameId).pipe(tap(res => {
+          this.gameStatuses = res.teamGameStatuses;
+          this.places = res.places;
+          this.selectedTeamStatus = this.gameStatuses[0];
+          this.selectedTeamPlace = this.gameStatuses[0]?.placeStatuses[0];
           console.log("gameData:", res);
           this.processDataToMarkers(res);
         }));
@@ -73,18 +85,29 @@ export class ActiveGameComponent implements OnInit {
   }
 
   processDataToMarkers(gameData: GameWithStatuses) {
-    const placeMap: Map<number, {name: string, lat: number, lng: number, teams:{ teamName: string, reached: Date }[]}> = new Map();
+    const placeMap: Map<number, {
+      name: string,
+      lat: number,
+      lng: number,
+      teams: { teamName: string, reached: Date }[]
+    }> = new Map();
     this.gameMarkers = [];
     let placeN = 18.5;
-    const teams: { id: number; name: string; lat: number; lng: number; date: Date}[] = [];
+    const teams: { id: number; name: string; lat: number; lng: number; date: Date }[] = [];
     //const places = [];
 
     gameData.places.forEach(place => {
-      placeMap.set(place.id,{name: place.name, lat: 47.49, lng: placeN+=0.2, teams: []});
+      placeMap.set(place.id, {name: place.name, lat: 47.49, lng: placeN += 0.2, teams: []});
     });
 
     gameData.teamGameStatuses.forEach(teamStatus => {
-      teams.push({id: teamStatus.teamId, name: teamStatus.teamName, lat: teamStatus.lastLatitude, lng: teamStatus.lastLongitude, date: teamStatus.updatedAt});
+      teams.push({
+        id: teamStatus.teamId,
+        name: teamStatus.teamName,
+        lat: teamStatus.lastLatitude,
+        lng: teamStatus.lastLongitude,
+        date: teamStatus.updatedAt
+      });
 
       teamStatus.placeStatuses.forEach(ps => {
         placeMap.get(ps.placeId)?.teams.push({teamName: teamStatus.teamName, reached: ps.reachedAt});
@@ -115,7 +138,7 @@ export class ActiveGameComponent implements OnInit {
       });
     });
 
-    placeMap.forEach((place, id) =>{
+    placeMap.forEach((place, id) => {
       this.gameMarkers.push({
         position: {
           lat: place.lat,
@@ -135,8 +158,6 @@ export class ActiveGameComponent implements OnInit {
     console.log("markers: ", this.gameMarkers);
 
 
-
-
   }
 
   openInfoWindow(marker: MapMarker, tmarker: GameMarker) {
@@ -144,4 +165,16 @@ export class ActiveGameComponent implements OnInit {
     this.infoWindow.open(marker);
   }
 
+  selectTeamStatus(teamStatusId: string) {
+    this.selectedTeamStatus = this.gameStatuses.find(s => s.id === Number(teamStatusId));
+  }
+
+  selectTeamPlace(placeId: string) {
+    this.selectedTeamPlace = this.selectedTeamStatus?.placeStatuses?.find(p => p.placeId === Number(placeId));
+    console.log(this.selectedTeamPlace);
+  }
+
+  getPlaceName(placeId: number): string {
+    return this.places.find(p => p.id === placeId)?.name ?? "Ismeretlen";
+  }
 }
