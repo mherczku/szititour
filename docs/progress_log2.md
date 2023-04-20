@@ -28,6 +28,10 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
 
 
 #### **9-10. hét:**
+ - Backend: Válasz értékelése
+ - Frontend:
+    - Minden komponens standalone
+    - Admin - Aktív játék: Válaszok mutatása felhasználó / helyszín szerint, válaszok értékelése
 
 
 #### **11-12. hét:**
