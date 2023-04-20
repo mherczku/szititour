@@ -57,4 +57,10 @@ class AnswerService @Autowired constructor(private val answerRepository: AnswerR
         return answerRepository.deleteById(id)
     }
 
+    fun evaluateAnswer(id: Int, isCorrect: Boolean): Answer {
+        val answer = getAnswerById(id)
+        answer.correct = isCorrect
+        return answerRepository.save(answer)
+    }
+
 }

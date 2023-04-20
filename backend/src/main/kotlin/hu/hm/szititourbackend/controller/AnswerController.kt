@@ -22,6 +22,16 @@ class AnswerController @Autowired constructor(private val answerService: AnswerS
         return ResponseEntity(newAnswer.convertToDto(), HttpStatus.CREATED)
     }*/
 
+    @GetMapping("/{id}/correct")
+    fun markAsCorrect(@PathVariable id: Int): ResponseEntity<AnswerDto?> {
+        return ResponseEntity(answerService.evaluateAnswer(id,true).convertToDto(), HttpStatus.OK)
+    }
+
+    @GetMapping("/{id}/incorrect")
+    fun markAsIncorrect(@PathVariable id: Int): ResponseEntity<AnswerDto?> {
+        return ResponseEntity(answerService.evaluateAnswer(id,false).convertToDto(), HttpStatus.OK)
+    }
+
     @GetMapping("/{id}")
     fun getAnswerById(@PathVariable id: Int): ResponseEntity<AnswerDto?> {
         val answer: Answer = answerService.getAnswerById(id)
