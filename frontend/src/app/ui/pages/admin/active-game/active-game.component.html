@@ -29,6 +29,8 @@
 
 <section class="answers">
 
-  <app-answer [answer]="answer" [index]="i" *ngFor="let answer of selectedTeamPlace?.qanswers, let i = index"></app-answer>
+  <div>
+    <app-answer [answer]="answer" [index]="i" *ngFor="let answer of selectedTeamPlace?.qanswers, let i = index"></app-answer>
+  </div>
 
 </section>

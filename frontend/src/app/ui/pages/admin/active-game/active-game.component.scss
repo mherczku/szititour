@@ -18,4 +18,12 @@
   align-items: center;
   gap: 1rem;
 
+  div {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
+    gap: 1rem;
+    width: 100%;
+    place-content: center;
+  }
+
 }
