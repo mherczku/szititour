@@ -7,9 +7,13 @@ import {Router} from "@angular/router";
 import {Question} from "../../../../types/question";
 import {QuestionType} from "../../../../enums/question-type";
 import {ButtonsComponent} from "../../buttons/buttons.component";
-import {QuestionModule} from "../question/question.module";
 import {ModalModule} from "../modal/modal.module";
-import {QuestionEditModule} from "../question-edit/question-edit.module";
+import {TextInputComponent} from "../inputs/text-input/text-input.component";
+import {QuestionComponent} from "../question/question.component";
+import {QuestionEditComponent} from "../question-edit/question-edit.component";
+import {ImgSrcModule} from "../../../../pipes/img-src/img-src.module";
+import {NgForOf} from "@angular/common";
+import {myTrackBy} from "../../../../e-functions/extension-functions";
 
 @Component({
   selector: "app-edit-place",
@@ -17,9 +21,12 @@ import {QuestionEditModule} from "../question-edit/question-edit.module";
   styleUrls: ["./edit-place.component.css"],
   imports: [
     ButtonsComponent,
-    QuestionModule,
     ModalModule,
-    QuestionEditModule
+    TextInputComponent,
+    QuestionComponent,
+    QuestionEditComponent,
+    ImgSrcModule,
+    NgForOf
   ],
   standalone: true
 })
@@ -136,6 +143,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
          this.place.questions.push($event.question);
          break;
        case "delete":
+         // eslint-disable-next-line no-case-declarations
          const qDelete = this.place.questions.find(x => x.id === $event.question.id);
          if(qDelete) {
            const index = this.place.questions.indexOf(qDelete);
@@ -145,6 +153,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
          }
          break;
        case "update":
+         // eslint-disable-next-line no-case-declarations
          const qUpdate = this.place.questions.find(x => x.id === $event.question.id);
          if(qUpdate){
            const index = this.place.questions.indexOf(qUpdate);
@@ -161,4 +170,6 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
     this.subscriptionSave?.unsubscribe();
     this.subscriptionDelete?.unsubscribe();
   }
+
+  protected readonly myTrackBy = myTrackBy;
 }

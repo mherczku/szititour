@@ -37,7 +37,7 @@ export class ActiveGameComponent implements OnInit {
       const id = params["id"];
       if (id) {
         this.gameId = id;
-        this.activeGameService.loadTeamGameStatus(id);
+        //this.activeGameService.loadTeamGameStatus(id);
         this.activeGame$ = this.activeGameService.getActiveGameData(id).pipe(tap(data => {
           this.selectedPlace = data.places[0];
         }));

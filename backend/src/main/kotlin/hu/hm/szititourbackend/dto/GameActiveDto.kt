@@ -14,6 +14,7 @@ class GameActiveDto(
 
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
-    val places: MutableList<PlaceActiveDto> = mutableListOf()
+    val places: MutableList<PlaceActiveDto> = mutableListOf(),
+    val teamGameStatusDto: TeamGameStatusDto = TeamGameStatusDto()
 
     )

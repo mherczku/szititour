@@ -21,6 +21,8 @@ export type ActiveGame = {
   dateEnd: Date,
   img?: string,
   places: ActivePlace[],
+  teamGameStatusDto: TeamGameStatus
+
 }
 
 export type GameWithStatuses = {

@@ -2,13 +2,13 @@
   <google-map [center]="center" [zoom]="zoom" [width]="'100%'">
 
     <ng-container >
-      <map-marker #marker="mapMarker" (mapClick)="openInfoWindow(marker, tmarker)" *ngFor="let tmarker of gameMarkers"
+      <map-marker #marker="mapMarker" (mapClick)="openInfoWindow(marker, tmarker)" *ngFor="let tmarker of gameMarkers; trackBy: myTrackBy"
                   [position]="tmarker.position" [options]="tmarker.option"></map-marker>
 
       <map-info-window>
         <p>{{selectedMarker?.infoPlace?.placeName ?? selectedMarker?.infoTeam?.teamName}}</p>
         <p>{{selectedMarker?.infoTeam?.date | date:'yyyy/MM/dd, hh:mm'}}</p>
-        <p *ngFor="let team of selectedMarker?.infoPlace?.teams">{{team.teamName}} : {{team.reached | date:'hh:mm'}}</p>
+        <p *ngFor="let team of selectedMarker?.infoPlace?.teams; trackBy: myTrackBy">{{team.teamName}} : {{team.reached | date:'hh:mm'}}</p>
       </map-info-window>
 
     </ng-container>
@@ -18,19 +18,19 @@
 <section class="selectors">
   <select [ngModel]="selectedTeamStatus?.teamId ?? 'none'" (ngModelChange)="selectTeamStatus($event)"  name="teams">
     <option *ngIf="!selectedTeamStatus" value="none">Válassz</option>
-    <option *ngFor="let teamStatus of (gameData | async)?.teamGameStatuses" [value]="teamStatus.id">{{teamStatus.teamName}} csapat</option>
+    <option *ngFor="let teamStatus of (gameData | async)?.teamGameStatuses; trackBy: myTrackBy" [value]="teamStatus.id">{{teamStatus.teamName}} csapat</option>
   </select>
 
   <select [disabled]="!selectedTeamStatus" name="places" [ngModel]="selectedTeamPlace?.placeId ?? 'none'" (ngModelChange)="selectTeamPlace($event)">
     <option *ngIf="!selectedTeamPlace" value="none">{{selectedTeamStatus?.teamId ? 'Válassz helyszínt' : 'Válassz csapatot'}}</option>
-    <option *ngFor="let placeStatus of selectedTeamStatus?.placeStatuses" [value]="placeStatus.placeId">{{getPlaceName(placeStatus.placeId)}}</option>
+    <option *ngFor="let placeStatus of selectedTeamStatus?.placeStatuses; trackBy: myTrackBy" [value]="placeStatus.placeId">{{getPlaceName(placeStatus.placeId)}}</option>
   </select>
 </section>
 
 <section class="answers">
 
   <div>
-    <app-answer [answer]="answer" [index]="i" *ngFor="let answer of selectedTeamPlace?.qanswers, let i = index"></app-answer>
+    <app-answer [answer]="answer" [index]="i" *ngFor="let answer of selectedTeamPlace?.qanswers, let i = index; trackBy: myTrackBy"></app-answer>
   </div>
 
 </section>

@@ -49,7 +49,9 @@ class LoggedInService @Autowired constructor(
                     updatedAt = Timestamp(System.currentTimeMillis()),
                     placeStatuses = statuses
                 )
-                return teamGameStatusRepository.save(statusNew).convertToDto()
+                val savedStatus = teamGameStatusRepository.save(statusNew)
+                teamGameStatusRepository.flush()
+                return savedStatus.convertToDto()
             }
         }
     }

@@ -2,8 +2,6 @@ package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.Team
-import hu.hm.szititourbackend.datamodel.convertToDto
-import hu.hm.szititourbackend.dto.TeamDto
 import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
@@ -16,7 +14,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
-import java.util.*
 
 @Service
 @Transactional
@@ -78,7 +75,7 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
         return team.applications.find { it.game.id == gameId }
     }
 
-    fun updateGameStatus(gameId: Int, theTeam: Team) {
+    fun updateGameStatusAuto(gameId: Int, theTeam: Team) {
         val gameStatus = theTeam.teamGameStatuses.find { it.game.id == gameId }
         if(gameStatus !== null && gameStatus.game.active){
 

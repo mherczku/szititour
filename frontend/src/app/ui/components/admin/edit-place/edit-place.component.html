@@ -23,7 +23,7 @@
                      classes="aspect-square w-[30px] hover:scale-110 active:opacity-70 transition"
                      type="icon" iconSrc="assets/svg/add.svg"></app-buttons>
       </div>
-      <app-question [question]="question" [number]="index + 1" (onEditPressed)="openEditQuestionDialog(question)" *ngFor="let question of place.questions; let index = index"></app-question>
+      <app-question [question]="question" [number]="index + 1" (onEditPressed)="openEditQuestionDialog(question)" *ngFor="let question of place.questions; let index = index; trackBy: myTrackBy"></app-question>
     </div>
   </div>
 

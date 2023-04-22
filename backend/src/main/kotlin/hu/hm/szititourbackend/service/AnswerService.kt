@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.sql.Timestamp
 
 @Service
 @Transactional
@@ -60,7 +61,30 @@ class AnswerService @Autowired constructor(private val answerRepository: AnswerR
     fun evaluateAnswer(id: Int, isCorrect: Boolean): Answer {
         val answer = getAnswerById(id)
         answer.correct = isCorrect
+        if(answer.question.riddle) {
+            updatePlaceStatus(answer, isCorrect)
+        }
+        println("done reached: ${answer.team.teamGameStatuses.find { it.game.id == answer.question.place.game.id }?.placeStatuses?.find { it.placeId == answer.question.place.id }?.reached}")
         return answerRepository.save(answer)
     }
+
+    private fun updatePlaceStatus(answer: Answer, isCorrect: Boolean) {
+        println("update status")
+        val gameStatus = answer.team.teamGameStatuses.find { it.game.id == answer.question.place.game.id }
+        if(gameStatus != null) {
+            val placeStatus = gameStatus.placeStatuses[gameStatus.nextUnreachedPlaceIndex]
+            println("update status $placeStatus $gameStatus")
+            placeStatus.reached = isCorrect
+            if(isCorrect) {
+                gameStatus.nextUnreachedPlaceIndex = gameStatus.placeStatuses.indexOf(placeStatus) + 1
+            } else {
+                gameStatus.nextUnreachedPlaceIndex = gameStatus.placeStatuses.indexOf(placeStatus)
+            }
+            placeStatus.reachedAt = Timestamp(System.currentTimeMillis())
+            gameStatus.updatedAt = Timestamp(System.currentTimeMillis())
+        }
+
+    }
+
 
 }

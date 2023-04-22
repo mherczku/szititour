@@ -6,11 +6,12 @@ import {AdminActiveGameService} from "../../../../services/AdminActiveGameServic
 import {ActivatedRoute} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {GoogleMapsModule, MapInfoWindow, MapMarker} from "@angular/google-maps";
-import {environmentSecrets} from "../../../../../environments/environment.secrets";
 import {FormsModule} from "@angular/forms";
 import {PlaceStatusDto, TeamGameStatus} from "../../../../types/team-game-status";
 import {AnswerComponent} from "../../../components/admin/answer/answer.component";
 import {Place} from "../../../../types/place";
+import {myTrackBy} from "../../../../e-functions/extension-functions";
+import {environment} from "../../../../../environments/environment.secrets";
 
 
 type GameMarker = {
@@ -53,7 +54,7 @@ export class ActiveGameComponent implements OnInit {
     this.apiLoaded.next(false);
     const script = document.createElement("script");
     script.type = "text/javascript";
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${environmentSecrets.MAP_KEY}&callback=gmNoop`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.MAP_KEY}&callback=gmNoop`;
     script.onload = () => {
       this.apiLoaded.next(true);
     };
@@ -177,4 +178,6 @@ export class ActiveGameComponent implements OnInit {
   getPlaceName(placeId: number): string {
     return this.places.find(p => p.id === placeId)?.name ?? "Ismeretlen";
   }
+
+  protected readonly myTrackBy = myTrackBy;
 }

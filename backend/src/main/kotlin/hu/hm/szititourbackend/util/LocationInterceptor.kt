@@ -42,7 +42,7 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
                     team.lastLatitude = lat.toDouble()
                     team.lastLongitude = lon.toDouble()
                     teamService.updateTeam(team)
-                    teamService.updateGameStatus(gameId.toInt(), team)
+                    teamService.updateGameStatusAuto(gameId.toInt(), team)
                 } catch (e: CustomException) {
                     println("Error in Location INTERCEPTOR ${e.message}")
                 }

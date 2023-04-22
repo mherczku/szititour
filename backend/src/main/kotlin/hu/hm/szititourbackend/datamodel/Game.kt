@@ -68,6 +68,7 @@ fun Game.convertToStatusDto(): GameWithStatusesDto {
         teamGameStatuses = this.teamGameStatuses.convertToDto()
     )
 }
+
 fun MutableList<Game>.convertToDto(): MutableList<GameDto> {
     val dtos = mutableListOf<GameDto>()
     this.forEach {
@@ -92,7 +93,7 @@ fun Game.convertToBasicDto(teamId: Int): GameOnlyBasicDto {
         dateStart = this.dateStart,
         dateEnd = this.dateEnd,
         img = this.img,
-        createdAt= this.createdAt,
+        createdAt = this.createdAt,
         updatedAt = this.updatedAt,
         userApplied = userStatus,
         active = this.active
@@ -108,7 +109,7 @@ fun MutableList<Game>.convertToBasicDto(teamId: Int): MutableList<GameOnlyBasicD
 }
 
 fun Game.convertToActiveDto(statusDto: TeamGameStatusDto): GameActiveDto {
-   return GameActiveDto(
+    return GameActiveDto(
         this.id,
         this.title,
         this.dateStart,
@@ -116,6 +117,7 @@ fun Game.convertToActiveDto(statusDto: TeamGameStatusDto): GameActiveDto {
         this.img,
         this.createdAt,
         this.updatedAt,
-        this.places.convertToActiveDto(statusDto)
+        this.places.convertToActiveDto(statusDto),
+        teamGameStatusDto = statusDto
     )
 }
