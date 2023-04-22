@@ -11,7 +11,7 @@ import {PlaceStatusDto, TeamGameStatus} from "../../../../types/team-game-status
 import {AnswerComponent} from "../../../components/admin/answer/answer.component";
 import {Place} from "../../../../types/place";
 import {myTrackBy} from "../../../../e-functions/extension-functions";
-import {environment} from "../../../../../environments/environment.secrets";
+import {environment} from "../../../../../environments/environment";
 
 
 type GameMarker = {
@@ -46,7 +46,7 @@ export class ActiveGameComponent implements OnInit {
   selectedTeamStatus?: TeamGameStatus;
   selectedTeamPlace?: PlaceStatusDto;
   private gameStatuses: TeamGameStatus[] = [];
-  private places: Place[] = []
+  private places: Place[] = [];
 
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
 
@@ -77,6 +77,7 @@ export class ActiveGameComponent implements OnInit {
           this.gameStatuses = res.teamGameStatuses;
           this.places = res.places;
           this.selectedTeamStatus = this.gameStatuses[0];
+          console.log("loaded: ",this.selectedTeamStatus)
           this.selectedTeamPlace = this.gameStatuses[0]?.placeStatuses[0];
           console.log("gameData:", res);
           this.processDataToMarkers(res);
