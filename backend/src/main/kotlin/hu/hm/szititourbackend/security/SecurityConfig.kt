@@ -108,7 +108,7 @@ class SecurityConfig2(
         corsConfiguration.allowedHeaders = listOf(
             "Origin", "Access-Control-Allow-Origin", "Content-Type",
             "Accept", "Authorization", "Email", "Origin, Accept", "X-Requested-With",
-            "Access-Control-Request-Method", "Access-Control-Request-Headers"
+            "Access-Control-Request-Method", "Access-Control-Request-Headers", "longitude", "latitude", "gameid"
         )
         corsConfiguration.exposedHeaders = listOf(
             "Origin", "Content-Type", "Accept", "Authorization",

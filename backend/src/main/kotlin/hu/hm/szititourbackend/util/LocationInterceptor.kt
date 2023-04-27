@@ -9,6 +9,7 @@ import hu.hm.szititourbackend.util.LocationUtils.LATITUDE
 import hu.hm.szititourbackend.util.LocationUtils.LONGITUDE
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.HandlerInterceptor
+import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import javax.servlet.http.HttpServletRequest
@@ -26,7 +27,15 @@ class WebMvcConfig(private val teamService: TeamService, private val securitySer
 
 class LocationInterceptor(private val teamService: TeamService, private val securityService: SecurityService) :
     HandlerInterceptor {
-    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+
+
+    override fun postHandle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+        modelAndView: ModelAndView?
+    ) {
+        super.postHandle(request, response, handler, modelAndView)
 
         val token = request.getHeader(TOKEN_NAME)
         val lat = request.getHeader(LATITUDE)
@@ -41,7 +50,32 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
                     val team = teamService.getTeamById(verification.teamId)
                     team.lastLatitude = lat.toDouble()
                     team.lastLongitude = lon.toDouble()
-                    teamService.updateTeam(team)
+                    teamService.updateTeam(team, true)
+                    teamService.updateGameStatusAuto(gameId.toInt(), team)
+                } catch (e: CustomException) {
+                    println("Error in Location INTERCEPTOR ${e.message}")
+                }
+
+            }
+        }
+    }
+
+    /*override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+
+        val token = request.getHeader(TOKEN_NAME)
+        val lat = request.getHeader(LATITUDE)
+        val lon = request.getHeader(LONGITUDE)
+        val gameId = request.getHeader(GAMEID)
+
+        if (token !== null && lat !== null && lon !== null && gameId !== null) {
+            println("LOCATION INTERCEPT --> $lat - $lon - $gameId")
+            val verification = securityService.verifyToken(token)
+            if (verification.verified) {
+                try {
+                    val team = teamService.getTeamById(verification.teamId)
+                    team.lastLatitude = lat.toDouble()
+                    team.lastLongitude = lon.toDouble()
+                    teamService.updateTeam(team, true)
                     teamService.updateGameStatusAuto(gameId.toInt(), team)
                 } catch (e: CustomException) {
                     println("Error in Location INTERCEPTOR ${e.message}")
@@ -50,5 +84,5 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
             }
         }
         return super.preHandle(request, response, handler)
-    }
+    }*/
 }

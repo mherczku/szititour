@@ -59,8 +59,10 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
         }
     }
 
-    fun updateTeam(team: Team): Team {
-        team.role = ROLE_USER
+    fun updateTeam(team: Team, isAdminMethod: Boolean = false): Team {
+        if(!isAdminMethod) {
+            team.role = ROLE_USER
+        }
         team.updatedAt = Timestamp(System.currentTimeMillis())
         return teamRepository.save(team)
     }
