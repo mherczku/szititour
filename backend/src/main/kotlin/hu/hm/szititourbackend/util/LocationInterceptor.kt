@@ -43,7 +43,7 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
         val gameId = request.getHeader(GAMEID)
 
         if (token !== null && lat !== null && lon !== null && gameId !== null) {
-            println("LOCATION INTERCEPT --> $lat - $lon - $gameId")
+            println("LOCATION INTERCEPT --> $lat - $lon - $gameId - ${System.currentTimeMillis()}")
             val verification = securityService.verifyToken(token)
             if (verification.verified) {
                 try {
@@ -59,30 +59,4 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
             }
         }
     }
-
-    /*override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-
-        val token = request.getHeader(TOKEN_NAME)
-        val lat = request.getHeader(LATITUDE)
-        val lon = request.getHeader(LONGITUDE)
-        val gameId = request.getHeader(GAMEID)
-
-        if (token !== null && lat !== null && lon !== null && gameId !== null) {
-            println("LOCATION INTERCEPT --> $lat - $lon - $gameId")
-            val verification = securityService.verifyToken(token)
-            if (verification.verified) {
-                try {
-                    val team = teamService.getTeamById(verification.teamId)
-                    team.lastLatitude = lat.toDouble()
-                    team.lastLongitude = lon.toDouble()
-                    teamService.updateTeam(team, true)
-                    teamService.updateGameStatusAuto(gameId.toInt(), team)
-                } catch (e: CustomException) {
-                    println("Error in Location INTERCEPTOR ${e.message}")
-                }
-
-            }
-        }
-        return super.preHandle(request, response, handler)
-    }*/
 }

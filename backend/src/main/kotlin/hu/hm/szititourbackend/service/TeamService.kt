@@ -90,9 +90,9 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
                         placeStatus.reached = true
                         gameStatus.nextUnreachedPlaceIndex = gameStatus.nextUnreachedPlaceIndex + 1
                         placeStatus.reachedAt = Timestamp(System.currentTimeMillis())
-                        gameStatus.updatedAt = Timestamp(System.currentTimeMillis())
-                        this.statusRepository.save(gameStatus)
                     }
+                    gameStatus.updatedAt = Timestamp(System.currentTimeMillis())
+                    this.statusRepository.save(gameStatus)
                 }
             }
         }
