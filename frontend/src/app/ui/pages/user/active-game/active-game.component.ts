@@ -12,6 +12,7 @@ import {selectGameStateStatuses} from "../../../../store/selectors/game-state.se
 import {AnswerRequest, QuestionAnswer} from "../../../../types/requests/answer-request";
 import {AutoDestroy} from "../../../../decorators/autodestroy.decorator";
 import {loadGameState} from "../../../../store/actions/game-state.actions";
+import {LocationService} from "../../../../services/LocationService";
 
 @Component({
   selector: "app-active-game",
@@ -22,7 +23,7 @@ import {loadGameState} from "../../../../store/actions/game-state.actions";
 })
 export class ActiveGameComponent implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute, private activeGameService: ActiveGameService, private store: Store) {
+  constructor(private activatedRoute: ActivatedRoute, private activeGameService: ActiveGameService, private store: Store, private locationsService: LocationService) {
   }
 
   @AutoDestroy destroy$ = new Subject();
@@ -37,6 +38,7 @@ export class ActiveGameComponent implements OnInit {
       const id = params["id"];
       if (id) {
         this.gameId = id;
+        this.locationsService.trackMe(this.gameId);
         //this.activeGameService.loadTeamGameStatus(id);
         this.activeGame$ = this.activeGameService.getActiveGameData(id).pipe(tap(data => {
           this.selectedPlace = data.places[0];

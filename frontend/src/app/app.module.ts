@@ -17,6 +17,7 @@ import {Modal2Component} from "./ui/components/modal2/modal2.component";
 import {HostDirective} from "./directives/hostDirective";
 import {GameStateReducer} from "./store/reducers/game-status.reducer";
 import {NavbarComponent} from "./ui/components/navbar/navbar.component";
+import {LocationInterceptor} from "./interceptors/LocationInterceptor";
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import {NavbarComponent} from "./ui/components/navbar/navbar.component";
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LocationInterceptor, multi: true},
     {provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService, HotToastService], multi: true}
   ],
   exports: [
