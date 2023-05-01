@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from "@angular/core";
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import {Place} from "../../../../types/place";
 import {Subscription} from "rxjs";
 import {AdminService} from "../../../../services/AdminService";
@@ -40,7 +40,6 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
     this.place = value;
     this.setMarkerStartPosition();
   }
-  //@Output() placeChange: EventEmitter<Place> = new EventEmitter<Place>();
 
   @ViewChild("fileInput")
   fileInput?: ElementRef;
@@ -57,6 +56,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
   subscriptionSave?: Subscription;
   subscriptionDelete?: Subscription;
 
+  changed = false;
   markerStartPosition: { lat: number, lng: number } = {lat: 0, lng: 0};
 
   constructor(
@@ -83,6 +83,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
   }
 
   setFile(event: any) {
+    this.changed = true;
     this.file = event.target.files[0];
   }
 
@@ -93,6 +94,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
         next: value => {
           this.alert.success(`${value.name} helyszín sikeresen frissítve`);
           this.saving = false;
+          this.changed = false;
           this.place = value;
           this.fileInput?.nativeElement.value ? this.fileInput.nativeElement.value = null : undefined;
         },
@@ -106,6 +108,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
         next: value => {
           this.alert.success(`${value.name} helyszín sikeresen létrehozva`);
           this.saving = false;
+          this.changed = false;
           this.router.navigateByUrl(`/admin-place/${value.gameId}/${value.id}`);
         },
         error: _err => {
@@ -179,6 +182,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
 
   locationDataChanged($event: PlaceLocationData) {
     console.log("place data chagned")
+    this.changed = true;
     this.place.longitude = $event.lng;
     this.place.latitude = $event.lat;
     this.place.address = $event.address;
@@ -193,7 +197,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
 
   setMarkerStartPosition() {
     console.log(this.markerStartPosition)
-    this.markerStartPosition = { lat: this.place.latitude, lng: this.place.longitude };
+    this.markerStartPosition = {lat: this.place.latitude, lng: this.place.longitude};
     console.log(this.markerStartPosition, 2)
   }
 }
