@@ -56,16 +56,21 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
     fun updatePlace(
         @RequestParam("image") file: MultipartFile?,
         @RequestParam("placeId") placeId: String,
-        @RequestParam("currentImage") img: String,
+        @RequestParam("lat") lat: String,
+        @RequestParam("lng") lng: String,
+        @RequestParam("currentImage") img: String?,
         @RequestParam("name") name: String,
         @RequestParam("address") address: String,
+
     ): ResponseEntity<PlaceDto> {
 
         val placeDto = PlaceDto(
             id = placeId.toInt(),
             name = name,
             address = address,
-            img = img
+            img = img.toString(),
+            latitude = lat.toDouble(),
+            longitude = lng.toDouble()
         )
 
         val updatedPlace: Place = if (file != null) {

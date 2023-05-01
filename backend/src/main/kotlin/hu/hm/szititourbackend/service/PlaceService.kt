@@ -68,7 +68,7 @@ class PlaceService @Autowired constructor(
         return try {
             imagePath = Utils.saveImage(file, Utils.imageDirectoryPlacesName, placeDto.img)
             placeDto.img = imagePath
-            val updated = updatePlace(placeDto)
+            val updated = updatePlace(placeDto, true)
             updated
         } catch (e: Exception) {
             Utils.deleteImage(imagePath)
@@ -76,11 +76,15 @@ class PlaceService @Autowired constructor(
         }
     }
 
-    fun updatePlace(placeDto: PlaceDto): Place {
+    fun updatePlace(placeDto: PlaceDto, image: Boolean = false): Place {
         val place = getPlaceById(placeDto.id)
-        place.img = placeDto.img
+        if(image) {
+            place.img = placeDto.img
+        }
         place.address = placeDto.address
         place.name = placeDto.name
+        place.latitude = placeDto.latitude
+        place.longitude = placeDto.longitude
         return placeRepository.save(place)
     }
 

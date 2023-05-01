@@ -15,8 +15,8 @@ class Place(
     var name: String = "",
     var img: String = "",
     var address: String = "",
-    val latitude: Double = 0.0,
-    val longitude: Double = 0.0,
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0,
 
     @OneToMany(mappedBy = "place", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     val questions: MutableList<Question> = mutableListOf(),
