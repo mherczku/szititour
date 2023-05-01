@@ -34,8 +34,13 @@ import {PlaceLocationData, PlaceMapMarkerComponent} from "../place-map-marker/pl
 })
 export class EditPlaceComponent implements OnInit, OnDestroy {
   @Input() isEdit = false;
-  @Input() place!: Place;
-  @Output() placeChange: EventEmitter<Place> = new EventEmitter<Place>();
+  place!: Place;
+
+  @Input() set setPlace(value: Place) {
+    this.place = value;
+    this.setMarkerStartPosition();
+  }
+  //@Output() placeChange: EventEmitter<Place> = new EventEmitter<Place>();
 
   @ViewChild("fileInput")
   fileInput?: ElementRef;
@@ -187,6 +192,8 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
   protected readonly myTrackBy = myTrackBy;
 
   setMarkerStartPosition() {
+    console.log(this.markerStartPosition)
     this.markerStartPosition = { lat: this.place.latitude, lng: this.place.longitude };
+    console.log(this.markerStartPosition, 2)
   }
 }
