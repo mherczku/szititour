@@ -72,7 +72,11 @@ export class AuthService implements OnDestroy {
   }
 
   public authorizeMe(): Observable<NetworkLoginResponse> {
-    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`);
+    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`).pipe(tap(res => {
+      if(res.success) {
+        res.team.role === "ROLE_ADMIN" ? this.router.navigateByUrl("/admin") : this.router.navigateByUrl("/user");
+      }
+    }));
   }
 
   logout() {

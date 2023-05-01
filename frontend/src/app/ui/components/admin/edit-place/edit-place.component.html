@@ -4,7 +4,7 @@
       <p class="text-size-lg mb-5 bold">Helyszín információk:</p>
       <app-text-input classes="w-fit mb-5" [(value)]="place.name" [label]="'Neve:'"
                       type="editable"></app-text-input>
-      <app-text-input classes="w-fit mb-5" [(value)]="place.address" [label]="'Címe:'"
+      <app-text-input (click)="mapModalVisible = true" classes="w-fit mb-5" [(value)]="place.address" [label]="'Címe:'"
                       type="editable"></app-text-input>
       <div class="flex flex-col gap-2 mb-5 w-full">
         <label class="text-size-base">Kép:</label>
@@ -36,6 +36,11 @@
   <!-- Edit modal -->
   <app-modal [(isDisplayed)]="editModalVisible">
     <app-question-edit (onExit)="editQuestionDialogExited($event)" [isEdit]="isEditQuestion" [question]="selectedQuestion"></app-question-edit>
+  </app-modal>
+
+  <!--Map modal-->
+  <app-modal [(isDisplayed)]="mapModalVisible">
+    <app-place-map-marker [markerPosition]="markerStartPosition" [title]="place.name" (locationDataChanged)="locationDataChanged($event)"></app-place-map-marker>
   </app-modal>
 
 </div>

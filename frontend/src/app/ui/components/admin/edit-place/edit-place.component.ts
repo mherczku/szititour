@@ -14,6 +14,7 @@ import {QuestionEditComponent} from "../question-edit/question-edit.component";
 import {ImgSrcModule} from "../../../../pipes/img-src/img-src.module";
 import {NgForOf} from "@angular/common";
 import {myTrackBy} from "../../../../e-functions/extension-functions";
+import {PlaceLocationData, PlaceMapMarkerComponent} from "../place-map-marker/place-map-marker.component";
 
 @Component({
   selector: "app-edit-place",
@@ -26,7 +27,8 @@ import {myTrackBy} from "../../../../e-functions/extension-functions";
     QuestionComponent,
     QuestionEditComponent,
     ImgSrcModule,
-    NgForOf
+    NgForOf,
+    PlaceMapMarkerComponent
   ],
   standalone: true
 })
@@ -41,6 +43,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
   file?: File;
 
   editModalVisible = false;
+  mapModalVisible = false;
   isEditQuestion = false;
   selectedQuestion!: Question;
 
@@ -48,6 +51,8 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
   deleting = false;
   subscriptionSave?: Subscription;
   subscriptionDelete?: Subscription;
+
+  markerStartPosition: { lat: number, lng: number } = {lat: 0, lng: 0};
 
   constructor(
     private adminService: AdminService,
@@ -58,6 +63,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.resetQuestion();
+    this.setMarkerStartPosition();
   }
 
   resetQuestion() {
@@ -138,32 +144,39 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
     console.log("edited: ", $event.question);
     this.editModalVisible = false;
     console.log($event);
-     switch ($event.action) {
-       case "create":
-         this.place.questions.push($event.question);
-         break;
-       case "delete":
-         // eslint-disable-next-line no-case-declarations
-         const qDelete = this.place.questions.find(x => x.id === $event.question.id);
-         if(qDelete) {
-           const index = this.place.questions.indexOf(qDelete);
-           if (index > -1) {
-             this.place.questions.splice(index, 1);
-           }
-         }
-         break;
-       case "update":
-         // eslint-disable-next-line no-case-declarations
-         const qUpdate = this.place.questions.find(x => x.id === $event.question.id);
-         if(qUpdate){
-           const index = this.place.questions.indexOf(qUpdate);
-           if (index > -1) {
-             this.place.questions.splice(index, 1);
-           }
-           this.place.questions.push($event.question);
-         }
-         break;
-     }
+    switch ($event.action) {
+      case "create":
+        this.place.questions.push($event.question);
+        break;
+      case "delete":
+        // eslint-disable-next-line no-case-declarations
+        const qDelete = this.place.questions.find(x => x.id === $event.question.id);
+        if (qDelete) {
+          const index = this.place.questions.indexOf(qDelete);
+          if (index > -1) {
+            this.place.questions.splice(index, 1);
+          }
+        }
+        break;
+      case "update":
+        // eslint-disable-next-line no-case-declarations
+        const qUpdate = this.place.questions.find(x => x.id === $event.question.id);
+        if (qUpdate) {
+          const index = this.place.questions.indexOf(qUpdate);
+          if (index > -1) {
+            this.place.questions.splice(index, 1);
+          }
+          this.place.questions.push($event.question);
+        }
+        break;
+    }
+  }
+
+  locationDataChanged($event: PlaceLocationData) {
+    console.log("place data chagned")
+    this.place.longitude = $event.lng;
+    this.place.latitude = $event.lat;
+    this.place.address = $event.address;
   }
 
   ngOnDestroy(): void {
@@ -172,4 +185,8 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
   }
 
   protected readonly myTrackBy = myTrackBy;
+
+  setMarkerStartPosition() {
+    this.markerStartPosition = { lat: this.place.latitude, lng: this.place.longitude };
+  }
 }

@@ -16,8 +16,7 @@ export const USER_ROUTES: Routes = [
   },
 
 
-
-  {path: "**", redirectTo: ""},
+  {path: "**", redirectTo: "home"},
 ];
 
 /*

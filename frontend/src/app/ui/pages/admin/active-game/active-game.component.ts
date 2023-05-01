@@ -10,7 +10,7 @@ import {FormsModule} from "@angular/forms";
 import {PlaceStatusDto, TeamGameStatus} from "../../../../types/team-game-status";
 import {AnswerComponent} from "../../../components/admin/answer/answer.component";
 import {Place} from "../../../../types/place";
-import {myTrackBy} from "../../../../e-functions/extension-functions";
+import {addMapApiHeader, myTrackBy} from "../../../../e-functions/extension-functions";
 import {environment} from "../../../../../environments/environment";
 
 
@@ -30,7 +30,7 @@ type GameMarker = {
 export class ActiveGameComponent implements OnInit {
 
   gameData?: Observable<GameWithStatuses>;
-  apiLoaded: Subject<boolean> = new Subject();
+  apiLoaded = false;
 
   gameMarkers: GameMarker[] = [];
 
@@ -51,22 +51,10 @@ export class ActiveGameComponent implements OnInit {
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
 
   constructor(httpClient: HttpClient, private route: ActivatedRoute, private adminService: AdminActiveGameService) {
-    this.apiLoaded.next(false);
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.MAP_KEY}&callback=gmNoop`;
-    script.onload = () => {
-      this.apiLoaded.next(true);
-    };
-    document.head.appendChild(script);
-    /*this.apiLoaded = httpClient.jsonp("https://maps.googleapis.com/maps/api/js?key=API_KEY", "gmNoop")
-      .pipe(
-        tap(res  =>{
-          console.log("maps api: ", res)
-        }),
-        map(() => true),
-        catchError(() => of(true)),
-      )*/
+    this.apiLoaded = false;
+    addMapApiHeader(() => {
+      this.apiLoaded = true;
+    });
   }
 
   ngOnInit(): void {
@@ -77,7 +65,7 @@ export class ActiveGameComponent implements OnInit {
           this.gameStatuses = res.teamGameStatuses;
           this.places = res.places;
           this.selectedTeamStatus = this.gameStatuses[0];
-          console.log("loaded: ",this.selectedTeamStatus)
+          console.log("loaded: ",this.selectedTeamStatus);
           this.selectedTeamPlace = this.gameStatuses[0]?.placeStatuses[0];
           console.log("gameData:", res);
           this.processDataToMarkers(res);
