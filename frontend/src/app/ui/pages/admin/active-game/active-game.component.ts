@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {Observable, Subject, tap} from "rxjs";
+import {Observable, tap} from "rxjs";
 import {GameWithStatuses} from "../../../../types/game";
 import {AdminActiveGameService} from "../../../../services/AdminActiveGameService";
 import {ActivatedRoute} from "@angular/router";
@@ -11,7 +11,6 @@ import {PlaceStatusDto, TeamGameStatus} from "../../../../types/team-game-status
 import {AnswerComponent} from "../../../components/admin/answer/answer.component";
 import {Place} from "../../../../types/place";
 import {addMapApiHeader, myTrackBy} from "../../../../e-functions/extension-functions";
-import {environment} from "../../../../../environments/environment";
 
 
 type GameMarker = {
@@ -82,12 +81,11 @@ export class ActiveGameComponent implements OnInit {
       teams: { teamName: string, reached: Date }[]
     }> = new Map();
     this.gameMarkers = [];
-    let placeN = 18.5;
     const teams: { id: number; name: string; lat: number; lng: number; date: Date }[] = [];
     //const places = [];
 
     gameData.places.forEach(place => {
-      placeMap.set(place.id, {name: place.name, lat: 47.49, lng: placeN += 0.2, teams: []});
+      placeMap.set(place.id, {name: place.name, lat: place.latitude, lng: place.longitude, teams: []});
     });
 
     gameData.teamGameStatuses.forEach(teamStatus => {
