@@ -5,7 +5,11 @@
   gap: 15px;
   padding: 20px 30px;
   scroll-behavior: smooth;
+  align-items: center;
   &::-webkit-scrollbar {
    display: none;
  }
+  app-buttons {
+    width: 50px;
+  }
 }

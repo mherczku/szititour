@@ -20,7 +20,6 @@ export type PlaceLocationData = {
 })
 export class PlaceMapMarkerComponent implements OnInit{
 
-  center: google.maps.LatLngLiteral = {lat: 47.497913, lng: 19.040236};
   zoom = 11;
   @Input() markerPosition: google.maps.LatLngLiteral = {lat: 47.49, lng: 19.04};
   @Input() set title(value: string) {

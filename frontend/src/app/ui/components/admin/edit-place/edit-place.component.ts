@@ -57,7 +57,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
   subscriptionDelete?: Subscription;
 
   changed = false;
-  markerStartPosition: { lat: number, lng: number } = {lat: 0, lng: 0};
+  markerStartPosition: { lat: number, lng: number } = {lat: 47.497913, lng: 19.040236};
 
   constructor(
     private adminService: AdminService,

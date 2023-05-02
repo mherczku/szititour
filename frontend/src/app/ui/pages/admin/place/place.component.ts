@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Place} from "../../../../types/place";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {AdminService} from "../../../../services/AdminService";
 import {Observable, Subscription} from "rxjs";
 import {EditPlaceComponent} from "../../../components/admin/edit-place/edit-place.component";
@@ -9,6 +9,7 @@ import {AsyncPipe, NgForOf} from "@angular/common";
 import {PlaceCardComponent} from "../../../components/user/place-card/place-card.component";
 import {Game} from "../../../../types/game";
 import {ConvertToActivePlacePipe} from "../../../../pipes/place-to-active/convert-to-active-place.pipe";
+import {ButtonsComponent} from "../../../components/buttons/buttons.component";
 
 @Component({
   selector: "app-place",
@@ -26,7 +27,9 @@ import {ConvertToActivePlacePipe} from "../../../../pipes/place-to-active/conver
     AsyncPipe,
     NgForOf,
     PlaceCardComponent,
-    ConvertToActivePlacePipe
+    ConvertToActivePlacePipe,
+    ButtonsComponent,
+    RouterLink
   ]
 })
 export class PlaceComponent implements OnInit, OnDestroy {
@@ -37,12 +40,13 @@ export class PlaceComponent implements OnInit, OnDestroy {
     img: "",
     gameId: 0,
     address: "Helyszín címe",
-    latitude: 0,
-    longitude: 0,
+    latitude: 47.49,
+    longitude: 19.04,
     questions: []
   };
 
   placeId = 0;
+  gameId = 0;
   isEdit = true;
 
   subscriptionGet?: Subscription;
@@ -59,7 +63,7 @@ export class PlaceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.params.subscribe(p => {
       const placeId = p["placeId"];
-      const gameId: number = p["gameId"];
+      this.gameId = p["gameId"];
       if (placeId === "new") {
         this.isEdit = false;
         this.placeId = 0;
@@ -67,10 +71,10 @@ export class PlaceComponent implements OnInit, OnDestroy {
           id: 0,
           name: "Helyszín neve",
           img: "",
-          gameId: gameId,
+          gameId: this.gameId,
           address: "Helyszín címe",
-          latitude: 0,
-          longitude: 0,
+          latitude: 47.49,
+          longitude: 19.04,
           questions: []
         };
 
@@ -78,14 +82,14 @@ export class PlaceComponent implements OnInit, OnDestroy {
         this.placeId = placeId;
         this.isEdit = true;
         this.getPlace();
-        this.getGame(gameId);
       }
+      this.getGame();
 
     });
   }
 
-  getGame(id: number) {
-    this.currentGame$ = this.adminService.getGameById(id);
+  getGame() {
+    this.currentGame$ = this.adminService.getGameById(this.gameId);
   }
 
   getPlace(): void {

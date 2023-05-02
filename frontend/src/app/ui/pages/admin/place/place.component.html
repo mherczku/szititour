@@ -1,7 +1,8 @@
 <div class="h-full w-full p-5 flex flex-col bg-smoke">
 
   <div class="holder-places">
-    <app-place-card [selected]="place === aplace" (click)="selectPlace(aplace)"
+    <app-buttons routerLink="/admin/place/{{gameId}}/new" classes="hover:scale-110 active:opacity-70 transition" type="icon" iconSrc="assets/svg/add.svg"></app-buttons>
+    <app-place-card [selected]="place.id === aplace.id" (click)="selectPlace(aplace)"
                     *ngFor="let aplace of (currentGame$ | async)?.places; let i = index; trackBy: myTrackBy" [place]="aplace | convertToActivePlace"
                     [index]="i"></app-place-card>
   </div>

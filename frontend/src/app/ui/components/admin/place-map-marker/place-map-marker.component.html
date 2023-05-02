@@ -1,6 +1,6 @@
 <p>place-map-marker works!</p>
 <section class="map" *ngIf="apiLoaded">
-  <google-map [center]="center" [zoom]="zoom" [width]="'100%'">
+  <google-map [center]="markerPosition" [zoom]="zoom" [width]="'100%'">
     <map-marker #marker="mapMarker" (mapMouseup)="markerPositionChanged(marker)" [position]="markerPosition" [options]="markerOption"></map-marker>
   </google-map>
 </section>
