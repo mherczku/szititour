@@ -75,6 +75,8 @@ export class AdminService {
     formData.append("name", place.name);
     formData.append("address", place.address);
     formData.append("gameId", place.gameId.toString());
+    formData.append("lat", place.latitude.toString());
+    formData.append("lng", place.longitude.toString());
     if(image) {
       formData.append("image", image);
     }
@@ -89,7 +91,6 @@ export class AdminService {
     formData.append("lat", place.latitude.toString());
     formData.append("lng", place.longitude.toString());
     if(image) {
-      formData.append("currentImage", place.img ?? "");
       formData.append("image", image);
     }
     return this.http.put<Place>(`${this.baseUrl}/places/`, formData);

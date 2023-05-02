@@ -65,9 +65,10 @@ class PlaceService @Autowired constructor(
     }
 
     fun updatePlaceToGameWithImage(placeDto: PlaceDto, file: MultipartFile): Place {
+        val currentPlace = getPlaceById(placeDto.id)
         var imagePath = ""
         return try {
-            imagePath = Utils.saveImage(file, Utils.imageDirectoryPlacesName, placeDto.img)
+            imagePath = Utils.saveImage(file, Utils.imageDirectoryPlacesName, currentPlace.img)
             placeDto.img = imagePath
             val updated = updatePlace(placeDto, true)
             updated

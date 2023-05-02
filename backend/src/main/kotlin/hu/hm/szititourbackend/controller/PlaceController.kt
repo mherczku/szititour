@@ -24,12 +24,16 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
         @RequestParam("gameId") gameId: String,
         @RequestParam("name") name: String,
         @RequestParam("address") address: String,
+        @RequestParam("lat") lat: String,
+        @RequestParam("lng") lng: String,
     ): ResponseEntity<PlaceDto> {
 
         val placeDto = PlaceDto(
             gameId = gameId.toInt(),
             name = name,
-            address = address
+            address = address,
+            latitude = lat.toDouble(),
+            longitude = lng.toDouble()
         )
 
         val createdPlace: Place = if (file != null) {
@@ -58,7 +62,6 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
         @RequestParam("placeId") placeId: String,
         @RequestParam("lat") lat: String,
         @RequestParam("lng") lng: String,
-        @RequestParam("currentImage") img: String?,
         @RequestParam("name") name: String,
         @RequestParam("address") address: String,
 
@@ -68,7 +71,6 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
             id = placeId.toInt(),
             name = name,
             address = address,
-            img = img.toString(),
             latitude = lat.toDouble(),
             longitude = lng.toDouble()
         )
