@@ -18,6 +18,7 @@ class Question(
     var img: String = "",
 
     @OneToMany(mappedBy = "question", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
+    @OrderBy("id")
     val answers: MutableList<Answer> = mutableListOf(),
 
     @ManyToOne

@@ -3,6 +3,7 @@ package hu.hm.szititourbackend.datamodel
 import hu.hm.szititourbackend.dto.PlaceActiveDto
 import hu.hm.szititourbackend.dto.PlaceDto
 import hu.hm.szititourbackend.dto.TeamGameStatusDto
+import org.springframework.core.annotation.Order
 import javax.persistence.*
 
 @Entity
@@ -17,10 +18,11 @@ class Place(
     var address: String = "",
     var latitude: Double = 0.0,
     var longitude: Double = 0.0,
+    var ordernumber: Int = 1,
 
     @OneToMany(mappedBy = "place", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
+    @OrderBy("id")
     val questions: MutableList<Question> = mutableListOf(),
-    // last question is the riddle to the next place
 
     @ManyToOne
     val game: Game = Game()

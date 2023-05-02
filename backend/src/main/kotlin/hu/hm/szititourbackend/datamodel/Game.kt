@@ -27,12 +27,15 @@ class Game(
 
 
     @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
+    @OrderBy("ordernumber")
     val places: MutableList<Place> = mutableListOf(),
 
     @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
+    @OrderBy("id")
     val applications: MutableList<Application> = mutableListOf(),
 
     @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
+    @OrderBy("id")
     val teamGameStatuses: MutableList<TeamGameStatus> = mutableListOf()
 
 ) {

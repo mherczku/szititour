@@ -34,6 +34,7 @@ class PlaceService @Autowired constructor(
         val game = gameService.getGameById(placeDto.gameId)
 
         val newPlace = Place(
+            ordernumber = game.places.size + 1,
             game = game,
             address = placeDto.address,
             img = placeDto.img,

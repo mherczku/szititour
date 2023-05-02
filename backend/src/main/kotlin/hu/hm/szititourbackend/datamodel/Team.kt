@@ -27,12 +27,15 @@ class Team(
     var lastLongitude: Double = 0.0,
 
     @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
+    @OrderBy("id")
     val answers: MutableList<Answer> = mutableListOf(),
 
     @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
+    @OrderBy("id")
     val applications: MutableList<Application> = mutableListOf(),
 
     @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
+    @OrderBy("id")
     val teamGameStatuses: MutableList<TeamGameStatus> = mutableListOf(),
 
     @ElementCollection
