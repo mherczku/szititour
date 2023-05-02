@@ -13,6 +13,7 @@ import {AnswerRequest, QuestionAnswer} from "../../../../types/requests/answer-r
 import {AutoDestroy} from "../../../../decorators/autodestroy.decorator";
 import {loadGameState} from "../../../../store/actions/game-state.actions";
 import {LocationService} from "../../../../services/LocationService";
+import {myTrackBy} from "../../../../e-functions/extension-functions";
 
 @Component({
   selector: "app-active-game",
@@ -75,4 +76,5 @@ export class ActiveGameComponent implements OnInit {
   }
 
 
+    protected readonly myTrackBy = myTrackBy;
 }

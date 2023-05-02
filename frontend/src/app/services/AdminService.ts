@@ -33,6 +33,10 @@ export class AdminService {
     return this.http.post<Game>(`${this.baseUrl}/games/image`, formData);
   }
 
+  getGameById(id: number): Observable<Game> {
+    return this.http.get<Game>(`${this.baseUrl}/games/${id}`);
+  }
+
   updateGame(game: Game, image: File | undefined = undefined): Observable<Game> {
     const dateStartNumber: number =  isNaN(Date.parse(game.dateStart.valueOf().toString())) ? game.dateStart.valueOf() : Date.parse(game.dateStart.valueOf().toString());
     const dateEndNumber: number = isNaN(Date.parse(game.dateEnd.valueOf().toString())) ? game.dateEnd.valueOf() : Date.parse(game.dateEnd.valueOf().toString());
@@ -131,4 +135,6 @@ export class AdminService {
       return this.http.put<Game>(`${this.baseUrl}/games/deactivate/${gameId}`, null);
     }
   }
+
+
 }

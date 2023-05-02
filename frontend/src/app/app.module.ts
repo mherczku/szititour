@@ -23,7 +23,7 @@ import {LocationInterceptor} from "./interceptors/LocationInterceptor";
   declarations: [
     AppComponent,
     HostDirective,
-    Modal2Component
+    Modal2Component,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +34,7 @@ import {LocationInterceptor} from "./interceptors/LocationInterceptor";
     StoreModule.forRoot({}, {}),
     StoreModule.forFeature("game", GameStateReducer),
     StoreModule.forFeature("auth", AuthReducer),
-    NavbarComponent,
+    NavbarComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

@@ -181,7 +181,6 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
   }
 
   locationDataChanged($event: PlaceLocationData) {
-    console.log("place data chagned")
     this.changed = true;
     this.place.longitude = $event.lng;
     this.place.latitude = $event.lat;
@@ -196,8 +195,6 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
   protected readonly myTrackBy = myTrackBy;
 
   setMarkerStartPosition() {
-    console.log(this.markerStartPosition)
     this.markerStartPosition = {lat: this.place.latitude, lng: this.place.longitude};
-    console.log(this.markerStartPosition, 2)
   }
 }

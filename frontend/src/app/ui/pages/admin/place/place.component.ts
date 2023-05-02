@@ -2,13 +2,18 @@ import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Place} from "../../../../types/place";
 import {ActivatedRoute} from "@angular/router";
 import {AdminService} from "../../../../services/AdminService";
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {EditPlaceComponent} from "../../../components/admin/edit-place/edit-place.component";
+import {myTrackBy} from "../../../../e-functions/extension-functions";
+import {AsyncPipe, NgForOf} from "@angular/common";
+import {PlaceCardComponent} from "../../../components/user/place-card/place-card.component";
+import {Game} from "../../../../types/game";
+import {ConvertToActivePlacePipe} from "../../../../pipes/place-to-active/convert-to-active-place.pipe";
 
 @Component({
   selector: "app-place",
   templateUrl: "./place.component.html",
-  styleUrls: ["./place.component.css"],
+  styleUrls: ["./place.component.scss"],
   standalone: true,
   styles: [`
     :host {
@@ -17,7 +22,11 @@ import {EditPlaceComponent} from "../../../components/admin/edit-place/edit-plac
     }
   `],
   imports: [
-    EditPlaceComponent
+    EditPlaceComponent,
+    AsyncPipe,
+    NgForOf,
+    PlaceCardComponent,
+    ConvertToActivePlacePipe
   ]
 })
 export class PlaceComponent implements OnInit, OnDestroy {
@@ -38,13 +47,19 @@ export class PlaceComponent implements OnInit, OnDestroy {
 
   subscriptionGet?: Subscription;
 
+  currentGame$?: Observable<Game>;
+
   constructor(private route: ActivatedRoute, private adminService: AdminService) {
+  }
+
+  selectPlace(place: Place) {
+    this.place = place;
   }
 
   ngOnInit(): void {
     this.route.params.subscribe(p => {
       const placeId = p["placeId"];
-      const gameId = p["gameId"];
+      const gameId: number = p["gameId"];
       if (placeId === "new") {
         this.isEdit = false;
         this.placeId = 0;
@@ -63,9 +78,14 @@ export class PlaceComponent implements OnInit, OnDestroy {
         this.placeId = placeId;
         this.isEdit = true;
         this.getPlace();
+        this.getGame(gameId);
       }
 
     });
+  }
+
+  getGame(id: number) {
+    this.currentGame$ = this.adminService.getGameById(id);
   }
 
   getPlace(): void {
@@ -82,4 +102,5 @@ export class PlaceComponent implements OnInit, OnDestroy {
     this.subscriptionGet?.unsubscribe();
   }
 
+  protected readonly myTrackBy = myTrackBy;
 }
