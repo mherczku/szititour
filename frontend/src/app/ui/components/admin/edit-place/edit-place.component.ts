@@ -109,7 +109,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
           this.alert.success(`${value.name} helyszín sikeresen létrehozva`);
           this.saving = false;
           this.changed = false;
-          this.router.navigateByUrl(`/admin-place/${value.gameId}/${value.id}`);
+          this.router.navigateByUrl(`/admin/place/${value.gameId}/${value.id}`);
         },
         error: _err => {
           this.saving = false;
