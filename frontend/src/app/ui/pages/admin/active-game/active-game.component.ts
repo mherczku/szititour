@@ -5,7 +5,7 @@ import {GameWithStatuses} from "../../../../types/game";
 import {AdminActiveGameService} from "../../../../services/AdminActiveGameService";
 import {ActivatedRoute} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
-import {GoogleMapsModule, MapInfoWindow, MapMarker} from "@angular/google-maps";
+import {GoogleMap, GoogleMapsModule, MapInfoWindow, MapMarker} from "@angular/google-maps";
 import {FormsModule} from "@angular/forms";
 import {PlaceStatusDto, TeamGameStatus} from "../../../../types/team-game-status";
 import {AnswerComponent} from "../../../components/admin/answer/answer.component";
@@ -33,10 +33,17 @@ export class ActiveGameComponent implements OnInit {
 
   gameMarkers: GameMarker[] = [];
 
-  mapOption: google.maps.MapOptions = {streetViewControl: false};
 
-  markerPositions: google.maps.LatLngLiteral[] = [{lat: 47.49, lng: 19.04}];
-  markerOptions: google.maps.MarkerOptions = {draggable: false, optimized: true, title: "Csapat", clickable: true};
+  circleOption: google.maps.CircleOptions = {
+    draggable: false, radius: 50, strokeColor: "#FF0000",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "#ffb70c",
+    fillOpacity: 0.35,
+  };
+  circleCenter: google.maps.LatLngLiteral = {lat: 0, lng: 0};
+  circleVisible = false;
+
 
   center: google.maps.LatLngLiteral = {lat: 47.497913, lng: 19.040236};
   zoom = 11;
@@ -48,6 +55,7 @@ export class ActiveGameComponent implements OnInit {
   private places: Place[] = [];
 
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
+  @ViewChild(GoogleMap) googleMap?: GoogleMap;
 
   constructor(httpClient: HttpClient, private route: ActivatedRoute, private adminService: AdminActiveGameService) {
     this.apiLoaded = false;
@@ -64,7 +72,7 @@ export class ActiveGameComponent implements OnInit {
           this.gameStatuses = res.teamGameStatuses;
           this.places = res.places;
           this.selectedTeamStatus = this.gameStatuses[0];
-          console.log("loaded: ",this.selectedTeamStatus);
+          console.log("loaded: ", this.selectedTeamStatus);
           this.selectedTeamPlace = this.gameStatuses[0]?.placeStatuses[0];
           console.log("gameData:", res);
           this.processDataToMarkers(res);
@@ -98,7 +106,7 @@ export class ActiveGameComponent implements OnInit {
       });
 
       teamStatus.placeStatuses.forEach(ps => {
-        if(ps.reached) {
+        if (ps.reached) {
           placeMap.get(ps.placeId)?.teams.push({teamName: teamStatus.teamName, reached: ps.reachedAt});
         }
         //teams.push({teamName: teamStatus.teamName, reached: ps.reachedAt})
@@ -151,6 +159,9 @@ export class ActiveGameComponent implements OnInit {
   }
 
   openInfoWindow(marker: MapMarker, tmarker: GameMarker) {
+    this.circleOption.map = this.googleMap?.googleMap;
+    this.circleVisible = true;
+    this.circleCenter = tmarker.position;
     this.selectedMarker = tmarker;
     this.infoWindow.open(marker);
   }
@@ -169,4 +180,5 @@ export class ActiveGameComponent implements OnInit {
   }
 
   protected readonly myTrackBy = myTrackBy;
+
 }

@@ -4,8 +4,9 @@
     <ng-container >
       <map-marker #marker="mapMarker" (mapClick)="openInfoWindow(marker, tmarker)" *ngFor="let tmarker of gameMarkers; trackBy: myTrackBy"
                   [position]="tmarker.position" [options]="tmarker.option"></map-marker>
+      <map-circle *ngIf="circleVisible" [options]="circleOption" [center]="circleCenter"></map-circle>
 
-      <map-info-window>
+      <map-info-window (closeclick)="circleVisible=false">
         <p>{{selectedMarker?.infoPlace?.placeName ?? selectedMarker?.infoTeam?.teamName}}</p>
         <p>{{selectedMarker?.infoTeam?.date | date:'yyyy/MM/dd, H:mm'}}</p>
         <p *ngFor="let team of selectedMarker?.infoPlace?.teams; trackBy: myTrackBy">{{team.teamName}} : {{team.reached | date:'H:mm'}}</p>

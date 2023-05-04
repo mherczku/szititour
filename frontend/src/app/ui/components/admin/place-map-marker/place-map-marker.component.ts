@@ -1,7 +1,15 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {GoogleMapsModule, MapMarker} from "@angular/google-maps";
-import {Subject} from "rxjs";
+import {GoogleMap, GoogleMapsModule, MapMarker} from "@angular/google-maps";
 import {addMapApiHeader} from "../../../../e-functions/extension-functions";
 
 
@@ -16,7 +24,8 @@ export type PlaceLocationData = {
   standalone: true,
   imports: [CommonModule, GoogleMapsModule],
   templateUrl: "./place-map-marker.component.html",
-  styleUrls: ["./place-map-marker.component.scss"]
+  styleUrls: ["./place-map-marker.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlaceMapMarkerComponent implements OnInit{
 
@@ -31,19 +40,26 @@ export class PlaceMapMarkerComponent implements OnInit{
 
   newPosition?: google.maps.LatLngLiteral;
 
+  mapCircle?: google.maps.Circle;
+
+  @ViewChild(GoogleMap) googleMap?: GoogleMap;
+
   @Output() locationDataChanged = new EventEmitter<PlaceLocationData>();
 
+  constructor(private change: ChangeDetectorRef) {
+  }
 
  ngOnInit() {
     this.apiLoaded = false;
    addMapApiHeader(() => {
      this.apiLoaded = true;
      this.geocoder = new google.maps.Geocoder();
+     this.change.markForCheck();
    });
  }
 
+
   markerPositionChanged(marker: MapMarker) {
-    console.log("marker position changed up")
     const lat = marker.getPosition()?.lat();
     const lng = marker.getPosition()?.lng();
     if (lat && lng) {
@@ -58,5 +74,23 @@ export class PlaceMapMarkerComponent implements OnInit{
         }
       });
     }
+  }
+
+  mapInit() {
+    if(!this.mapCircle) {
+      this.mapCircle = new google.maps.Circle({
+        draggable: false, radius: 50, strokeColor: "#FF0000",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#ffb70c",
+        fillOpacity: 0.35,
+        map: this.googleMap?.googleMap,
+        center: this.markerPosition
+      });
+    }
+  }
+
+  onMarkerDrag($event: google.maps.MapMouseEvent) {
+   this.mapCircle?.setCenter($event.latLng);
   }
 }
