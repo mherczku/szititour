@@ -1,3 +1,14 @@
 <section class="profile">
 
+  <ng-container *ngIf="teamProfile$ | async as profile">
+    <p>Csapat neve:</p>
+    <p>{{profile.name}}</p>
+
+    <p>Email cím:</p>
+    <p>{{profile.email}}</p>
+    <p>Csapattagok:</p>
+    <p>{{profile.members}}</p>
+    <img [src]="profile.img" alt="">
+  </ng-container>
+
 </section>

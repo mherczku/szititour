@@ -4,6 +4,7 @@ import {AuthGuard} from "./guards/auth.guard";
 import {ActiveGameComponent} from "./ui/pages/admin/active-game/active-game.component";
 import {AuthService} from "./services/AuthService";
 import {PlaceComponent} from "./ui/pages/admin/place/place.component";
+import {ProfileComponent} from "./ui/pages/user/profile/profile.component";
 
 const routes: Routes = [
 
@@ -32,6 +33,12 @@ const routes: Routes = [
     canMatch: [() => inject(AuthService).isRoleAdmin()],
     data: {roles: ["ROLE_ADMIN"]},
     component: ActiveGameComponent
+  },
+
+  {
+    path: "profile",
+    //canMatch: [() => inject(AuthService).isLoggedIn()],
+    component: ProfileComponent
   },
 
   {

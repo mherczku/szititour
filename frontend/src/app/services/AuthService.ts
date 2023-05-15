@@ -36,6 +36,9 @@ export class AuthService implements OnDestroy {
   isRoleUser(): boolean {
     return this.currentRole === "ROLE_USER";
   }
+  isLoggedIn(): boolean {
+    return this.currentRole !== "ROLE_GUEST";
+  }
   isRoleGuest(): boolean {
     return this.currentRole === "ROLE_GUEST";
   }
@@ -74,7 +77,7 @@ export class AuthService implements OnDestroy {
   public authorizeMe(): Observable<NetworkLoginResponse> {
     return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`).pipe(tap(res => {
       if(res.success) {
-        res.team.role === "ROLE_ADMIN" ? this.router.navigateByUrl("/admin") : this.router.navigateByUrl("/user");
+        //res.team.role === "ROLE_ADMIN" ? this.router.navigateByUrl("/admin") : this.router.navigateByUrl("/user");
       }
     }));
   }
