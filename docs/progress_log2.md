@@ -35,6 +35,12 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
 
 
 #### **11-12. hét:**
-
+ - Backend: Profil kérés
+ - Frontend:
+    - Profil oldal
+    - Hiba javítások
 
 #### **13-14. hét:**
+ - Fixes
+ - Dokumentáció írás
+ - Prezentáció
