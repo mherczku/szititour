@@ -1,4 +1,3 @@
-<p>place-map-marker works!</p>
 <section class="map" *ngIf="apiLoaded">
   <google-map (mapMouseover)="mapInit()" [center]="markerPosition" [zoom]="zoom" [width]="'100%'">
     <map-marker #marker="mapMarker" (mapDrag)="onMarkerDrag($event)" (mapMouseup)="markerPositionChanged(marker)" [position]="markerPosition" [options]="markerOption"></map-marker>

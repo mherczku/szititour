@@ -4,8 +4,12 @@
       <p class="text-size-lg mb-5 bold">Helyszín információk:</p>
       <app-text-input classes="w-fit mb-5" [(value)]="place.name" (valueChange)="changed = true" [label]="'Neve:'"
                       type="editable"></app-text-input>
-      <app-text-input (click)="mapModalVisible = true" classes="w-fit mb-5" [(value)]="place.address" (valueChange)="changed = true" [label]="'Címe:'"
-                      type="editable"></app-text-input>
+      <!--<app-text-input (click)="mapModalVisible = true" classes="w-fit mb-5" [(value)]="place.address" (valueChange)="changed = true" [label]="'Címe:'"
+                      type="label"></app-text-input>-->
+      <div class="w-fit mb-5 flex gap-2 ">
+        <p class="text-size-base cursor-default">Címe:</p>
+        <p (click)="mapModalVisible = true" class="text-size-base cursor-text">{{place.address}}</p>
+      </div>
       <div class="flex flex-col gap-2 mb-5 w-full">
         <label class="text-size-base">Kép:</label>
         <div class="input_container">
