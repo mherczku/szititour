@@ -1,6 +1,13 @@
-@import "../../../../../styles/styles-layouts";
+@import "styles/styles-layouts";
 
 .grid-games {
   padding: 0 1rem;
   place-items: center;
+}
+
+.welcome {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
 }

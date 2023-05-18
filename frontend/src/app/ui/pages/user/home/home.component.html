@@ -1,4 +1,6 @@
-<p>Üdv újra itt username csapat</p>
+<div class="welcome">
+  <p class="text-size-h3">Üdv újra itt {{(profile | async)?.name}} csapat</p>
+</div>
 
 <section class="grid-games">
   <app-user-game-card *ngFor="let g of (games | async)" [game]="g"></app-user-game-card>
