@@ -32,11 +32,18 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
 
         val updateTeam = getTeamById(teamId)
         updateTeam.img = teamUpdateProfileDto.img ?: updateTeam.img
-        updateTeam.password = teamUpdateProfileDto.password ?: PasswordUtils.encryptPassword(updateTeam.password)
         updateTeam.name = teamUpdateProfileDto.name ?: updateTeam.name
+        updateTeam.email = teamUpdateProfileDto.email ?: updateTeam.email
         updateTeam.members = teamUpdateProfileDto.members?.toMutableList() ?: updateTeam.members
+        if(!teamUpdateProfileDto.passwordBefore.isNullOrBlank() && !teamUpdateProfileDto.password.isNullOrBlank()) {
+            if(PasswordUtils.encryptPassword(teamUpdateProfileDto.passwordBefore) == updateTeam.password) {
+                updateTeam.password = PasswordUtils.encryptPassword(teamUpdateProfileDto.password)
+            } else {
+                throw CustomException("Wrong password", HttpStatus.BAD_REQUEST)
+            }
+        }
 
-        return this.updateTeam(updateTeam)
+        return this.updateTeam(updateTeam, true)
     }
 
     fun addTeam(team: Team): Team {

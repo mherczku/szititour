@@ -16,7 +16,7 @@ class Team(
     @Column(unique = true)
     var name: String = "",
     @Column(unique = true)
-    val email: String = "",
+    var email: String = "",
     var password: String = "",
     var role: String = ROLE_USER,
     var img: String = "",

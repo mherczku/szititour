@@ -7,5 +7,15 @@ export type Team = {
   createdAt?: Date,
   updatedAt?: Date,
   applications?: any[],
+  members: string[]
+}
+
+
+export type UpdateTeam = {
+  name?: string,
+  email?: string,
+  password?: string,
+  passwordBefore?: string,
+  img?: string,
   members?: string[]
 }

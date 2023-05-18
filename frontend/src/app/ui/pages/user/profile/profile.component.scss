@@ -1,0 +1,73 @@
+:host {
+  height: 100%;
+}
+.profile {
+  padding: 1rem;
+  height: 100%;
+
+  .profile-inside {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+  }
+}
+.profile-data {
+
+  display: flex;
+  flex-direction: row;
+  gap: 20vw;
+  justify-content: space-between;
+  width: fit-content;
+
+  background-color: #FFFFFF;
+  padding: 1.5rem;
+  border-radius: 8px;
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 20px;
+  }
+
+  img {
+    border-radius: 8px;
+    object-fit: cover;
+    aspect-ratio: 1;
+    width: 200px;
+
+  }
+
+
+  .infos {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    gap: 14px;
+    .members {
+      display: flex;
+      flex-direction: column;
+      width: fit-content;
+      gap: 5px;
+      app-text-input {
+        margin-left: 10px;
+      }
+      .title {
+        display: flex;
+        flex-direction: row;
+        width: max-content;
+        align-items: center;
+        gap: 10px;
+
+        app-buttons {
+          height: 30px;
+          width: 30px;
+        }
+      }
+    }
+  }
+
+}
+
+

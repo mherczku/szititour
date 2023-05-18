@@ -4,7 +4,6 @@ import {AuthService} from "../../../services/AuthService";
 import {selectIsLoggedIn, selectLoggedInTeam} from "../../../store/selectors/auth.selector";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgIf} from "@angular/common";
-import {async} from "rxjs";
 import {RouterLink} from "@angular/router";
 
 @Component({
