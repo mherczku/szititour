@@ -31,16 +31,34 @@ export class AuthService implements OnDestroy {
   }
 
   isRoleAdmin(): boolean {
-    return this.currentRole === "ROLE_ADMIN";
+    const isAdmin =  this.currentRole === "ROLE_ADMIN";
+    if(!isAdmin) {
+      if(this.isLoggedIn()) {
+        this.router.navigateByUrl("user");
+      }
+    }
+    return isAdmin;
   }
   isRoleUser(): boolean {
     return this.currentRole === "ROLE_USER";
   }
   isLoggedIn(): boolean {
-    return this.currentRole !== "ROLE_GUEST";
+    const isLoggedIN= this.currentRole !== "ROLE_GUEST";
+    if(!isLoggedIN) {
+      this.router.navigateByUrl("login");
+    }
+    return isLoggedIN;
   }
   isRoleGuest(): boolean {
-    return this.currentRole === "ROLE_GUEST";
+    const isGuest = this.currentRole === "ROLE_GUEST";
+    if(!isGuest) {
+      if(this.isRoleAdmin()) {
+        this.router.navigateByUrl("admin");
+      } else {
+        this.router.navigateByUrl("user");
+      }
+    }
+    return isGuest;
   }
 
   public login(email: string, password: string): Observable<NetworkLoginResponse> {
@@ -61,10 +79,8 @@ export class AuthService implements OnDestroy {
           console.log("admin login", team);
           this.router.navigateByUrl("/admin");
         }
-        // todo remove when user site is ready
         else {
-          this.alertService.warning("Felhasználói oldal fejlesztés alatt... Kijelentkezés");
-          this.logout();
+          this.router.navigateByUrl("/user");
         }
       }
     }));

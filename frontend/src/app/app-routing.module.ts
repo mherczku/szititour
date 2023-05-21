@@ -1,10 +1,8 @@
 import {inject, NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
-import {AuthGuard} from "./guards/auth.guard";
 import {ActiveGameComponent} from "./ui/pages/admin/active-game/active-game.component";
 import {AuthService} from "./services/AuthService";
 import {PlaceComponent} from "./ui/pages/admin/place/place.component";
-import {ProfileComponent} from "./ui/pages/user/profile/profile.component";
 
 const routes: Routes = [
 
@@ -36,12 +34,6 @@ const routes: Routes = [
   },
 
   {
-    path: "profile",
-    //canMatch: [() => inject(AuthService).isLoggedIn()],
-    component: ProfileComponent
-  },
-
-  {
     path: "admin/place/:gameId/:placeId",
     canMatch: [() => inject(AuthService).isRoleAdmin()],
     data: {roles: ["ROLE_ADMIN"]},
@@ -56,7 +48,7 @@ const routes: Routes = [
     })),*/
   {
     path: "user",
-    //canMatch: [() => inject(AuthService).isRoleUser()],
+    canMatch: [() => inject(AuthService).isLoggedIn()],
     data: {roles: ["ROLE_USER"]},
     loadChildren: () => import("./ui/pages/user/user.routes").then(r => r.USER_ROUTES)
   },
