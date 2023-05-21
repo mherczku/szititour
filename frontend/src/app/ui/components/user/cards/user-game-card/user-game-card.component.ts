@@ -5,11 +5,12 @@ import {UserService} from "../../../../../services/UserService";
 import {Subject, takeUntil} from "rxjs";
 import {AutoDestroy} from "../../../../../decorators/autodestroy.decorator";
 import {RouterLink} from "@angular/router";
+import {ImgSrcModule} from "../../../../../pipes/img-src/img-src.module";
 
 @Component({
   selector: "app-user-game-card",
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ImgSrcModule],
   templateUrl: "./user-game-card.component.html",
   styleUrls: ["./user-game-card.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,5 +1,5 @@
 <div class="card-game">
-  <img [src]="'https://media.timeout.com/images/105879336/750/422/image.jpg'" [alt]="game.title">
+  <img [src]="game.img | imgSrc" [alt]="game.title">
   <div class="details">
     <p class="text-size-lg bold">{{game.title}}</p>
     <p class="text-size-base">{{game.dateStart | date:'short' }} - {{game.dateEnd | date:'short' }}</p>
