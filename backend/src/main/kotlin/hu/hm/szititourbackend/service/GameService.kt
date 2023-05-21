@@ -3,6 +3,7 @@ package hu.hm.szititourbackend.service
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.GameRepository
+import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -13,7 +14,7 @@ import java.sql.Timestamp
 
 @Service
 @Transactional
-class GameService @Autowired constructor(private val gameRepository: GameRepository) {
+class GameService @Autowired constructor(private val gameRepository: GameRepository, private val teamGameStatusRepository: TeamGameStatusRepository) {
 
     fun getAllAvailableGames(): MutableList<Game> {
         val games = gameRepository.findAll()
@@ -78,6 +79,9 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
     fun changeActivation(gameId: Int, activation: Boolean): Game {
         val game = getGameById(gameId)
         if(!activation) {
+            game.teamGameStatuses.forEach {
+                teamGameStatusRepository.deleteById(it.id)
+            }
             game.teamGameStatuses.clear()
         }
         game.active = activation
