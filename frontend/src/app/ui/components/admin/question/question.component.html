@@ -29,7 +29,7 @@
         <p class="text-size-base font-bold">Típusa:</p>
         <p class="text-size-base">{{question.type | questionType}}</p>
       </div>
-      <img class="object-contain max-h-[300px] aspect-video" [src]="question.img | imgSrc" alt="">
+      <img class="object-contain max-h-[300px] aspect-video" *ngIf="question.img" [src]="question.img | imgSrc" alt="">
     </div>
 
   </div>

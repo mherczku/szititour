@@ -23,8 +23,8 @@
     </div>
   </div>
 
-  <div class="w-full flex justify-between">
+  <div class="actions">
     <button class="btn-simple-red" (click)="delete()" [disabled]="!isEdit || deleting">Törlés</button>
-    <button [disabled]="saving" (click)="save()">{{this.isEdit ? 'Mentés' : 'Létrehozás'}}</button>
+    <button class="btn-simple-green" [disabled]="saving" (click)="save()">{{this.isEdit ? 'Mentés' : 'Létrehozás'}}</button>
   </div>
 </div>

@@ -19,7 +19,7 @@ import {FormsModule} from "@angular/forms";
 @Component({
   selector: "app-question-edit",
   templateUrl: "./question-edit.component.html",
-  styleUrls: ["./question-edit.component.sass"],
+  styleUrls: ["./question-edit.component.scss"],
   imports: [
     FormsModule
   ],
