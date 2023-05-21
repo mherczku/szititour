@@ -77,6 +77,9 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
 
     fun changeActivation(gameId: Int, activation: Boolean): Game {
         val game = getGameById(gameId)
+        if(!activation) {
+            game.teamGameStatuses.clear()
+        }
         game.active = activation
         return gameRepository.save(game)
     }
