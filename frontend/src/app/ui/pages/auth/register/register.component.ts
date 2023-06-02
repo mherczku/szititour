@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from "@angular/core";
+import {ChangeDetectionStrategy, Component, OnDestroy} from "@angular/core";
 import {HotToastService} from "@ngneat/hot-toast";
 import {AuthService} from "../../../../services/AuthService";
 import {Subscription} from "rxjs";
@@ -14,7 +14,8 @@ import {confirmPassword} from "../../../../validators/same-pass.validator";
     ReactiveFormsModule,
     RouterLink
   ],
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent implements OnDestroy {
   subscriptionRegister?: Subscription;
