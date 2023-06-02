@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, signal} from "@angular/core";
+import {ChangeDetectionStrategy, Component, OnDestroy} from "@angular/core";
 import {AuthService} from "../../../../services/AuthService";
 import {UserService} from "../../../../services/UserService";
 import {NetworkResponse} from "../../../../types/network-response";
