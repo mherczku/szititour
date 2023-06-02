@@ -30,7 +30,9 @@ import {LocationInterceptor} from "./interceptors/LocationInterceptor";
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    HotToastModule.forRoot(),
+    HotToastModule.forRoot({
+      autoClose: true
+    }),
     StoreModule.forRoot({}, {}),
     StoreModule.forFeature("game", GameStateReducer),
     StoreModule.forFeature("auth", AuthReducer),
