@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import {ChangeDetectionStrategy, Component, OnInit} from "@angular/core";
 import {Store} from "@ngrx/store";
 import {AuthService} from "../../../services/AuthService";
 import {selectIsLoggedIn, selectLoggedInTeam} from "../../../store/selectors/auth.selector";
@@ -17,13 +17,13 @@ import {RouterLink} from "@angular/router";
     RouterLink,
     AsyncPipe
   ],
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit {
 
   isLoggedIn = this.store.select(selectIsLoggedIn);
   team = this.store.select(selectLoggedInTeam);
-  //title = "Szititour";
   isMobileMenuOpen = false;
 
   constructor(private store: Store, private authService: AuthService) { }
@@ -38,7 +38,6 @@ export class NavbarComponent implements OnInit {
       window.scroll(0, 0);
     }
     else {
-
       document.body.style.overflow = "auto";
     }
     this.isMobileMenuOpen = event;
