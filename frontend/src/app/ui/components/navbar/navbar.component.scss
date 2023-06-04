@@ -69,6 +69,10 @@
   width: 100vw;
   height: 100vh;
   transition-duration: 0.5s;
+
+  svg {
+    position: absolute;
+  }
 }
 
 .darkPart {
@@ -93,6 +97,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+
+  svg {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    min-width: fit-content;
+    opacity: 0.8;
+  }
+
 }
 .whitePartOpen {
   transition-duration: 0.5s;
