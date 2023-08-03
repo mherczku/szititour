@@ -1,4 +1,7 @@
-FROM balenalib/raspberry-pi-debian-openjdk:8--stretch
+
+FROM openjdk:11-jre-slim
+COPY build/libs/szititour-backend-0.0.2-SNAPSHOT.jar /myapp.jar
 EXPOSE 8080/tcp
-COPY build/libs/szititour-backend-0.0.2-SNAPSHOT.jar docker.jar
-ENTRYPOINT ["java","-jar","/docker.jar"]
+CMD ["java", "-jar", "/myapp.jar"]
+
+

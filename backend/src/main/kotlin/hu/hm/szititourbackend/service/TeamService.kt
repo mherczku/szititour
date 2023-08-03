@@ -6,6 +6,7 @@ import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.repository.TeamRepository
+import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_ADMIN
 import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_USER
 import hu.hm.szititourbackend.util.LocationUtils
 import hu.hm.szititourbackend.util.PasswordUtils
@@ -46,8 +47,12 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
         return this.updateTeam(updateTeam, true)
     }
 
-    fun addTeam(team: Team): Team {
-        team.role = ROLE_USER
+    fun addTeam(team: Team, isAdmin: Boolean = false): Team {
+        if(isAdmin) {
+            team.role = ROLE_ADMIN
+        } else {
+            team.role = ROLE_USER
+        }
         team.createdAt = Timestamp(System.currentTimeMillis())
         team.updatedAt = Timestamp(System.currentTimeMillis())
         return teamRepository.save(team)

@@ -1,10 +1,11 @@
-import {ChangeDetectionStrategy, Component, OnDestroy} from "@angular/core";
+import {ChangeDetectionStrategy, Component, DestroyRef, OnDestroy} from "@angular/core";
 import {HotToastService} from "@ngneat/hot-toast";
 import {AuthService} from "../../../../services/AuthService";
 import {Subscription} from "rxjs";
 import {Router, RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {confirmPassword} from "../../../../validators/same-pass.validator";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-register",
@@ -25,7 +26,8 @@ export class RegisterComponent implements OnDestroy {
     private alertService: HotToastService,
     private authService: AuthService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private ref: DestroyRef
   ) {
     this.registerForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
@@ -35,7 +37,7 @@ export class RegisterComponent implements OnDestroy {
   }
 
   register() {
-    this.subscriptionRegister = this.authService.register(this.registerForm.value.email, this.registerForm.value.password).subscribe(res => {
+    this.subscriptionRegister = this.authService.register(this.registerForm.value.email, this.registerForm.value.password).pipe(takeUntilDestroyed(this.ref)).subscribe(res => {
       if (res.success) {
         this.alertService.success("Sikeres regisztráció, bejelentkezhetsz");
         this.registerForm.reset();
