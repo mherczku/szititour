@@ -1,8 +1,7 @@
 FROM openjdk:11-jdk-slim
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
+COPY . .
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/szititour-backend-0.0.2-SNAPSHOT.jar"]
 
 
 #FROM openjdk:11-jre-slim
