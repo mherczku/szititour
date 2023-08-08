@@ -98,6 +98,11 @@ export class AuthService implements OnDestroy {
     }));
   }
 
+  
+  verifyEmail(token: string): Observable<NetworkResponse> {
+    return this.http.get<NetworkResponse>(`${this.baseUrl}/verifyEmail/${token}`);
+  }
+
   logout() {
     this.removeToken();
     this.store.dispatch(logout());

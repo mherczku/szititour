@@ -39,7 +39,7 @@ export class RegisterComponent implements OnDestroy {
   register() {
     this.subscriptionRegister = this.authService.register(this.registerForm.value.email, this.registerForm.value.password).pipe(takeUntilDestroyed(this.ref)).subscribe(res => {
       if (res.success) {
-        this.alertService.success("Sikeres regisztráció, bejelentkezhetsz");
+        this.alertService.success("Sikeres regisztráció, email elküldve!");
         this.registerForm.reset();
         this.router.navigateByUrl("/login");
       } else {

@@ -20,6 +20,12 @@ const routes: Routes = [
     loadComponent: () => import("./ui/pages/auth/login/login.component").then(c => c.LoginComponent)
   },
   {
+    path: "verify/:token",
+    canMatch: [() => inject(AuthService).isRoleGuest()],
+    data: {roles: ["ROLE_GUEST"]},
+    loadComponent: () => import("./ui/pages/auth/verify/verify.component").then(c => c.VerifyComponent)
+  },
+  {
     path: "admin",
     canMatch: [() => inject(AuthService).isRoleAdmin()],
     data: {roles: ["ROLE_ADMIN"]},
