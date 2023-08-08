@@ -44,8 +44,12 @@ class SecurityController(private val teamService: TeamService, private val secur
     @GetMapping("verifyEmail/{token}")
     fun verifyEmailWithToken(@PathVariable token: String): ResponseEntity<Response> {
         val verification = securityService.verifyEmailVerificationToken(token)
-        teamService.enableTeam(verification.teamId)
-        return ResponseEntity(Response(true, "", "Email verified"), HttpStatus.OK)
+        return if(verification.verified) {
+            teamService.enableTeam(verification.teamId)
+            ResponseEntity(Response(true, "", "Email verified"), HttpStatus.OK)
+        } else {
+            ResponseEntity(Response(false, "verification.errorMessage"), HttpStatus.BAD_REQUEST)
+        }
 
     }
 
