@@ -18,11 +18,11 @@ import java.sql.Timestamp
 
 @Service
 @Transactional
-class TeamService @Autowired constructor(private val teamRepository: TeamRepository, private val statusRepository: TeamGameStatusRepository) {
+class TeamService @Autowired constructor(private val teamRepository: TeamRepository, private val statusRepository: TeamGameStatusRepository, private val emailService: EmailService) {
 
     fun getTeamByEmail(email: String): Team {
         val team = teamRepository.findByEmail(email)
-        if(team.isPresent) {
+        if (team.isPresent) {
             return team.get()
         } else {
             throw CustomException("Team not found", HttpStatus.NOT_FOUND)
@@ -36,8 +36,8 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
         updateTeam.name = teamUpdateProfileDto.name ?: updateTeam.name
         updateTeam.email = teamUpdateProfileDto.email ?: updateTeam.email
         updateTeam.members = teamUpdateProfileDto.members?.toMutableList() ?: updateTeam.members
-        if(!teamUpdateProfileDto.passwordBefore.isNullOrBlank() && !teamUpdateProfileDto.password.isNullOrBlank()) {
-            if(PasswordUtils.encryptPassword(teamUpdateProfileDto.passwordBefore) == updateTeam.password) {
+        if (!teamUpdateProfileDto.passwordBefore.isNullOrBlank() && !teamUpdateProfileDto.password.isNullOrBlank()) {
+            if (PasswordUtils.encryptPassword(teamUpdateProfileDto.passwordBefore) == updateTeam.password) {
                 updateTeam.password = PasswordUtils.encryptPassword(teamUpdateProfileDto.password)
             } else {
                 throw CustomException("Wrong password", HttpStatus.BAD_REQUEST)
@@ -48,14 +48,17 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
     }
 
     fun addTeam(team: Team, isAdmin: Boolean = false): Team {
-        if(isAdmin) {
+        if (isAdmin) {
             team.role = ROLE_ADMIN
         } else {
             team.role = ROLE_USER
         }
         team.createdAt = Timestamp(System.currentTimeMillis())
         team.updatedAt = Timestamp(System.currentTimeMillis())
-        return teamRepository.save(team)
+        val saved = teamRepository.save(team)
+        // todo email verification
+        emailService.sendWelcomeMail(team.email, team.name, verificationToken = "abc")
+        return saved
     }
 
     fun getAllTeam(): MutableList<Team> {
@@ -63,8 +66,8 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
     }
 
     fun getTeamById(id: Int): Team {
-        val team =  teamRepository.findById(id)
-        if(team.isPresent) {
+        val team = teamRepository.findById(id)
+        if (team.isPresent) {
             return team.get()
         } else {
             throw CustomException("Team not found", HttpStatus.NOT_FOUND)
@@ -72,7 +75,7 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
     }
 
     fun updateTeam(team: Team, isAdminMethod: Boolean = false): Team {
-        if(!isAdminMethod) {
+        if (!isAdminMethod) {
             team.role = ROLE_USER
         }
         team.updatedAt = Timestamp(System.currentTimeMillis())
@@ -91,14 +94,14 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
 
     fun updateGameStatusAuto(gameId: Int, theTeam: Team) {
         val gameStatus = theTeam.teamGameStatuses.find { it.game.id == gameId }
-        if(gameStatus !== null && gameStatus.game.active){
+        if (gameStatus !== null && gameStatus.game.active) {
 
-            if(gameStatus.placeStatuses.size > gameStatus.nextUnreachedPlaceIndex) {
+            if (gameStatus.placeStatuses.size > gameStatus.nextUnreachedPlaceIndex) {
                 val placeStatus = gameStatus.placeStatuses[gameStatus.nextUnreachedPlaceIndex]
                 val place = gameStatus.game.places.find { it.id == placeStatus.placeId }
-                if(place !== null) {
+                if (place !== null) {
                     val distanceInMeter = LocationUtils.getDistance(place.latitude, place.longitude, theTeam.lastLatitude, theTeam.lastLongitude)
-                    if(distanceInMeter <= 50) {
+                    if (distanceInMeter <= 50) {
                         placeStatus.reached = true
                         gameStatus.nextUnreachedPlaceIndex = gameStatus.nextUnreachedPlaceIndex + 1
                         placeStatus.reachedAt = Timestamp(System.currentTimeMillis())
