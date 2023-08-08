@@ -42,18 +42,11 @@ class SecurityController(private val teamService: TeamService, private val secur
     }
 
     @GetMapping("verifyEmail/{token}")
-    fun verifyEmailWithToken(@PathVariable token: String): ResponseEntity<LoginResponse> {
+    fun verifyEmailWithToken(@PathVariable token: String): ResponseEntity<Response> {
         val verification = securityService.verifyEmailVerificationToken(token)
-        try {
-            teamService.enableTeam(verification.teamId)
-            return ResponseEntity(LoginResponse(true, "", "Email verified", null), HttpStatus.OK)
-        } catch (e: CustomException) {
-            if (e.statusCode == HttpStatus.NOT_FOUND) {
-                throw CustomException("User not found", HttpStatus.UNAUTHORIZED)
-            } else {
-                throw e
-            }
-        }
+        teamService.enableTeam(verification.teamId)
+        return ResponseEntity(Response(true, "", "Email verified"), HttpStatus.OK)
+
     }
 
     @PostMapping("login")
