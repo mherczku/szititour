@@ -22,6 +22,7 @@ class Team(
     var img: String = "",
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
+    var enabled: Boolean = false,
 
     var lastLatitude: Double = 0.0,
     var lastLongitude: Double = 0.0,

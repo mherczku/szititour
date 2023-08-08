@@ -6,6 +6,7 @@ import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.repository.TeamRepository
+import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_ADMIN
 import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_USER
 import hu.hm.szititourbackend.util.LocationUtils
@@ -18,7 +19,7 @@ import java.sql.Timestamp
 
 @Service
 @Transactional
-class TeamService @Autowired constructor(private val teamRepository: TeamRepository, private val statusRepository: TeamGameStatusRepository, private val emailService: EmailService) {
+class TeamService @Autowired constructor(private val securityService: SecurityService, private val teamRepository: TeamRepository, private val statusRepository: TeamGameStatusRepository, private val emailService: EmailService) {
 
     fun getTeamByEmail(email: String): Team {
         val team = teamRepository.findByEmail(email)
@@ -56,8 +57,7 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
         team.createdAt = Timestamp(System.currentTimeMillis())
         team.updatedAt = Timestamp(System.currentTimeMillis())
         val saved = teamRepository.save(team)
-        // todo email verification
-        emailService.sendWelcomeMail(team.email, team.name, verificationToken = "abc")
+        emailService.sendWelcomeMail(team.email, team.name, verificationToken = securityService.generateEmailVerificationToken(team))
         return saved
     }
 
@@ -111,5 +111,11 @@ class TeamService @Autowired constructor(private val teamRepository: TeamReposit
                 }
             }
         }
+    }
+
+    fun enableTeam(teamId: Int) {
+        val team = getTeamById(teamId)
+        team.enabled = true
+        updateTeam(team, true)
     }
 }

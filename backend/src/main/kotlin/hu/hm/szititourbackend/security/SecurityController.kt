@@ -25,13 +25,28 @@ class SecurityController(private val teamService: TeamService, private val secur
 
     @GetMapping
     fun authorize(
-        @RequestHeader(TOKEN_NAME) token: String,
-        response: HttpServletResponse
+            @RequestHeader(TOKEN_NAME) token: String,
+            response: HttpServletResponse
     ): ResponseEntity<LoginResponse> {
         val verification = securityService.verifyToken(token)
         try {
             val t = teamService.getTeamById(verification.teamId)
             return ResponseEntity(LoginResponse(true, "", "", t.convertToDto()), HttpStatus.OK)
+        } catch (e: CustomException) {
+            if (e.statusCode == HttpStatus.NOT_FOUND) {
+                throw CustomException("User not found", HttpStatus.UNAUTHORIZED)
+            } else {
+                throw e
+            }
+        }
+    }
+
+    @GetMapping("verifyEmail/{token}")
+    fun verifyEmailWithToken(@PathVariable token: String): ResponseEntity<LoginResponse> {
+        val verification = securityService.verifyEmailVerificationToken(token)
+        try {
+            teamService.enableTeam(verification.teamId)
+            return ResponseEntity(LoginResponse(true, "", "Email verified", null), HttpStatus.OK)
         } catch (e: CustomException) {
             if (e.statusCode == HttpStatus.NOT_FOUND) {
                 throw CustomException("User not found", HttpStatus.UNAUTHORIZED)
@@ -57,11 +72,11 @@ class SecurityController(private val teamService: TeamService, private val secur
         if (Utils.validateEmail(credentials.email) && Utils.validatePassword(credentials.password)) {
             try {
                 teamService.addTeam(
-                    Team(
-                        email = credentials.email,
-                        password = PasswordUtils.encryptPassword(credentials.password),
-                        name = credentials.email.split('@')[0]
-                    )
+                        Team(
+                                email = credentials.email,
+                                password = PasswordUtils.encryptPassword(credentials.password),
+                                name = credentials.email.split('@')[0]
+                        )
                 )
             } catch (e: DataIntegrityViolationException) {
                 throw CustomException("Email is already in use", HttpStatus.BAD_REQUEST)

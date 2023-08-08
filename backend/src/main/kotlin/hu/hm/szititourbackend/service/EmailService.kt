@@ -13,7 +13,7 @@ import javax.mail.Message
 @Service
 class EmailService @Autowired constructor(private val javaMailSender: JavaMailSender) {
 
-    @Value("classpath:/welcome_template.html")
+    @Value("classpath:/templates/welcome.template.html")
     var resource: Resource? = null
 
     fun sendWelcomeMail(emailTo: String, username: String, verificationToken: String) {

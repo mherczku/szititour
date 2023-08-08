@@ -35,6 +35,6 @@ class SecurityUser(private val team: Team) : UserDetails {
     }
 
     override fun isEnabled(): Boolean {
-        return true
+        return team.enabled
     }
 }
