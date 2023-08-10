@@ -29,6 +29,9 @@ class SecurityController(private val teamService: TeamService, private val secur
             response: HttpServletResponse
     ): ResponseEntity<LoginResponse> {
         val verification = securityService.verifyToken(token)
+        if(!verification.verified) {
+            throw CustomException("VERIFICATION FAILED", HttpStatus.UNAUTHORIZED)
+        }
         try {
             val t = teamService.getTeamById(verification.teamId)
             return ResponseEntity(LoginResponse(true, "", "", t.convertToDto()), HttpStatus.OK)

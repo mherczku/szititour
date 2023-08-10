@@ -18,36 +18,37 @@ import {HostDirective} from "./directives/hostDirective";
 import {GameStateReducer} from "./store/reducers/game-status.reducer";
 import {NavbarComponent} from "./ui/components/navbar/navbar.component";
 import {LocationInterceptor} from "./interceptors/LocationInterceptor";
+import { ChatComponent } from "./ui/components/chat/chat.component";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HostDirective,
-    Modal2Component,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    HotToastModule.forRoot({
-      autoClose: true
-    }),
-    StoreModule.forRoot({}, {}),
-    StoreModule.forFeature("game", GameStateReducer),
-    StoreModule.forFeature("auth", AuthReducer),
-    NavbarComponent
-  ],
-  providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: LocationInterceptor, multi: true},
-    {provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService, HotToastService], multi: true}
-  ],
-  exports: [
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        HostDirective,
+        Modal2Component
+    ],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: LocationInterceptor, multi: true },
+        { provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService, HotToastService], multi: true }
+    ],
+    exports: [],
+    bootstrap: [AppComponent],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        HotToastModule.forRoot({
+            autoClose: true
+        }),
+        StoreModule.forRoot({}, {}),
+        StoreModule.forFeature("game", GameStateReducer),
+        StoreModule.forFeature("auth", AuthReducer),
+        NavbarComponent,
+        ChatComponent
+    ]
 })
 export class AppModule {
 }

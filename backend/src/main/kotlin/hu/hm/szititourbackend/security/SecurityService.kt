@@ -1,7 +1,9 @@
 package hu.hm.szititourbackend.security
 
 import hu.hm.szititourbackend.datamodel.Team
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.VerificationResponse
+import org.springframework.http.HttpStatus
 import org.springframework.security.oauth2.jwt.*
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -58,6 +60,10 @@ class SecurityService(private val jwtEncoder: JwtEncoder, private val jwtDecoder
 
         return try {
             val jwt: Jwt = jwtDecoder.decode(token)
+            val now = Instant.now()
+            if(jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
+                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN)
+            }
             val type: String = jwt.getClaim(CLAIM_TYPE)
             if (type != CLAIM_TYPE_VERIFICATION) {
                 throw Exception("Bad token type")
@@ -76,6 +82,10 @@ class SecurityService(private val jwtEncoder: JwtEncoder, private val jwtDecoder
         val token = bearerToken.replace("Bearer ", "")
         return try {
             val jwt: Jwt = jwtDecoder.decode(token)
+            val now = Instant.now()
+            if(jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
+                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN)
+            }
             val type: String = jwt.getClaim(CLAIM_TYPE)
             if (type != CLAIM_TYPE_TOKEN) {
                 throw Exception("Bad token type")

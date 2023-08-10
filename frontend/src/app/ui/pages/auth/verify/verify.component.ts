@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common";
 import { Component, DestroyRef, OnInit, inject } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -8,7 +9,7 @@ import { AuthService } from "src/app/services/AuthService";
   standalone: true,
   selector: "app-verify",
   templateUrl: "./verify.component.html",
-  styleUrls: ["./verify.component.scss"],
+  styleUrls: ["./verify.component.scss"]
 })
 export class VerifyComponent implements OnInit {
   private token = "";
@@ -19,12 +20,16 @@ export class VerifyComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private alertService: HotToastService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.token = params["token"];
     });
+
+    /* console.log("FETCHING")
+    fetch("http://localhost:8080/auth").then(r => r.json()).then(j => {console.log("fetched ", j);}); */
   }
 
   verifyEmail() {
@@ -33,7 +38,7 @@ export class VerifyComponent implements OnInit {
         .verifyEmail(this.token)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: (value) => {
+          next: () => {
             this.alertService.success(
               "Sikeres verifikáció, mostmár bejelentkezhetsz!"
             );

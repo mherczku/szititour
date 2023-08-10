@@ -18,10 +18,13 @@ class SzititourBackendApplication {
     fun commandLineRunner(teamService: TeamService): CommandLineRunner {
         return CommandLineRunner { args ->
 
-            val testPass = PasswordUtils.encryptPassword("T12345678");
-            val tester =  Team(email= "t@test.hu", password = testPass);
-            val savedAdmin = teamService.addTeam(tester, true)
-            println("tester created ${savedAdmin.id}")
+            val testPass = PasswordUtils.encryptPassword("T12345678")
+            val tester =  Team(email= "t@test.hu", password = testPass)
+            val tester2 =  Team(email= "tu@test.hu", password = testPass)
+            val savedAdmin = teamService.addTeam(tester, true, isTester = true)
+            val savedUser = teamService.addTeam(tester2, false, isTester = true)
+            println("tester admin created ${savedAdmin.id}")
+            println("tester user created ${savedUser.id}")
         }
     }
 }

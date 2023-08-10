@@ -48,16 +48,22 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         return this.updateTeam(updateTeam, true)
     }
 
-    fun addTeam(team: Team, isAdmin: Boolean = false): Team {
+    fun addTeam(team: Team, isAdmin: Boolean = false, isTester: Boolean = false): Team {
+        if(team.name.isBlank()) {
+            team.name = team.email.split('@')[0]
+        }
         if (isAdmin) {
             team.role = ROLE_ADMIN
         } else {
             team.role = ROLE_USER
         }
+        team.enabled = isTester
         team.createdAt = Timestamp(System.currentTimeMillis())
         team.updatedAt = Timestamp(System.currentTimeMillis())
         val saved = teamRepository.save(team)
-        emailService.sendWelcomeMail(team.email, team.name, verificationToken = securityService.generateEmailVerificationToken(team))
+        if(!isTester) {
+            emailService.sendWelcomeMail(team.email, team.name, verificationToken = securityService.generateEmailVerificationToken(team))
+        }
         return saved
     }
 
@@ -78,6 +84,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         if (!isAdminMethod) {
             team.role = ROLE_USER
         }
+
         team.updatedAt = Timestamp(System.currentTimeMillis())
         return teamRepository.save(team)
     }

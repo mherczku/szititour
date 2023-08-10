@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.web.bind.MissingRequestValueException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
@@ -18,6 +19,8 @@ class MyExceptionHandler {
 
     @ExceptionHandler(Exception::class)
     fun handleSimpleException(ex: Exception): ResponseEntity<Response> {
+        println("INTERNAL SERVER ERROR: ")
+        ex.printStackTrace()
         return ResponseEntity<Response>(
             Response(errorMessage = ex.message.toString(), success = false),
             HttpStatus.INTERNAL_SERVER_ERROR
@@ -27,6 +30,11 @@ class MyExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException::class)
     fun handleCustomException(ex: DataIntegrityViolationException): ResponseEntity<Response> {
         return ResponseEntity<Response>(Response(errorMessage = "Game title is already taken", success = false), HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(MissingRequestValueException::class)
+    fun handleCustomException(ex: MissingRequestValueException): ResponseEntity<Response> {
+        return ResponseEntity<Response>(Response(errorMessage = ex.localizedMessage, success = false), HttpStatus.FORBIDDEN)
     }
 
     @ExceptionHandler(UsernameNotFoundException::class)
