@@ -1,36 +1,65 @@
-
-<div class="chat-container">
-
-    <div class="chat-head">
-        <div class="left">
-            <p>Szititour Szervezők</p>
-        </div>
-
-        <div class="right">
-            <button>HIDE</button>
-            <button>CLOSE</button>
-        </div>
+<div [@chatCollapse]="isHidden"  class="chat-container">
+  <div class="chat-head" (click)="toggle()">
+    <div class="left">
+      <p *ngIf="!isAdmin">Szititour Szervezők</p>
+      <select>
+        <option value="test">test</option>
+      </select>
     </div>
 
-    <div class="chat-content" id="bs" #chatContent>
+    <div class="right">
+      <svg (click)="hide($event)" class="btn-hide" height="26px" viewBox="0 0 24 24" width="26px">
+        <line
+          stroke="black"
+          stroke-linecap="round"
+          stroke-width="2"
+          sroke-height="2"
+          x1="2"
+          x2="20"
+          y1="12"
+          y2="12"
+        ></line>
+      </svg>
+    </div>
+  </div>
 
-        <div class="chat-message-sent">
-            <p>Ez egy rövid üzenet</p>
-        </div>
+  <div  class="chat-content" id="bs" #chatContent>
 
-        <div class="chat-message-received">
-            <p>Ez egy pár karakterrel hosszab chat üzenet, hogy kiderüljön az hogyan néz ki a külömböző képernyőméreteken.</p>
-        </div>
-
-        <div [@popInOut] *ngFor="let m of msgs" [ngClass]="(isAdmin && m.sender === 'ADMIN') ? 'chat-message-sent' : 'chat-message-received'">
-            <p>{{m.content}}</p>
-        </div>
-
+    <div class="info" *ngIf="!isAdmin">
+      <p>Itt felveheted a kapcsolatot a szervezőkkel</p>
     </div>
 
-    <div class="chat-footer">
-        <input (keyup.enter)="sendMsg()" class="simpleInput" [(ngModel)]="content" type="text">
-        <button class="btn btn-simple" (click)="sendMsg()">SEND</button>
+    <div class="chat-message-sent">
+      <p>Ez egy rövid üzenet</p>
     </div>
 
+    <div class="chat-message-received">
+      <p>
+        Ez egy pár karakterrel hosszab chat üzenet, hogy kiderüljön az hogyan
+        néz ki a külömböző képernyőméreteken.
+      </p>
+    </div>
+
+    <div
+      [@popInOut]
+      *ngFor="let m of msgs"
+      [ngClass]="
+        (isAdmin && m.sender === 'ADMIN') || (!isAdmin && m.sender !== 'ADMIN')
+          ? 'chat-message-sent'
+          : 'chat-message-received'
+      "
+    >
+      <p>{{ m.content }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="!isHidden" class="chat-footer">
+    <input
+      (keyup.enter)="sendMsg()"
+      class="simpleInput"
+      [(ngModel)]="content"
+      type="text"
+    />
+    <button class="btn btn-simple" (click)="sendMsg()">SEND</button>
+  </div>
 </div>

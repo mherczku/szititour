@@ -8,25 +8,53 @@
 }
 
 .chat-container {
-  background-color: whitesmoke;
+  /* From https://css.glass */
+  background: rgba(0, 0, 0, 0.21);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6.3px);
+  -webkit-backdrop-filter: blur(6.3px);
+  border: 1px solid rgba(255, 255, 255, 0.58);
+
   padding: 20px;
-  padding-top: 80px;
+  padding-top: 60px;
   border-radius: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 
   .chat-head {
+    cursor: pointer;
     background-color: $kon-orange;
     color: white;
     font-weight: bold;
     flex-direction: row;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     position: absolute;
     top: 0;
     width: 100%;
     left: 0;
     padding: 20px;
+    user-select: none;
 
     border-radius: 20px;
+
+    .right {
+      .btn-hide {
+        cursor: pointer;
+        line {
+          transition: all 100ms ease-in-out;
+          stroke-linecap: round;
+          stroke: #ffffff;
+        }
+        &:hover {
+          line {
+            stroke: rgba(255, 255, 255, 0.4);
+          }
+        }
+      }
+    }
   }
 
   .chat-content {
@@ -36,6 +64,7 @@
     padding: 20px 0px;
     height: 400px;
     overflow-y: auto;
+    margin: 20px 0;
 
     .chat-message-received {
       margin: 0 10px;
@@ -63,6 +92,13 @@
         width: 50%;
         border-radius: 20px 20px 3px 20px;
       }
+    }
+
+    .info {
+      width: fit-content;
+      margin: auto;
+      margin-top: 0;
+      margin-bottom: 20px;
     }
   }
 

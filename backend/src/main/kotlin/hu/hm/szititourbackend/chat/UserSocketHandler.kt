@@ -1,8 +1,12 @@
 package hu.hm.szititourbackend.chat
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import hu.hm.szititourbackend.security.SecurityService
+import hu.hm.szititourbackend.service.TeamService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
@@ -11,9 +15,15 @@ import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.io.IOException
 
 
+data class SessionData(
+        val username: String,
+        val session: WebSocketSession,
+        val authenticated: Boolean
+)
+
 @Component
-class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: AdminSocketHandler) : TextWebSocketHandler() {
-    var sessions: MutableMap<String, WebSocketSession> = mutableMapOf()
+class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: AdminSocketHandler, private val teamService: TeamService, private val securityService: SecurityService) : TextWebSocketHandler() {
+    var sessions: MutableMap<String, SessionData> = mutableMapOf()
 
     @Throws(InterruptedException::class, IOException::class)
     public override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
@@ -21,12 +31,28 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
 
         try {
             val chatMessage: ChatMessage = ObjectMapper().readValue(message.payload, ChatMessage::class.java)
-            chatMessage.sender = session.id
+            var sessionData = sessions[session.id]
+
+            if (sessionData == null) {
+                session.close(CloseStatus.NOT_ACCEPTABLE)
+            } else {
+                if(!sessionData.authenticated) {
+                    sessionData = authenticate(session, chatMessage)
+                    if(sessionData !== null) {
+                        sessions[session.id] = sessionData
+                    } else {
+                        return
+                    }
+                }
+                chatMessage.sender = sessionData.username
+            }
 
             println("sending user message $message to all admins")
             for (webSocketSession in adminSocket.sessions) {
-                webSocketSession.value.sendMessage(message)
+                webSocketSession.value.session.sendMessage(message)
             }
+            // sent back to user
+            session.sendMessage(message)
         } catch (e: Exception) {
             println("Websocket exception while in user socket:")
             e.printStackTrace()
@@ -41,8 +67,26 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
     @Throws(Exception::class)
     override fun afterConnectionEstablished(session: WebSocketSession) {
         println("user conn est: ${session.id} : ${session.remoteAddress} : ${session.attributes} ---")
-
+        val sessionData = SessionData(username = "", session = session, authenticated = false)
         //the messages will be broadcasted to all users.
-        sessions[session.id] = session
+        sessions[session.id] = sessionData
+
+    }
+
+    private fun authenticate(session: WebSocketSession, chatMessage: ChatMessage): SessionData? {
+        return if (chatMessage.type == "AUTH") {
+            val token = chatMessage.token
+            val verification = securityService.verifyToken(token)
+            if (verification.verified) {
+                val currentTeam = teamService.getTeamById(verification.teamId)
+                SessionData(username = currentTeam.name, session = session, authenticated = true)
+            } else {
+                session.close(CloseStatus.POLICY_VIOLATION)
+                null
+            }
+        } else {
+            session.close(CloseStatus.NOT_ACCEPTABLE)
+            null
+        }
     }
 }

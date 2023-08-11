@@ -12,6 +12,6 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 class WebSocketConfig constructor(@Autowired @Lazy private val userSocket: UserSocketHandler, @Lazy private val adminSocket: AdminSocketHandler) : WebSocketConfigurer {
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
         registry.addHandler(adminSocket, "/ws/admin").setAllowedOrigins("*")
-        registry.addHandler(userSocket, "/ws/user")
+        registry.addHandler(userSocket, "/ws/user").setAllowedOrigins("*")
     }
 }

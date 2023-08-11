@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet
 import com.nimbusds.jose.proc.SecurityContext
 import hu.hm.szititourbackend.security.SecurityService.Companion.CLAIM_ROLE
+import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_ADMIN
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter
