@@ -21,10 +21,13 @@ class SzititourBackendApplication {
             val testPass = PasswordUtils.encryptPassword("T12345678")
             val tester =  Team(email= "t@test.hu", password = testPass)
             val tester2 =  Team(email= "tu@test.hu", password = testPass)
+            val tester3 =  Team(email= "testerTeam23Autok@test.hu", password = testPass)
             val savedAdmin = teamService.addTeam(tester, true, isTester = true)
             val savedUser = teamService.addTeam(tester2, false, isTester = true)
+            val savedUser3 = teamService.addTeam(tester3, false, isTester = true)
             println("tester admin created ${savedAdmin.id}")
             println("tester user created ${savedUser.id}")
+            println("tester user created ${savedUser3.id}")
         }
     }
 }

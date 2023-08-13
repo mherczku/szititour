@@ -51,7 +51,8 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
             chatMessage.sender = "ADMIN"
 
             println("SENDING ADMIN MESSAGE TO RECIPIENT")
-            userSocket.sessions[chatMessage.recipient]?.session?.sendMessage(message)
+            userSocket.sessions.values.find { it.username == chatMessage.recipient }?.session?.sendMessage(message)
+            //userSocket.sessions[chatMessage.recipient]?.session?.sendMessage(message)
 
             for (webSocketSession in sessions) {
 
