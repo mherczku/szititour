@@ -38,3 +38,7 @@ out/
 /src/main/resources/keystore/backend.p12
 /src/main/resources/cert/private.pem
 /src/main/resources/cert/public.pem
+/src/main/resources/cert.p12
+/src/main/resources/private.pem
+/src/main/resources/public.pem
+/images/

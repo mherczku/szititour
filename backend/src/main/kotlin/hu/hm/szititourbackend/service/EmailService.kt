@@ -19,7 +19,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
     fun sendWelcomeMail(emailTo: String, username: String, verificationToken: String) {
         println("sending email 1")
         val mimeMessage = javaMailSender.createMimeMessage()
-        mimeMessage.setFrom("szititour.test@gmail.com")
+        mimeMessage.setFrom("szititour.nxt+test@gmail.com")
         mimeMessage.subject = "Verify your Email"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
