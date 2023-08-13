@@ -57,7 +57,7 @@ export class ChatService {
           const message: Message = {
             content: "",
             recipient: "",
-            sender: "",
+            sender: this.authService.getUsername(),
             type: "AUTH",
             info: [],
             token: token
@@ -78,7 +78,7 @@ export class ChatService {
 
     const observer = {
       error: (err: any) => {
-        console.log("obs error")
+        console.log("obs error");
         console.error(err);
       },
       complete: () => {

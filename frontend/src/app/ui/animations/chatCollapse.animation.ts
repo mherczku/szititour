@@ -14,8 +14,7 @@ export const chatCollapse = trigger("chatCollapse", [
     style({
       padding: "65px 0 0 0",
       width: "300px",
-      height: 0,
-      overflow: "hidden",
+      height: 0
     })
   ),
 

@@ -18,6 +18,7 @@ export class AuthService implements OnDestroy {
   private baseUrl = environment.apiBaseUrl + "/auth";
   private currentRole: "ROLE_GUEST" | "ROLE_ADMIN" | "ROLE_USER" = "ROLE_GUEST";
   private destroy$ = new Subject();
+  private username = "GUEST";
 
   constructor(
     private http: HttpClient,
@@ -27,6 +28,7 @@ export class AuthService implements OnDestroy {
 
     this.store.select(selectLoggedInTeam).pipe(takeUntil(this.destroy$)).subscribe(team => {
       this.currentRole = team?.role ?? "ROLE_GUEST";
+      this.username = team?.name ?? "GUEST";
     });
   }
 
@@ -139,5 +141,9 @@ export class AuthService implements OnDestroy {
       case "ROLE_USER":
         return "user/home";
     }
+  }
+
+  getUsername(): string {
+    return this.username;
   }
 }
