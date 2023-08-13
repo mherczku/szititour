@@ -5,8 +5,6 @@ import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.service.TeamService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
@@ -36,9 +34,9 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
             if (sessionData == null) {
                 session.close(CloseStatus.NOT_ACCEPTABLE)
             } else {
-                if(!sessionData.authenticated) {
+                if (!sessionData.authenticated) {
                     sessionData = authenticate(session, chatMessage)
-                    if(sessionData !== null) {
+                    if (sessionData !== null) {
                         sessions[session.id] = sessionData
                     } else {
                         return
@@ -61,13 +59,24 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
         super.afterConnectionClosed(session, status)
+
+        notifyAdminsOnLeave(sessions[session.id]?.username)
         sessions.remove(session.id)
+    }
+
+    private fun notifyAdminsOnLeave(username: String?) {
+        if(username != null) {
+            for (webSocketSession in adminSocket.sessions) {
+                webSocketSession.value.session.sendMessage(TextMessage(ObjectMapper().writeValueAsString(ChatMessage(sender = username, type = "LEAVE"))))
+            }
+        }
     }
 
     @Throws(Exception::class)
     override fun afterConnectionEstablished(session: WebSocketSession) {
         println("user conn est: ${session.id} : ${session.remoteAddress} : ${session.attributes} ---")
         val sessionData = SessionData(username = "", session = session, authenticated = false)
+
         //the messages will be broadcasted to all users.
         sessions[session.id] = sessionData
 
