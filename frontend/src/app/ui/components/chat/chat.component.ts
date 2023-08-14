@@ -99,6 +99,8 @@ export class ChatComponent implements OnInit, OnDestroy {
           this.handleMSG(msg);
         } else if (msg?.type === "INFO") {
           this.handleINFO(msg);
+        } else if (msg?.type === "LEAVE") {
+          this.handleLEAVE(msg);
         }
         console.log("Response from websocket: ", msg);
         console.log(this.adminChat().users.length);
@@ -114,6 +116,18 @@ export class ChatComponent implements OnInit, OnDestroy {
         messages: [],
       });
     });
+  }
+
+
+  handleLEAVE(msg: Message) {
+    this.adminChat.update(chat => {
+      const user = chat.users.find(user => user.name === msg.sender);
+      if(user) {
+        user.online = false;
+      }
+      return chat;
+    });
+  
   }
 
   hide(event: Event) {
@@ -149,7 +163,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     clearTimeout(this.timeOut);
-    //TODO this.chatService.close()
+    this.chatService.close();
   }
 
   handleMSG(msg: Message) {

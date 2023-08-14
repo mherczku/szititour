@@ -38,6 +38,8 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
                     sessionData = authenticate(session, chatMessage)
                     if (sessionData !== null) {
                         sessions[session.id] = sessionData
+                        session.sendMessage(TextMessage(ObjectMapper().writeValueAsString(ChatMessage(content = "SUCCESS", type = "JOIN"))))
+                        return
                     } else {
                         return
                     }

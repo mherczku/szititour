@@ -9,7 +9,7 @@ export interface Message {
   content: string
   sender: string 
   recipient: string
-  type: "MSG" | "INFO" | "AUTH"
+  type: "MSG" | "INFO" | "AUTH" | "LEAVE" | "JOIN"
   info: string[]
   token: string
 }
@@ -20,6 +20,8 @@ export class ChatService {
 
   private subject?: AnonymousSubject<MessageEvent>;
   public messages?: Subject<Message>;
+
+  private ws!: WebSocket;
 
   constructor(private http: HttpClient, private authService: AuthService) {
   
@@ -46,11 +48,15 @@ export class ChatService {
     return this.subject;
   }
 
+  public close() {
+    this.ws.close();
+  }
+
   public createWebSocket(): AnonymousSubject<MessageEvent> {
-    const ws = new WebSocket(this.baseUrl);
+    this.ws = new WebSocket(this.baseUrl);
 
     const observable = new Observable((obs: Observer<MessageEvent<Message>>) => {
-      ws.onopen = () => {
+      this.ws.onopen = () => {
         console.log("ws connection successfully opened - sending auth");
         const token = this.authService.getToken();
         if(token) {
@@ -70,10 +76,10 @@ export class ChatService {
         
 
       };
-      ws.onmessage = obs.next.bind(obs);
-      ws.onerror = obs.error.bind(obs);
-      ws.onclose = obs.complete.bind(obs);
-      return ws.close.bind(ws);
+      this.ws.onmessage = obs.next.bind(obs);
+      this.ws.onerror = obs.error.bind(obs);
+      this.ws.onclose = obs.complete.bind(obs);
+      return this.ws.close.bind(this.ws);
     });
 
     const observer = {
@@ -86,8 +92,8 @@ export class ChatService {
       },
       next: (data: MessageEvent<Message>) => {
         console.log("Message sent to websocket: ", data);
-        if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify(data));
+        if (this.ws.readyState === WebSocket.OPEN) {
+          this.ws.send(JSON.stringify(data));
         }
       },
     };

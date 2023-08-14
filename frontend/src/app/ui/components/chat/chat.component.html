@@ -84,6 +84,7 @@
       >
         <p>{{ m.content }}</p>
       </div>
+      <p class="info" *ngIf="adminChat().selectedUser?.online === false">Csapat nem elérhető!</p>
     </ng-container>
   </div>
 
