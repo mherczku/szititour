@@ -9,7 +9,7 @@ export interface Message {
   content: string
   sender: string 
   recipient: string
-  type: "MSG" | "INFO" | "AUTH" | "LEAVE" | "JOIN"
+  type: "MSG" | "INFO" | "AUTH" | "LEAVE" | "JOIN" | "ALREADY_OPEN"
   info: string[]
   token: string
 }

@@ -44,6 +44,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   isAdmin = true;
   isHidden = true;
   first = true;
+  isConnected = false;
 
   adminChat: WritableSignal<AdminChat> = signal({
     users: [
@@ -56,7 +57,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     ],
     newMessages: computed(() => {
       let a = 0;
-      this.adminChat().users.forEach((user) => (a += user.newMessages));
+      this.adminChat().users.forEach((user) => {
+        if (user.name !== "Nincs üzenet") {
+          a += user.newMessages;
+        }
+      });
       return a;
     }),
   });
@@ -94,46 +99,65 @@ export class ChatComponent implements OnInit, OnDestroy {
   subscribeToMessages() {
     this.chatService.messages
       ?.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((msg) => {
-        if (msg?.type === "MSG") {
-          this.handleMSG(msg);
-        } else if (msg?.type === "INFO") {
-          this.handleINFO(msg);
-        } else if (msg?.type === "LEAVE") {
-          this.handleLEAVE(msg);
-        }
-        console.log("Response from websocket: ", msg);
-        console.log(this.adminChat().users.length);
+      .subscribe({
+        next: (msg) => {
+          if (msg?.type === "MSG") {
+            this.handleMSG(msg);
+          } else if (msg?.type === "INFO") {
+            this.handleINFO(msg);
+          } else if (msg?.type === "LEAVE") {
+            this.handleLEAVE(msg);
+          } else if (msg?.type === "ALREADY_OPEN") {
+            this.handleALREADY_OPEN(msg);
+          }
+          console.log("Response from websocket: ", msg);
+          console.log(this.adminChat().users.length);
+        },
+
+        error: (error) => {
+          this.isConnected = false;
+          this.alertService.error("Chat hiba történt: " + error);
+        },
+        complete: () => {
+          this.isConnected = false;
+        },
       });
+  }
+
+  handleALREADY_OPEN(msg: Message) {
+    //TODO implement
+    console.error("ALREADY OPEN CHAT");
   }
 
   handleINFO(msg: Message) {
     msg.info.forEach((name) => {
-      this.adminChat().users.push({
+      const newUser = {
         name: name,
         online: true,
         newMessages: 0,
         messages: [],
-      });
+      };
+      this.adminChat().users.push(newUser);
+      this.adminChat().selectedUser = newUser;
+      this.adminChat.set(this.adminChat()); 
     });
   }
 
-
   handleLEAVE(msg: Message) {
-    this.adminChat.update(chat => {
-      const user = chat.users.find(user => user.name === msg.sender);
-      if(user) {
+    this.adminChat.update((chat) => {
+      const user = chat.users.find((user) => user.name === msg.sender);
+      if (user) {
         user.online = false;
       }
       return chat;
     });
-  
   }
 
   hide(event: Event) {
     this.isHidden = true;
     event.stopPropagation();
   }
+
   toggle() {
     this.isHidden = !this.isHidden;
 
@@ -208,11 +232,10 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   resetSelectedCounter() {
     console.log("resetSelectedCounter");
-    
-    this.adminChat.update(chat => {
-      chat.selectedUser?.newMessages ? chat.selectedUser.newMessages = 0 : 0;
+
+    this.adminChat.update((chat) => {
+      chat.selectedUser?.newMessages ? (chat.selectedUser.newMessages = 0) : 0;
       return chat;
     });
-
   }
 }
