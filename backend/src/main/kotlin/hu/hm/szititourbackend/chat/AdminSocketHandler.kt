@@ -76,7 +76,7 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
     override fun afterConnectionEstablished(session: WebSocketSession) {
         println("conn est: ${session.id} : ${session.remoteAddress} : ${session.attributes} ---")
         //the messages will be broadcasted to all users.
-        sessions[session.id] = SessionData("", session, false)
+        sessions[session.id] = SessionData("", -1, session, false)
     }
 
     private fun authenticate(session: WebSocketSession, chatMessage: ChatMessage): SessionData? {
@@ -86,7 +86,16 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
             if (verification.verified) {
                 val currentTeam = teamService.getTeamById(verification.teamId)
                 if(currentTeam.role == ROLE_ADMIN) {
-                    SessionData(username = currentTeam.name, session = session, authenticated = true)
+
+                    // Already has open connection:
+                    if(sessions.values.find { it.userId == currentTeam.id } != null) {
+                        session.sendMessage(TextMessage(ObjectMapper().writeValueAsString(ChatMessage(type = "ALREADY_OPEN"))))
+                        session.close(CloseStatus.SERVICE_OVERLOAD)
+                        null
+                    } else {
+                        SessionData(username = currentTeam.name, session = session, authenticated = true, userId = currentTeam.id)
+                    }
+
                 } else {
                     null
                 }

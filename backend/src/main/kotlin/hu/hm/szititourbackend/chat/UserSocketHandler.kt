@@ -15,6 +15,7 @@ import java.io.IOException
 
 data class SessionData(
         val username: String,
+        val userId: Int,
         val session: WebSocketSession,
         val authenticated: Boolean
 )
@@ -64,6 +65,9 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
 
         notifyAdminsOnLeave(sessions[session.id]?.username)
         sessions.remove(session.id)
+        sessions.forEach {
+            println("marad: ${it.value.username }")
+        }
     }
 
     private fun notifyAdminsOnLeave(username: String?) {
@@ -77,9 +81,9 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
     @Throws(Exception::class)
     override fun afterConnectionEstablished(session: WebSocketSession) {
         println("user conn est: ${session.id} : ${session.remoteAddress} : ${session.attributes} ---")
-        val sessionData = SessionData(username = "", session = session, authenticated = false)
+        val sessionData = SessionData(username = "", session = session, authenticated = false, userId = -1)
 
-        //the messages will be broadcasted to all users.
+
         sessions[session.id] = sessionData
 
     }
@@ -90,7 +94,16 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
             val verification = securityService.verifyToken(token)
             if (verification.verified) {
                 val currentTeam = teamService.getTeamById(verification.teamId)
-                SessionData(username = currentTeam.name, session = session, authenticated = true)
+
+                // Already has open connection:
+                if(sessions.values.find { it.userId == currentTeam.id } != null) {
+                    session.sendMessage(TextMessage(ObjectMapper().writeValueAsString(ChatMessage(type = "ALREADY_OPEN"))))
+                    session.close(CloseStatus.SERVICE_OVERLOAD)
+                    null
+                } else {
+                    SessionData(username = currentTeam.name, session = session, authenticated = true, userId = currentTeam.id)
+                }
+
             } else {
                 session.close(CloseStatus.POLICY_VIOLATION)
                 null
