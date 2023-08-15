@@ -15,7 +15,7 @@ import java.io.IOException
 
 
 @Component
-class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: UserSocketHandler, private val teamService: TeamService, private val securityService: SecurityService) : TextWebSocketHandler() {
+class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: UserSocketHandler, private val teamService: TeamService, private val securityService: SecurityService) : BaseSocketHandler() {
     var sessions: MutableMap<String, SessionData> = mutableMapOf()
 
     @Throws(InterruptedException::class, IOException::class)
@@ -34,11 +34,9 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
                     sessionData = authenticate(session, chatMessage)
                     if(sessionData !== null) {
                         sessions[session.id] = sessionData
-
                         // sending infos:
                         val infos: List<String> = userSocket.sessions.map { it.value.username }
-                        val text = ObjectMapper().writeValueAsString(ChatMessage(type = "INFO", info = infos))
-                        session.sendMessage(TextMessage(text))
+                        sendMessageTo(sessionData, ChatMessage(type = "INFO", info = infos))
                         return
                     } else {
                         return
@@ -51,15 +49,20 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
             chatMessage.sender = "ADMIN"
 
             println("SENDING ADMIN MESSAGE TO RECIPIENT")
-            userSocket.sessions.values.find { it.username == chatMessage.recipient }?.session?.sendMessage(message)
-            //userSocket.sessions[chatMessage.recipient]?.session?.sendMessage(message)
+            val recipient = userSocket.sessions.values.find { it.username == chatMessage.recipient }
 
-            for (webSocketSession in sessions) {
+            if(recipient != null && recipient.session.isOpen) {
+                sendMessageTo(recipient, message)
 
-                println("sending admin message to admins: $message")
-                webSocketSession.value.session.sendMessage(message)
-
+                for (webSocketSession in sessions) {
+                    if(webSocketSession.value.session.isOpen) {
+                        println("sending admin message to admins: $message")
+                        sendMessageTo(webSocketSession.value, message)
+                    }
+                }
             }
+
+
         } catch (e: Exception) {
             println("Websocket exception while in admin socket:")
             e.printStackTrace()
@@ -89,7 +92,7 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
 
                     // Already has open connection:
                     if(sessions.values.find { it.userId == currentTeam.id } != null) {
-                        session.sendMessage(TextMessage(ObjectMapper().writeValueAsString(ChatMessage(type = "ALREADY_OPEN"))))
+                        sendMessageTo(session, ChatMessage(type = "ALREADY_OPEN"))
                         session.close(CloseStatus.SERVICE_OVERLOAD)
                         null
                     } else {
