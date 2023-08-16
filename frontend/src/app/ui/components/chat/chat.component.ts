@@ -11,13 +11,14 @@ import {
   computed,
   signal,
 } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
 import { HotToastService } from "@ngneat/hot-toast";
-import { ChatService, Message } from "src/app/services/ChatService";
-import { popInOut } from "../../animations/pupInOut.animation";
-import { chatCollapse } from "../../animations/chatCollapse.animation";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthService } from "src/app/services/AuthService";
+import { ChatService, Message } from "src/app/services/ChatService";
+import { chatCollapse } from "../../animations/chatCollapse.animation";
+import { popInOut } from "../../animations/pupInOut.animation";
+import { UserSelectorComponent } from "./user-selector/user-selector.component";
 
 interface AdminChat {
   newMessages: Signal<number>;
@@ -25,7 +26,7 @@ interface AdminChat {
   selectedUser?: SimpleUser;
 }
 
-interface SimpleUser {
+export interface SimpleUser {
   name: string;
   online: boolean;
   newMessages: number;
@@ -37,12 +38,12 @@ interface SimpleUser {
   selector: "app-chat",
   templateUrl: "./chat.component.html",
   styleUrls: ["./chat.component.scss"],
-  imports: [CommonModule, FormsModule],
   animations: [popInOut, chatCollapse],
+  imports: [CommonModule, FormsModule, UserSelectorComponent],
 })
 export class ChatComponent implements OnInit, OnDestroy {
   isAdmin = true;
-  isHidden = true;
+  isHidden = false;
   first = true;
   isConnected = false;
 
@@ -51,6 +52,12 @@ export class ChatComponent implements OnInit, OnDestroy {
       {
         name: "Nincs üzenet",
         online: false,
+        newMessages: 0,
+        messages: [],
+      },
+      {
+        name: "LakatosDorinaCsapatFeketeKarácsony",
+        online: true,
         newMessages: 0,
         messages: [],
       },
@@ -139,7 +146,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       };
       this.adminChat().users.push(newUser);
       this.adminChat().selectedUser = newUser;
-      this.adminChat.set(this.adminChat()); 
+      this.adminChat.set(this.adminChat());
     });
   }
 
@@ -158,7 +165,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     event.stopPropagation();
   }
 
-  toggle() {
+  toggle(event: Event) {
     this.isHidden = !this.isHidden;
 
     if (this.first) {
@@ -235,6 +242,13 @@ export class ChatComponent implements OnInit, OnDestroy {
 
     this.adminChat.update((chat) => {
       chat.selectedUser?.newMessages ? (chat.selectedUser.newMessages = 0) : 0;
+      return chat;
+    });
+  }
+
+  setSelecteduser(user: SimpleUser) {
+    this.adminChat.update((chat) => {
+      chat.selectedUser = user;
       return chat;
     });
   }

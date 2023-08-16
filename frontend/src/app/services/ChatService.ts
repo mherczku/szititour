@@ -83,7 +83,7 @@ export class ChatService {
     });
 
     const observer = {
-      error: (err: any) => {
+      error: (err: unknown) => {
         console.log("obs error");
         console.error(err);
       },

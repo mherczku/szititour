@@ -11,21 +11,21 @@
 
 .badge {
   z-index: 10;
-    position: absolute;
-    top: -10px;
-    left: -5px;
-    color: white;
-    background-color: #007bff;
-    font-weight: bold;
-    aspect-ratio: 1;
-    width: 30px;
-    height: 30px;
-    font-size: 14px;
-    display: flex;
-    border-radius: 100%;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+  position: absolute;
+  top: -10px;
+  left: -5px;
+  color: white;
+  background-color: #007bff;
+  font-weight: bold;
+  aspect-ratio: 1;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  display: flex;
+  border-radius: 100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .chat-container {
@@ -61,7 +61,6 @@
     user-select: none;
 
     border-radius: 20px;
-
 
     .left {
       select {
@@ -108,6 +107,21 @@
     overflow-y: auto;
     margin: 20px 0;
     width: 400px;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: $smoke;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: darkgray;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #6f6f6f;
+    }
 
     .chat-message-received {
       margin: 0 10px;
