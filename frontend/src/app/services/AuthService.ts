@@ -88,6 +88,26 @@ export class AuthService implements OnDestroy {
     }));
   }
 
+  public continueWithGoogle(token: string): Observable<NetworkLoginResponse> {
+    const headers = new HttpHeaders()
+      .set("googleToken", token);
+
+    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}/login/google`, {headers: headers}).pipe(tap(evt => {
+      if (evt.success) {
+        const team: Team = evt.team;
+        console.log(evt.team, team.role === "ROLE_ADMIN");
+        this.store.dispatch(login({team: team}));
+        if (team.role === "ROLE_ADMIN") {
+          console.log("admin login", team);
+          this.router.navigateByUrl("/admin");
+        }
+        else {
+          this.router.navigateByUrl("/user");
+        }
+      }
+    }));
+  }
+
   public register(email: string, password: string): Observable<NetworkResponse> {
     return this.http.post<NetworkResponse>(`${this.baseUrl}/register`, {email: email, password: password});
   }
