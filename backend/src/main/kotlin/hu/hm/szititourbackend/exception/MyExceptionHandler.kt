@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MissingRequestValueException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -42,6 +43,14 @@ class MyExceptionHandler {
         return ResponseEntity<Response>(
             Response(errorMessage = "Username (email) not found. SecurityDetailService", success = false),
             HttpStatus.NOT_FOUND
+        )
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
+    fun handleHttpRequestMethodNotSupportedException(ex: HttpRequestMethodNotSupportedException): ResponseEntity<Response> {
+        return ResponseEntity<Response>(
+                Response(errorMessage = "Request method not supported: ${ex.localizedMessage}", success = false),
+                HttpStatus.BAD_REQUEST
         )
     }
 }

@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet
 import com.nimbusds.jose.proc.SecurityContext
 import hu.hm.szititourbackend.security.SecurityService.Companion.CLAIM_ROLE
+import hu.hm.szititourbackend.security.SecurityService.Companion.GOOGLE_TOKEN_HEADER
 import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_ADMIN
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -111,7 +112,7 @@ class SecurityConfig2(
         corsConfiguration.allowedHeaders = listOf(
                 "Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Authorization", "Email", "Origin, Accept", "X-Requested-With",
-                "Access-Control-Request-Method", "Access-Control-Request-Headers", "longitude", "latitude", "gameid"
+                "Access-Control-Request-Method", "Access-Control-Request-Headers", "longitude", "latitude", "gameid", GOOGLE_TOKEN_HEADER
         )
         corsConfiguration.exposedHeaders = listOf(
                 "Origin", "Content-Type", "Accept", "Authorization",

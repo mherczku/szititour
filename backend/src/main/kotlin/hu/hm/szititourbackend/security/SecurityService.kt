@@ -1,16 +1,26 @@
 package hu.hm.szititourbackend.security
 
+import com.google.api.client.auth.openidconnect.IdToken
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
+import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.json.gson.GsonFactory
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.exception.CustomException
+import hu.hm.szititourbackend.extramodel.GoogleAccount
+import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.extramodel.VerificationResponse
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.security.oauth2.jwt.*
 import org.springframework.stereotype.Service
 import java.time.Instant
+import java.util.*
 
 
 @Service
-class SecurityService(private val jwtEncoder: JwtEncoder, private val jwtDecoder: JwtDecoder) {
+class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder, private val jwtDecoder: JwtDecoder) {
 
     companion object {
         const val CLAIM_ROLE = "role"
@@ -24,7 +34,11 @@ class SecurityService(private val jwtEncoder: JwtEncoder, private val jwtDecoder
         const val JWT_TOKEN_VALIDITY = 1 * 60 * 60 * 1000 // 1 hour
         const val JWT_TOKEN_VALIDITY_DAY = 24 * 60 * 60 * 1000 // 1 hour
         const val TOKEN_NAME = "Authorization"
+        const val GOOGLE_TOKEN_HEADER = "googleToken"
     }
+
+    @Value("\${google.clientId}")
+    var CLIENT_ID: String? = null
 
     fun generateToken(team: Team): String {
         val now = Instant.now()
@@ -99,6 +113,42 @@ class SecurityService(private val jwtEncoder: JwtEncoder, private val jwtDecoder
             //Invalid signature/claims
             VerificationResponse(verified = false, errorMessage = e.localizedMessage)
         }
+    }
+
+    fun verifyGoogleToken(idTokenString: String): GoogleAccount {
+
+        val verifier: GoogleIdTokenVerifier = GoogleIdTokenVerifier.Builder(NetHttpTransport(), GsonFactory()) // Specify the CLIENT_ID of the app that accesses the backend:
+                .setAudience(Collections.singletonList(CLIENT_ID)) // Or, if multiple clients access the backend:
+                //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
+                .build()
+
+        // (Receive idTokenString by HTTPS POST)
+        try {
+            val idToken: GoogleIdToken? = verifier.verify(idTokenString)
+            if(idToken !== null) {
+                val payload: IdToken.Payload = idToken.payload
+                println(payload)
+
+                // Print user identifier
+                val userId: String = payload.subject
+                println("User ID: $userId")
+
+                return GoogleAccount(
+                        userId = userId,
+                        email = payload["email"] as String,
+                        emailVerified = payload["email_verified"] as Boolean,
+                        name = payload["name"] as String,
+                        pictureUrl = payload["picture"] as String,
+                        locale = payload["locale"] as String,
+                        familyName = payload["family_name"] as String,
+                        givenName = payload["given_name"] as String,
+                )
+            }
+        } catch (e: Exception) {
+            throw CustomException("Google Token Invalid", HttpStatus.BAD_REQUEST)
+        }
+        throw CustomException("Google Validation Failed", HttpStatus.BAD_REQUEST)
+
     }
 
 }

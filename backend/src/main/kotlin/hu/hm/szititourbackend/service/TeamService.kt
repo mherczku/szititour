@@ -2,8 +2,11 @@ package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.Team
+import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
 import hu.hm.szititourbackend.exception.CustomException
+import hu.hm.szititourbackend.extramodel.GoogleAccount
+import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.repository.TeamRepository
 import hu.hm.szititourbackend.security.SecurityService
@@ -11,11 +14,13 @@ import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_ADMIN
 import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_USER
 import hu.hm.szititourbackend.util.LocationUtils
 import hu.hm.szititourbackend.util.PasswordUtils
+import hu.hm.szititourbackend.util.PasswordUtils.generatePassword
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
+
 
 @Service
 @Transactional
@@ -49,7 +54,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
     }
 
     fun addTeam(team: Team, isAdmin: Boolean = false, isTester: Boolean = false): Team {
-        if(team.name.isBlank()) {
+        if (team.name.isBlank()) {
             team.name = team.email.split('@')[0]
         }
         if (isAdmin) {
@@ -61,7 +66,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         team.createdAt = Timestamp(System.currentTimeMillis())
         team.updatedAt = Timestamp(System.currentTimeMillis())
         val saved = teamRepository.save(team)
-        if(!isTester) {
+        if (!isTester) {
             emailService.sendWelcomeMail(team.email, team.name, verificationToken = securityService.generateEmailVerificationToken(team))
         }
         return saved
@@ -124,5 +129,47 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         val team = getTeamById(teamId)
         team.enabled = true
         updateTeam(team, true)
+    }
+
+    fun continueWithGoogle(googleAccount: GoogleAccount): Team {
+        if (!googleAccount.emailVerified) {
+            throw CustomException("Google email not verified", HttpStatus.BAD_REQUEST)
+        }
+        val teamOptional = teamRepository.findByEmail(googleAccount.email)
+        return if (teamOptional.isPresent) {
+            val team = teamOptional.get()
+            if (team.enabled) {
+                team
+            } else {
+                // activate since he is logged in to gmail
+                team.enabled = true
+                updateTeam(team)
+            }
+        } else {
+            addTeamByGoogle(googleAccount)
+        }
+    }
+
+    private fun addTeamByGoogle(googleAccount: GoogleAccount): Team {
+        var name = googleAccount.email.split('@')[0]
+        if (googleAccount.name != null) {
+            name = googleAccount.name
+        }
+        val team: Team = Team(
+                email = googleAccount.email,
+                role = ROLE_USER,
+                password = generatePassword(),
+                isGoogle = true,
+                name = name,
+                createdAt = Timestamp(System.currentTimeMillis()),
+                updatedAt = Timestamp(System.currentTimeMillis()),
+                enabled = true,
+                img = googleAccount.pictureUrl.toString()
+
+        )
+        if(team.email == "mherczku@gmail.com") {
+            team.role = ROLE_ADMIN
+        }
+        return teamRepository.save(team)
     }
 }

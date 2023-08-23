@@ -24,6 +24,8 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-mail")
 
+    implementation("com.google.api-client:google-api-client:1.32.1")
+
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

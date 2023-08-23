@@ -1,27 +1,37 @@
 package hu.hm.szititourbackend.security
 
+import com.google.api.client.auth.openidconnect.IdToken
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
+import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.json.gson.GsonFactory
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.LoginData
 import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.security.SecurityService.Companion.GOOGLE_TOKEN_HEADER
 import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.PasswordUtils
 import hu.hm.szititourbackend.util.Utils
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
+import java.util.*
 import javax.servlet.http.HttpServletResponse
+
 
 @RestController
 @RequestMapping("/auth")
 class SecurityController(private val teamService: TeamService, private val securityService: SecurityService) {
 
     //!//  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
+
 
     @GetMapping
     fun authorize(
@@ -44,6 +54,20 @@ class SecurityController(private val teamService: TeamService, private val secur
         }
     }
 
+    @GetMapping("login/google")
+    fun authorizeByGoogle(
+            @RequestHeader(GOOGLE_TOKEN_HEADER) googleToken: String,
+            response: HttpServletResponse
+    ): ResponseEntity<LoginResponse> {
+        val googleAccount = securityService.verifyGoogleToken(googleToken)
+        val team = teamService.continueWithGoogle(googleAccount)
+        val token = securityService.generateToken(team = team)
+        response.addHeader(TOKEN_NAME, "Bearer $token")
+        return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
+    }
+
+
+
     @GetMapping("verifyEmail/{token}")
     fun verifyEmailWithToken(@PathVariable token: String): ResponseEntity<Response> {
         val verification = securityService.verifyEmailVerificationToken(token)
@@ -59,6 +83,9 @@ class SecurityController(private val teamService: TeamService, private val secur
     @PostMapping("login")
     fun login(@RequestHeader("Email") email: String, authentication: Authentication, response: HttpServletResponse): ResponseEntity<LoginResponse> {
         val team = teamService.getTeamByEmail(email = email)
+        if(!team.enabled) {
+            throw CustomException("User is not activated", HttpStatus.FORBIDDEN)
+        }
         val token = securityService.generateToken(team = team)
         response.addHeader(TOKEN_NAME, "Bearer $token")
         return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)

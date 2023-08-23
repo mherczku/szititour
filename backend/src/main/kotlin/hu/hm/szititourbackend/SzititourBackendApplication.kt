@@ -2,6 +2,7 @@ package hu.hm.szititourbackend
 
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.security.RsaKeyProperties
+import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.PasswordUtils
 import org.springframework.boot.CommandLineRunner
@@ -15,9 +16,8 @@ import org.springframework.context.annotation.Bean
 @SpringBootApplication(/*exclude = [SecurityAutoConfiguration::class]*/)
 class SzititourBackendApplication {
     @Bean
-    fun commandLineRunner(teamService: TeamService): CommandLineRunner {
+    fun commandLineRunner(teamService: TeamService, securityService: SecurityService): CommandLineRunner {
         return CommandLineRunner { args ->
-
             val testPass = PasswordUtils.encryptPassword("T12345678")
             val tester =  Team(email= "t@test.hu", password = testPass)
             val tester2 =  Team(email= "tu@test.hu", password = testPass)
