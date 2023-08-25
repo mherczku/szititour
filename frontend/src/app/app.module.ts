@@ -20,6 +20,9 @@ import {NavbarComponent} from "./ui/components/navbar/navbar.component";
 import {LocationInterceptor} from "./interceptors/LocationInterceptor";
 import { ChatComponent } from "./ui/components/chat/chat.component";
 
+import { provideFirebaseApp, initializeApp, FirebaseAppModule} from "@angular/fire/app";
+import { MessagingModule } from "@angular/fire/messaging";
+import { environment } from "src/environments/environment";
 @NgModule({
     declarations: [
         AppComponent,
@@ -47,7 +50,9 @@ import { ChatComponent } from "./ui/components/chat/chat.component";
         StoreModule.forFeature("game", GameStateReducer),
         StoreModule.forFeature("auth", AuthReducer),
         NavbarComponent,
-        ChatComponent
+        ChatComponent,
+        provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+        MessagingModule
     ]
 })
 export class AppModule {

@@ -5,5 +5,7 @@ export const environment = {
   apiWebsocketUrlAdmin: "ws://localhost:8080/ws/admin",
   apiWebsocketUrlUser: "ws://localhost:8080/ws/user",
   MAP_KEY: "",
-  googleClientId: ""
+  googleClientId: "",
+  firebaseConfig: {},
+  vpKey: ""
 };
