@@ -8,7 +8,6 @@ import com.google.api.client.json.gson.GsonFactory
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.GoogleAccount
-import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.extramodel.VerificationResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value

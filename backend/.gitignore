@@ -42,3 +42,4 @@ out/
 /src/main/resources/private.pem
 /src/main/resources/public.pem
 /images/
+/src/main/resources/firebase.json

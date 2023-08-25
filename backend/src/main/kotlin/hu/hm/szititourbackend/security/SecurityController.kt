@@ -1,10 +1,5 @@
 package hu.hm.szititourbackend.security
 
-import com.google.api.client.auth.openidconnect.IdToken
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.exception.CustomException
@@ -16,13 +11,11 @@ import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.PasswordUtils
 import hu.hm.szititourbackend.util.Utils
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
-import java.util.*
 import javax.servlet.http.HttpServletResponse
 
 

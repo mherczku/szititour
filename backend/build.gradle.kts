@@ -24,7 +24,10 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-mail")
 
-    implementation("com.google.api-client:google-api-client:1.32.1")
+    implementation("com.google.api-client:google-api-client:2.2.0")
+
+	// Firebase
+    implementation("com.google.firebase:firebase-admin:9.2.0")
 
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
