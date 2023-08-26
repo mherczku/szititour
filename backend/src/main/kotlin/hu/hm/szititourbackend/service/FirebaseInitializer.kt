@@ -3,9 +3,8 @@ package hu.hm.szititourbackend.service
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
-import hu.hm.szititourbackend.security.RsaKeyProperties
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 import java.io.IOException
@@ -14,8 +13,7 @@ import javax.annotation.PostConstruct
 @Service
 class FirebaseInitializer {
 
-    // creates a logger we can use to log messages to the console. This is just to format our console messages nicely.
-    //var logger: Logger = LoggerFactory.getLogger(FirebaseInitializer::class.java)
+    var logger: Logger = LoggerFactory.getLogger(FirebaseInitializer::class.java)
 
     @PostConstruct
     fun initialize(){
@@ -26,10 +24,10 @@ class FirebaseInitializer {
             // If our app Firebase application was not initialized, do so.
             if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options)
-                //logger.info("Firebase application has been initialized")
+                logger.info("Firebase application has been initialized")
             }
         } catch (e: IOException) {
-            //logger.error(e.message)
+            logger.error("Error while initializing firebase app: ${e.message}")
         }
 
     }
