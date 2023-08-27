@@ -15,6 +15,7 @@ import { Subscription } from "rxjs";
 import { FormsModule } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { environment } from "src/environments/environment";
+import { GoogleSignInService } from "src/app/services/GoogleSignIn.service";
 
 @Component({
   selector: "app-login",
@@ -36,29 +37,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private router: Router,
     private toastService: HotToastService,
-    private destroyRef: DestroyRef
+    private destroyRef: DestroyRef,
+    private googleSignInService: GoogleSignInService
   ) {}
 
   ngOnInit() {
-    // @ts-ignore
-    google.accounts.id.initialize({
-      client_id: environment.googleClientId,
-      callback: this.handleCredentialResponse.bind(this),
-      auto_select: false,
-      cancel_on_tap_outside: true,
+    this.googleSignInService.fullCycle("google-button", (res: any)=> {
+      this.handleCredentialResponse(res);
     });
-    // @ts-ignore
-    google.accounts.id.renderButton(
-      // @ts-ignore
-      document.getElementById("google-button"),
-      { theme: "outline", size: "large", width: "100%", text: "continue_with" }
-    );
-    // @ts-ignore
-    google.accounts.id.prompt((notification: PromptMomentNotification) => {});
   }
 
   handleCredentialResponse(response: any) {
-    console.log("Encoded JWT ID token: " + response.credential);
     this.authService.continueWithGoogle(response.credential).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
 
   }
