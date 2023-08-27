@@ -9,27 +9,30 @@ import { AuthService } from "src/app/services/AuthService";
   standalone: true,
   selector: "app-verify",
   templateUrl: "./verify.component.html",
-  styleUrls: ["./verify.component.scss"]
+  styleUrls: ["./verify.component.scss"],
+  imports: [CommonModule],
 })
 export class VerifyComponent implements OnInit {
+  state: "loading" | "success" | "failure" = "loading";
   private token = "";
   destroyRef = inject(DestroyRef);
+  title = "Fiók aktiválása";
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
     private alertService: HotToastService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.token = params["token"];
+      setTimeout(() => {
+        this.verifyEmail();
+      }, 1000);
+      
     });
-
-    /* console.log("FETCHING")
-    fetch("http://localhost:8080/auth").then(r => r.json()).then(j => {console.log("fetched ", j);}); */
   }
 
   verifyEmail() {
@@ -39,14 +42,17 @@ export class VerifyComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
+            this.state = "success";
             this.alertService.success(
               "Sikeres verifikáció, mostmár bejelentkezhetsz!"
             );
+            this.title = "Sikeres aktiválás!";
             this.router.navigateByUrl("/login");
           },
-          error: (_err) => {
+          error: () => {
+            this.state = "failure";
             this.alertService.error("Sikertelen verifikáció!");
-            console.error(_err);
+            this.title = "Fiók aktiválás sikertelen!";
           },
         });
     } else {

@@ -5,7 +5,6 @@ export function AutoDestroy(component: any, key: string | symbol): void {
     if(originalOnDestroy) {
       originalOnDestroy.call(this);
     }
-    console.log("autodestroy");
     this[key].next();
     this[key].complete();
   };
