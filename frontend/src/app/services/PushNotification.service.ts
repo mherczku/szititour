@@ -30,6 +30,19 @@ export class PushNotificationService {
   }
 
   public subscribeToTopic() {
-    
+    this.http
+          .post("http://localhost:8080/notification", {
+            target: token,
+            title: "hello world",
+            message: "First notification, kinda nervous",
+          });
+  }
+
+  public sendNotificationToTopic() {
+    this.http
+          .post("http://localhost:8080/topic/subscription", {
+            topic: "weather",
+            subscriber: token,
+          });
   }
 }

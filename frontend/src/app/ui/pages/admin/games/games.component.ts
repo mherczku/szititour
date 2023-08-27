@@ -14,7 +14,7 @@ import {NgForOf} from "@angular/common";
 @Component({
   selector: "app-games",
   templateUrl: "./games.component.html",
-  styleUrls: ["./games.component.css"],
+  styleUrls: ["./games.component.scss"],
   standalone: true,
   styles: [`
     :host {
