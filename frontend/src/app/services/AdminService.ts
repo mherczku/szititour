@@ -16,8 +16,8 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  public getAllGames(): Observable<unknown> {
-    return this.http.get<unknown>(`${this.baseUrl}/games`);
+  public getAllGames(): Observable<Game[]> {
+    return this.http.get<Game[]>(`${this.baseUrl}/games`);
   }
 
   createGame(newGame: Game, image: File | undefined = undefined): Observable<Game> {

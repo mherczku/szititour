@@ -1,6 +1,8 @@
+import { PushNotificationService } from "src/app/services/PushNotification.service";
 import { Component, OnInit } from "@angular/core";
 import { ChildrenOutletContexts } from "@angular/router";
 import { routeAnimations } from "./ui/animations/route.animation";
+import { NotificationService } from "./services/Notification.service";
 
 
 @Component({
@@ -13,11 +15,14 @@ export class AppComponent implements OnInit {
   title = "szititour";
 
   constructor(
-    private contexts: ChildrenOutletContexts
+    private contexts: ChildrenOutletContexts,
+    private pushNotificationService: PushNotificationService,
+    private noti: NotificationService
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   get getRouteAnimationData(): string {
     return (

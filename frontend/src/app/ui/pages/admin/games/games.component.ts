@@ -52,7 +52,7 @@ export class GamesComponent implements OnInit, OnDestroy {
   }
 
   getGames() {
-    this.subscriptionGetGames = this.adminService.getAllGames().subscribe((res: any) => {
+    this.subscriptionGetGames = this.adminService.getAllGames().subscribe((res: Game[]) => {
       this.games = res;
     });
   }

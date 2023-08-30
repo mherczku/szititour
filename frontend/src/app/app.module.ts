@@ -20,9 +20,11 @@ import {NavbarComponent} from "./ui/components/navbar/navbar.component";
 import {LocationInterceptor} from "./interceptors/LocationInterceptor";
 import { ChatComponent } from "./ui/components/chat/chat.component";
 
-import { provideFirebaseApp, initializeApp, FirebaseAppModule} from "@angular/fire/app";
+import { provideFirebaseApp, initializeApp} from "@angular/fire/app";
 import { MessagingModule } from "@angular/fire/messaging";
 import { environment } from "src/environments/environment";
+import { LoginEffects } from "./store/effects/login.effects";
+import { EffectsModule } from "@ngrx/effects";
 @NgModule({
     declarations: [
         AppComponent,
@@ -49,6 +51,7 @@ import { environment } from "src/environments/environment";
         StoreModule.forRoot({}, {}),
         StoreModule.forFeature("game", GameStateReducer),
         StoreModule.forFeature("auth", AuthReducer),
+        EffectsModule.forRoot([LoginEffects]),
         NavbarComponent,
         ChatComponent,
         provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
