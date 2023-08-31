@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse
 @RequestMapping("/auth")
 class SecurityController(private val teamService: TeamService, private val securityService: SecurityService) {
 
-    //!//  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
+    //!  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
 
 
     @GetMapping
@@ -91,11 +91,12 @@ class SecurityController(private val teamService: TeamService, private val secur
         }
         if (Utils.validateEmail(credentials.email) && Utils.validatePassword(credentials.password)) {
             try {
+                
                 teamService.addTeam(
                         Team(
                                 email = credentials.email,
                                 password = PasswordUtils.encryptPassword(credentials.password),
-                                name = credentials.email.split('@')[0]
+                                name = credentials.name
                         )
                 )
             } catch (e: DataIntegrityViolationException) {

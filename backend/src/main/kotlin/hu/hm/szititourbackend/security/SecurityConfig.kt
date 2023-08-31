@@ -55,6 +55,8 @@ class SecurityConfig2(
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/v2/api-docs").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
+                //.antMatchers("/h2-console/**").permitAll()
+                //.antMatchers("/h2-console").permitAll()
                 .antMatchers("/ws/admin").permitAll()
                 .antMatchers("/ws/user").permitAll()
                 //.antMatchers("/**").permitAll()
