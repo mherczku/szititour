@@ -84,6 +84,16 @@ export class PushNotificationService {
     });
   }
 
+  public popOne(): SzititourNotification | undefined {
+    let toReturn;  
+    this.notifications.update(n => {
+        toReturn = n.pop();
+        return n;
+      });
+
+    return toReturn;
+  }
+
   public getTopics(request: SubscriptionRequest): Observable<string[]>  {
 
     if (this.token) {

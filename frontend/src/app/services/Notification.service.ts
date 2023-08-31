@@ -1,4 +1,4 @@
-import { Injectable, Signal, WritableSignal, computed, effect, signal } from "@angular/core";
+import { Injectable, WritableSignal, effect, signal } from "@angular/core";
 import { PushNotificationService } from "./PushNotification.service";
 
 
@@ -10,27 +10,67 @@ export interface SzititourNotification {
   icon: string;
   link: string;
   type: "PUSH" | "APP";
+  isSeen?: boolean;
 }
 
 
 @Injectable({ providedIn: "root" })
 export class NotificationService {
 
+  private latestNoti?: SzititourNotification;
 
   private pushNotis = this.pushNoti.getNotis();
-  private appNotis: WritableSignal<SzititourNotification[]> = signal([]);
-  private notis: Signal<SzititourNotification[]> = computed(() => {    
-    return this.pushNotis().sort((a,b) => a.time.getTime() - b.time.getTime());
-  }); 
+
+  private notis: WritableSignal<SzititourNotification[]> = signal([]); 
 
 
   constructor(private readonly pushNoti: PushNotificationService) {
   
     effect(() => {
       console.log(`The current count is: ${this.notis().length}`);
+      console.log(`The current push count is: ${this.pushNotis().length}`);
+    });
+
+    effect(() => {
+      if(this.pushNotis().length > 0) {
+        this.take1FromPush();
+      }
+    }, {allowSignalWrites: true});
+   }
+
+
+   private take1FromPush() {
+      const newNoti = this.pushNoti.popOne();
+      if(newNoti) {
+        this.pushToNotis(newNoti);
+      }
+   }
+
+   private pushToNotis(noti: SzititourNotification) {
+    this.notis.update(n => {
+      n.push(noti);
+      return n;
     });
    }
 
+   public removeNotiByIndex(index: number) {
+    this.notis.update(n => {
+      n.splice(index, 1);
+      return n;
+    });
+   }
+
+   public removeNoti(noti: SzititourNotification) {
+    this.removeNotiByIndex(this.notis().indexOf(noti));
+   }
+
+   public seenNoti(noti: SzititourNotification, isSeen = true) {
+    this.notis.update(n => {
+      const i = n.indexOf(noti);
+      n[i].isSeen = isSeen;
+      return n;
+    });
+   }
 
 
  

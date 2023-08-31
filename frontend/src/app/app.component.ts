@@ -22,6 +22,9 @@ export class AppComponent implements OnInit {
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   ngOnInit(): void {
+   /*  setInterval(() => {
+      this.pushNotificationService.trigger();
+    }, 20000); */
   }
 
   get getRouteAnimationData(): string {
