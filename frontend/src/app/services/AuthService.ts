@@ -1,18 +1,24 @@
-import {Injectable, OnDestroy, OnInit} from "@angular/core";
-import {environment} from "../../environments/environment";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable, Subject, takeUntil, tap} from "rxjs";
-import {Store} from "@ngrx/store";
-import {Team} from "../types/team";
-import {login, logout} from "../store/actions/auth.actions";
-import {Router} from "@angular/router";
-import {NetworkLoginResponse} from "../types/network-login-response";
-import {NetworkResponse} from "../types/network-response";
-import {HotToastService} from "@ngneat/hot-toast";
-import {selectLoggedInTeam} from "../store/selectors/auth.selector";
+import { Injectable, OnDestroy } from "@angular/core";
+import { environment } from "../../environments/environment";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Observable, Subject, takeUntil, tap } from "rxjs";
+import { Store } from "@ngrx/store";
+import { Team } from "../types/team";
+import { login, logout } from "../store/actions/auth.actions";
+import { Router } from "@angular/router";
+import { NetworkLoginResponse } from "../types/network-login-response";
+import { NetworkResponse } from "../types/network-response";
+import { HotToastService } from "@ngneat/hot-toast";
+import { selectLoggedInTeam } from "../store/selectors/auth.selector";
 
 
-@Injectable({providedIn: "root"})
+export interface RegisterData {
+  email: string;
+  password: string;
+  name: string;
+}
+
+@Injectable({ providedIn: "root" })
 export class AuthService implements OnDestroy {
 
   private baseUrl = environment.apiBaseUrl + "/auth";
@@ -33,9 +39,9 @@ export class AuthService implements OnDestroy {
   }
 
   isRoleAdmin(): boolean {
-    const isAdmin =  this.currentRole === "ROLE_ADMIN";
-    if(!isAdmin) {
-      if(this.isLoggedIn()) {
+    const isAdmin = this.currentRole === "ROLE_ADMIN";
+    if (!isAdmin) {
+      if (this.isLoggedIn()) {
         this.router.navigateByUrl("user");
       }
     }
@@ -45,16 +51,16 @@ export class AuthService implements OnDestroy {
     return this.currentRole === "ROLE_USER";
   }
   isLoggedIn(): boolean {
-    const isLoggedIN= this.currentRole !== "ROLE_GUEST";
-    if(!isLoggedIN) {
+    const isLoggedIN = this.currentRole !== "ROLE_GUEST";
+    if (!isLoggedIN) {
       this.router.navigateByUrl("login");
     }
     return isLoggedIN;
   }
   isRoleGuest(): boolean {
     const isGuest = this.currentRole === "ROLE_GUEST";
-    if(!isGuest) {
-      if(this.isRoleAdmin()) {
+    if (!isGuest) {
+      if (this.isRoleAdmin()) {
         this.router.navigateByUrl("admin");
       } else {
         this.router.navigateByUrl("user");
@@ -72,12 +78,12 @@ export class AuthService implements OnDestroy {
       .set("Authorization", authHeader)
       .set("email", email);
 
-    return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, null, {headers: headers}).pipe(tap(evt => {
+    return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, null, { headers: headers }).pipe(tap(evt => {
       if (evt.success) {
         const team: Team = evt.team;
         console.log(evt.team, team.role === "ROLE_ADMIN");
         if (team.role === "ROLE_ADMIN") {
-          this.store.dispatch(login({team: team}));
+          this.store.dispatch(login({ team: team }));
           console.log("admin login", team);
           this.router.navigateByUrl("/admin");
         }
@@ -92,11 +98,11 @@ export class AuthService implements OnDestroy {
     const headers = new HttpHeaders()
       .set("googleToken", token);
 
-    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}/login/google`, {headers: headers}).pipe(tap(evt => {
+    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}/login/google`, { headers: headers }).pipe(tap(evt => {
       if (evt.success) {
         const team: Team = evt.team;
         console.log(evt.team, team.role === "ROLE_ADMIN");
-        this.store.dispatch(login({team: team}));
+        this.store.dispatch(login({ team: team }));
         if (team.role === "ROLE_ADMIN") {
           console.log("admin login", team);
           this.router.navigateByUrl("/admin");
@@ -108,19 +114,19 @@ export class AuthService implements OnDestroy {
     }));
   }
 
-  public register(email: string, password: string): Observable<NetworkResponse> {
-    return this.http.post<NetworkResponse>(`${this.baseUrl}/register`, {email: email, password: password});
+  public register(registerData: RegisterData): Observable<NetworkResponse> {
+    return this.http.post<NetworkResponse>(`${this.baseUrl}/register`, registerData);
   }
 
   public authorizeMe(): Observable<NetworkLoginResponse> {
     return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`).pipe(tap(res => {
-      if(res.success) {
+      if (res.success) {
         //res.team.role === "ROLE_ADMIN" ? this.router.navigateByUrl("/admin") : this.router.navigateByUrl("/user");
       }
     }));
   }
 
-  
+
   verifyEmail(token: string): Observable<NetworkResponse> {
     return this.http.get<NetworkResponse>(`${this.baseUrl}/verifyEmail/${token}`);
   }
@@ -144,7 +150,7 @@ export class AuthService implements OnDestroy {
   }
 
   dispatchLogin(team: Team) {
-    this.store.dispatch(login({team: team}));
+    this.store.dispatch(login({ team: team }));
   }
 
   ngOnDestroy(): void {
