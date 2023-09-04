@@ -3,7 +3,6 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import * as actions from "../actions/auth.actions";
 import { PushNotificationService } from "src/app/services/PushNotification.service";
 import { tap } from "rxjs";
-import { Team } from "src/app/types/team";
 import { CONST_ROUTES } from "src/app/constants/routes.constants";
 import { Router } from "@angular/router";
 
