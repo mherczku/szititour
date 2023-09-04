@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { confirmPassword } from "../../../../validators/same-pass.validator";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { GoogleSignInService } from "src/app/services/GoogleSignIn.service";
+import { CONST_ROUTES } from "src/app/constants/routes.constants";
 
 @Component({
   selector: "app-register",
@@ -52,15 +53,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   register() {
     const registerData: RegisterData = {
-      email: this.registerForm.value.email, 
-      password: this.registerForm.value.password, 
+      email: this.registerForm.value.email,
+      password: this.registerForm.value.password,
       name: this.registerForm.value.name
     };
     this.subscriptionRegister = this.authService.register(registerData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {
       if (res.success) {
         this.alertService.success("Sikeres regisztráció, email elküldve!");
         this.registerForm.reset();
-        this.router.navigateByUrl("/login");
+        this.router.navigateByUrl(CONST_ROUTES.auth.login.call);
       } else {
         this.alertService.error("Hiba történt: " + res.errorMessage);
       }

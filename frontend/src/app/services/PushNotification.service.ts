@@ -30,7 +30,7 @@ interface SubscriptionRequest {
 export class PushNotificationService {
   trigger() {
     console.log("triggering");
-    
+
     this.notifications.update(v => {
       v.push({
         id: crypto.randomUUID(),
@@ -85,7 +85,7 @@ export class PushNotificationService {
   }
 
   public popOne(): SzititourNotification | undefined {
-    let toReturn;  
+    let toReturn;
     this.notifications.update(n => {
         toReturn = n.pop();
         return n;

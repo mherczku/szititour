@@ -8,7 +8,7 @@
 
 
   <div class="flex flex-row mobile:hidden tablet:block">
-    <a class="btn-simple" *ngIf="!(isLoggedIn | async)" routerLink="/login">Bejelentkezés</a>
+    <a class="btn-simple" *ngIf="!(isLoggedIn | async)" routerLink="/auth/login">Bejelentkezés</a>
     <button class="btn-simple" (click)="logout()" *ngIf="(isLoggedIn | async)">Kijelentkezés</button>
   </div>
 
@@ -69,7 +69,7 @@
       <a *ngIf="(isLoggedIn | async)" routerLink="/user/home" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Főoldal</a>
       <a *ngIf="(isLoggedIn | async) && (team | async)?.role ==='ROLE_ADMIN'" routerLink="/admin" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Admin Panel</a>
       <a *ngIf="(isLoggedIn | async)" (click)="changeIsMobileMenuOpen(false); logout()" class=" font-semibold text-size-lg cursor-pointer">Kijelentkezés</a>
-      <a *ngIf="!(isLoggedIn | async)" routerLink="/login" class=" font-semibold text-size-lg cursor-pointer">Bejelentkezés</a>
+      <a *ngIf="!(isLoggedIn | async)" routerLink="/auth/login" class=" font-semibold text-size-lg cursor-pointer">Bejelentkezés</a>
     </div>
   </div>
 

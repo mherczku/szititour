@@ -10,6 +10,7 @@ import { NetworkLoginResponse } from "../types/network-login-response";
 import { NetworkResponse } from "../types/network-response";
 import { HotToastService } from "@ngneat/hot-toast";
 import { selectLoggedInTeam } from "../store/selectors/auth.selector";
+import { CONST_ROUTES } from "../constants/routes.constants";
 
 
 export interface RegisterData {
@@ -42,7 +43,7 @@ export class AuthService implements OnDestroy {
     const isAdmin = this.currentRole === "ROLE_ADMIN";
     if (!isAdmin) {
       if (this.isLoggedIn()) {
-        this.router.navigateByUrl("user");
+        this.router.navigateByUrl(CONST_ROUTES.user.call);
       }
     }
     return isAdmin;
@@ -53,7 +54,7 @@ export class AuthService implements OnDestroy {
   isLoggedIn(): boolean {
     const isLoggedIN = this.currentRole !== "ROLE_GUEST";
     if (!isLoggedIN) {
-      this.router.navigateByUrl("login");
+      this.router.navigateByUrl(CONST_ROUTES.auth.login.call);
     }
     return isLoggedIN;
   }
@@ -61,9 +62,9 @@ export class AuthService implements OnDestroy {
     const isGuest = this.currentRole === "ROLE_GUEST";
     if (!isGuest) {
       if (this.isRoleAdmin()) {
-        this.router.navigateByUrl("admin");
+        this.router.navigateByUrl(CONST_ROUTES.admin.call);
       } else {
-        this.router.navigateByUrl("user");
+        this.router.navigateByUrl(CONST_ROUTES.user.call);
       }
     }
     return isGuest;
@@ -80,16 +81,7 @@ export class AuthService implements OnDestroy {
 
     return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, null, { headers: headers }).pipe(tap(evt => {
       if (evt.success) {
-        const team: Team = evt.team;
-        console.log(evt.team, team.role === "ROLE_ADMIN");
-        if (team.role === "ROLE_ADMIN") {
-          this.store.dispatch(login({ team: team }));
-          console.log("admin login", team);
-          this.router.navigateByUrl("/admin");
-        }
-        else {
-          this.router.navigateByUrl("/user");
-        }
+        this.store.dispatch(login({ team: evt.team }));
       }
     }));
   }
@@ -100,16 +92,7 @@ export class AuthService implements OnDestroy {
 
     return this.http.get<NetworkLoginResponse>(`${this.baseUrl}/login/google`, { headers: headers }).pipe(tap(evt => {
       if (evt.success) {
-        const team: Team = evt.team;
-        console.log(evt.team, team.role === "ROLE_ADMIN");
-        this.store.dispatch(login({ team: team }));
-        if (team.role === "ROLE_ADMIN") {
-          console.log("admin login", team);
-          this.router.navigateByUrl("/admin");
-        }
-        else {
-          this.router.navigateByUrl("/user");
-        }
+        this.store.dispatch(login({ team: evt.team }));
       }
     }));
   }
@@ -119,11 +102,7 @@ export class AuthService implements OnDestroy {
   }
 
   public authorizeMe(): Observable<NetworkLoginResponse> {
-    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`).pipe(tap(res => {
-      if (res.success) {
-        //res.team.role === "ROLE_ADMIN" ? this.router.navigateByUrl("/admin") : this.router.navigateByUrl("/user");
-      }
-    }));
+    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`);
   }
 
 
@@ -134,7 +113,7 @@ export class AuthService implements OnDestroy {
   logout() {
     this.removeToken();
     this.store.dispatch(logout());
-    this.router.navigateByUrl("/login");
+    this.router.navigateByUrl(CONST_ROUTES.auth.call);
   }
 
   setToken(token: string) {

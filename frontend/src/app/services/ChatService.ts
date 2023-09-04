@@ -7,7 +7,7 @@ import { AuthService } from "./AuthService";
 
 export interface Message {
   content: string
-  sender: string 
+  sender: string
   recipient: string
   type: "MSG" | "INFO" | "AUTH" | "LEAVE" | "JOIN" | "ALREADY_OPEN"
   info: string[]
@@ -24,7 +24,7 @@ export class ChatService {
   private ws!: WebSocket;
 
   constructor(private http: HttpClient, private authService: AuthService) {
-  
+
   }
 
   obs = new Subject<number>();
@@ -73,7 +73,7 @@ export class ChatService {
         } else {
           console.log("ws - auth - no token");
         }
-        
+
 
       };
       this.ws.onmessage = obs.next.bind(obs);

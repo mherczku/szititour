@@ -1,27 +1,28 @@
-import {Routes} from "@angular/router";
-import {HomeComponent} from "./home/home.component";
-import {ActiveGameComponent} from "./active-game/active-game.component";
-import {ProfileComponent} from "./profile/profile.component";
+import { Routes } from "@angular/router";
+import { HomeComponent } from "./home/home.component";
+import { ActiveGameComponent } from "./active-game/active-game.component";
+import { ProfileComponent } from "./profile/profile.component";
+import { CONST_ROUTES } from "src/app/constants/routes.constants";
 
 
 export const USER_ROUTES: Routes = [
   {
     //matcher: getMatcher(["home", "fooldal"], 1),
-    path: "home",
+    path: CONST_ROUTES.user.home.path,
     component: HomeComponent
   },
 
   {
-    path: "active/:id",
+    path: CONST_ROUTES.user.active.path,
     component: ActiveGameComponent
   },
   {
-    path: "profile",
+    path: CONST_ROUTES.user.profile.path,
     component: ProfileComponent
   },
 
 
-  {path: "**", redirectTo: "home"},
+  { path: "**", redirectTo: CONST_ROUTES.user.home.path },
 ];
 
 /*
