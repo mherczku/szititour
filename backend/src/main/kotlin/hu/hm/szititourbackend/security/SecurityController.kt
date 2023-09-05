@@ -30,10 +30,7 @@ class SecurityController(private val teamService: TeamService, private val secur
     //!!!  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
 
     @GetMapping
-    fun authorize(
-            @RequestHeader(TOKEN_NAME) token: String,
-            response: HttpServletResponse
-    ): ResponseEntity<LoginResponse> {
+    fun authorize(@RequestHeader(TOKEN_NAME) token: String): ResponseEntity<LoginResponse> {
         val verification = securityService.verifyToken(token)
         logger.debug("Authorize me ${verification.teamId}")
 
