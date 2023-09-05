@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct
 @Service
 class FirebaseInitializer {
 
-    var logger: Logger = LoggerFactory.getLogger(FirebaseInitializer::class.java)
+    val logger: Logger = LoggerFactory.getLogger(FirebaseInitializer::class.java)
 
     @PostConstruct
     fun initialize(){
@@ -21,6 +21,7 @@ class FirebaseInitializer {
         try {
             val options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(ClassPathResource("firebase.json").inputStream)).build()
+
             // If our app Firebase application was not initialized, do so.
             if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options)

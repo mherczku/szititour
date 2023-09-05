@@ -36,7 +36,6 @@ class LoggedInService @Autowired constructor(
             if (status !== null) {
                 return status.convertToDto()
             } else {
-                println("WARNING ----> No status for ${theGame.id} - $teamId")
                 val statuses = mutableListOf<PlaceStatus>()
                 theGame.places.forEach {
                     statuses.add(PlaceStatus(it.id, false))

@@ -10,11 +10,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 
 
 @EnableConfigurationProperties(RsaKeyProperties::class)
 @SpringBootApplication(/*exclude = [SecurityAutoConfiguration::class]*/)
 class SzititourBackendApplication {
+
+    val logger: Logger = LoggerFactory.getLogger(SzititourBackendApplication::class.java)
+
     @Bean
     fun commandLineRunner(teamService: TeamService, securityService: SecurityService): CommandLineRunner {
         return CommandLineRunner { args ->
@@ -25,9 +31,9 @@ class SzititourBackendApplication {
             val savedAdmin = teamService.addTeam(tester, true, isTester = true)
             val savedUser = teamService.addTeam(tester2, false, isTester = true)
             val savedUser3 = teamService.addTeam(tester3, false, isTester = true)
-            println("tester admin created ${savedAdmin.id}")
-            println("tester user created ${savedUser.id}")
-            println("tester user created ${savedUser3.id}")
+            logger.debug("tester admin created ${savedAdmin.id}")
+            logger.debug("tester user created ${savedUser.id}")
+            logger.debug("tester user created ${savedUser3.id}")
         }
     }
 }

@@ -76,8 +76,7 @@ export class AuthService implements OnDestroy {
     const encoded = btoa(usernamePassword);
     const authHeader = `Basic ${encoded}`;
     const headers = new HttpHeaders()
-      .set("Authorization", authHeader)
-      .set("email", email);
+      .set("Authorization", authHeader);
 
     return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, null, { headers: headers }).pipe(tap(evt => {
       if (evt.success) {

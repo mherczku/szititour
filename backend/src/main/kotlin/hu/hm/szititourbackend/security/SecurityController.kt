@@ -17,14 +17,17 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @RestController
 @RequestMapping("/auth")
 class SecurityController(private val teamService: TeamService, private val securityService: SecurityService) {
 
-    //!  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
+    val logger: Logger = LoggerFactory.getLogger(SecurityController::class.java)
 
+    //!!!  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
 
     @GetMapping
     fun authorize(
@@ -32,6 +35,8 @@ class SecurityController(private val teamService: TeamService, private val secur
             response: HttpServletResponse
     ): ResponseEntity<LoginResponse> {
         val verification = securityService.verifyToken(token)
+        logger.debug("Authorize me ${verification.teamId}")
+
         if(!verification.verified) {
             throw CustomException("VERIFICATION FAILED", HttpStatus.UNAUTHORIZED)
         }
@@ -52,6 +57,7 @@ class SecurityController(private val teamService: TeamService, private val secur
             @RequestHeader(GOOGLE_TOKEN_HEADER) googleToken: String,
             response: HttpServletResponse
     ): ResponseEntity<LoginResponse> {
+        logger.debug("Authorize by google")
         val googleAccount = securityService.verifyGoogleToken(googleToken)
         val team = teamService.continueWithGoogle(googleAccount)
         val token = securityService.generateToken(team = team)
@@ -63,6 +69,7 @@ class SecurityController(private val teamService: TeamService, private val secur
 
     @GetMapping("verifyEmail/{token}")
     fun verifyEmailWithToken(@PathVariable token: String): ResponseEntity<Response> {
+        logger.debug("Verify email")
         val verification = securityService.verifyEmailVerificationToken(token)
         return if(verification.verified) {
             teamService.enableTeam(verification.teamId)
@@ -74,8 +81,10 @@ class SecurityController(private val teamService: TeamService, private val secur
     }
 
     @PostMapping("login")
-    fun login(@RequestHeader("Email") email: String, authentication: Authentication, response: HttpServletResponse): ResponseEntity<LoginResponse> {
-        val team = teamService.getTeamByEmail(email = email)
+    fun login(auth: Authentication, response: HttpServletResponse): ResponseEntity<LoginResponse> {
+        logger.debug("Login for ${auth.name}")
+
+        val team = teamService.getTeamByEmail(email = auth.name)
         if(!team.enabled) {
             throw CustomException("User is not activated", HttpStatus.FORBIDDEN)
         }
@@ -86,12 +95,13 @@ class SecurityController(private val teamService: TeamService, private val secur
 
     @PostMapping("register")
     fun register(@RequestBody credentials: LoginData): ResponseEntity<Response> {
+        logger.debug("Register for ${credentials.name}")
         if (credentials.email.isNullOrEmpty() || credentials.password.isNullOrEmpty()) {
             throw CustomException("Email or password is empty", HttpStatus.BAD_REQUEST)
         }
         if (Utils.validateEmail(credentials.email) && Utils.validatePassword(credentials.password)) {
             try {
-                
+
                 teamService.addTeam(
                         Team(
                                 email = credentials.email,

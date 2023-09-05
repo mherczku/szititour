@@ -38,11 +38,6 @@ class SecurityConfig2(
         private val rsaKeyProperties: RsaKeyProperties
 ) {
 
-    /*@Bean
-    fun webSecurityCustomizer(): WebSecurityCustomizer? {
-        return WebSecurityCustomizer { web: WebSecurity -> web.ignoring().antMatchers("/auth/**") }
-    }**/*/
-
     @Bean
     @Throws(Exception::class)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain? {
@@ -113,7 +108,7 @@ class SecurityConfig2(
         corsConfiguration.allowedOrigins = allowedOrigins
         corsConfiguration.allowedHeaders = listOf(
                 "Origin", "Access-Control-Allow-Origin", "Content-Type",
-                "Accept", "Authorization", "Email", "Origin, Accept", "X-Requested-With",
+                "Accept", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method", "Access-Control-Request-Headers", "longitude", "latitude", "gameid", GOOGLE_TOKEN_HEADER
         )
         corsConfiguration.exposedHeaders = listOf(

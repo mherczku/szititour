@@ -10,37 +10,39 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/applications")
 class ApplicationController @Autowired constructor(private val applicationService: ApplicationService) {
 
-    /*@PostMapping()
-    fun addApplication(@RequestBody application: Application): ResponseEntity<ApplicationDto> {
-        val newApplication = applicationService.addApplication(application)
-        return ResponseEntity(newApplication.convertToDto(), HttpStatus.CREATED)
-    }*/
+    val logger: Logger = LoggerFactory.getLogger(ApplicationController::class.java)
 
     @GetMapping("/{id}")
     fun getApplicationById(@PathVariable id: Int): ResponseEntity<ApplicationDto?> {
+        logger.debug("Get application by id ${id}")
         val application: Application = applicationService.getApplicationById(id)
         return ResponseEntity(application.convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping
     fun getAllApplications(): ResponseEntity<List<ApplicationDto>> {
+        logger.debug("Get all applications")
         val applications: List<ApplicationDto> = applicationService.getAllApplications().convertToDto()
         return ResponseEntity<List<ApplicationDto>>(applications, HttpStatus.OK)
     }
 
     @PutMapping
     fun updateApplication(@RequestBody application: Application): ResponseEntity<ApplicationDto> {
+        logger.debug("Update application ${application.id}")
         return ResponseEntity(applicationService.updateApplication(application).convertToDto(), HttpStatus.OK)
     }
 
     @DeleteMapping("/{id}")
     fun deleteApplicationById(@PathVariable id: Int): ResponseEntity<Nothing> {
+        logger.debug("Delete application ${id}")
         return try {
             applicationService.deleteApplicationById(id)
             ResponseEntity(null, HttpStatus.OK)

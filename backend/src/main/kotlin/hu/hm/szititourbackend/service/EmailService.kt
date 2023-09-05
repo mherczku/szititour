@@ -8,6 +8,8 @@ import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
 import java.nio.file.Files
 import javax.mail.Message
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @Service
@@ -16,8 +18,11 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
     @Value("classpath:/templates/welcome.template.html")
     var resource: Resource? = null
 
+    val logger: Logger = LoggerFactory.getLogger(EmailService::class.java)
+
+
     fun sendWelcomeMail(emailTo: String, username: String, verificationToken: String) {
-        println("sending email 1")
+        logger.debug("Send welcome email to ${username}")
         val mimeMessage = javaMailSender.createMimeMessage()
         mimeMessage.setFrom("szititour.nxt@gmail.com")
         mimeMessage.subject = "Verify your Email"

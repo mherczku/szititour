@@ -10,24 +10,31 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 @RequestMapping("/notification")
 class NotificationUserController(private val fms: FirebaseMessagingService) {
-    
+
+    val logger: Logger = LoggerFactory.getLogger(NotificationUserController::class.java)
+
     @PostMapping("subscribe")
     fun subscribeToTopic(@RequestBody subscription: SubscriptionRequest, auth: Authentication): ResponseEntity<List<String>> {
+        logger.info("Subscribe to topic ${subscription.topic} by user ${auth.name}")
         return ResponseEntity<List<String>>(fms.subscribeToTopic(subscription, auth.name.toInt()), HttpStatus.OK)
     }
 
     @PostMapping("unsubscribe")
     fun unsubscribeFromTopic(@RequestBody subscription: SubscriptionRequest, auth: Authentication): ResponseEntity<List<String>> {
+        logger.info("Unsubscribe from topic ${subscription.topic} by user ${auth.name}")
         return ResponseEntity<List<String>>(fms.unsubscribeFromTopic(subscription, auth.name.toInt()), HttpStatus.OK)
     }
 
     @PostMapping("topics")
-    fun getTopics(@RequestBody subscription: SubscriptionRequest): ResponseEntity<List<String>> {
+    fun getSubscriptions(@RequestBody subscription: SubscriptionRequest, auth: Authentication): ResponseEntity<List<String>> {
+        logger.debug("Get subscriptions by user ${auth.name}")
         fms.getSubscriptions(subscription)
         return ResponseEntity<List<String>>(fms.getSubscriptions(subscription), HttpStatus.OK)
     }

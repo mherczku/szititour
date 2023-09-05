@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*
 import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @RestController
 @RequestMapping("/resources")
@@ -21,7 +23,9 @@ class ResourceController @Autowired constructor(
     private val securityService: SecurityService,
 ) {
 
-    /**!  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY **/
+    val logger: Logger = LoggerFactory.getLogger(ResourceController::class.java)
+
+    //!!!  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
 
     @GetMapping("/images")
     fun getResource(
@@ -30,6 +34,7 @@ class ResourceController @Autowired constructor(
     ): ResponseEntity<UrlResource> {
 
         val verification = securityService.verifyToken(token)
+        logger.debug("Get resource ${imagePath} by user ${verification.teamId}")
 
         if (verification.verified && verification.isAdmin) {
 
@@ -58,7 +63,7 @@ class ResourceController @Autowired constructor(
                 .body(urlRes)
         }
         /*else if(verification.verified) {
-            // todo if not admin
+            // TODO if not admin
 
         }*/
         else {

@@ -14,6 +14,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @Configuration
@@ -27,6 +29,8 @@ class WebMvcConfig(private val teamService: TeamService, private val securitySer
 
 class LocationInterceptor(private val teamService: TeamService, private val securityService: SecurityService) :
     HandlerInterceptor {
+
+    val logger: Logger = LoggerFactory.getLogger(LocationInterceptor::class.java)
 
 
     override fun postHandle(
@@ -43,7 +47,7 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
         val gameId = request.getHeader(GAMEID)
 
         if (token !== null && lat !== null && lon !== null && gameId !== null) {
-            println("LOCATION INTERCEPT --> $lat - $lon - $gameId - ${System.currentTimeMillis()}")
+            logger.debug("LOCATION INTERCEPT --> $lat - $lon - $gameId - ${System.currentTimeMillis()}")
             val verification = securityService.verifyToken(token)
             if (verification.verified) {
                 try {
@@ -53,7 +57,7 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
                     teamService.updateTeam(team, true)
                     teamService.updateGameStatusAuto(gameId.toInt(), team)
                 } catch (e: CustomException) {
-                    println("Error in Location INTERCEPTOR ${e.message}")
+                    logger.error("Error in Location INTERCEPTOR ${e.message}")
                 }
 
             }

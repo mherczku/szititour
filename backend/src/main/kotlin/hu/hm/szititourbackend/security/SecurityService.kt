@@ -126,11 +126,9 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             val idToken: GoogleIdToken? = verifier.verify(idTokenString)
             if(idToken !== null) {
                 val payload: IdToken.Payload = idToken.payload
-                println(payload)
 
                 // Print user identifier
                 val userId: String = payload.subject
-                println("User ID: $userId")
 
                 return GoogleAccount(
                         userId = userId,

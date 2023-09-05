@@ -14,14 +14,19 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.sql.Timestamp
 import java.util.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/games")
 class GameController @Autowired constructor(private val gameService: GameService) {
 
+    val logger: Logger = LoggerFactory.getLogger(GameController::class.java)
+
     @PostMapping()
     fun addGame(@RequestBody game: Game): ResponseEntity<GameDto> {
+        logger.debug("Add new game ${game.title}")
         val newGame = gameService.addGame(game)
         return ResponseEntity(newGame.convertToDto(), HttpStatus.CREATED)
     }
@@ -33,6 +38,8 @@ class GameController @Autowired constructor(private val gameService: GameService
         @RequestParam("gameStart") gameStart: String,
         @RequestParam("gameEnd") gameEnd: String
     ): ResponseEntity<GameDto> {
+
+        logger.debug("Add new game with image ${gameTitle}")
 
         val dateEnd = Timestamp(gameEnd.toLong())
         val dateStart = Timestamp(gameStart.toLong())
@@ -52,29 +59,34 @@ class GameController @Autowired constructor(private val gameService: GameService
 
     @GetMapping("/{id}")
     fun getGameById(@PathVariable id: Int): ResponseEntity<GameDto?> {
+        logger.debug("Get game by id ${id}")
         val game: Game = gameService.getGameById(id)
         return ResponseEntity(game.convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping("/{id}/status")
     fun getGameWithStatusesById(@PathVariable id: Int): ResponseEntity<GameWithStatusesDto?> {
+        logger.debug("Get game with statuses by id ${id}")
         val game: Game = gameService.getGameById(id)
         return ResponseEntity(game.convertToStatusDto(), HttpStatus.OK)
     }
 
     @GetMapping
     fun getAllGames(): ResponseEntity<List<GameDto>> {
+        logger.debug("Get all games")
         val games: MutableList<Game> = gameService.getAllGames()
         return ResponseEntity<List<GameDto>>(games.convertToDto(), HttpStatus.OK)
     }
 
     @PutMapping("activate/{id}")
     fun activateGame(@PathVariable("id") gameId: Int): ResponseEntity<GameDto> {
+        logger.debug("Activate game by id ${gameId}")
         return ResponseEntity(gameService.changeActivation(gameId, true).convertToDto(), HttpStatus.OK)
     }
 
     @PutMapping("deactivate/{id}")
     fun deactivateGame(@PathVariable("id") gameId: Int): ResponseEntity<GameDto> {
+        logger.debug("Deactivate game by id ${gameId}")
         return ResponseEntity(gameService.changeActivation(gameId, false).convertToDto(), HttpStatus.OK)
     }
 
@@ -87,6 +99,8 @@ class GameController @Autowired constructor(private val gameService: GameService
         @RequestParam("gameStart") gameStart: String,
         @RequestParam("gameEnd") gameEnd: String
     ): ResponseEntity<GameDto> {
+
+        logger.debug("Update game by id ${gameId}")
 
         val dateEnd = Timestamp(gameEnd.toLong())
         val dateStart = Timestamp(gameStart.toLong())
@@ -110,6 +124,7 @@ class GameController @Autowired constructor(private val gameService: GameService
 
     @DeleteMapping("/{id}")
     fun deleteGameById(@PathVariable id: Int): ResponseEntity<Nothing> {
+        logger.debug("Delete game by id ${id}")
         gameService.deleteGameById(id)
         return ResponseEntity(null, HttpStatus.OK)
     }
