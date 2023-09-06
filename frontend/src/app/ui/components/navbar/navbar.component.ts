@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { AuthService } from "../../../services/AuthService";
 import { selectIsLoggedIn, selectLoggedInTeam } from "../../../store/selectors/auth.selector";
@@ -23,7 +23,7 @@ import { NotificationService } from "src/app/services/Notification.service";
     NotificationsComponent
   ]
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
 
   isLoggedIn = this.store.select(selectIsLoggedIn);
   team = this.store.select(selectLoggedInTeam);
@@ -35,10 +35,6 @@ export class NavbarComponent implements OnInit {
     private readonly store: Store,
     private readonly authService: AuthService,
     private readonly notiService: NotificationService) { }
-
-  ngOnInit(): void {
-
-  }
 
   toggleNoti() {
     this.notiService.isOpen.set(!this.isNotiOpen());
