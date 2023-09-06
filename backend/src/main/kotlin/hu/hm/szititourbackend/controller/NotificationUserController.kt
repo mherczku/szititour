@@ -29,7 +29,7 @@ class NotificationUserController(private val fms: FirebaseMessagingService) {
     @PostMapping("unsubscribe")
     fun unsubscribeFromTopic(@RequestBody subscription: SubscriptionRequest, auth: Authentication): ResponseEntity<List<String>> {
         logger.info("Unsubscribe from topic ${subscription.topic} by user ${auth.name}")
-        return ResponseEntity<List<String>>(fms.unsubscribeFromTopic(subscription, auth.name.toInt()), HttpStatus.OK)
+        return ResponseEntity<List<String>>(fms.unsubscribeFromTopic(subscription), HttpStatus.OK)
     }
 
     @PostMapping("topics")

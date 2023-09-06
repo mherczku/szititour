@@ -75,7 +75,7 @@ class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscri
         return toReturn
     }
 
-    fun unsubscribeFromTopic(subscription: SubscriptionRequest, toInt: Int): List<String> {
+    fun unsubscribeFromTopic(subscription: SubscriptionRequest): List<String> {
         var toReturn = listOf<String>()
         val optional = notiSubscriberRepository.findByToken(subscription.subscriber)
         if (optional.isPresent) {
