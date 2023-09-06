@@ -1,24 +1,27 @@
-import {ChangeDetectionStrategy, Component, OnInit} from "@angular/core";
-import {Store} from "@ngrx/store";
-import {AuthService} from "../../../services/AuthService";
-import {selectIsLoggedIn, selectLoggedInTeam} from "../../../store/selectors/auth.selector";
-import {FormsModule} from "@angular/forms";
-import {AsyncPipe, NgClass, NgIf} from "@angular/common";
-import {RouterLink} from "@angular/router";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { AuthService } from "../../../services/AuthService";
+import { selectIsLoggedIn, selectLoggedInTeam } from "../../../store/selectors/auth.selector";
+import { FormsModule } from "@angular/forms";
+import { AsyncPipe, NgClass, NgIf } from "@angular/common";
+import { RouterLink } from "@angular/router";
+import { NotificationsComponent } from "../notifications/notifications.component";
+import { NotificationService } from "src/app/services/Notification.service";
 
 @Component({
   selector: "app-navbar",
   templateUrl: "./navbar.component.html",
   styleUrls: ["./navbar.component.scss"],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     FormsModule,
     NgClass,
     NgIf,
     RouterLink,
-    AsyncPipe
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    AsyncPipe,
+    NotificationsComponent
+  ]
 })
 export class NavbarComponent implements OnInit {
 
@@ -26,14 +29,23 @@ export class NavbarComponent implements OnInit {
   team = this.store.select(selectLoggedInTeam);
   isMobileMenuOpen = false;
 
-  constructor(private store: Store, private authService: AuthService) { }
+  isNotiOpen = this.notiService.isOpen;
+
+  constructor(
+    private readonly store: Store,
+    private readonly authService: AuthService,
+    private readonly notiService: NotificationService) { }
 
   ngOnInit(): void {
 
   }
 
+  toggleNoti() {
+    this.notiService.isOpen.set(!this.isNotiOpen());
+  }
+
   changeIsMobileMenuOpen(event: boolean) {
-    if(event) {
+    if (event) {
       document.body.style.overflow = "hidden";
       window.scroll(0, 0);
     }

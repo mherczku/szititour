@@ -1,4 +1,4 @@
-import { Injectable, WritableSignal, effect, signal } from "@angular/core";
+import { Injectable, Signal, WritableSignal, effect, signal } from "@angular/core";
 import { PushNotificationService } from "./PushNotification.service";
 
 
@@ -21,57 +21,71 @@ export class NotificationService {
 
   private pushNotis = this.pushNoti.getNotis();
 
-  private notis: WritableSignal<SzititourNotification[]> = signal([]); 
+  private notis: WritableSignal<SzititourNotification[]> = signal([]);
 
+  public isOpen: WritableSignal<boolean> = signal(false);
 
   constructor(private readonly pushNoti: PushNotificationService) {
-  
+
+
+    /* this.pushToNotis({
+      id: "1",
+      title: "Alma",
+      message: "Az almák lehetnek zöldek vagy pirosak, ha az alma lila akkor nem jó!",
+      time: new Date(),
+      icon: "assets/svg/notification.svg",
+      link: "/admin/place/1",
+      type: "APP"
+    }); */
+
     effect(() => {
       console.log(`The current count is: ${this.notis().length}`);
       console.log(`The current push count is: ${this.pushNotis().length}`);
     });
 
     effect(() => {
-      if(this.pushNotis().length > 0) {
+      if (this.pushNotis().length > 0) {
         this.take1FromPush();
       }
-    }, {allowSignalWrites: true});
-   }
+    }, { allowSignalWrites: true });
+  }
 
 
-   private take1FromPush() {
-      const newNoti = this.pushNoti.popOne();
-      if(newNoti) {
-        this.pushToNotis(newNoti);
-      }
-   }
+  private take1FromPush() {
+    const newNoti = this.pushNoti.popOne();
+    if (newNoti) {
+      this.pushToNotis(newNoti);
+    }
+  }
 
-   private pushToNotis(noti: SzititourNotification) {
+  private pushToNotis(noti: SzititourNotification) {
     this.notis.update(n => {
       n.push(noti);
       return n;
     });
-   }
+  }
 
-   public removeNotiByIndex(index: number) {
+  public removeNotiByIndex(index: number) {
     this.notis.update(n => {
       n.splice(index, 1);
       return n;
     });
-   }
+  }
 
-   public removeNoti(noti: SzititourNotification) {
+  public removeNoti(noti: SzititourNotification) {
     this.removeNotiByIndex(this.notis().indexOf(noti));
-   }
+  }
 
-   public seenNoti(noti: SzititourNotification, isSeen = true) {
+  public seenNoti(noti: SzititourNotification, isSeen = true) {
     this.notis.update(n => {
       const i = n.indexOf(noti);
       n[i].isSeen = isSeen;
       return n;
     });
-   }
+  }
 
+  public getNotifications(): Signal<SzititourNotification[]> {
+    return this.notis;
+  }
 
- 
 }

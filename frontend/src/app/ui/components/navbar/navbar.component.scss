@@ -1,10 +1,51 @@
+@import "styles-variables";
+
+.notification-container {
+  display: flex;
+  position: absolute;
+  top: 100px;
+  right: 0px;
+  z-index: 20;
+
+  @media (max-width: $breakpoint-mobile) {
+    top: 85px;
+  }
+
+}
+
+.right {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.btn-notification {
+  background-image: url("/assets/svg/notification.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 30px;
+  aspect-ratio: 1;
+  transform: translateY(-3px);
+
+  &:hover {
+    transform: translateY(-6px);
+    padding-bottom: 5px;
+    transition: all 200ms;
+  }
+}
+
+.nav-container {
+  width: 32px;
+  height: 32px;
+}
+
 .nav-container .checkbox {
   position: absolute;
   display: block;
   height: 32px;
   width: 32px;
-  top: 20px;
-  left: 20px;
+  top: 0px;
+  left: 0px;
   z-index: 5;
   opacity: 0;
   cursor: pointer;
@@ -15,8 +56,8 @@
   height: 26px;
   width: 32px;
   position: absolute;
-  top: 17px;
-  left: 20px;
+  top: 0px;
+  left: 0px;
   z-index: 2;
   display: flex;
   flex-direction: column;

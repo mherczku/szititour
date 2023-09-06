@@ -1,0 +1,8 @@
+<div class="notifications">
+
+    <app-notification *ngFor="let noti of notifications()" [noti]="noti"></app-notification>
+    <div *ngIf="notifications().length < 1">
+        <p>Nincs új üzenet</p>
+    </div>
+
+</div>
