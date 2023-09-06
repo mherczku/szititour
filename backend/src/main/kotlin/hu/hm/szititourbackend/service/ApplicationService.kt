@@ -29,10 +29,6 @@ class ApplicationService @Autowired constructor(private val applicationRepositor
 
     fun getAllApplications(): MutableList<Application> {
         return applicationRepository.findAll()
-        /*val dtos = mutableListOf<Application>()
-        apps.forEach {
-            dtos.add(it.convertToDto())
-        }*/
     }
 
     fun getApplicationById(id: Int): Application {
