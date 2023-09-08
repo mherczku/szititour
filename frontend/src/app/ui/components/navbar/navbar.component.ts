@@ -7,29 +7,29 @@ import { AsyncPipe, NgClass, NgIf } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { NotificationsComponent } from "../notifications/notifications.component";
 import { NotificationService } from "src/app/services/Notification.service";
+import { LatestNotificationComponent } from "../notifications/latest-notification/latest-notification.component";
 
 @Component({
-  selector: "app-navbar",
-  templateUrl: "./navbar.component.html",
-  styleUrls: ["./navbar.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    FormsModule,
-    NgClass,
-    NgIf,
-    RouterLink,
-    AsyncPipe,
-    NotificationsComponent
-  ]
+    selector: "app-navbar",
+    templateUrl: "./navbar.component.html",
+    styleUrls: ["./navbar.component.scss"],
+    standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        FormsModule,
+        NgClass,
+        NgIf,
+        RouterLink,
+        AsyncPipe,
+        NotificationsComponent,
+        LatestNotificationComponent
+    ]
 })
 export class NavbarComponent {
 
   isLoggedIn = this.store.select(selectIsLoggedIn);
   team = this.store.select(selectLoggedInTeam);
   isMobileMenuOpen = false;
-
-  isNotiOpen = this.notiService.isOpen;
 
   hasNewNoti = this.notiService.hasNew;
 
@@ -40,7 +40,7 @@ export class NavbarComponent {
 
   toggleNoti(event: MouseEvent) {
     event.stopPropagation();
-    this.notiService.isOpen.set(!this.notiService.isOpen());
+    this.notiService.setOpen(!this.notiService.isOpenR());
   }
 
   changeIsMobileMenuOpen(event: boolean) {

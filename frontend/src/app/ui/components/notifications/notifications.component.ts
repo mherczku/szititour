@@ -2,16 +2,19 @@ import { Component, OnDestroy, OnInit, Renderer2, Signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { NotificationComponent } from "./notification/notification.component";
 import { NotificationService, SzititourNotification } from "src/app/services/Notification.service";
+import { popInOut } from "../../animations/pupInOut.animation";
 
 @Component({
     selector: "app-notifications",
     standalone: true,
     templateUrl: "./notifications.component.html",
     styleUrls: ["./notifications.component.scss"],
-    imports: [CommonModule, NotificationComponent]
+    imports: [CommonModule, NotificationComponent],
+    animations: [popInOut]
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
 
+    isNotiOpen = this.notiService.isOpenR;
 
     notifications: Signal<SzititourNotification[]> = this.notiService.getNotifications();
 
@@ -33,7 +36,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         $event.stopPropagation();
     }
     close() {
-        this.notiService.isOpen.set(false);
+        this.notiService.setOpen(false);
     }
 
     seenAll() {

@@ -17,7 +17,7 @@ export interface SzititourNotification {
 @Injectable({ providedIn: "root" })
 export class NotificationService {
 
-  private latestNoti?: SzititourNotification;
+  latestNoti: WritableSignal<SzititourNotification | undefined> = signal(undefined);
 
   private pushNotis = this.pushNoti.getNotis();
 
@@ -26,7 +26,7 @@ export class NotificationService {
   public hasNew: Signal<boolean> = computed(() => {
     let isNew = false;
     this.notis().forEach(n => {
-      if(n.isSeen !== true) {
+      if (n.isSeen !== true) {
         isNew = true;
       }
     });
@@ -34,24 +34,24 @@ export class NotificationService {
   });
 
 
-  public isOpen: WritableSignal<boolean> = signal(true);
+  private isOpen: WritableSignal<boolean> = signal(false);
+  public isOpenR = this.isOpen.asReadonly();
 
-  constructor(private readonly pushNoti: PushNotificationService) {
+  public setOpen(value: boolean) {
+    if (value && this.latestNoti()) {
+      this.latestNoti.set(undefined);
+      setTimeout(() => {
+        this.isOpen.set(value);
+      }, 200);
+    } else {
+      this.isOpen.set(value);
+    }
+  }
 
-
+  trigger() {
     this.pushToNotis({
       id: "1",
-      title: "Alma",
-      message: "Az almák lehetnek zöldek vagy pirosak, ha az alma lila akkor nem jó!",
-      time: new Date(),
-      icon: "assets/svg/notification.svg",
-      link: "/admin/place/1",
-      type: "APP",
-      isSeen: true
-    });
-    this.pushToNotis({
-      id: "1",
-      title: "Alma",
+      title: "Test",
       message: "Az almák lehetnek zöldek vagy pirosak, ha az alma lila akkor nem jó!",
       time: new Date(),
       icon: "assets/svg/notification.svg",
@@ -59,11 +59,19 @@ export class NotificationService {
       type: "APP",
       isSeen: false
     });
+  }
+
+  constructor(private readonly pushNoti: PushNotificationService) {
 
     effect(() => {
-      console.log(`The current count is: ${this.notis().length}`);
-      console.log(`The current push count is: ${this.pushNotis().length}`);
-    });
+      console.log(`The current noti count is: ${this.notis().length}`);
+    },);
+
+    effect(() => {
+      if (this.isOpen()) {
+        this.latestNoti.set(undefined);
+      }
+    }, { allowSignalWrites: true });
 
     effect(() => {
       if (this.pushNotis().length > 0) {
@@ -81,6 +89,12 @@ export class NotificationService {
   }
 
   private pushToNotis(noti: SzititourNotification) {
+    if (!this.isOpen()) {
+      this.latestNoti.set(noti);
+      setTimeout(() => {
+        this.latestNoti.set(undefined);
+      }, 3000);
+    }
     this.notis.update(n => {
       n.push(noti);
       return n;
