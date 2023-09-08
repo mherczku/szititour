@@ -1,4 +1,9 @@
-<div class="notifications">
+<div class="notifications" (click)="clicInside($event)">
+
+    <div *ngIf="notifications().length > 0" class="actions">
+        <button (click)="seenAll()" class="btn-hover-bold text-size-min">Összes jelölése olvasottnak</button>
+        <button (click)="removeAll()" class="btn-hover-bold text-size-min">Összes törlése</button>
+    </div>
 
     <app-notification *ngFor="let noti of notifications()" [noti]="noti"></app-notification>
     <div *ngIf="notifications().length < 1">

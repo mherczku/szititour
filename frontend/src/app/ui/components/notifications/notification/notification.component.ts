@@ -12,15 +12,18 @@ import { ButtonsComponent } from "../../buttons/buttons.component";
 })
 export class NotificationComponent {
 
-
-  @Input({required: true}) noti!: SzititourNotification;
+  @Input({ required: true }) noti!: SzititourNotification;
 
   constructor(
     private readonly notiService: NotificationService
-  ) {}
+  ) { }
 
   removeNoti() {
     this.notiService.removeNoti(this.noti);
+  }
+
+  seenNoti() {
+    this.notiService.seenNoti(this.noti);
   }
 
 }

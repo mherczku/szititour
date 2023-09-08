@@ -9,7 +9,7 @@
 
 
   <div class="right">
-    <button (click)="toggleNoti()" class="btn-notification"></button>
+    <button (click)="toggleNoti($event)" class="btn-notification hasNew" [class.hasNew]="hasNewNoti()"></button>
     <div class="flex flex-row mobile:hidden tablet:block">
 
       <a class="btn-simple" *ngIf="!(isLoggedIn | async)" routerLink="/auth/login">Bejelentkezés</a>

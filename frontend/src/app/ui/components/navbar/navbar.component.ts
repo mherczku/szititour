@@ -31,13 +31,16 @@ export class NavbarComponent {
 
   isNotiOpen = this.notiService.isOpen;
 
+  hasNewNoti = this.notiService.hasNew;
+
   constructor(
     private readonly store: Store,
     private readonly authService: AuthService,
     private readonly notiService: NotificationService) { }
 
-  toggleNoti() {
-    this.notiService.isOpen.set(!this.isNotiOpen());
+  toggleNoti(event: MouseEvent) {
+    event.stopPropagation();
+    this.notiService.isOpen.set(!this.notiService.isOpen());
   }
 
   changeIsMobileMenuOpen(event: boolean) {

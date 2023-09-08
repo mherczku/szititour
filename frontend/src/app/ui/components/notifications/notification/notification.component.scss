@@ -11,10 +11,27 @@
     -moz-box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.38);
     box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.38);
 
+    &.seen {
+        .content {
+            .top {
+                .title {
+                    font-weight: normal;
+                }
+
+                .img {
+                    width: 25px;
+                }
+            }
+
+            background-color:transparent;
+        }
+    }
+
     app-buttons {
         position: absolute;
         top: 5px;
         right: 5px;
+        //transform: scale(0.9);
     }
 
     .content {
@@ -32,15 +49,17 @@
             align-items: center;
             text-align: center;
 
-            img {
+            .img {
                 width: 30px;
                 height: 30px;
                 object-fit: contain;
             }
+
             .title {
                 text-overflow: ellipsis;
             }
         }
+
         .message {
             text-overflow: ellipsis;
             max-lines: 2;
@@ -48,7 +67,8 @@
             overflow: hidden;
             display: -webkit-box;
             -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2; /* number of lines to show */
+            -webkit-line-clamp: 2;
+            /* number of lines to show */
             line-clamp: 2;
         }
 

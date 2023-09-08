@@ -1,4 +1,4 @@
-import { Injectable, Signal, WritableSignal, effect, signal } from "@angular/core";
+import { Injectable, Signal, WritableSignal, computed, effect, signal } from "@angular/core";
 import { PushNotificationService } from "./PushNotification.service";
 
 
@@ -23,20 +23,42 @@ export class NotificationService {
 
   private notis: WritableSignal<SzititourNotification[]> = signal([]);
 
-  public isOpen: WritableSignal<boolean> = signal(false);
+  public hasNew: Signal<boolean> = computed(() => {
+    let isNew = false;
+    this.notis().forEach(n => {
+      if(n.isSeen !== true) {
+        isNew = true;
+      }
+    });
+    return isNew;
+  });
+
+
+  public isOpen: WritableSignal<boolean> = signal(true);
 
   constructor(private readonly pushNoti: PushNotificationService) {
 
 
-    /* this.pushToNotis({
+    this.pushToNotis({
       id: "1",
       title: "Alma",
       message: "Az almák lehetnek zöldek vagy pirosak, ha az alma lila akkor nem jó!",
       time: new Date(),
       icon: "assets/svg/notification.svg",
       link: "/admin/place/1",
-      type: "APP"
-    }); */
+      type: "APP",
+      isSeen: true
+    });
+    this.pushToNotis({
+      id: "1",
+      title: "Alma",
+      message: "Az almák lehetnek zöldek vagy pirosak, ha az alma lila akkor nem jó!",
+      time: new Date(),
+      icon: "assets/svg/notification.svg",
+      link: "/admin/place/1",
+      type: "APP",
+      isSeen: false
+    });
 
     effect(() => {
       console.log(`The current count is: ${this.notis().length}`);
@@ -86,6 +108,18 @@ export class NotificationService {
 
   public getNotifications(): Signal<SzititourNotification[]> {
     return this.notis;
+  }
+
+  seenAllNotifications() {
+    this.notis.update(notifications => {
+      notifications.forEach(n => {
+        n.isSeen = true;
+      });
+      return notifications;
+    });
+  }
+  removeAllNotifications() {
+    this.notis.set([]);
   }
 
 }

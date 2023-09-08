@@ -1,8 +1,8 @@
-<div class="notification">
+<div class="notification" [class.seen]="noti.isSeen">
     <app-buttons (click)="removeNoti()" type="delete"></app-buttons>
     <div class="content">
         <div class="top">
-            <img [src]="noti.icon" alt="Notification icon">
+            <img class="img" [src]="noti.icon" alt="Notification icon">
             <p class="title bold">{{noti.title}}</p>
         </div>
         <p class="message">{{noti.message}}</p>

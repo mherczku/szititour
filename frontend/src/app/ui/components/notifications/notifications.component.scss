@@ -1,6 +1,7 @@
 @import "styles/styles-variables";
 
 .notifications {
+
     max-width: 400px;
     overflow: hidden;
     display: flex;
@@ -19,6 +20,10 @@
     -moz-box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.38);
     box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.38);
 
+    @media (min-width: $breakpoint-mobile) {
+        width: 400px;
+    }
+
     &::-webkit-scrollbar {
         width: 10px;
     }
@@ -35,5 +40,11 @@
 
     &::-webkit-scrollbar-thumb:hover {
         background: #6f6f6f;
+    }
+
+    .actions {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
     }
 }
