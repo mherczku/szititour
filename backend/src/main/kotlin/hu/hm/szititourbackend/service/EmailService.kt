@@ -1,6 +1,7 @@
 package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.util.SzititourProperties
+import hu.hm.szititourbackend.security.RsaKeyProperties
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
@@ -14,10 +15,12 @@ import org.slf4j.LoggerFactory
 
 
 @Service
-class EmailService @Autowired constructor(private val javaMailSender: JavaMailSender) {
+class EmailService @Autowired constructor(private val javaMailSender: JavaMailSender, private val szititourProperties: SzititourProperties) {
 
     val logger: Logger = LoggerFactory.getLogger(EmailService::class.java)
 
+    @Value("classpath:/templates/welcome.template.html")
+    var resource: Resource? = null
 
     fun sendWelcomeMail(emailTo: String, username: String, verificationToken: String) {
         logger.debug("Send welcome email to ${username}")
@@ -26,7 +29,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
         mimeMessage.subject = "Verify your Email"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
-        val messageTemplate = SzititourProperties().resource?.file
+        val messageTemplate = szititourProperties.welcomeTemplate?.file
         if(messageTemplate != null) {
 
             var content = String(Files.readAllBytes(messageTemplate.toPath()))
@@ -37,6 +40,8 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
             helper.setText(content, true)
 
             javaMailSender.send(mimeMessage)
+        } else {
+            logger.error("Send welcome email to ${username} message template file was null")
         }
 
     }

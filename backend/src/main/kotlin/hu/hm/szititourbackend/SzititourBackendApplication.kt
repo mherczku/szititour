@@ -5,6 +5,7 @@ import hu.hm.szititourbackend.security.RsaKeyProperties
 import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.PasswordUtils
+import hu.hm.szititourbackend.util.SzititourProperties
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -15,7 +16,7 @@ import org.slf4j.LoggerFactory
 
 
 
-@EnableConfigurationProperties(RsaKeyProperties::class)
+@EnableConfigurationProperties(RsaKeyProperties::class, SzititourProperties::class)
 @SpringBootApplication(/*exclude = [SecurityAutoConfiguration::class]*/)
 class SzititourBackendApplication {
 
