@@ -21,7 +21,7 @@ class SzititourBackendApplication {
 
     val logger: Logger = LoggerFactory.getLogger(SzititourBackendApplication::class.java)
 
-    @Bean
+    /*@Bean
     fun commandLineRunner(teamService: TeamService, securityService: SecurityService): CommandLineRunner {
         return CommandLineRunner { args ->
             val testPass = PasswordUtils.encryptPassword("T12345678")
@@ -35,7 +35,7 @@ class SzititourBackendApplication {
             logger.debug("tester user created ${savedUser.id}")
             logger.debug("tester user created ${savedUser3.id}")
         }
-    }
+    }*/
 }
 
 fun main(args: Array<String>) {

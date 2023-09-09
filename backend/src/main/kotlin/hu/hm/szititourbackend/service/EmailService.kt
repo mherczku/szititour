@@ -1,5 +1,6 @@
 package hu.hm.szititourbackend.service
 
+import hu.hm.szititourbackend.util.SzititourProperties
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
@@ -15,9 +16,6 @@ import org.slf4j.LoggerFactory
 @Service
 class EmailService @Autowired constructor(private val javaMailSender: JavaMailSender) {
 
-    @Value("classpath:/templates/welcome.template.html")
-    var resource: Resource? = null
-
     val logger: Logger = LoggerFactory.getLogger(EmailService::class.java)
 
 
@@ -28,7 +26,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
         mimeMessage.subject = "Verify your Email"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
-        val messageTemplate = resource?.file
+        val messageTemplate = SzititourProperties().resource?.file
         if(messageTemplate != null) {
 
             var content = String(Files.readAllBytes(messageTemplate.toPath()))
