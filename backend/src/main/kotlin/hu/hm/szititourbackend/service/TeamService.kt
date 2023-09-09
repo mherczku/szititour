@@ -67,7 +67,12 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         team.updatedAt = Timestamp(System.currentTimeMillis())
         val saved = teamRepository.save(team)
         if (!isTester) {
-            emailService.sendWelcomeMail(team.email, team.name, verificationToken = securityService.generateEmailVerificationToken(team))
+            try {
+                emailService.sendWelcomeMail(team.email, team.name, verificationToken = securityService.generateEmailVerificationToken(team))
+            } catch(e: Exception) {
+                teamRepository.delete(team)
+                throw e;
+            }
         }
         return saved
     }

@@ -7,6 +7,6 @@ import org.springframework.core.io.Resource
 @ConfigurationProperties()
 class SzititourProperties {
 
-    @Value("classpath:/templates/welcome.template.html")
+    @Value("classpath:templates/welcome.template.html")
     var welcomeTemplate: Resource? = null
 }
