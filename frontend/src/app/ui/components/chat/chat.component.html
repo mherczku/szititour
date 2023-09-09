@@ -1,3 +1,4 @@
+<!-- TODO ng container if logged in - open ws button -->
 <div [@chatCollapse]="isHidden" class="chat-container">
   <div class="chat-head" (click)="toggle($event);">
     <span *ngIf="isAdmin" class="badge">{{ adminChat().newMessages() }}</span>
@@ -5,7 +6,7 @@
       <p *ngIf="!isAdmin">Szititour Szervezők</p>
       <!-- [ngModel]="adminChat.selectedUser?.name" -->
       <app-user-selector *ngIf="isAdmin" [isHidden]="isHidden" (selectedUserChange)="setSelecteduser($event)" [users]="adminChat().users"></app-user-selector>
-      <!-- <select 
+      <!-- <select
         *ngIf="isAdmin && adminChat().users.length > 1"
         (click)="$event.stopPropagation()"
       >
@@ -14,7 +15,7 @@
             {{ user.name }}
           </option>
         </ng-container>
-        
+
       </select>
       <p *ngIf="isAdmin && adminChat().users.length <= 1">Nincs üzenet</p> -->
     </div>
@@ -42,6 +43,9 @@
   </div>
 
   <div class="chat-content" id="bs" #chatContent (click)="resetSelectedCounter()">
+    <div class="info" *ngIf="!isAdmin">
+      <p>Az ablak újratöltése esetén az üzenetek elvesznek</p>
+    </div>
     <div class="info" *ngIf="!isAdmin">
       <p>Itt felveheted a kapcsolatot a szervezőkkel</p>
     </div>

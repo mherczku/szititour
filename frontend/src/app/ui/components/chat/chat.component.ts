@@ -61,6 +61,12 @@ export class ChatComponent implements OnInit, OnDestroy {
         newMessages: 0,
         messages: [],
       },
+      {
+        name: "LakatosDorinaCsapatFeketeKarácsony",
+        online: true,
+        newMessages: 0,
+        messages: [],
+      },
     ],
     newMessages: computed(() => {
       let a = 0;

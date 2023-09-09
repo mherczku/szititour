@@ -2,7 +2,6 @@
 
 :host {
   position: fixed;
-  width: 400px;
   height: fit-content;
   bottom: 10px;
   left: 10px;
@@ -33,7 +32,7 @@
   background: rgba(0, 0, 0, 0.21);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(6.3px);
+  backdrop-filter: blur(10.3px);
   -webkit-backdrop-filter: blur(6.3px);
   border: 1px solid rgba(255, 255, 255, 0.58);
 
@@ -44,6 +43,11 @@
   bottom: 0;
   left: 0;
   overflow: none;
+  width: 400px;
+  @media (max-width: $breakpoint-mobile) {
+    max-width: 90vw;
+    //overflow-x: hidden;
+  }
 
   .chat-head {
     cursor: pointer;
@@ -106,7 +110,7 @@
     height: 400px;
     overflow-y: auto;
     margin: 20px 0;
-    width: 400px;
+    width: 100%;
 
     &::-webkit-scrollbar {
       width: 10px;
@@ -156,6 +160,8 @@
       margin: auto;
       margin-top: 0;
       margin-bottom: 20px;
+      align-items: center;
+      text-align: center;
     }
   }
 
