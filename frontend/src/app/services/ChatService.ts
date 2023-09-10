@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, WritableSignal, effect, signal } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, Observer, Subject, map } from "rxjs";
 import { AnonymousSubject } from "rxjs/internal/Subject";
@@ -23,14 +23,33 @@ export class ChatService {
 
   private ws!: WebSocket;
 
+  readonly isAdmin = this.authService.isAdminSignal;
+  user = this.authService.currentUserSignalR;
+  initialized = false;
+  signalToComponent: WritableSignal<Subject<Message> | undefined> = signal(undefined);
+
+
+  // todo init chat by authservice isadmin no component, init only if user want to private
+
   constructor(private http: HttpClient, private authService: AuthService) {
 
+    effect(() => {
+      console.log("reconnext 0000");
+      if (this.user() && this.initialized) {
+        console.log("reconnext chat service");
+
+        this.initializeChat();
+      } else {
+        this.close();
+      }
+    }, { allowSignalWrites: true });
   }
 
   obs = new Subject<number>();
 
-  public initializeChat(isAdmin: boolean) {
-    this.baseUrl = isAdmin ? environment.apiWebsocketUrlAdmin : environment.apiWebsocketUrlUser;
+  public initializeChat() {
+    this.initialized = true;
+    this.baseUrl = this.isAdmin() ? environment.apiWebsocketUrlAdmin : environment.apiWebsocketUrlUser;
 
     this.messages = <Subject<Message>>this.connect().pipe(
       map((response: MessageEvent): Message => {
@@ -39,17 +58,18 @@ export class ChatService {
         return data;
       })
     );
+    console.log("initialied c s");
+
+    this.signalToComponent.set(this.messages);
   }
 
   private connect(): AnonymousSubject<MessageEvent> {
-    if (!this.subject) {
-      this.subject = this.createWebSocket();
-    }
+    this.subject = this.createWebSocket();
     return this.subject;
   }
 
   public close() {
-    this.ws.close();
+    this.ws?.close();
   }
 
   public createWebSocket(): AnonymousSubject<MessageEvent> {
@@ -59,7 +79,7 @@ export class ChatService {
       this.ws.onopen = () => {
         console.log("ws connection successfully opened - sending auth");
         const token = this.authService.getToken();
-        if(token) {
+        if (token) {
           const message: Message = {
             content: "",
             recipient: "",

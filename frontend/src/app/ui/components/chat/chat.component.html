@@ -1,23 +1,10 @@
 <!-- TODO ng container if logged in - open ws button -->
 <div [@chatCollapse]="isHidden" class="chat-container">
-  <div class="chat-head" (click)="toggle($event);">
+  <div class="chat-head" (click)="toggle();">
     <span *ngIf="isAdmin" class="badge">{{ adminChat().newMessages() }}</span>
     <div class="left">
       <p *ngIf="!isAdmin">Szititour Szervezők</p>
-      <!-- [ngModel]="adminChat.selectedUser?.name" -->
-      <app-user-selector *ngIf="isAdmin" [isHidden]="isHidden" (selectedUserChange)="setSelecteduser($event)" [users]="adminChat().users"></app-user-selector>
-      <!-- <select
-        *ngIf="isAdmin && adminChat().users.length > 1"
-        (click)="$event.stopPropagation()"
-      >
-        <ng-container *ngFor="let user of adminChat().users">
-          <option *ngIf="user.name !== 'Nincs üzenet'" value="user.name">
-            {{ user.name }}
-          </option>
-        </ng-container>
-
-      </select>
-      <p *ngIf="isAdmin && adminChat().users.length <= 1">Nincs üzenet</p> -->
+      <app-user-selector *ngIf="isAdmin" [isHidden]="isHidden" [selectedUserI]="adminChat().selectedUser" (selectedUserChange)="setSelecteduser($event)" [users]="adminChat().users"></app-user-selector>
     </div>
 
     <div class="right">
@@ -43,11 +30,14 @@
   </div>
 
   <div class="chat-content" id="bs" #chatContent (click)="resetSelectedCounter()">
-    <div class="info" *ngIf="!isAdmin">
+    <div class="info">
       <p>Az ablak újratöltése esetén az üzenetek elvesznek</p>
     </div>
     <div class="info" *ngIf="!isAdmin">
       <p>Itt felveheted a kapcsolatot a szervezőkkel</p>
+    </div>
+    <div class="info" *ngIf="isAlreadyOpen()">
+      <p class="bold">A chat kliens csak egy ablakban lehet aktív</p>
     </div>
 
     <!-- <div class="chat-message-sent">
@@ -96,11 +86,12 @@
 
   <div *ngIf="!isHidden" class="chat-footer">
     <input
+      [disabled]="!canSend()"
       (keyup.enter)="sendMsg()"
       class="simpleInput"
       [(ngModel)]="content"
       type="text"
     />
-    <button class="btn btn-simple" (click)="sendMsg()">SEND</button>
+    <button class="btn btn-simple" [disabled]="!canSend()" (click)="sendMsg()">SEND</button>
   </div>
 </div>

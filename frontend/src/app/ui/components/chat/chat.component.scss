@@ -137,6 +137,8 @@
         height: fit-content;
         width: 50%;
         border-radius: 3px 20px 20px 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 
@@ -152,6 +154,8 @@
         height: fit-content;
         width: 50%;
         border-radius: 20px 20px 3px 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 

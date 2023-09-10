@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from "@angular/core";
+import { Injectable, OnDestroy, WritableSignal, computed, signal } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, Subject, takeUntil, tap } from "rxjs";
@@ -27,6 +27,10 @@ export class AuthService implements OnDestroy {
   private destroy$ = new Subject();
   private username = "GUEST";
 
+  private currentUserSignal: WritableSignal<Team | undefined> = signal(undefined);
+  public currentUserSignalR = computed(() => this.currentUserSignal());
+  public isAdminSignal = computed(() => this.currentUserSignal()?.role === "ROLE_ADMIN");
+
   constructor(
     private http: HttpClient,
     private store: Store,
@@ -34,6 +38,9 @@ export class AuthService implements OnDestroy {
     private alertService: HotToastService) {
 
     this.store.select(selectLoggedInTeam).pipe(takeUntil(this.destroy$)).subscribe(team => {
+      this.currentUserSignal.set(team ?? undefined);
+      console.log(`set current user Signal ${team?.email}, , , ${this.currentUserSignalR()?.email}`);
+
       this.currentRole = team?.role ?? "ROLE_GUEST";
       this.username = team?.name ?? "GUEST";
     });

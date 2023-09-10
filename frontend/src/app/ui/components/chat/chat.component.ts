@@ -9,6 +9,7 @@ import {
   ViewChild,
   WritableSignal,
   computed,
+  effect,
   signal,
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -33,6 +34,13 @@ export interface SimpleUser {
   messages: Message[];
 }
 
+const defaultAdminUsers = [{
+  name: "Én",
+  online: true,
+  newMessages: 0,
+  messages: [],
+}];
+
 @Component({
   standalone: true,
   selector: "app-chat",
@@ -42,38 +50,23 @@ export interface SimpleUser {
   imports: [CommonModule, FormsModule, UserSelectorComponent],
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  isAdmin = true;
+
+  readonly isAdmin = this.authService.isAdminSignal();
+  readonly isLoggedIn = computed(() => this.authService.currentUserSignalR() !== undefined);
+  isAlreadyOpen = signal(false);
+
   isHidden = false;
-  first = true;
-  isConnected = false;
+  isConnected: WritableSignal<boolean> = signal(false);
+  canSend: Signal<boolean> = computed(() => (this.adminChat().selectedUser?.online ?? false) && this.isConnected());
 
   adminChat: WritableSignal<AdminChat> = signal({
-    users: [
-      {
-        name: "Nincs üzenet",
-        online: false,
-        newMessages: 0,
-        messages: [],
-      },
-      {
-        name: "LakatosDorinaCsapatFeketeKarácsony",
-        online: true,
-        newMessages: 0,
-        messages: [],
-      },
-      {
-        name: "LakatosDorinaCsapatFeketeKarácsony",
-        online: true,
-        newMessages: 0,
-        messages: [],
-      },
-    ],
+    users: defaultAdminUsers,
     newMessages: computed(() => {
       let a = 0;
       this.adminChat().users.forEach((user) => {
-        if (user.name !== "Nincs üzenet") {
+        //if (user.name !== "Én") {
           a += user.newMessages;
-        }
+        //}
       });
       return a;
     }),
@@ -92,11 +85,18 @@ export class ChatComponent implements OnInit, OnDestroy {
     private chatService: ChatService,
     private destroyRef: DestroyRef,
     private authService: AuthService
-  ) {}
+  ) {
+    effect(() => {
+      console.log("effetc chat component");
+
+      this.chatService.signalToComponent();
+      this.subscribeToMessages();
+    });
+  }
 
   ngOnInit(): void {
     //TODO only if user wants to chat
-    this.isAdmin = this.authService.isRoleAdmin();
+
     this.connect();
     this.adminChat.update((chat: AdminChat) => {
       chat.selectedUser = chat.users[0];
@@ -105,8 +105,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   connect() {
-    this.chatService.initializeChat(this.isAdmin);
-    this.subscribeToMessages();
+    this.isAlreadyOpen.set(false);
+    this.chatService.initializeChat();
   }
 
   subscribeToMessages() {
@@ -121,39 +121,43 @@ export class ChatComponent implements OnInit, OnDestroy {
           } else if (msg?.type === "LEAVE") {
             this.handleLEAVE(msg);
           } else if (msg?.type === "ALREADY_OPEN") {
-            this.handleALREADY_OPEN(msg);
+            this.handleALREADY_OPEN();
+          } else if (msg?.type === "JOIN") {
+            this.isConnected.set(true);
           }
           console.log("Response from websocket: ", msg);
           console.log(this.adminChat().users.length);
         },
 
         error: (error) => {
-          this.isConnected = false;
+          this.isConnected.set(false);
           this.alertService.error("Chat hiba történt: " + error);
         },
         complete: () => {
-          this.isConnected = false;
+          this.isConnected.set(false);
         },
       });
   }
 
-  handleALREADY_OPEN(msg: Message) {
-    //TODO implement
-    console.error("ALREADY OPEN CHAT");
+  handleALREADY_OPEN() {
+    this.isAlreadyOpen.set(true);
   }
 
   handleINFO(msg: Message) {
+    this.adminChat().users = defaultAdminUsers;
     msg.info.forEach((name) => {
-      const newUser = {
-        name: name,
-        online: true,
-        newMessages: 0,
-        messages: [],
-      };
-      this.adminChat().users.push(newUser);
-      this.adminChat().selectedUser = newUser;
-      this.adminChat.set(this.adminChat());
+      if(name.length > 0) {
+        const newUser = {
+          name: name,
+          online: true,
+          newMessages: 0,
+          messages: [],
+        };
+        this.adminChat().users.push(newUser);
+        this.adminChat().selectedUser = newUser;
+      }
     });
+    this.adminChat.set(this.adminChat());
   }
 
   handleLEAVE(msg: Message) {
@@ -171,12 +175,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     event.stopPropagation();
   }
 
-  toggle(event: Event) {
+  toggle() {
     this.isHidden = !this.isHidden;
-
-    if (this.first) {
-      this.first = false;
-    }
   }
 
   sendMsg() {
@@ -193,7 +193,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       info: [],
       token: "",
     };
-    console.log("sending message", message);
+    //console.log("sending message", message);
     this.chatService.messages?.next(message);
     this.content = "";
   }
@@ -211,6 +211,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       if (sender) {
         sender.newMessages++;
         sender.messages.push(msg);
+        sender.online = true;
         this.adminChat().selectedUser = sender;
         this.adminChat.set(this.adminChat());
         console.log("van .", this.adminChat().selectedUser);

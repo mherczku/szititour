@@ -12,7 +12,7 @@
 
   <div *ngIf="isOpen" class="dropdown">
     <ng-container *ngFor="let user of users">
-      <p *ngIf="user !== selectedUser && user.name !=='Nincs üzenet'" (click)="selectUser(user)">
+      <p *ngIf="user !== selectedUser" (click)="$event.stopPropagation(); selectUser(user)">
         {{ user.name }}
       </p>
     </ng-container>

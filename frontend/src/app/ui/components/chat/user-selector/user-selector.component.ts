@@ -12,10 +12,16 @@ import { CommonModule } from "@angular/common";
 export class UserSelectorComponent implements OnInit {
   @Input({ required: true }) users!: SimpleUser[];
   _isHidden!: boolean;
-  @Input() set isHidden(value: boolean) { 
+  @Input() set isHidden(value: boolean) {
     this._isHidden = value;
     if(this._isHidden) {
       this.isOpen = false;
+    }
+  }
+
+  @Input() set selectedUserI(value: SimpleUser | undefined) {
+    if(value) {
+      this.selectedUser = value;
     }
   }
 
@@ -23,11 +29,11 @@ export class UserSelectorComponent implements OnInit {
 
   @Output() selectedUserChange = new EventEmitter<SimpleUser>();
 
-  isOpen = true;
+  isOpen = false;
 
   ngOnInit(): void {
     this.selectedUser = this.users[0] ?? {
-      name: "Nincs üzenet",
+      name: "Én",
       online: false,
       newMessages: 0,
       messages: [],
