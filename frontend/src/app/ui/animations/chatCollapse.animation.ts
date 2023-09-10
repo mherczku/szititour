@@ -3,18 +3,17 @@ import {
   transition,
   style,
   animate,
-  state,
-  query,
-  group,
+  state
 } from "@angular/animations";
 
 export const chatCollapse = trigger("chatCollapse", [
   state(
     "true",
     style({
-      padding: "65px 0 0 0",
-      width: "300px",
-      height: 0
+      padding: 0,
+      width: "0",
+      height: 0,
+      overflow: "hidden"
     })
   ),
 

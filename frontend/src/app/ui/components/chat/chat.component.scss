@@ -8,6 +8,23 @@
   z-index: 100;
 }
 
+.chatIcon {
+  display: block;
+  transform: scale(0);
+  width: 50px;
+  z-index: 9;
+  transition: 200ms all;
+  background-color: $kon-orange;
+  border-radius: 8px;
+  aspect-ratio: 1;
+  cursor: pointer;
+
+  &.isHidden {
+    transform: scale(1);
+  }
+
+}
+
 .badge {
   z-index: 10;
   position: absolute;
