@@ -1,97 +1,101 @@
-<!-- TODO ng container if logged in - open ws button -->
-<div [@chatCollapse]="isHidden" class="chat-container">
-  <div class="chat-head" (click)="toggle();">
-    <span *ngIf="isAdmin" class="badge">{{ adminChat().newMessages() }}</span>
-    <div class="left">
-      <p *ngIf="!isAdmin">Szititour Szervezők</p>
-      <app-user-selector *ngIf="isAdmin" [isHidden]="isHidden" [selectedUserI]="adminChat().selectedUser" (selectedUserChange)="setSelecteduser($event)" [users]="adminChat().users"></app-user-selector>
-    </div>
-
-    <div class="right">
-      <svg
-        (click)="hide($event)"
-        class="btn-hide"
-        height="26px"
-        viewBox="0 0 24 24"
-        width="26px"
-      >
-        <line
-          stroke="black"
-          stroke-linecap="round"
-          stroke-width="2"
-          sroke-height="2"
-          x1="2"
-          x2="20"
-          y1="12"
-          y2="12"
-        ></line>
-      </svg>
-    </div>
-  </div>
-
-  <div class="chat-content" id="bs" #chatContent (click)="resetSelectedCounter()">
-    <div class="info">
-      <p>Az ablak újratöltése esetén az üzenetek elvesznek</p>
-    </div>
-    <div class="info" *ngIf="!isAdmin">
-      <p>Itt felveheted a kapcsolatot a szervezőkkel</p>
-    </div>
-    <div class="info" *ngIf="isAlreadyOpen()">
-      <p class="bold">A chat kliens csak egy ablakban lehet aktív</p>
-    </div>
-
-    <!-- <div class="chat-message-sent">
-      <p>Ez egy rövid üzenet</p>
-    </div>
-
-    <div class="chat-message-received">
-      <p>
-        Ez egy pár karakterrel hosszab chat üzenet, hogy kiderüljön az hogyan
-        néz ki a külömböző képernyőméreteken.
-      </p>
-    </div> -->
-
-
-    <ng-container *ngIf="!isAdmin">
-      <div
-        [@popInOut]
-        *ngFor="let m of msgs"
-        [ngClass]="
-          (isAdmin && m.sender === 'ADMIN') ||
-          (!isAdmin && m.sender !== 'ADMIN')
-            ? 'chat-message-sent'
-            : 'chat-message-received'
-        "
-      >
-        <p>{{ m.content }}</p>
+<ng-container *ngIf="isLoggedIn()">
+  <div [@chatCollapse]="isHidden" class="chat-container">
+    <div class="chat-head" (click)="toggle();">
+      <span *ngIf="isAdmin()" class="badge">{{ adminChat().newMessages() }}</span>
+      <div class="left">
+        <p *ngIf="!isAdmin()">Szititour Szervezők</p>
+        <app-user-selector *ngIf="isAdmin()" [isHidden]="isHidden" [selectedUserI]="adminChat().selectedUser" (selectedUserChange)="setSelecteduser($event)" [users]="adminChat().users"></app-user-selector>
       </div>
-    </ng-container>
 
-    <ng-container *ngIf="isAdmin">
-      <div
-        [@popInOut]
-        *ngFor="let m of adminChat().selectedUser?.messages"
-        [ngClass]="
-          (isAdmin && m.sender === 'ADMIN') ||
-          (!isAdmin && m.sender !== 'ADMIN')
-            ? 'chat-message-sent'
-            : 'chat-message-received'
-        "
-      >
-        <p>{{ m.content }}</p>
+      <div class="right">
+        <svg
+          (click)="hide($event)"
+          class="btn-hide"
+          height="26px"
+          viewBox="0 0 24 24"
+          width="26px"
+        >
+          <line
+            stroke="black"
+            stroke-linecap="round"
+            stroke-width="2"
+            sroke-height="2"
+            x1="2"
+            x2="20"
+            y1="12"
+            y2="12"
+          ></line>
+        </svg>
       </div>
-      <p class="info" *ngIf="adminChat().selectedUser?.online === false">Csapat nem elérhető!</p>
-    </ng-container>
-  </div>
+    </div>
 
-  <div *ngIf="!isHidden" class="chat-footer">
-    <input
-      [disabled]="!canSend()"
-      (keyup.enter)="sendMsg()"
-      class="simpleInput"
-      [(ngModel)]="content"
-      type="text"
-    />
-    <button class="btn btn-simple" [disabled]="!canSend()" (click)="sendMsg()">SEND</button>
+    <div class="chat-content" id="bs" #chatContent (click)="resetSelectedCounter()">
+      <div class="info">
+        <p>Az ablak újratöltése esetén az üzenetek elvesznek</p>
+      </div>
+      <div class="info" *ngIf="!isAdmin()">
+        <p>Itt felveheted a kapcsolatot a szervezőkkel</p>
+      </div>
+      <div class="info" *ngIf="isAlreadyOpen()">
+        <p class="bold">A chat kliens csak egy ablakban lehet aktív</p>
+      </div>
+      <div class="info" *ngIf="!isConnected()">
+        <button (click)="connect()" class="btn-hover-bold">Start</button>
+      </div>
+
+      <!-- <div class="chat-message-sent">
+        <p>Ez egy rövid üzenet</p>
+      </div>
+
+      <div class="chat-message-received">
+        <p>
+          Ez egy pár karakterrel hosszab chat üzenet, hogy kiderüljön az hogyan
+          néz ki a külömböző képernyőméreteken.
+        </p>
+      </div> -->
+
+
+      <ng-container *ngIf="!isAdmin()">
+        <div
+          [@popInOut]
+          *ngFor="let m of msgs"
+          [ngClass]="
+            (isAdmin() && m.sender === 'ADMIN') ||
+            (!isAdmin() && m.sender !== 'ADMIN')
+              ? 'chat-message-sent'
+              : 'chat-message-received'
+          "
+        >
+          <p>{{ m.content }}</p>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isAdmin()">
+        <div
+          [@popInOut]
+          *ngFor="let m of adminChat().selectedUser?.messages"
+          [ngClass]="
+            (isAdmin() && m.sender === 'ADMIN') ||
+            (!isAdmin() && m.sender !== 'ADMIN')
+              ? 'chat-message-sent'
+              : 'chat-message-received'
+          "
+        >
+          <p>{{ m.content }}</p>
+        </div>
+        <p class="info" *ngIf="adminChat().selectedUser?.online === false">Csapat nem elérhető!</p>
+      </ng-container>
+    </div>
+
+    <div *ngIf="!isHidden" class="chat-footer">
+      <input
+        [disabled]="!canSend()"
+        (keyup.enter)="sendMsg()"
+        class="simpleInput"
+        [(ngModel)]="content"
+        type="text"
+      />
+      <button class="btn btn-simple" [disabled]="!canSend()" (click)="sendMsg()">SEND</button>
+    </div>
   </div>
-</div>
+</ng-container>

@@ -51,13 +51,13 @@ const defaultAdminUsers = [{
 })
 export class ChatComponent implements OnInit, OnDestroy {
 
-  readonly isAdmin = this.authService.isAdminSignal();
+  readonly isAdmin = this.authService.isAdminSignal;
   readonly isLoggedIn = computed(() => this.authService.currentUserSignalR() !== undefined);
   isAlreadyOpen = signal(false);
 
-  isHidden = false;
+  isHidden = true;
   isConnected: WritableSignal<boolean> = signal(false);
-  canSend: Signal<boolean> = computed(() => (this.adminChat().selectedUser?.online ?? false) && this.isConnected());
+  canSend: Signal<boolean> = computed(() => ((this.adminChat().selectedUser?.online ?? false) || !this.isAdmin()) && this.isConnected());
 
   adminChat: WritableSignal<AdminChat> = signal({
     users: defaultAdminUsers,
@@ -65,7 +65,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       let a = 0;
       this.adminChat().users.forEach((user) => {
         //if (user.name !== "Én") {
-          a += user.newMessages;
+        a += user.newMessages;
         //}
       });
       return a;
@@ -87,21 +87,19 @@ export class ChatComponent implements OnInit, OnDestroy {
     private authService: AuthService
   ) {
     effect(() => {
-      console.log("effetc chat component");
-
       this.chatService.signalToComponent();
       this.subscribeToMessages();
     });
   }
 
   ngOnInit(): void {
-    //TODO only if user wants to chat
-
-    this.connect();
-    this.adminChat.update((chat: AdminChat) => {
-      chat.selectedUser = chat.users[0];
-      return chat;
-    });
+    if (this.isAdmin()) {
+      this.connect();
+      this.adminChat.update((chat: AdminChat) => {
+        chat.selectedUser = chat.users[0];
+        return chat;
+      });
+    }
   }
 
   connect() {
@@ -125,8 +123,6 @@ export class ChatComponent implements OnInit, OnDestroy {
           } else if (msg?.type === "JOIN") {
             this.isConnected.set(true);
           }
-          console.log("Response from websocket: ", msg);
-          console.log(this.adminChat().users.length);
         },
 
         error: (error) => {
@@ -146,7 +142,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   handleINFO(msg: Message) {
     this.adminChat().users = defaultAdminUsers;
     msg.info.forEach((name) => {
-      if(name.length > 0) {
+      if (name.length > 0) {
         const newUser = {
           name: name,
           online: true,
@@ -185,15 +181,14 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
     const message: Message = {
       content: this.content,
-      recipient: this.isAdmin
-        ? this.adminChat().selectedUser?.name ?? "ALMAAA"
+      recipient: this.isAdmin()
+        ? this.adminChat().selectedUser?.name ?? "Névtelen"
         : "ADMIN",
-      sender: this.isAdmin ? "ADMIN" : this.authService.getUsername(),
+      sender: this.isAdmin() ? "ADMIN" : this.authService.getUsername(),
       type: "MSG",
       info: [],
       token: "",
     };
-    //console.log("sending message", message);
     this.chatService.messages?.next(message);
     this.content = "";
   }
@@ -204,7 +199,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   handleMSG(msg: Message) {
-    if (this.isAdmin) {
+    if (this.isAdmin()) {
       const sender = this.adminChat().users.find(
         (user) => user.name === msg.sender || user.name === msg.recipient
       );
@@ -214,8 +209,6 @@ export class ChatComponent implements OnInit, OnDestroy {
         sender.online = true;
         this.adminChat().selectedUser = sender;
         this.adminChat.set(this.adminChat());
-        console.log("van .", this.adminChat().selectedUser);
-
         return;
       } else {
         const newSender: SimpleUser = {
@@ -227,8 +220,6 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.adminChat().users.push(newSender);
         this.adminChat().selectedUser = newSender;
         this.adminChat.set(this.adminChat());
-
-        console.log("uj .", this.adminChat().selectedUser);
         return;
       }
     }
@@ -246,7 +237,6 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   resetSelectedCounter() {
     console.log("resetSelectedCounter");
-
     this.adminChat.update((chat) => {
       chat.selectedUser?.newMessages ? (chat.selectedUser.newMessages = 0) : 0;
       return chat;

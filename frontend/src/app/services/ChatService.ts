@@ -28,16 +28,10 @@ export class ChatService {
   initialized = false;
   signalToComponent: WritableSignal<Subject<Message> | undefined> = signal(undefined);
 
-
-  // todo init chat by authservice isadmin no component, init only if user want to private
-
   constructor(private http: HttpClient, private authService: AuthService) {
 
     effect(() => {
-      console.log("reconnext 0000");
       if (this.user() && this.initialized) {
-        console.log("reconnext chat service");
-
         this.initializeChat();
       } else {
         this.close();
@@ -48,18 +42,19 @@ export class ChatService {
   obs = new Subject<number>();
 
   public initializeChat() {
+    if(this.user() === undefined) {
+      console.error("ChatService - init failed - not logged in")
+      return;
+    }
     this.initialized = true;
     this.baseUrl = this.isAdmin() ? environment.apiWebsocketUrlAdmin : environment.apiWebsocketUrlUser;
 
     this.messages = <Subject<Message>>this.connect().pipe(
       map((response: MessageEvent): Message => {
-        console.log("got repsonse", response.data);
         const data = JSON.parse(response.data);
         return data;
       })
     );
-    console.log("initialied c s");
-
     this.signalToComponent.set(this.messages);
   }
 
@@ -77,7 +72,6 @@ export class ChatService {
 
     const observable = new Observable((obs: Observer<MessageEvent<Message>>) => {
       this.ws.onopen = () => {
-        console.log("ws connection successfully opened - sending auth");
         const token = this.authService.getToken();
         if (token) {
           const message: Message = {
@@ -88,7 +82,6 @@ export class ChatService {
             info: [],
             token: token
           };
-          console.log("sending message", message);
           this.messages?.next(message);
         } else {
           console.log("ws - auth - no token");
@@ -104,14 +97,12 @@ export class ChatService {
 
     const observer = {
       error: (err: unknown) => {
-        console.log("obs error");
         console.error(err);
       },
       complete: () => {
-        console.info("compllete ws obs");
+        console.info("complete ws obs");
       },
       next: (data: MessageEvent<Message>) => {
-        console.log("Message sent to websocket: ", data);
         if (this.ws.readyState === WebSocket.OPEN) {
           this.ws.send(JSON.stringify(data));
         }
