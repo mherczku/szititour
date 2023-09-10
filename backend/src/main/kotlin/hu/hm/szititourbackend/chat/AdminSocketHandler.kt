@@ -12,15 +12,19 @@ import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.io.IOException
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @Component
 class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: UserSocketHandler, private val teamService: TeamService, private val securityService: SecurityService) : BaseSocketHandler() {
+
+    val logger: Logger = LoggerFactory.getLogger(AdminSocketHandler::class.java)
+
     var sessions: MutableMap<String, SessionData> = mutableMapOf()
 
     @Throws(InterruptedException::class, IOException::class)
     public override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
-        println("Admin wrote text $message - payload: ${message.payload} : ${session.id} : ${session.remoteAddress} : ${session.attributes} ---")
 
         try {
             val chatMessage: ChatMessage = ObjectMapper().readValue(message.payload, ChatMessage::class.java)
@@ -37,6 +41,7 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
                         // sending infos:
                         val infos: List<String> = userSocket.sessions.map { it.value.username }
                         sendMessageTo(sessionData, ChatMessage(type = "INFO", info = infos))
+                        sendMessageTo(sessionData, ChatMessage(content = "SUCCESS", type = "JOIN"))
                         return
                     } else {
                         return
@@ -48,7 +53,14 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
 
             chatMessage.sender = "ADMIN"
 
-            println("SENDING ADMIN MESSAGE TO RECIPIENT")
+            // send admin messages (recipient only admin "én") to admins:
+            if(chatMessage.recipient == "Én") {
+                for (webSocketSession in sessions) {
+                    if(webSocketSession.value.session.isOpen) {
+                        sendMessageTo(webSocketSession.value, message)
+                    }
+                }
+            }
             val recipient = userSocket.sessions.values.find { it.username == chatMessage.recipient }
 
             if(recipient != null && recipient.session.isOpen) {
@@ -56,7 +68,6 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
 
                 for (webSocketSession in sessions) {
                     if(webSocketSession.value.session.isOpen) {
-                        println("sending admin message to admins: $message")
                         sendMessageTo(webSocketSession.value, message)
                     }
                 }
@@ -64,8 +75,7 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
 
 
         } catch (e: Exception) {
-            println("Websocket exception while in admin socket:")
-            e.printStackTrace()
+            logger.error("Websocket exception")
         }
 
     }
@@ -77,8 +87,6 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
 
     @Throws(Exception::class)
     override fun afterConnectionEstablished(session: WebSocketSession) {
-        println("conn est: ${session.id} : ${session.remoteAddress} : ${session.attributes} ---")
-        //the messages will be broadcasted to all users.
         sessions[session.id] = SessionData("", -1, session, false)
     }
 
@@ -91,11 +99,13 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
                 if(currentTeam.role == ROLE_ADMIN) {
 
                     // Already has open connection:
-                    if(sessions.values.find { it.userId == currentTeam.id } != null) {
+                    val alreadySession = sessions.values.find { it.userId == currentTeam.id }
+                    if(alreadySession != null && alreadySession?.session.isOpen) {
                         sendMessageTo(session, ChatMessage(type = "ALREADY_OPEN"))
                         session.close(CloseStatus.SERVICE_OVERLOAD)
                         null
                     } else {
+                        sessions.remove(alreadySession?.session?.id)
                         SessionData(username = currentTeam.name, session = session, authenticated = true, userId = currentTeam.id)
                     }
 

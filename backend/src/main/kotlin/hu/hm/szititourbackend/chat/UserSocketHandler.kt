@@ -11,6 +11,8 @@ import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.io.IOException
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 data class SessionData(
@@ -22,11 +24,13 @@ data class SessionData(
 
 @Component
 class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: AdminSocketHandler, private val teamService: TeamService, private val securityService: SecurityService) : BaseSocketHandler() {
+
+    val logger: Logger = LoggerFactory.getLogger(UserSocketHandler::class.java)
+
     var sessions: MutableMap<String, SessionData> = mutableMapOf()
 
     @Throws(InterruptedException::class, IOException::class)
     public override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
-        println("handle user text $message - : ${session.id} : ${session.remoteAddress} : ${session.attributes} ---")
 
         try {
             val chatMessage: ChatMessage = ObjectMapper().readValue(message.payload, ChatMessage::class.java)
@@ -48,7 +52,6 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
                 chatMessage.sender = sessionData.username
             }
 
-            println("sending user message $message to all admins")
             for (webSocketSession in adminSocket.sessions) {
                 sendMessageTo(webSocketSession.value, message)
             }
@@ -56,8 +59,7 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
             sendMessageTo(session, message)
 
         } catch (e: Exception) {
-            println("Websocket exception while in user socket:")
-            e.printStackTrace()
+            logger.error("Websocket exception")
         }
     }
 
@@ -66,9 +68,6 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
 
         notifyAdminsOnLeave(sessions[session.id]?.username)
         sessions.remove(session.id)
-        sessions.forEach {
-            println("marad: ${it.value.username }")
-        }
     }
 
     private fun notifyAdminsOnLeave(username: String?) {
@@ -81,9 +80,7 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
 
     @Throws(Exception::class)
     override fun afterConnectionEstablished(session: WebSocketSession) {
-        println("user conn est: ${session.id} : ${session.remoteAddress} : ${session.attributes} ---")
         val sessionData = SessionData(username = "", session = session, authenticated = false, userId = -1)
-
         sessions[session.id] = sessionData
     }
 
@@ -95,11 +92,13 @@ class UserSocketHandler constructor(@Autowired @Lazy private val adminSocket: Ad
                 val currentTeam = teamService.getTeamById(verification.teamId)
 
                 // Already has open connection:
-                if(sessions.values.find { it.userId == currentTeam.id } != null) {
+                val alreadySession = sessions.values.find { it.userId == currentTeam.id }
+                if(alreadySession != null && alreadySession?.session.isOpen) {
                     sendMessageTo(session, ChatMessage(type = "ALREADY_OPEN"))
                     session.close(CloseStatus.SERVICE_OVERLOAD)
                     null
                 } else {
+                    sessions.remove(alreadySession?.session?.id)
                     SessionData(username = currentTeam.name, session = session, authenticated = true, userId = currentTeam.id)
                 }
 
