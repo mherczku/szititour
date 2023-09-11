@@ -87,7 +87,7 @@ export class AuthService implements OnDestroy {
 
     return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, null, { headers: headers }).pipe(tap(evt => {
       if (evt.success) {
-        this.store.dispatch(login({ team: evt.team }));
+        this.store.dispatch(login({ team: evt.team, notAuto: true }));
       }
     }));
   }
@@ -98,7 +98,7 @@ export class AuthService implements OnDestroy {
 
     return this.http.get<NetworkLoginResponse>(`${this.baseUrl}/login/google`, { headers: headers }).pipe(tap(evt => {
       if (evt.success) {
-        this.store.dispatch(login({ team: evt.team }));
+        this.store.dispatch(login({ team: evt.team, notAuto: true }));
       }
     }));
   }

@@ -21,11 +21,13 @@ export class LoginEffects {
       ofType(actions.login),
       tap(action => {
         if(action.team.role === "ROLE_ADMIN") {
-          console.log("admin login", action.team);
-          this.router.navigateByUrl(CONST_ROUTES.admin.call);
+          if(action.notAuto) {
+            this.router.navigateByUrl(CONST_ROUTES.admin.call);
+          }
         } else if(action.team.role === "ROLE_USER") {
-          console.log("user login", action.team);
-          this.router.navigateByUrl(CONST_ROUTES.user.call);
+          if(action.notAuto) {
+            this.router.navigateByUrl(CONST_ROUTES.user.call);
+          }
         }
         this.pushNoti.initializePushNoti();
       }),
