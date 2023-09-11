@@ -9,5 +9,5 @@ export const environment = {
     MAP_KEY: "SECRET_MAP_KEY",
     googleClientId: "SECRET_GOOGLE_ID",
     firebaseConfig: SECRET_FIREBASE_CONFIG,
-    vpKey: "SECRET_VPKEY"
+    vpKey: "SECRET_VPKEY" 
   };
