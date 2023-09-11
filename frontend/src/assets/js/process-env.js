@@ -19,14 +19,16 @@ fs.access(dir, fs.constants.F_OK, (err) => {
     // Write content to file
     try {
         fs.writeFileSync(dir + "/" + file, content);
-        fs.writeFileSync(dir + "/" + prodFile, content);
+        fs.writeFileSync(dir + "/" + prodFile, content + "//TEST SZÖVEG BELEMEGY E");
         console.log("Write successfull in", process.cwd());
 
         if(fs.existsSync(dir + "/" + file)) {
             console.log("File created", path.resolve(dir + "/" + file));
         }
         if(fs.existsSync(dir + "/" + prodFile)) {
-            console.log("File created", path.resolve(dir + "/" + prodFile + content));
+            console.log("File created", path.resolve(dir + "/" + prodFile));
+            const str = fs.readFileSync(dir + "/" + prodFile).toString();
+            console.log(str);
         }
     } catch (err) {
         console.log(err);
