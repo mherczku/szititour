@@ -10,7 +10,7 @@ const content = `${process.env.ENV_STAGE}`;
 fs.access(dir, fs.constants.F_OK, (err) => {
     if(err) {
         // Dir not exist
-        console.log("src not exist, creating now", process.cws());
+        console.log("src not exist, creating now", process.cwd());
         fs.mkdir(dir, {recursive: true}, (err) => {
             if(err) throw err;
         });
@@ -20,7 +20,7 @@ fs.access(dir, fs.constants.F_OK, (err) => {
     try {
         fs.writeFileSync(dir + "/" + file, content);
         fs.writeFileSync(dir + "/" + prodFile, content);
-        console.log("Write successfull in", process.cws());
+        console.log("Write successfull in", process.cwd());
 
         if(fs.existsSync(dir + "/" + file)) {
             console.log("File created", path.resolve(dir + "/" + file));
