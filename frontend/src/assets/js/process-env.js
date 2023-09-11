@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const dir = "src/environments";
+const dir = "frontend/src/environments";
 const file = "environment.ts";
 const prodFile = "environment.prod.ts";
 
