@@ -64,12 +64,14 @@ export class PushNotificationService {
 
         const m: any = getMessaging(this.fireApp);
 
-        navigator.serviceWorker.register("../../firebase-messaging-sw.js").then((registration) => {
-          console.warn("MAJOM", m, navigator.serviceWorker);
-          //m.useServiceWorker(registration);
+        if(environment.production) {
 
-          // Request permission and get token.....
-        });
+          navigator.serviceWorker.register("/szititour/firebase-messaging-sw.js").then((registration) => {
+            console.warn("MAJOM", m, navigator.serviceWorker, registration);
+            //m.useServiceWorker(registration);
+            // Request permission and get token.....
+          });
+        }
         getToken(m, { vapidKey: environment.vpKey }).then((res) => {
           this.token = res;
         });
