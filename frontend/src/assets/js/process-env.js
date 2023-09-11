@@ -30,9 +30,9 @@ fs.access(dir, fs.constants.F_OK, (err) => {
             console.log("contents: " + contents);
 
             let replaced = contents.replace("SECRET_MAP_KEY", MAP_KEY);
-            replaced = contents.replace("SECRET_GOOGLE_ID", GOOGLE_ID);
-            replaced = contents.replace("SECRET_FIREBASE_CONFIG", FIREBASE_CONFIG);
-            replaced = contents.replace("SECRET_VPKEY", VPKEY);
+            replaced = replaced.replace("SECRET_GOOGLE_ID", GOOGLE_ID);
+            replaced = replaced.replace("SECRET_FIREBASE_CONFIG", FIREBASE_CONFIG);
+            replaced = replaced.replace("SECRET_VPKEY", VPKEY);
 
             console.log("replaced: " + replaced);
 
