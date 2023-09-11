@@ -14,6 +14,10 @@ export const CONST_ROUTES = {
         place: {
             path: "place/:gameId/:placeId",
             call: "/admin/place/"
+        },
+        notification: {
+            path: "notification",
+            call: "/admin/notification/"
         }
     },
 

@@ -1,0 +1,39 @@
+<main>
+
+    <section class="topic-noti">
+        <h2 class="text-size-h2 bold">Értesítés küldése</h2>
+
+        <form [formGroup]="topicForm">
+
+            <div class="inputs text-size-base">
+                <div>
+                    <p>Topic: default</p>
+                </div>
+                <div>
+                    <label for="topic-title">Üzenet címe:</label>
+                    <input formControlName="title" required autofocus tabindex="1" placeholder="Téma" class="simpleInput" id="topic-title" type="text" maxlength="16">
+                </div>
+                <div>
+                    <label for="topic-msg">Üzenet szövege:</label>
+                    <input formControlName="msg" required tabindex="2" name="topicMsg" placeholder="Üzenet..." class="simpleInput" id="topic-msg" type="text" maxlength="50">
+                </div>
+                <button [disabled]="!topicForm.valid" tabindex="3" (click)="sendTopicNotification()" type="submit" class="btn-simple">Küldés</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- <section class="topic-noti">
+        <h2>Send target notification:</h2>
+        <div class="inputs">
+            <label for="">Válassz ˝célt˝</label>
+            <select>
+                <option value="default">default</option>
+            </select>
+            <label for="topic-title">Üzenet címe:</label>
+            <input class="simpleInput" id="topic-title" type="text" maxlength="16">
+            <label for="topic-msg">Üzenet szövege:</label>
+            <input class="simpleInput" id="topic-msg" type="text" maxlength="50">
+        </div>
+    </section> -->
+
+</main>

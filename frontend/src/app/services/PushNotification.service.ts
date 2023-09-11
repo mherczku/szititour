@@ -13,7 +13,7 @@ interface AppNotification {
   message: string;
 }
 
-interface TopicNotification extends AppNotification {
+export interface TopicNotification extends AppNotification {
   topic: string;
 }
 
@@ -70,7 +70,7 @@ export class PushNotificationService {
           this.notifications.update(v => {
             v.push({
               id: crypto.randomUUID(),
-              icon: "",
+              icon: payload.notification?.icon ?? "",
               link: "",
               type: "PUSH",
               time: new Date(),
