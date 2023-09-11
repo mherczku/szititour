@@ -5,10 +5,12 @@ import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.WebpushConfig
 import com.google.firebase.messaging.WebpushNotification
 import hu.hm.szititourbackend.datamodel.NotiSubscriber
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.DirectNotification
 import hu.hm.szititourbackend.extramodel.SubscriptionRequest
 import hu.hm.szititourbackend.extramodel.TopicNotification
 import hu.hm.szititourbackend.repository.NotiSubscriberRepository
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
@@ -17,6 +19,9 @@ import org.springframework.stereotype.Service
 class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscriberRepository) {
 
     fun sendNotificationToTarget(notification: DirectNotification){
+        if(!notification.isValid()) {
+            throw CustomException("Notification is not valid", HttpStatus.BAD_REQUEST)
+        }
         val message = Message.builder()
                 // Set the configuration for our web notification
                 .setWebpushConfig(
@@ -38,6 +43,9 @@ class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscri
     }
 
     fun sendNotificationToTopic(notification: TopicNotification){
+        if(!notification.isValid()) {
+            throw CustomException("Notification is not valid", HttpStatus.BAD_REQUEST)
+        }
         val message = Message.builder()
                 .setWebpushConfig(
                         WebpushConfig.builder()
