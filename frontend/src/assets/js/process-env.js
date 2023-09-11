@@ -25,6 +25,9 @@ fs.access(dir, fs.constants.F_OK, (err) => {
         if(fs.existsSync(dir + "/" + file)) {
             console.log("File created", path.resolve(dir + "/" + file));
         }
+        if(fs.existsSync(dir + "/" + prodFile)) {
+            console.log("File created", path.resolve(dir + "/" + file + content));
+        }
     } catch (err) {
         console.log(err);
         process.exit(1);
