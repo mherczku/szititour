@@ -67,30 +67,46 @@ export class PushNotificationService {
         if(environment.production) {
 
           navigator.serviceWorker.register("/szititour/firebase-messaging-sw.js").then((registration) => {
-            console.warn("MAJOM", m, navigator.serviceWorker);
             m.swRegistration = registration;
-            console.log(registration, m.swRegistration, registration === m.swRegistration)
-            // Request permission and get token.....
+            getToken(m, { vapidKey: environment.vpKey, serviceWorkerRegistration: registration}).then((res) => {
+              this.token = res;
+            });
+            onMessage(m, (payload) => {
+              console.log("Message received. ", payload);
+              this.notifications.update(v => {
+                v.push({
+                  id: crypto.randomUUID(),
+                  icon: payload.notification?.icon ?? "",
+                  link: "",
+                  type: "PUSH",
+                  time: new Date(),
+                  message: payload.notification?.body ?? "message",
+                  title: payload.notification?.title ?? "title"
+                });
+                return v;
+              });
+            });
+          });
+        } else {
+          getToken(m, { vapidKey: environment.vpKey }).then((res) => {
+            this.token = res;
+          });
+          onMessage(m, (payload) => {
+            console.log("Message received. ", payload);
+            this.notifications.update(v => {
+              v.push({
+                id: crypto.randomUUID(),
+                icon: payload.notification?.icon ?? "",
+                link: "",
+                type: "PUSH",
+                time: new Date(),
+                message: payload.notification?.body ?? "message",
+                title: payload.notification?.title ?? "title"
+              });
+              return v;
+            });
           });
         }
-        getToken(m, { vapidKey: environment.vpKey }).then((res) => {
-          this.token = res;
-        });
-        onMessage(m, (payload) => {
-          console.log("Message received. ", payload);
-          this.notifications.update(v => {
-            v.push({
-              id: crypto.randomUUID(),
-              icon: payload.notification?.icon ?? "",
-              link: "",
-              type: "PUSH",
-              time: new Date(),
-              message: payload.notification?.body ?? "message",
-              title: payload.notification?.title ?? "title"
-            });
-            return v;
-          });
-        });
       }
     });
   }
