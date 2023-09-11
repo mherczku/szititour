@@ -39,7 +39,7 @@ export class PushNotificationService {
         type: "PUSH",
         time: new Date(),
         message: "message",
-        title:  "title"
+        title: "title"
       });
       return v;
     });
@@ -60,8 +60,16 @@ export class PushNotificationService {
     Notification.requestPermission().then((res) => {
       console.log(res);
 
-      if (res !== "denied") {
-        const m = getMessaging(this.fireApp);
+      if (res === "granted") {
+
+        const m: any = getMessaging(this.fireApp);
+
+        navigator.serviceWorker.register("../../firebase-messaging-sw.js").then((registration) => {
+          console.warn("MAJOM", m, navigator.serviceWorker);
+          //m.useServiceWorker(registration);
+
+          // Request permission and get token.....
+        });
         getToken(m, { vapidKey: environment.vpKey }).then((res) => {
           this.token = res;
         });
@@ -87,14 +95,14 @@ export class PushNotificationService {
   public popOne(): SzititourNotification | undefined {
     let toReturn;
     this.notifications.update(n => {
-        toReturn = n.pop();
-        return n;
-      });
+      toReturn = n.pop();
+      return n;
+    });
 
     return toReturn;
   }
 
-  public getTopics(request: SubscriptionRequest): Observable<string[]>  {
+  public getTopics(request: SubscriptionRequest): Observable<string[]> {
 
     if (this.token) {
       const req = {
@@ -107,7 +115,7 @@ export class PushNotificationService {
     }
   }
 
-  public subscribeToTopic(request: SubscriptionRequest): Observable<string[]>  {
+  public subscribeToTopic(request: SubscriptionRequest): Observable<string[]> {
     if (this.token) {
       const req = {
         ...request,
@@ -119,7 +127,7 @@ export class PushNotificationService {
     }
   }
 
-  public unsubscribeFromTopic(request: SubscriptionRequest): Observable<string[]>  {
+  public unsubscribeFromTopic(request: SubscriptionRequest): Observable<string[]> {
     if (this.token) {
       const req = {
         ...request,
