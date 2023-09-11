@@ -1,2 +1,7 @@
 <app-navbar></app-navbar>
-<router-outlet></router-outlet>
+<div style="height: 100%;" [@routeAnimations]="getRouteAnimationData">
+  <router-outlet></router-outlet>
+</div>
+
+<app-chat></app-chat>
+

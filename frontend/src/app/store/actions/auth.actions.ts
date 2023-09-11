@@ -3,7 +3,7 @@ import {Team} from "../../types/team";
 
 export const login = createAction(
   "[Auth] Login",
-  props<{ team: Team }>()
+  props<{ team: Team, notAuto?: boolean }>()
 );
 
 export const logout = createAction(

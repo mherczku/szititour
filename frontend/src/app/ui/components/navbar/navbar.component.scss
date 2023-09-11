@@ -1,10 +1,62 @@
+@import "styles-variables";
+
+.notification-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100px;
+  right: 0px;
+  z-index: 20;
+
+  @media (max-width: $breakpoint-mobile) {
+    top: 85px;
+  }
+
+}
+
+.right {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+}
+
+.btn-notification {
+  background-image: url("/assets/svg/notification.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 30px;
+  aspect-ratio: 1;
+  transform: translateY(-3px);
+
+  &.hasNew::before {
+    content: "";
+    position: absolute;
+    border: 4px solid red;
+    border-radius: 100%;
+    top: 0;
+    right: 0;
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    padding-bottom: 5px;
+    transition: all 200ms;
+  }
+}
+
+.nav-container {
+  width: 32px;
+  height: 32px;
+}
+
 .nav-container .checkbox {
   position: absolute;
   display: block;
   height: 32px;
   width: 32px;
-  top: 20px;
-  left: 20px;
+  top: 0px;
+  left: 0px;
   z-index: 5;
   opacity: 0;
   cursor: pointer;
@@ -15,8 +67,8 @@
   height: 26px;
   width: 32px;
   position: absolute;
-  top: 17px;
-  left: 20px;
+  top: 0px;
+  left: 0px;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -69,6 +121,10 @@
   width: 100vw;
   height: 100vh;
   transition-duration: 0.5s;
+
+  svg {
+    position: absolute;
+  }
 }
 
 .darkPart {
@@ -93,6 +149,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+
+  svg {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    min-width: fit-content;
+    opacity: 0.8;
+  }
+
 }
 .whitePartOpen {
   transition-duration: 0.5s;

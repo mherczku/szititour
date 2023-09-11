@@ -1,28 +1,72 @@
 <div class="relative flex justify-center mt-10 p-5">
-
   <div class="relative flex flex-col neumorphism mobile:p-5 p-10 mobile:w-full">
+    <p class="text-size-h1 font-bold">Regisztráció</p>
 
-    <p class="text-size-h1 font-bold mb-10">Regisztráció</p>
+    <div id="google-button2"></div>
 
     <form [formGroup]="registerForm">
+
+      <label class="text-size-base mb-2 block">Csapat név *</label>
+      <input
+        tabindex="1"
+        autofocus
+        required
+        formControlName="name"
+        class="simpleInput mb-5"
+        type="text"
+        placeholder="Add a csapat nevet"
+      />
+
       <label class="text-size-base mb-2 block">E-mail *</label>
-      <input tabindex="1" autofocus required formControlName="email" class="simpleInput mb-5" type="email" placeholder="Add meg az e-mail címed">
+      <input
+        tabindex="2"
+        required
+        formControlName="email"
+        class="simpleInput mb-5"
+        type="email"
+        placeholder="Add meg az e-mail címed"
+      />
 
       <label class="text-size-base mb-2 block">Jelszó *</label>
-      <input tabindex="2" required formControlName="password" class="simpleInput mb-5" type="password" placeholder="Adj meg egy jelszót">
+      <input
+        tabindex="3"
+        required
+        formControlName="password"
+        class="simpleInput mb-5"
+        type="password"
+        placeholder="Adj meg egy jelszót"
+      />
 
       <label class="text-size-base mb-2 block">Jelszó mégegyszer *</label>
-      <input tabindex="3" required formControlName="confirmPassword" class="simpleInput mb-5" type="password" placeholder="Add meg még egyszer">
+      <input
+        tabindex="4"
+        required
+        formControlName="confirmPassword"
+        class="simpleInput mb-5"
+        type="password"
+        placeholder="Add meg még egyszer"
+      />
 
       <div class="flex justify-between items-center">
-        <a #button1 class="btn-hover-bold-textChange" title="Még nincs fiókod?" (mouseenter)="button1.innerText = 'Lépj be!'" (mouseleave)="button1.innerText = 'Már van fiókod?'" routerLink="/login">Még nincs fiókod?</a>
-        <button (click)="register()" type="submit" tabindex="4" [disabled]="!registerForm.valid" class="btn-simple">Regisztrálás</button>
+        <a
+          #button1
+          class="btn-hover-bold-textChange"
+          title="Még nincs fiókod?"
+          (mouseenter)="button1.innerText = 'Lépj be!'"
+          (mouseleave)="button1.innerText = 'Már van fiókod?'"
+          routerLink="/auth/login"
+          >Még nincs fiókod?</a
+        >
+        <button
+          (click)="register()"
+          type="submit"
+          tabindex="5"
+          [disabled]="!registerForm.valid"
+          class="btn-simple"
+        >
+          Regisztrálás
+        </button>
       </div>
     </form>
-
-
   </div>
-
-
 </div>
-

@@ -15,6 +15,7 @@ import {ImgSrcModule} from "../../../../pipes/img-src/img-src.module";
 import {NgForOf} from "@angular/common";
 import {myTrackBy} from "../../../../e-functions/extension-functions";
 import {PlaceLocationData, PlaceMapMarkerComponent} from "../place-map-marker/place-map-marker.component";
+import { CONST_ROUTES } from "src/app/constants/routes.constants";
 
 @Component({
   selector: "app-edit-place",
@@ -109,7 +110,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
           this.alert.success(`${value.name} helyszín sikeresen létrehozva`);
           this.saving = false;
           this.changed = false;
-          this.router.navigateByUrl(`/admin/place/${value.gameId}/${value.id}`);
+          this.router.navigateByUrl(`${CONST_ROUTES.admin.place.call}/${value.gameId}/${value.id}`);
         },
         error: _err => {
           this.saving = false;
@@ -126,7 +127,7 @@ export class EditPlaceComponent implements OnInit, OnDestroy {
         next: _value => {
           this.alert.success(`${this.place.name} helyszín sikeresen törölve`);
           this.deleting = false;
-          this.router.navigateByUrl("/admin");
+          this.router.navigateByUrl(CONST_ROUTES.admin.call);
         },
         error: _err => {
           this.deleting = false;

@@ -1,18 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="hu">
-<head>
-  <meta charset="utf-8">
-  <title>Szititour</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <script>function gmNoop() { console.log('GMap Loaded'); }</script>
-  <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQaLf_BsA8vcOgKtG4_yPBj6lxdVUSpuM&callback=gmNoop"></script>-->
-</head>
-<body>
-  <app-root class="flex flex-col h-full"></app-root>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Szititour</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <!-- <script src="https://accounts.google.com/gsi/client" async defer></script> -->
+    <script rel="preload" src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+      function gmNoop() {
+        console.log("GMap Loaded");
+      }
+    </script>
+    <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQaLf_BsA8vcOgKtG4_yPBj6lxdVUSpuM&callback=gmNoop"></script>-->
+  </head>
+  <body>
+    
+      
+
+    <app-root class="flex flex-col h-full"></app-root>
+  </body>
 </html>

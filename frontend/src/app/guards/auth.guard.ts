@@ -1,14 +1,5 @@
 import {Injectable} from "@angular/core";
-import {
-  ActivatedRouteSnapshot, CanActivate,
-  CanActivateChild,
-  CanLoad,
-  Route,
-  Router,
-  RouterStateSnapshot,
-  UrlSegment,
-  UrlTree
-} from "@angular/router";
+import { ActivatedRouteSnapshot, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from "@angular/router";
 import {Observable} from "rxjs";
 import {Store} from "@ngrx/store";
 import {selectLoggedInTeam} from "../store/selectors/auth.selector";
@@ -16,7 +7,7 @@ import {selectLoggedInTeam} from "../store/selectors/auth.selector";
 @Injectable({
   providedIn: "root"
 })
-export class AuthGuard implements CanLoad, CanActivateChild, CanActivate {
+export class AuthGuard  {
 
   private team = this.store.select(selectLoggedInTeam);
   private currentTeamRole: "ROLE_ADMIN" | "ROLE_USER" | "ROLE_GUEST" = "ROLE_GUEST";

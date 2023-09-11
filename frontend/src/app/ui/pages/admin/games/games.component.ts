@@ -14,7 +14,7 @@ import {NgForOf} from "@angular/common";
 @Component({
   selector: "app-games",
   templateUrl: "./games.component.html",
-  styleUrls: ["./games.component.css"],
+  styleUrls: ["./games.component.scss"],
   standalone: true,
   styles: [`
     :host {
@@ -52,7 +52,7 @@ export class GamesComponent implements OnInit, OnDestroy {
   }
 
   getGames() {
-    this.subscriptionGetGames = this.adminService.getAllGames().subscribe((res: any) => {
+    this.subscriptionGetGames = this.adminService.getAllGames().subscribe((res: Game[]) => {
       this.games = res;
     });
   }

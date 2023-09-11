@@ -13,11 +13,15 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/questions")
 class QuestionController @Autowired constructor(private val questionService: QuestionService) {
+
+    val logger: Logger = LoggerFactory.getLogger(QuestionController::class.java)
 
     @PostMapping()
     fun addQuestion(
@@ -27,6 +31,9 @@ class QuestionController @Autowired constructor(private val questionService: Que
         @RequestParam("name") name: String,
         @RequestParam("riddle") riddle: String
     ): ResponseEntity<QuestionDto> {
+
+        logger.debug("Add question to place ${placeId}")
+
         val questionDto = QuestionDto(
             name = name,
             placeId = placeId.toInt(),
@@ -44,12 +51,14 @@ class QuestionController @Autowired constructor(private val questionService: Que
 
     @GetMapping("/{id}")
     fun getQuestionById(@PathVariable id: Int): ResponseEntity<QuestionDto?> {
+        logger.debug("Get question by id ${id}")
         val question: Question = questionService.getQuestionById(id)
         return ResponseEntity(question.convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping
     fun getAllQuestions(): ResponseEntity<List<QuestionDto>> {
+        logger.debug("Get all questions")
         val questions: MutableList<Question> = questionService.getAllQuestion()
         return ResponseEntity(questions.convertToDto(), HttpStatus.OK)
     }
@@ -63,6 +72,8 @@ class QuestionController @Autowired constructor(private val questionService: Que
         @RequestParam("name") name: String,
         @RequestParam("riddle") riddle: String
     ): ResponseEntity<QuestionDto> {
+
+        logger.debug("Update question ${questionId}")
 
         val questionDto = QuestionDto(
             name = name,
@@ -81,6 +92,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
 
     @DeleteMapping("/{id}")
     fun deleteQuestionById(@PathVariable id: Int): ResponseEntity<Nothing> {
+        logger.debug("Delete question by id ${id}")
         return try {
             questionService.deleteQuestionById(id)
             ResponseEntity(null, HttpStatus.OK)

@@ -12,11 +12,15 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/places")
 class PlaceController @Autowired constructor(private val placeService: PlaceService) {
+
+    val logger: Logger = LoggerFactory.getLogger(PlaceController::class.java)
 
     @PostMapping()
     fun addPlaceToGame(
@@ -27,6 +31,8 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
         @RequestParam("lat") lat: String,
         @RequestParam("lng") lng: String,
     ): ResponseEntity<PlaceDto> {
+
+        logger.debug("Add place to game ${gameId}")
 
         val placeDto = PlaceDto(
             gameId = gameId.toInt(),
@@ -46,12 +52,14 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
 
     @GetMapping("/{id}")
     fun getPlaceById(@PathVariable id: Int): ResponseEntity<PlaceDto?> {
+        logger.debug("Get place by id ${id}")
         val place: Place = placeService.getPlaceById(id)
         return ResponseEntity(place.convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping
     fun getAllPlaces(): ResponseEntity<List<PlaceDto>> {
+        logger.debug("Get all places")
         val places: MutableList<Place> = placeService.getAllPlaces()
         return ResponseEntity(places.convertToDto(), HttpStatus.OK)
     }
@@ -66,6 +74,8 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
         @RequestParam("address") address: String,
 
     ): ResponseEntity<PlaceDto> {
+
+        logger.debug("Update place ${placeId}")
 
         val placeDto = PlaceDto(
             id = placeId.toInt(),
@@ -85,6 +95,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
 
     @DeleteMapping("/{id}")
     fun deletePlaceById(@PathVariable id: Int): ResponseEntity<Nothing> {
+        logger.debug("Delete place by id ${id}")
         return try {
             placeService.deletePlaceById(id)
             ResponseEntity(null, HttpStatus.OK)

@@ -1,0 +1,199 @@
+@import "styles/styles-variables";
+
+:host {
+  position: fixed;
+  height: fit-content;
+  bottom: 10px;
+  left: 10px;
+  z-index: 100;
+}
+
+.chatIcon {
+  display: block;
+  transform: scale(0);
+  width: 50px;
+  z-index: 9;
+  transition: 200ms all;
+  background-color: $kon-orange;
+  border-radius: 8px;
+  aspect-ratio: 1;
+  cursor: pointer;
+
+  &.isHidden {
+    transform: scale(1);
+  }
+
+}
+
+.badge {
+  z-index: 10;
+  position: absolute;
+  top: -10px;
+  left: -5px;
+  color: white;
+  background-color: #007bff;
+  font-weight: bold;
+  aspect-ratio: 1;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  display: flex;
+  border-radius: 100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.chat-container {
+  /* From https://css.glass */
+  background: rgba(0, 0, 0, 0.21);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10.3px);
+  -webkit-backdrop-filter: blur(6.3px);
+  border: 1px solid rgba(255, 255, 255, 0.58);
+
+  padding: 20px;
+  padding-top: 60px;
+  border-radius: 20px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  overflow: none;
+  width: 400px;
+  @media (max-width: $breakpoint-mobile) {
+    max-width: 90vw;
+    //overflow-x: hidden;
+  }
+
+  .chat-head {
+    cursor: pointer;
+    background-color: $kon-orange;
+    color: white;
+    font-weight: bold;
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    left: 0;
+    padding: 20px;
+    user-select: none;
+
+    border-radius: 20px;
+
+    .left {
+      select {
+        background: transparent;
+
+        option {
+          color: inherit;
+          background-color: black;
+        }
+        /* Remove focus outline */
+        &:focus {
+          outline: none;
+        }
+        /* Remove IE arrow */
+        &::-ms-expand {
+          display: none;
+        }
+      }
+    }
+
+    .right {
+      .btn-hide {
+        cursor: pointer;
+        line {
+          transition: all 100ms ease-in-out;
+          stroke-linecap: round;
+          stroke: #ffffff;
+        }
+        &:hover {
+          line {
+            stroke: rgba(255, 255, 255, 0.4);
+          }
+        }
+      }
+    }
+  }
+
+  .chat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px 0px;
+    height: 400px;
+    overflow-y: auto;
+    margin: 20px 0;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: $smoke;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: darkgray;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #6f6f6f;
+    }
+
+    .chat-message-received {
+      margin: 0 10px;
+      p {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background-color: $kon-blue;
+        height: fit-content;
+        width: 50%;
+        border-radius: 3px 20px 20px 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .chat-message-sent {
+      margin: 0 10px;
+      display: flex;
+      justify-content: flex-end;
+      p {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background-color: $m-green;
+        height: fit-content;
+        width: 50%;
+        border-radius: 20px 20px 3px 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .info {
+      width: fit-content;
+      margin: auto;
+      margin-top: 0;
+      margin-bottom: 20px;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .chat-footer {
+    position: relative;
+    margin: 5px;
+
+    button {
+      position: absolute;
+      right: 0px;
+      top: -2px;
+    }
+  }
+}

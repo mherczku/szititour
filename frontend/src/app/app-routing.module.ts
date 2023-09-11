@@ -1,13 +1,35 @@
-import {inject, NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {ActiveGameComponent} from "./ui/pages/admin/active-game/active-game.component";
-import {AuthService} from "./services/AuthService";
-import {PlaceComponent} from "./ui/pages/admin/place/place.component";
+import { inject, NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { AuthService } from "./services/AuthService";
+import { CONST_ROUTES } from "./constants/routes.constants";
 
 const routes: Routes = [
 
   /*{path: '', loadChildren: () => import('./pages/').then(m => m.HomeModule)},*/
+
   {
+    path: CONST_ROUTES.auth.path,
+    canMatch: [() => inject(AuthService).isRoleGuest()],
+    data: { roles: ["ROLE_GUEST"] },
+    loadChildren: () => import("./ui/pages/auth/auth.routes").then(r => r.AUTH_ROUTES)
+  },
+
+  {
+    path: CONST_ROUTES.admin.path,
+    canMatch: [() => inject(AuthService).isRoleAdmin()],
+    data: { roles: ["ROLE_ADMIN"] },
+    loadChildren: () => import("./ui/pages/admin/admin.routes").then(r => r.ADMIN_ROUTES)
+  },
+
+  {
+    path: CONST_ROUTES.user.path,
+    canMatch: [() => inject(AuthService).isLoggedIn()],
+    data: { roles: ["ROLE_USER"] },
+    loadChildren: () => import("./ui/pages/user/user.routes").then(r => r.USER_ROUTES)
+  },
+
+
+  /* {
     path: "register",
     canMatch: [() => inject(AuthService).isRoleGuest()],
     data: {roles: ["ROLE_GUEST"]},
@@ -20,6 +42,15 @@ const routes: Routes = [
     loadComponent: () => import("./ui/pages/auth/login/login.component").then(c => c.LoginComponent)
   },
   {
+    path: "verify/:token",
+    canMatch: [() => inject(AuthService).isRoleGuest()],
+    data: {roles: ["ROLE_GUEST"]},
+    loadComponent: () => import("./ui/pages/auth/verify/verify.component").then(c => c.VerifyComponent)
+  }, */
+
+
+
+  /* {
     path: "admin",
     canMatch: [() => inject(AuthService).isRoleAdmin()],
     data: {roles: ["ROLE_ADMIN"]},
@@ -38,27 +69,21 @@ const routes: Routes = [
     canMatch: [() => inject(AuthService).isRoleAdmin()],
     data: {roles: ["ROLE_ADMIN"]},
     component: PlaceComponent
-  },
+  }, */
 
-   /* ...["user", "felhasznalo"].map(path => ({
-      path,
-    //canActivateChild: [AuthGuard],
-    data: {roles: ["ROLE_USER"]},
-    loadChildren: () => import("./pages/user/user.routes").then(r => r.USER_ROUTES)
-    })),*/
-  {
-    path: "user",
-    canMatch: [() => inject(AuthService).isLoggedIn()],
-    data: {roles: ["ROLE_USER"]},
-    loadChildren: () => import("./ui/pages/user/user.routes").then(r => r.USER_ROUTES)
-  },
+  /* ...["user", "felhasznalo"].map(path => ({
+     path,
+   //canActivateChild: [AuthGuard],
+   data: {roles: ["ROLE_USER"]},
+   loadChildren: () => import("./pages/user/user.routes").then(r => r.USER_ROUTES)
+   })),*/
 
 
-  {path: "**", redirectTo: "login"},
+  { path: "**", redirectTo: CONST_ROUTES.auth.path },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: "enabled", onSameUrlNavigation: "ignore"})],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: "enabled", onSameUrlNavigation: "ignore" })],
   exports: [RouterModule]
 })
 

@@ -17,6 +17,9 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '16'
+    - run: node frontend/src/assets/js/process-env.js
+      env:
+        ENV_STAGE: '${{ secrets.ENV_STAGE }}'
 
     - name: Install dependencies
       working-directory: ./frontend

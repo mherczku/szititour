@@ -64,16 +64,13 @@ class AnswerService @Autowired constructor(private val answerRepository: AnswerR
         if(answer.question.riddle) {
             updatePlaceStatus(answer, isCorrect)
         }
-        println("done reached: ${answer.team.teamGameStatuses.find { it.game.id == answer.question.place.game.id }?.placeStatuses?.find { it.placeId == answer.question.place.id }?.reached}")
         return answerRepository.save(answer)
     }
 
     private fun updatePlaceStatus(answer: Answer, isCorrect: Boolean) {
-        println("update status")
         val gameStatus = answer.team.teamGameStatuses.find { it.game.id == answer.question.place.game.id }
         if(gameStatus != null) {
             val placeStatus = gameStatus.placeStatuses[gameStatus.nextUnreachedPlaceIndex]
-            println("update status $placeStatus $gameStatus")
             placeStatus.reached = isCorrect
             if(isCorrect) {
                 gameStatus.nextUnreachedPlaceIndex = gameStatus.placeStatuses.indexOf(placeStatus) + 1

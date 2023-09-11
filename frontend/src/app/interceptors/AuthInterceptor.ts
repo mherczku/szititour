@@ -16,6 +16,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(httpRequest: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    console.log("INTERCEPT")
     return next.handle(this.addAuthToken(httpRequest))
       .pipe(tap(evt => {
           if (evt instanceof HttpResponse) {

@@ -1,0 +1,20 @@
+<p *ngIf="users.length <= 1">{{ selectedUser.name }}</p>
+<div>
+  <div *ngIf="users.length > 1" class="selector" [class.open]="!_isHidden" (click)="toggle($event)">
+    <p>{{ selectedUser.name }}</p>
+    <img
+      class="cursor-pointer"
+      [ngClass]="isOpen ? 'rotate-180' : ''"
+      src="assets/svg/anchor-down-black.svg"
+      alt="Dropdown"
+    />
+  </div>
+
+  <div *ngIf="isOpen" class="dropdown">
+    <ng-container *ngFor="let user of users">
+      <p *ngIf="user !== selectedUser" (click)="$event.stopPropagation(); selectUser(user)">
+        {{ user.name }}
+      </p>
+    </ng-container>
+  </div>
+</div>
