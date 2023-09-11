@@ -66,9 +66,10 @@ export class PushNotificationService {
 
         if(environment.production) {
 
-          navigator.serviceWorker.register("/szititour/firebase-messaging-sw.js").then((registration) => {
-            console.warn("MAJOM", m, navigator.serviceWorker, registration);
-            //m.useServiceWorker(registration);
+          navigator.serviceWorker.register("/szitiour/firebase-messaging-sw.js").then((registration) => {
+            console.warn("MAJOM", m, navigator.serviceWorker);
+            m.swRegistration = registration;
+            console.log(registration, m.swRegistration, registration === m.swRegistration)
             // Request permission and get token.....
           });
         }
