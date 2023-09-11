@@ -19,10 +19,6 @@ jobs:
         node-version: '16'
     - run: node frontend/src/assets/js/process-env.js
       env:
-        FIREBASE_CONFIG: '${{ secrets.FIREBASE_CONFIG }}'
-        GOOGLE_ID: '${{ secrets.GOOGLE_ID }}'
-        MAP_KEY: '${{ secrets.MAP_KEY }}'
-        VPKEY: '${{ secrets.VPKEY }}'
         ENV_STAGE: '${{ secrets.ENV_STAGE }}'
 
     - name: Install dependencies
