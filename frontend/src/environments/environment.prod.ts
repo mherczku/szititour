@@ -1,15 +1,13 @@
 export const environment = {
-  production: true,
+    production: true,
 
-  apiBaseUrl: "https://wildfire.ddns.net:8091",
+    apiBaseUrl: "https://wildfire.ddns.net:8091",
 
-  apiWebsocketUrlAdmin: "ws://localhost:8080/ws/admin",
-  apiWebsocketUrlUser: "ws://localhost:8080/ws/user",
+    apiWebsocketUrlAdmin: "ws://localhost:8080/ws/admin",
+    apiWebsocketUrlUser: "ws://localhost:8080/ws/user",
 
-  MAP_KEY: "",
-  googleClientId: "",
-  firebaseConfig: {},
-  vpKey: ""
+    MAP_KEY: "",
+    googleClientId: "",
+    firebaseConfig: {},
+    vpKey: ""
 };
-
-
