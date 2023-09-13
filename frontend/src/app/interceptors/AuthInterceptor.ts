@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
 import {
   HttpInterceptor,
   HttpEvent,
@@ -6,8 +6,8 @@ import {
   HttpRequest,
   HttpHandler
 } from "@angular/common/http";
-import {Observable, tap} from "rxjs";
-import {AuthService} from "../services/AuthService";
+import { Observable, tap } from "rxjs";
+import { AuthService } from "../services/AuthService";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -17,17 +17,17 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(httpRequest: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     console.log("INTERCEPT")
-    return next.handle(this.addAuthToken(httpRequest))
+    return next.handle(this.addRokHeader(this.addAuthToken(httpRequest)))
       .pipe(tap(evt => {
-          if (evt instanceof HttpResponse) {
-            if (evt.headers.has("Authorization")) {
-              const token = evt.headers.get("Authorization")?.substring(7);
-              if (token) {
-                this.authService.setToken(token);
-              }
+        if (evt instanceof HttpResponse) {
+          if (evt.headers.has("Authorization")) {
+            const token = evt.headers.get("Authorization")?.substring(7);
+            if (token) {
+              this.authService.setToken(token);
             }
           }
         }
+      }
       ));
   }
 
@@ -43,5 +43,13 @@ export class AuthInterceptor implements HttpInterceptor {
     } else {
       return request;
     }
+  }
+
+  addRokHeader(request: HttpRequest<unknown>) {
+    return request.clone({
+      setHeaders: {
+        "ngrok-skip-browser-warning": "yes"
+      }
+    });
   }
 }
