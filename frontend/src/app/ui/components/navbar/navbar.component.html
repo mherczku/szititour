@@ -9,6 +9,7 @@
 
 
   <div class="right">
+    <img (click)="ngRok()" *ngIf="!isNgRok" class="btn-warning mobile-none" src="assets/svg/warning.svg" alt="Warning">
     <a routerLink="/user/profile" class="btn-profile"></a>
     <button (click)="toggleNoti($event)" class="btn-notification hasNew" [class.hasNew]="hasNewNoti()"></button>
     <div class="flex flex-row mobile:hidden tablet:block">
@@ -87,7 +88,9 @@
       <a *ngIf="(isLoggedIn | async)" routerLink="/user/profile" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Profil</a>
       <a *ngIf="(isLoggedIn | async)" (click)="changeIsMobileMenuOpen(false); logout()" class=" font-semibold text-size-lg cursor-pointer">Kijelentkezés</a>
       <a *ngIf="!(isLoggedIn | async)" routerLink="/auth/login" class=" font-semibold text-size-lg cursor-pointer">Bejelentkezés</a>
+      <img (click)="ngRok()" *ngIf="!isNgRok" class="btn-warning" src="assets/svg/warning.svg" alt="Warning">
     </div>
+
   </div>
 
 </div>

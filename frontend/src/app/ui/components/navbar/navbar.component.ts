@@ -10,23 +10,24 @@ import { NotificationService } from "src/app/services/Notification.service";
 import { LatestNotificationComponent } from "../notifications/latest-notification/latest-notification.component";
 
 @Component({
-    selector: "app-navbar",
-    templateUrl: "./navbar.component.html",
-    styleUrls: ["./navbar.component.scss"],
-    standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        FormsModule,
-        NgClass,
-        NgIf,
-        RouterLink,
-        AsyncPipe,
-        NotificationsComponent,
-        LatestNotificationComponent
-    ]
+  selector: "app-navbar",
+  templateUrl: "./navbar.component.html",
+  styleUrls: ["./navbar.component.scss"],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    FormsModule,
+    NgClass,
+    NgIf,
+    RouterLink,
+    AsyncPipe,
+    NotificationsComponent,
+    LatestNotificationComponent
+  ]
 })
 export class NavbarComponent {
 
+  isNgRok: boolean = document.cookie.includes("ngrok");
   isLoggedIn = this.store.select(selectIsLoggedIn);
   team = this.store.select(selectLoggedInTeam);
   isMobileMenuOpen = false;
@@ -56,6 +57,19 @@ export class NavbarComponent {
 
   logout() {
     this.authService.logout();
+  }
+
+  ngRok() {
+    window.open("https://dolphin-casual-deer.ngrok-free.app/", "_blank");
+    this.setCookie("ngrok", "ngrok", 7);
+    this.isNgRok = true;
+  }
+
+  setCookie(cname: string, cvalue: string, exdays: number) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    const expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
 
 }

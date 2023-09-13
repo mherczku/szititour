@@ -7,11 +7,18 @@
   top: 100px;
   right: 0px;
   z-index: 20;
+}
 
-  @media (max-width: $breakpoint-mobile) {
-    top: 85px;
+.btn-warning {
+  width: 30px;
+  margin-top: -5px;
+
+  &.mobile-none {
+
+    @media (max-width: $breakpoint-mobile) {
+      display: none;
+    }
   }
-
 }
 
 .right {
