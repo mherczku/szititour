@@ -1,4 +1,5 @@
 package hu.hm.szititourbackend.controller
+
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.TeamDto
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
-import java.util.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

@@ -10,14 +10,13 @@ import org.springframework.stereotype.Component
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
-import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.io.IOException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 
 @Component
-class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: UserSocketHandler, private val teamService: TeamService, private val securityService: SecurityService) : BaseSocketHandler() {
+class AdminSocketHandler(@Autowired @Lazy private val userSocket: UserSocketHandler, private val teamService: TeamService, private val securityService: SecurityService) : BaseSocketHandler() {
 
     val logger: Logger = LoggerFactory.getLogger(AdminSocketHandler::class.java)
 
@@ -100,7 +99,7 @@ class AdminSocketHandler constructor(@Autowired @Lazy private val userSocket: Us
 
                     // Already has open connection:
                     val alreadySession = sessions.values.find { it.userId == currentTeam.id }
-                    if(alreadySession != null && alreadySession?.session.isOpen) {
+                    if(alreadySession != null && alreadySession.session.isOpen) {
                         sendMessageTo(session, ChatMessage(type = "ALREADY_OPEN"))
                         session.close(CloseStatus.SERVICE_OVERLOAD)
                         null

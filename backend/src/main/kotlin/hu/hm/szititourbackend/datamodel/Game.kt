@@ -2,8 +2,6 @@ package hu.hm.szititourbackend.datamodel
 
 import hu.hm.szititourbackend.dto.*
 import hu.hm.szititourbackend.enum.UserApplicationStatus
-import hu.hm.szititourbackend.exception.CustomException
-import org.springframework.http.HttpStatus
 import java.sql.Timestamp
 import java.time.Instant
 import javax.persistence.*
@@ -38,8 +36,7 @@ class Game(
     @OrderBy("id")
     val teamGameStatuses: MutableList<TeamGameStatus> = mutableListOf()
 
-) {
-}
+)
 
 fun Game.convertToDto(): GameDto {
     return GameDto(

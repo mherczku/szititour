@@ -4,7 +4,6 @@ import hu.hm.szititourbackend.datamodel.*
 import hu.hm.szititourbackend.dto.*
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityService
-import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
 import hu.hm.szititourbackend.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus

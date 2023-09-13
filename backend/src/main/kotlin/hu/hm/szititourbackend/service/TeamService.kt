@@ -2,11 +2,9 @@ package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.Team
-import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.GoogleAccount
-import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.repository.TeamRepository
 import hu.hm.szititourbackend.security.SecurityService
@@ -71,7 +69,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
                 emailService.sendWelcomeMail(team.email, team.name, verificationToken = securityService.generateEmailVerificationToken(team))
             } catch(e: Exception) {
                 teamRepository.delete(team)
-                throw e;
+                throw e
             }
         }
         return saved

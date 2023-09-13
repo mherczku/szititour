@@ -21,10 +21,10 @@ object LocationUtils {
         val lonDistance = Math.toRadians(lon2 - lon1)
         val a = (sin(latDistance / 2) * sin(latDistance / 2)
                 + (cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2))
-                * sin(lonDistance / 2) * sin(lonDistance / 2)));
+                * sin(lonDistance / 2) * sin(lonDistance / 2)))
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         var distance: Double = earthRadius * c * 1000 // convert to meters
-        distance = distance.pow(2) + 0.0.pow(2);
+        distance = distance.pow(2) + 0.0.pow(2)
         return sqrt(distance)
     }
 }
