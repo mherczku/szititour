@@ -109,7 +109,7 @@ class SecurityConfig2(
         corsConfiguration.allowedHeaders = listOf(
                 "Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Authorization", "Origin, Accept", "X-Requested-With",
-                "Access-Control-Request-Method", "Access-Control-Request-Headers", "longitude", "latitude", "gameid", GOOGLE_TOKEN_HEADER
+                "Access-Control-Request-Method", "Access-Control-Request-Headers", "longitude", "latitude", "gameid", GOOGLE_TOKEN_HEADER, "ngrok-skip-browser-warning"
         )
         corsConfiguration.exposedHeaders = listOf(
                 "Origin", "Content-Type", "Accept", "Authorization",
