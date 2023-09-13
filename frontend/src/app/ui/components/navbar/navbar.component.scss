@@ -45,6 +45,26 @@
   }
 }
 
+
+.btn-profile {
+  background-image: url("../../../../assets/svg/profile.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 24px;
+  aspect-ratio: 1;
+  transform: translateY(-3px);
+
+  &:hover {
+    transform: translateY(-6px);
+    padding-bottom: 5px;
+    transition: all 200ms;
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    display: none;
+  }
+}
+
 .nav-container {
   width: 32px;
   height: 32px;
