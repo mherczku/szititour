@@ -103,6 +103,10 @@ export class NotificationService {
 
   public removeNotiByIndex(index: number) {
     this.notis.update(n => {
+      const noti = n[index];
+      if(noti.id === this.latestNoti()?.id) {
+        this.latestNoti.set(undefined);
+      }
       n.splice(index, 1);
       return n;
     });
