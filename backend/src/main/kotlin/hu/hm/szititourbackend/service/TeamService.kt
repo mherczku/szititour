@@ -12,6 +12,7 @@ import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_ADMIN
 import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_USER
 import hu.hm.szititourbackend.util.LocationUtils
 import hu.hm.szititourbackend.util.PasswordUtils
+import hu.hm.szititourbackend.util.PasswordUtils.encryptPassword
 import hu.hm.szititourbackend.util.PasswordUtils.generatePassword
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -158,10 +159,11 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         if (googleAccount.name != null) {
             name = googleAccount.name
         }
+
         val team: Team = Team(
                 email = googleAccount.email,
                 role = ROLE_USER,
-                password = generatePassword(),
+                password = encryptPassword(generatePassword()),
                 isGoogle = true,
                 name = name,
                 createdAt = Timestamp(System.currentTimeMillis()),

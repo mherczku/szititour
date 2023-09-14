@@ -32,7 +32,9 @@ object PasswordUtils {
         for (i in 4 until length) {
             password[i] = combinedChars[random.nextInt(combinedChars.length)]
         }
-        return password.shuffle().toString()
+        val p = password.toMutableList()
+        p.shuffle()
+        return p.toString().replace(", ", "")
     }
 
 }
