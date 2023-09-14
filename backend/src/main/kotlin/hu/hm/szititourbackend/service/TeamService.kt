@@ -99,7 +99,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
     }
 
     fun deleteTeamById(id: Int) {
-        val team = getTeamById(id)
+        getTeamById(id)
         return teamRepository.deleteById(id)
     }
 
