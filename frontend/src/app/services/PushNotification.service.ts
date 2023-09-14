@@ -28,22 +28,7 @@ interface SubscriptionRequest {
 
 @Injectable({ providedIn: "root" })
 export class PushNotificationService {
-  trigger() {
-    console.log("triggering");
 
-    this.notifications.update(v => {
-      v.push({
-        id: crypto.randomUUID(),
-        icon: "",
-        link: "",
-        type: "PUSH",
-        time: new Date(),
-        message: "message",
-        title: "title"
-      });
-      return v;
-    });
-  }
   private baseUrl = environment.apiBaseUrl;
 
   private token?: string;
@@ -70,6 +55,37 @@ export class PushNotificationService {
           this.handleRegistration(m);
         }
       }
+    });
+  }
+
+  public trigger(noti?: SzititourNotification, inPush = false) {
+
+    if(inPush) {
+      new Notification(noti?.title ?? "Test", {
+        body: noti?.message ?? "Test message",
+        icon: "../../assets/svg/szititour.svg"
+      });
+      return;
+    }
+
+    if(noti) {
+      this.notifications.update(n => {
+        n.push(noti);
+        return n;
+      });
+      return;
+    }
+    this.notifications.update(v => {
+      v.push({
+        id: crypto.randomUUID(),
+        icon: "",
+        link: "",
+        type: "PUSH",
+        time: new Date(),
+        message: "message",
+        title: "title"
+      });
+      return v;
     });
   }
 

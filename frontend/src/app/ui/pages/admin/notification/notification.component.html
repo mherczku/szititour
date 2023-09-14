@@ -17,7 +17,11 @@
                     <label for="topic-msg">Üzenet szövege:</label>
                     <input formControlName="msg" required tabindex="2" name="topicMsg" placeholder="Üzenet..." class="simpleInput" id="topic-msg" type="text" maxlength="50">
                 </div>
-                <button [disabled]="!topicForm.valid" tabindex="3" (click)="sendTopicNotification()" type="submit" class="btn-simple">Küldés</button>
+                <div class="test-btns">
+                    <button [disabled]="!topicForm.valid" tabindex="3" (click)="testTopicNoti()" type="submit" class="btn-simple">App Teszt</button>
+                    <button [disabled]="!topicForm.valid" tabindex="4" (click)="testTopicNoti(true)" type="submit" class="btn-simple">Push Teszt</button>
+                </div>
+                <button [disabled]="!topicForm.valid" tabindex="5" (click)="sendTopicNotification()" type="submit" class="btn-simple-red">Küldés</button>
             </div>
         </form>
     </section>

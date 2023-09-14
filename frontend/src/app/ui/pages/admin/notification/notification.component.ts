@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { PushNotificationService, TopicNotification } from "src/app/services/PushNotification.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { SzititourNotification } from "src/app/services/Notification.service";
 
 @Component({
   selector: "app-notification",
@@ -35,5 +36,19 @@ export class NotificationComponent {
     this.pushService.sendNotificationToTopic(noti).pipe(takeUntilDestroyed(this.ref)).subscribe();
     this.topicForm.reset();
   }
+
+  testTopicNoti(inPush = false) {
+    const noti: SzititourNotification = {
+      id: "-2",
+      title: this.topicForm.value.title,
+      message: this.topicForm.value.msg,
+      time: new Date(),
+      icon: "assets/svg/szititour.svg",
+      link: "",
+      type: "PUSH"
+    };
+    this.pushService.trigger(noti, inPush);
+  }
+
 
 }
