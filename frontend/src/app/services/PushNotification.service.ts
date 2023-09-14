@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, Signal, WritableSignal, signal } from "@angular/core";
 import { FirebaseApp } from "@angular/fire/app";
-import { getMessaging, getToken, onMessage } from "@angular/fire/messaging";
+import { Messaging, getMessaging, getToken, onMessage } from "@angular/fire/messaging";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { NetworkResponse } from "../types/network-response";
@@ -61,53 +61,43 @@ export class PushNotificationService {
       console.log(res);
 
       if (res === "granted") {
-
         const m: any = getMessaging(this.fireApp);
-
         if(environment.production) {
-
           navigator.serviceWorker.register("/szititour/firebase-messaging-sw.js").then((registration) => {
             m.swRegistration = registration;
-            getToken(m, { vapidKey: environment.vpKey, serviceWorkerRegistration: registration}).then((res) => {
-              this.token = res;
-            });
-            onMessage(m, (payload) => {
-              console.log("Message received. ", payload);
-              this.notifications.update(v => {
-                v.push({
-                  id: crypto.randomUUID(),
-                  icon: payload.notification?.icon ?? "",
-                  link: "",
-                  type: "PUSH",
-                  time: new Date(),
-                  message: payload.notification?.body ?? "message",
-                  title: payload.notification?.title ?? "title"
-                });
-                return v;
-              });
-            });
+            this.handleRegistration(m, registration);
           });
         } else {
-          getToken(m, { vapidKey: environment.vpKey }).then((res) => {
-            this.token = res;
-          });
-          onMessage(m, (payload) => {
-            console.log("Message received. ", payload);
-            this.notifications.update(v => {
-              v.push({
-                id: crypto.randomUUID(),
-                icon: payload.notification?.icon ?? "",
-                link: "",
-                type: "PUSH",
-                time: new Date(),
-                message: payload.notification?.body ?? "message",
-                title: payload.notification?.title ?? "title"
-              });
-              return v;
-            });
-          });
+          this.handleRegistration(m);
         }
       }
+    });
+  }
+
+  private handleRegistration(messaging: Messaging, prodReg?: ServiceWorkerRegistration) {
+
+    getToken(messaging, { vapidKey: environment.vpKey, serviceWorkerRegistration: prodReg }).then((res) => {
+      this.token = res;
+      this.getTopics({topic: "default"}).subscribe(r => {
+        if(!r.includes("default")) {
+          this.subscribeToTopic({topic: "default"});
+        }
+      });
+    });
+    onMessage(messaging, (payload) => {
+      console.log("Message received. ", payload);
+      this.notifications.update(v => {
+        v.push({
+          id: crypto.randomUUID(),
+          icon: payload.notification?.icon ?? "",
+          link: "",
+          type: "PUSH",
+          time: new Date(),
+          message: payload.notification?.body ?? "message",
+          title: payload.notification?.title ?? "title"
+        });
+        return v;
+      });
     });
   }
 
