@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnDestroy, Output} from "@angular/core";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Game} from "../../../../../types/game";
 import {HotToastService} from "@ngneat/hot-toast";
 import {AdminService} from "../../../../../services/AdminService";
-import {Subject, Subscription, take, takeUntil} from "rxjs";
+import {Subject,takeUntil} from "rxjs";
 import {AutoDestroy} from "../../../../../decorators/autodestroy.decorator";
 import {FormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
@@ -14,7 +14,7 @@ import {ButtonsComponent} from "../../../buttons/buttons.component";
 @Component({
   selector: "app-gamecard",
   templateUrl: "./gamecard.component.html",
-  styleUrls: ["./gamecard.component.css"],
+  styleUrls: ["./gamecard.component.scss"],
   imports: [
     FormsModule,
     RouterLink,

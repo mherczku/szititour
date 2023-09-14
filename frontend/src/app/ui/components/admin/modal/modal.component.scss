@@ -1,7 +1,9 @@
+@import "styles/styles-variables";
+
 /* The Modal (background) */
 .modal {
   position: fixed; /* Stay in place */
-  z-index: 1000; /* Sit on top */
+  z-index: $z-modal-background; /* Sit on top */
   left: 0;
   top: 0;
   align-items: center;

@@ -1,10 +1,12 @@
+@import "styles/styles-variables";
+
 .host-container {
   background: rgba(0, 0, 0, 0.31);
   width: 100vw;
   height: 100vh;
   position: absolute;
   top: 0;
-  z-index: 1000;
+  z-index: $z-modal2-host;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +21,7 @@
   margin: 1rem;
   border: 1px solid black;
   border-radius: 5px;
-  z-index: 1001;
+  z-index: $z-modal2-content;
 }
 
 .hidden-host {

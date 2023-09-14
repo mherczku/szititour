@@ -18,7 +18,7 @@
       <button class="btn-simple" (click)="logout()" *ngIf="(isLoggedIn | async)">Kijelentkezés</button>
     </div>
 
-    <div class="hidden z-[101] mobile:block relative disableSelectAndTap">
+    <div class="hidden z-navbar-hamburger-container mobile:block relative disableSelectAndTap">
       <div class="nav-container">
         <input [ngModel]="isMobileMenuOpen" (ngModelChange)="changeIsMobileMenuOpen($event)" class="checkbox"
                type="checkbox"/>
@@ -41,7 +41,7 @@
 
 
 
-  <div class="mobileMenu" [ngClass]="isMobileMenuOpen ? 'z-[100]' : 'z-[-1]'">
+  <div class="mobileMenu" [class.z-navbar-mobile-menu-open]="isMobileMenuOpen">
     <div class="darkPart" (click)="changeIsMobileMenuOpen(false)" [ngClass]="isMobileMenuOpen ? 'animateDarkPart' : ''"></div>
     <div class="whitePart" [ngClass]="isMobileMenuOpen ? 'whitePartOpen' : ''">
 <!--

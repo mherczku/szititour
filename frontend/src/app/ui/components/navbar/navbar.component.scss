@@ -6,7 +6,7 @@
   position: absolute;
   top: 100px;
   right: 0px;
-  z-index: 20;
+  z-index: $z-navbar-noti;
 }
 
 .btn-warning {
@@ -26,6 +26,10 @@
   flex-direction: row;
   gap: 20px;
   align-items: center;
+}
+
+.z-navbar-hamburger-container {
+  z-index: $z-navbar-hamburger-container;
 }
 
 .btn-notification {
@@ -84,7 +88,7 @@
   width: 32px;
   top: 0px;
   left: 0px;
-  z-index: 5;
+  z-index: $z-navbar-nav-checkbox;
   opacity: 0;
   cursor: pointer;
 }
@@ -96,7 +100,7 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  z-index: 2;
+  z-index: $z-navbar-hamburger;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -148,6 +152,10 @@
   width: 100vw;
   height: 100vh;
   transition-duration: 0.5s;
+  z-index: $z-navbar-mobile-menu-close;
+  &.z-navbar-mobile-menu-open {
+    z-index: $z-navbar-mobile-menu-open
+  }
 
   svg {
     position: absolute;

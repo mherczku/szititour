@@ -1,3 +1,9 @@
+@import "styles/styles-variables";
+
+.z-delete {
+  z-index: $z-gamecard-delete;
+}
+
 .gif {
   background-image: url("/src/assets/gif/map.gif");
 }

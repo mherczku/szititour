@@ -1,4 +1,8 @@
 
+// @import "styles/styles-variables";
+
+
+// colors:
 $default-dark: #2F2F2F;
 $m-green: #20c428;
 $m-blue: #218AEB;
@@ -6,5 +10,31 @@ $kon-blue: #25AAD3;
 $kon-orange: #EB5221;
 $smoke: #F5F5F5;
 
+
+// breakpoints:
 $breakpoint-mobile: 600px;
 $breakpoint-tablet: 1050px;
+
+
+// z-indexes:
+$z-modal-background: 1000;
+$z-modal2-host: 1000;
+$z-modal2-content: 1001;
+
+$z-chat-host: 30;
+$z-chat-icon: 9;
+$z-chat-badge: 10;
+$z-chat-userselector-dropdown: 10;
+
+$z-navbar-noti: 20;
+$z-navbar-nav-checkbox: 5;
+$z-navbar-hamburger: 2;
+$z-navbar-hamburger-container: 101;
+$z-navbar-mobile-menu-open: 100;
+$z-navbar-mobile-menu-close: -1;
+
+$z-aswer-evaluate: 10;
+$z-gamecard-delete: 10;
+$z-lists-add: 10;
+$z-buttons-delete: 10;
+$z-games-newgame: 10;

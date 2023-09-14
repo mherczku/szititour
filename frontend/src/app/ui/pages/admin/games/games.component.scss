@@ -1,3 +1,9 @@
+@import "styles/styles-variables";
+
 :host {
     height: 100%;
+}
+
+.z-games-newgame {
+    z-index: $z-games-newgame;
 }

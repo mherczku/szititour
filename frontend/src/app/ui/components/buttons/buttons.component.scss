@@ -1,3 +1,8 @@
+@import "styles/styles-variables";
+
+.z-buttons-delete {
+  z-index: $z-buttons-delete;
+}
 
 * {
   user-select: none;

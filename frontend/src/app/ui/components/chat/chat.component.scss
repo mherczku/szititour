@@ -5,14 +5,14 @@
   height: fit-content;
   bottom: 10px;
   left: 10px;
-  z-index: 100;
+  z-index: $z-chat-host;
 }
 
 .chatIcon {
   display: block;
   transform: scale(0);
   width: 50px;
-  z-index: 9;
+  z-index: $z-chat-icon;
   transition: 200ms all;
   background-color: $kon-orange;
   border-radius: 8px;
@@ -26,7 +26,7 @@
 }
 
 .badge {
-  z-index: 10;
+  z-index: $z-chat-badge;
   position: absolute;
   top: -10px;
   left: -5px;
