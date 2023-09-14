@@ -9,7 +9,8 @@
 
 
   <div class="right">
-    <img (click)="ngRok()" *ngIf="!isNgRok" class="btn-warning mobile-none" src="assets/svg/warning.svg" alt="Warning">
+    <img routerLink="/admin/notification" *ngIf="((isLoggedIn | async) && (team | async)?.role ==='ROLE_ADMIN')" class="btn-icon mobile-none" src="assets/svg/notification-plus.svg" alt="Notification-manager">
+    <img (click)="ngRok()" *ngIf="!isNgRok" class="btn-icon mobile-none" src="assets/svg/warning.svg" alt="Warning">
     <a routerLink="/user/profile" class="btn-profile"></a>
     <button (click)="toggleNoti($event)" class="btn-notification hasNew" [class.hasNew]="hasNewNoti()"></button>
     <div class="flex flex-row mobile:hidden tablet:block">
@@ -84,7 +85,8 @@
 -->
 
       <a *ngIf="(isLoggedIn | async)" routerLink="/user/home" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Főoldal</a>
-      <a *ngIf="(isLoggedIn | async) && (team | async)?.role ==='ROLE_ADMIN'" routerLink="/admin" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Admin Panel</a>
+      <a *ngIf="(isLoggedIn | async) && (team | async)?.role ==='ROLE_ADMIN'" routerLink="/admin" (click)="changeIsMobileMenuOpen(false)" class="font-semibold text-size-lg cursor-pointer">Admin Panel</a>
+      <a *ngIf="(isLoggedIn | async) && (team | async)?.role ==='ROLE_ADMIN'" routerLink="/admin/notification" (click)="changeIsMobileMenuOpen(false)" class="font-semibold text-size-lg cursor-pointer">Push értesítések</a>
       <a *ngIf="(isLoggedIn | async)" routerLink="/user/profile" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Profil</a>
       <a *ngIf="(isLoggedIn | async)" (click)="changeIsMobileMenuOpen(false); logout()" class=" font-semibold text-size-lg cursor-pointer">Kijelentkezés</a>
       <a *ngIf="!(isLoggedIn | async)" routerLink="/auth/login" class=" font-semibold text-size-lg cursor-pointer">Bejelentkezés</a>

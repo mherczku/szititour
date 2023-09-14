@@ -9,9 +9,15 @@
   z-index: $z-navbar-noti;
 }
 
-.btn-warning {
+.btn-icon {
   width: 30px;
   margin-top: -5px;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    transition: all 200ms;
+  }
 
   &.mobile-none {
 
