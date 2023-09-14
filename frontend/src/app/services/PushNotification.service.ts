@@ -58,7 +58,6 @@ export class PushNotificationService {
 
   public initializePushNoti() {
     Notification.requestPermission().then((res) => {
-      console.log(res);
 
       if (res === "granted") {
         const m: any = getMessaging(this.fireApp);
@@ -80,7 +79,7 @@ export class PushNotificationService {
       this.token = res;
       this.getTopics({topic: "default"}).subscribe(r => {
         if(!r.includes("default")) {
-          this.subscribeToTopic({topic: "default"});
+          this.subscribeToTopic({topic: "default"}).subscribe();
         }
       });
     });
