@@ -9,4 +9,7 @@ class SzititourProperties {
 
     @Value("classpath:templates/welcome.template.html")
     var welcomeTemplate: Resource? = null
+
+    @Value("classpath:templates/email-update.template.html")
+    var emailUpdateTemplate: Resource? = null
 }

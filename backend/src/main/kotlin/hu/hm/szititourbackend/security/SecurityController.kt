@@ -69,7 +69,7 @@ class SecurityController(private val teamService: TeamService, private val secur
         logger.debug("Verify email")
         val verification = securityService.verifyEmailVerificationToken(token)
         return if(verification.verified) {
-            teamService.enableTeam(verification.teamId)
+            teamService.verifyEmail(verification.teamId)
             ResponseEntity(Response(true, "", "Email verified"), HttpStatus.OK)
         } else {
             ResponseEntity(Response(false, "verification.errorMessage"), HttpStatus.BAD_REQUEST)

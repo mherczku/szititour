@@ -23,10 +23,10 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
     val logger: Logger = LoggerFactory.getLogger(EmailService::class.java)
 
     fun sendWelcomeMail(emailTo: String, username: String, verificationToken: String) {
-        logger.debug("Send welcome email to ${username}")
+        logger.debug("Send welcome email to $username")
         val mimeMessage = javaMailSender.createMimeMessage()
         mimeMessage.setFrom("szititour.nxt@gmail.com")
-        mimeMessage.subject = "Verify your Email"
+        mimeMessage.subject = "Verify your E-mail"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
         val messageTemplateIs = szititourProperties.welcomeTemplate?.inputStream
@@ -41,9 +41,33 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
 
             javaMailSender.send(mimeMessage)
         } else {
-            logger.error("Send welcome email to ${username} message template file was null")
+            logger.error("Send welcome email to $username message template file was null")
             throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR)
         }
 
+    }
+
+    fun sendModifyEmailMail(emailTo: String, username: String, verificationToken: String) {
+        logger.debug("Send modify email to $username")
+        val mimeMessage = javaMailSender.createMimeMessage()
+        mimeMessage.setFrom("szititour.nxt@gmail.com")
+        mimeMessage.subject = "Verify your new E-mail"
+        mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
+
+        val messageTemplateIs = szititourProperties.emailUpdateTemplate?.inputStream
+        if(messageTemplateIs != null) {
+
+            var content = String(messageTemplateIs.readAllBytes())
+
+            content = content.replace("[USERNAME]", username)
+            content = content.replace("[VERIFICATION_TOKEN]", verificationToken)
+            val helper = MimeMessageHelper(mimeMessage, true)
+            helper.setText(content, true)
+
+            javaMailSender.send(mimeMessage)
+        } else {
+            logger.error("Send modify-email email to $username message template file was null")
+            throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 }

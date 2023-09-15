@@ -25,7 +25,6 @@ class LoggedInController @Autowired constructor(
     private val applicationService: ApplicationService,
     private val questionService: QuestionService,
     private val answerService: AnswerService,
-    private val securityService: SecurityService,
     private val loggedInService: LoggedInService
 ) {
 
@@ -42,6 +41,18 @@ class LoggedInController @Autowired constructor(
         val updatedTeam = teamService.updateTeamProfile(auth.name.toInt(), profileUpdate)
         return ResponseEntity(updatedTeam.convertToDto(), HttpStatus.OK)
     }
+
+     @PostMapping("update/email")
+    fun updateProfileEmail(
+        @RequestBody email: String,
+        auth: Authentication
+    ): ResponseEntity<TeamDto> {
+        logger.debug("Update user profile email ${auth.name}")
+        val updatedTeam = teamService.updateProfileEmail(auth.name.toInt(), email)
+        return ResponseEntity(updatedTeam.convertToDto(), HttpStatus.OK)
+    }
+
+
 
     @GetMapping("games")
     fun getAllAvailableGames(auth: Authentication): ResponseEntity<List<GameOnlyBasicDto>> {

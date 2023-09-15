@@ -14,6 +14,7 @@ import hu.hm.szititourbackend.util.LocationUtils
 import hu.hm.szititourbackend.util.PasswordUtils
 import hu.hm.szititourbackend.util.PasswordUtils.encryptPassword
 import hu.hm.szititourbackend.util.PasswordUtils.generatePassword
+import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -89,6 +90,24 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         }
     }
 
+    fun updateProfileEmail(teamId: Int, nextEmail: String): Team {
+        val team = getTeamById(teamId)
+        val teamWithEmail = teamRepository.findByEmail(nextEmail)
+        if(teamWithEmail.isPresent) {
+            throw CustomException("Email is already in use", HttpStatus.BAD_REQUEST)
+        }
+        team.nextEmail = nextEmail
+        val updated = updateTeam(team, true)
+        try {
+            emailService.sendModifyEmailMail(team.nextEmail, team.name, securityService.generateEmailVerificationToken(updated))
+            return updated
+        } catch (e: Exception) {
+            updated.nextEmail = ""
+            updateTeam(updated)
+            throw e
+        }
+    }
+
     fun updateTeam(team: Team, isAdminMethod: Boolean = false): Team {
         if (!isAdminMethod) {
             team.role = ROLE_USER
@@ -129,10 +148,23 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         }
     }
 
-    fun enableTeam(teamId: Int) {
-        val team = getTeamById(teamId)
+    private fun enableTeam(team: Team): Team {
         team.enabled = true
-        updateTeam(team, true)
+        return updateTeam(team, true)
+    }
+
+    fun verifyEmail(teamId: Int) {
+        val team = getTeamById(teamId)
+        if(team.enabled && team.nextEmail.isNotBlank()) {
+            if(Utils.validateEmail(team.nextEmail)) {
+                team.email = team.nextEmail
+                updateTeam(team, true)
+            } else {
+                throw CustomException("New email is not valid", HttpStatus.BAD_REQUEST)
+            }
+        } else {
+            enableTeam(team)
+        }
     }
 
     fun continueWithGoogle(googleAccount: GoogleAccount): Team {

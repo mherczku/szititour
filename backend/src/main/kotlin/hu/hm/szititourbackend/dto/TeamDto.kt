@@ -7,6 +7,7 @@ class TeamDto (
     val id: Int = 0,
     var name: String = "",
     val email: String = "",
+    val nextEmail: String = "",
     var img: String = "",
     val role: String = ROLE_USER,
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
