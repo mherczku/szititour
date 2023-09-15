@@ -12,4 +12,7 @@ class SzititourProperties {
 
     @Value("classpath:templates/email-update.template.html")
     var emailUpdateTemplate: Resource? = null
+
+    @Value("classpath:templates/password-update.template.html")
+    var passwordUpdateTemplate: Resource? = null
 }

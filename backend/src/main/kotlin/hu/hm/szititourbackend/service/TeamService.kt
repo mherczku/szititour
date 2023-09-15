@@ -2,6 +2,7 @@ package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.Team
+import hu.hm.szititourbackend.dto.TeamPasswordUpdateDto
 import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.GoogleAccount
@@ -38,19 +39,31 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
     fun updateTeamProfile(teamId: Int, teamUpdateProfileDto: TeamUpdateProfileDto): Team {
 
         val updateTeam = getTeamById(teamId)
-        updateTeam.img = teamUpdateProfileDto.img ?: updateTeam.img
         updateTeam.name = teamUpdateProfileDto.name ?: updateTeam.name
-        updateTeam.email = teamUpdateProfileDto.email ?: updateTeam.email
         updateTeam.members = teamUpdateProfileDto.members?.toMutableList() ?: updateTeam.members
-        if (!teamUpdateProfileDto.passwordBefore.isNullOrBlank() && !teamUpdateProfileDto.password.isNullOrBlank()) {
-            if (PasswordUtils.encryptPassword(teamUpdateProfileDto.passwordBefore) == updateTeam.password) {
-                updateTeam.password = PasswordUtils.encryptPassword(teamUpdateProfileDto.password)
-            } else {
-                throw CustomException("Wrong password", HttpStatus.BAD_REQUEST)
-            }
-        }
-
         return this.updateTeam(updateTeam, true)
+    }
+
+    fun updateTeamPassword(teamId: Int, passwordUpdateDto: TeamPasswordUpdateDto): Team {
+        val team = getTeamById(teamId)
+        if (passwordUpdateDto.oldPassword.isNotBlank() && passwordUpdateDto.newPassword.isNotBlank()) {
+            if (PasswordUtils.encryptPassword(passwordUpdateDto.oldPassword) == team.password) {
+                if(Utils.validatePassword(passwordUpdateDto.newPassword)) {
+                    if(team.nextEmail.isNotBlank()) {
+                        throw CustomException("Cannot modify password while email is not verified", HttpStatus.FORBIDDEN)
+                    }
+                    team.password = PasswordUtils.encryptPassword(passwordUpdateDto.newPassword)
+                    emailService.sendPasswordModifiedEmail(team.email, team.name)
+                    return updateTeam(team, true)
+                } else {
+                    throw CustomException("New password is not acceptable", HttpStatus.BAD_REQUEST)
+                }
+            } else {
+                throw CustomException("Old password is incorrect", HttpStatus.BAD_REQUEST)
+            }
+        } else {
+            throw CustomException("Password cannot be blank", HttpStatus.BAD_REQUEST)
+        }
     }
 
     fun addTeam(team: Team, isAdmin: Boolean = false, isTester: Boolean = false): Team {
@@ -158,6 +171,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         if(team.enabled && team.nextEmail.isNotBlank()) {
             if(Utils.validateEmail(team.nextEmail)) {
                 team.email = team.nextEmail
+                team.isGoogle = false
                 updateTeam(team, true)
             } else {
                 throw CustomException("New email is not valid", HttpStatus.BAD_REQUEST)
@@ -175,10 +189,16 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         return if (teamOptional.isPresent) {
             val team = teamOptional.get()
             if (team.enabled) {
-                team
+                if(!team.isGoogle) {
+                    team.isGoogle = true
+                    updateTeam(team)
+                } else {
+                    team
+                }
             } else {
                 // activate since he is logged in to gmail
                 team.enabled = true
+                team.isGoogle = true
                 updateTeam(team)
             }
         } else {

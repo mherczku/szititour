@@ -42,6 +42,16 @@ class LoggedInController @Autowired constructor(
         return ResponseEntity(updatedTeam.convertToDto(), HttpStatus.OK)
     }
 
+    @PostMapping("update/password")
+    fun updateProfilePassword(
+            @RequestBody profileUpdate: TeamPasswordUpdateDto,
+            auth: Authentication
+    ): ResponseEntity<TeamDto> {
+        logger.debug("Update user password ${auth.name}")
+        val updatedTeam = teamService.updateTeamPassword(auth.name.toInt(), profileUpdate)
+        return ResponseEntity(updatedTeam.convertToDto(), HttpStatus.OK)
+    }
+
      @PostMapping("update/email")
     fun updateProfileEmail(
         @RequestBody email: String,
