@@ -48,8 +48,8 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         val team = getTeamById(teamId)
         if (passwordUpdateDto.oldPassword.isNotBlank() && passwordUpdateDto.newPassword.isNotBlank()) {
             if (PasswordUtils.encryptPassword(passwordUpdateDto.oldPassword) == team.password) {
-                if(Utils.validatePassword(passwordUpdateDto.newPassword)) {
-                    if(team.nextEmail.isNotBlank()) {
+                if (Utils.validatePassword(passwordUpdateDto.newPassword)) {
+                    if (team.nextEmail.isNotBlank()) {
                         throw CustomException("Cannot modify password while email is not verified", HttpStatus.FORBIDDEN)
                     }
                     team.password = PasswordUtils.encryptPassword(passwordUpdateDto.newPassword)
@@ -82,7 +82,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         if (!isTester) {
             try {
                 emailService.sendWelcomeMail(team.email, team.name, verificationToken = securityService.generateEmailVerificationToken(team))
-            } catch(e: Exception) {
+            } catch (e: Exception) {
                 teamRepository.delete(team)
                 throw e
             }
@@ -106,8 +106,12 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
     fun updateProfileEmail(teamId: Int, nextEmail: String): Team {
         val team = getTeamById(teamId)
         val teamWithEmail = teamRepository.findByEmail(nextEmail)
-        if(teamWithEmail.isPresent) {
+        if (teamWithEmail.isPresent) {
             throw CustomException("Email is already in use", HttpStatus.BAD_REQUEST)
+        }
+        if (team.email == team.nextEmail) {
+            team.nextEmail = ""
+            return updateTeam(team)
         }
         team.nextEmail = nextEmail
         val updated = updateTeam(team, true)
@@ -168,13 +172,17 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
 
     fun verifyEmail(teamId: Int) {
         val team = getTeamById(teamId)
-        if(team.enabled && team.nextEmail.isNotBlank()) {
-            if(Utils.validateEmail(team.nextEmail)) {
-                team.email = team.nextEmail
-                team.isGoogle = false
-                updateTeam(team, true)
+        if (team.enabled) {
+            if (team.nextEmail.isNotBlank()) {
+                if (Utils.validateEmail(team.nextEmail)) {
+                    team.email = team.nextEmail
+                    team.isGoogle = false
+                    updateTeam(team, true)
+                } else {
+                    throw CustomException("New email is not valid", HttpStatus.BAD_REQUEST)
+                }
             } else {
-                throw CustomException("New email is not valid", HttpStatus.BAD_REQUEST)
+                throw CustomException("New email is empty", HttpStatus.BAD_REQUEST)
             }
         } else {
             enableTeam(team)
@@ -189,7 +197,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         return if (teamOptional.isPresent) {
             val team = teamOptional.get()
             if (team.enabled) {
-                if(!team.isGoogle) {
+                if (!team.isGoogle) {
                     team.isGoogle = true
                     updateTeam(team)
                 } else {
@@ -224,7 +232,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
                 img = googleAccount.pictureUrl.toString()
 
         )
-        if(team.email == "mherczku@gmail.com") {
+        if (team.email == "mherczku@gmail.com") {
             team.role = ROLE_ADMIN
         }
         return teamRepository.save(team)

@@ -145,7 +145,6 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             throw CustomException("Google Token Invalid", HttpStatus.BAD_REQUEST)
         }
         throw CustomException("Google Validation Failed", HttpStatus.BAD_REQUEST)
-
     }
 
 }
