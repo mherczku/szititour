@@ -2,7 +2,7 @@ package hu.hm.szititourbackend.controller
 
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityService
-import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
+import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_RESOURCE_NAME
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.UrlResource
@@ -28,15 +28,15 @@ class ResourceController @Autowired constructor(
     //!!!  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
 
     @GetMapping("/images")
-    fun getResource(
-        @RequestParam(TOKEN_NAME) token: String,
-        @RequestParam("image") imagePath: String
+    fun getResourceV2(
+            @RequestParam(TOKEN_RESOURCE_NAME) token: String,
+            @RequestParam("img") imagePath: String
     ): ResponseEntity<UrlResource> {
 
-        val verification = securityService.verifyToken(token)
-        logger.debug("Get resource ${imagePath} by user ${verification.teamId}")
+        val verification = securityService.verifyResourceToken(token, imagePath)
+        logger.debug("Get resource $imagePath by user ${verification.teamId}")
 
-        if (verification.verified && verification.isAdmin) {
+        if (verification.verified) {
 
             val paths = imagePath.split('-')
 
@@ -59,13 +59,9 @@ class ResourceController @Autowired constructor(
             val contentType: MediaType = if (extension == "jpg") MediaType.IMAGE_JPEG else MediaType.IMAGE_PNG
 
             return ResponseEntity.ok()
-                .contentType(contentType)
-                .body(urlRes)
+                    .contentType(contentType)
+                    .body(urlRes)
         }
-        /*else if(verification.verified) {
-            // TODO if not admin
-
-        }*/
         else {
             throw CustomException("Verification unsuccessful", HttpStatus.FORBIDDEN)
         }

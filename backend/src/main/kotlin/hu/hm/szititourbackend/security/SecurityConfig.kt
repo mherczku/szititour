@@ -4,12 +4,15 @@ import com.nimbusds.jose.jwk.JWKSet
 import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet
 import com.nimbusds.jose.proc.SecurityContext
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityService.Companion.CLAIM_ROLE
+import hu.hm.szititourbackend.security.SecurityService.Companion.CLAIM_TYPE
+import hu.hm.szititourbackend.security.SecurityService.Companion.CLAIM_TYPE_AUTH_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.GOOGLE_TOKEN_HEADER
-import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_ADMIN
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter
+import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
@@ -25,8 +28,10 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.oauth2.jwt.*
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import java.time.Instant
 import java.util.stream.Collectors
 
 
@@ -66,6 +71,7 @@ class SecurityConfig2(
                 .userDetailsService(securityUserDetailService)
                 .httpBasic(Customizer.withDefaults<HttpBasicConfigurer<HttpSecurity>>())
                 //.addFilterBefore(jwtBlackListFilter, UsernamePasswordAuthenticationFilter::class.java)
+                .addFilterAfter(ImgPropertyFilter(), UsernamePasswordAuthenticationFilter::class.java)
                 .cors().configurationSource(corsResource()).and()
                 .build()
     }
@@ -131,7 +137,16 @@ class SecurityConfig2(
 
 class JwtRoleConverter : Converter<Jwt?, Collection<GrantedAuthority?>?> {
     override fun convert(source: Jwt): Collection<GrantedAuthority> {
+
         val roles = source.getClaimAsStringList(CLAIM_ROLE)
+        val type = source.getClaimAsString(CLAIM_TYPE)
+
+        if(type != CLAIM_TYPE_AUTH_TOKEN) {
+            throw CustomException("AUTH_INVALID_TOKEN_TYPE", HttpStatus.FORBIDDEN)
+        }
+        if(source.expiresAt == null || source.expiresAt?.isBefore(Instant.now()) == true) {
+            throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN)
+        }
 
         return roles.stream().map { role: String? ->
             SimpleGrantedAuthority(role)

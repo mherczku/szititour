@@ -2,6 +2,7 @@ export type Team = {
   id: number,
   name: string,
   email: string,
+  nextEmail: string,
   img?: string,
   role: "ROLE_ADMIN" | "ROLE_USER",
   createdAt?: Date,
