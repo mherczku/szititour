@@ -40,6 +40,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
 
         val updateTeam = getTeamById(teamId)
         updateTeam.name = teamUpdateProfileDto.name ?: updateTeam.name
+        // TODO limit 4-5?
         updateTeam.members = teamUpdateProfileDto.members?.toMutableList() ?: updateTeam.members
         return this.updateTeam(updateTeam, true)
     }

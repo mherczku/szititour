@@ -10,8 +10,7 @@ export class ImgSrcPipe implements PipeTransform {
     if(value === null || value === "") {
       return "";
     }
-    const token = localStorage.getItem("auth-token");
-    return environment.apiBaseUrl + "/resources/images?Authorization=" + token + "&image=" + value;
+    return environment.apiBaseUrl + "/resources/" + value;
   }
 
 }
