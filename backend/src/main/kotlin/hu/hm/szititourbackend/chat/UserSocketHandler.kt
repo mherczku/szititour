@@ -49,12 +49,20 @@ class UserSocketHandler(@Autowired @Lazy private val adminSocket: AdminSocketHan
                 }
                 chatMessage.sender = sessionData.username
             }
-
+            var openAdmins = 0
             for (webSocketSession in adminSocket.sessions) {
-                sendMessageTo(webSocketSession.value, message)
+                if(sendMessageTo(webSocketSession.value, message)) {
+                    openAdmins ++
+                }
             }
-            // sent back to user
-            sendMessageTo(session, message)
+            if(openAdmins < 1) {
+                // if no admin session open, notify user
+                sendMessageTo(session, ChatMessage(type = "INFO", content = "NO_ADMIN"))
+            } else {
+                // sent back to user
+                sendMessageTo(session, message)
+            }
+
 
         } catch (e: Exception) {
             logger.error("Websocket exception")

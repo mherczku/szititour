@@ -35,6 +35,7 @@ class AdminSocketHandler(@Autowired @Lazy private val userSocket: UserSocketHand
             } else {
                 if(!sessionData.authenticated) {
                     sessionData = authenticate(session, chatMessage)
+                    notifyUserIfFirstAdminAvailable()
                     if(sessionData !== null) {
                         sessions[session.id] = sessionData
                         // sending infos:
@@ -77,6 +78,15 @@ class AdminSocketHandler(@Autowired @Lazy private val userSocket: UserSocketHand
             logger.error("Websocket exception")
         }
 
+    }
+
+    private fun notifyUserIfFirstAdminAvailable() {
+        // now comes the first admin
+        if(sessions.values.filter { it.authenticated && it.session.isOpen }.isEmpty()) {
+            userSocket.sessions.values.forEach {
+                sendMessageTo(it, ChatMessage(type = "INFO", content = "YES_ADMIN"))
+            }
+        }
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
