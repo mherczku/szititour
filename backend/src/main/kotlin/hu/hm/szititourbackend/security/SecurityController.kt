@@ -1,5 +1,6 @@
 package hu.hm.szititourbackend.security
 
+import hu.hm.szititourbackend.datamodel.ClientData
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.exception.CustomException
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import javax.servlet.http.HttpServletRequest
 
 
 @RestController
@@ -49,21 +51,6 @@ class SecurityController(private val teamService: TeamService, private val secur
         }
     }
 
-    @GetMapping("login/google")
-    fun authorizeByGoogle(
-            @RequestHeader(GOOGLE_TOKEN_HEADER) googleToken: String,
-            response: HttpServletResponse
-    ): ResponseEntity<LoginResponse> {
-        logger.debug("Authorize by google")
-        val googleAccount = securityService.verifyGoogleToken(googleToken)
-        val team = teamService.continueWithGoogle(googleAccount)
-        val token = securityService.generateToken(team = team)
-        response.addHeader(TOKEN_NAME, "Bearer $token")
-        return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
-    }
-
-
-
     @GetMapping("verifyEmail/{token}")
     fun verifyEmailWithToken(@PathVariable token: String): ResponseEntity<Response> {
         logger.debug("Verify email")
@@ -77,15 +64,36 @@ class SecurityController(private val teamService: TeamService, private val secur
 
     }
 
+    @GetMapping("login/google")
+    fun authorizeByGoogle(
+            @RequestHeader(GOOGLE_TOKEN_HEADER) googleToken: String,
+            @RequestBody clientData: ClientData,
+            request: HttpServletRequest,
+            response: HttpServletResponse
+    ): ResponseEntity<LoginResponse> {
+        logger.debug("Authorize by google")
+        val googleAccount = securityService.verifyGoogleToken(googleToken)
+        val team = teamService.continueWithGoogle(googleAccount)
+
+
+        clientData.ipAddress = request.remoteAddr
+        val tokenId = teamService.addClient(team, clientData, true)
+        val token = securityService.generateToken(team = team, tokenId)
+        response.addHeader(TOKEN_NAME, "Bearer $token")
+        return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
+    }
+
     @PostMapping("login")
-    fun login(auth: Authentication, response: HttpServletResponse): ResponseEntity<LoginResponse> {
-        logger.debug("Login for ${auth.name}")
+    fun login(auth: Authentication, @RequestBody clientData: ClientData, request: HttpServletRequest, response: HttpServletResponse): ResponseEntity<LoginResponse> {
+        logger.info("Login for ${auth.name} - ${request.remoteAddr} - ${request.getHeader("x-Forwarded-For")}")
 
         val team = teamService.getTeamByEmail(email = auth.name)
         if(!team.enabled) {
             throw CustomException("User is not activated", HttpStatus.FORBIDDEN)
         }
-        val token = securityService.generateToken(team = team)
+        clientData.ipAddress = request.remoteAddr
+        val tokenId = teamService.addClient(team, clientData, false)
+        val token = securityService.generateToken(team = team, tokenId)
         response.addHeader(TOKEN_NAME, "Bearer $token")
         return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
     }

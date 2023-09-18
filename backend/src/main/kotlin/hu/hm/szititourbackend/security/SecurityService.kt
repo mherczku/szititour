@@ -25,6 +25,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         const val CLAIM_ROLE = "role"
         const val CLAIM_USERNAME = "username"
         const val CLAIM_TYPE = "claim_type"
+        const val CLAIM_TOKEN_ID = "claim_token_id"
         const val CLAIM_TYPE_VERIFICATION_TOKEN = "claim_type_verification_token"
         const val CLAIM_TYPE_AUTH_TOKEN = "claim_type_auth_token"
         const val CLAIM_TYPE_RES_TOKEN = "claim_type_res_token"
@@ -45,7 +46,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
 
     
     // AUTH TOKEN
-    fun generateToken(team: Team): String {
+    fun generateToken(team: Team, tokenId: String): String {
         val now = Instant.now()
         val claims = JwtClaimsSet.builder()
                 .issuer(ISSUER)
@@ -55,6 +56,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
                 .claim(CLAIM_TYPE, CLAIM_TYPE_AUTH_TOKEN)
                 .claim(CLAIM_USERNAME, team.email)
                 .claim(CLAIM_ROLE, team.role)
+                .claim(CLAIM_TOKEN_ID, tokenId)
                 .build()
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).tokenValue
     }
@@ -75,10 +77,14 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
                 throw Exception("Bad token type")
             }
             val role: String = jwt.getClaim(CLAIM_ROLE)
+            val tokenId: String = jwt.getClaim(CLAIM_TOKEN_ID)
+            if(tokenId.isBlank()) {
+                throw CustomException("TokenId cannot be empty", HttpStatus.FORBIDDEN)
+            }
             val isAdmin = role == ROLE_ADMIN
             val teamId: Int = jwt.subject.toInt()
 
-            VerificationResponse(verified = true, isAdmin = isAdmin, teamId = teamId)
+            VerificationResponse(verified = true, isAdmin = isAdmin, teamId = teamId, tokenId = tokenId)
         } catch (e: Exception) {
             //Invalid signature/claims
             VerificationResponse(verified = false, errorMessage = e.localizedMessage)

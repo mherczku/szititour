@@ -1,6 +1,7 @@
 package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.datamodel.Application
+import hu.hm.szititourbackend.datamodel.ClientData
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.dto.TeamPasswordUpdateDto
 import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
@@ -21,6 +22,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
+import java.util.*
 
 
 @Service
@@ -237,5 +239,20 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
             team.role = ROLE_ADMIN
         }
         return teamRepository.save(team)
+    }
+
+    fun revokeClient(tokenId: String, teamId: Int): Team {
+        val team = getTeamById(teamId)
+        team.clients.removeIf { it.tokenId == tokenId }
+        return updateTeam(team, true)
+    }
+
+    fun addClient(team: Team, clientData: ClientData, isGoogle: Boolean): String {
+        clientData.isGoogle = isGoogle
+        val tokenId = UUID.randomUUID().toString()
+        clientData.tokenId = tokenId
+        team.clients.add(clientData)
+        updateTeam(team, true)
+        return tokenId
     }
 }

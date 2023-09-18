@@ -42,8 +42,21 @@ class Team(
         val teamGameStatuses: MutableList<TeamGameStatus> = mutableListOf(),
 
         @ElementCollection
-        var members: MutableList<String> = mutableListOf()
+        var members: MutableList<String> = mutableListOf(),
 
+        @ElementCollection(fetch = FetchType.EAGER)
+        val clients: MutableList<ClientData> = mutableListOf()
+
+)
+
+@Embeddable
+class ClientData (
+        var tokenId: String = "",
+        val platform: String = "",
+        val isMobile: Boolean = false,
+        val brand: String = "",
+        var isGoogle: Boolean = false,
+        var ipAddress: String = ""
 )
 
 fun Team.convertToDto(): TeamDto {
@@ -57,7 +70,8 @@ fun Team.convertToDto(): TeamDto {
             createdAt = this.createdAt,
             updatedAt = this.updatedAt,
             applications = this.applications.convertToDto(),
-            members = this.members
+            members = this.members,
+            clients = this.clients
     )
 }
 

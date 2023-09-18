@@ -44,6 +44,11 @@ class SecurityConfig2(
 ) {
 
     @Bean
+    fun tokenIdFilter(): TokenIdFilter {
+        return TokenIdFilter()
+    }
+
+    @Bean
     @Throws(Exception::class)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain? {
 
@@ -71,7 +76,8 @@ class SecurityConfig2(
                 .userDetailsService(securityUserDetailService)
                 .httpBasic(Customizer.withDefaults<HttpBasicConfigurer<HttpSecurity>>())
                 //.addFilterBefore(jwtBlackListFilter, UsernamePasswordAuthenticationFilter::class.java)
-                .addFilterAfter(ImgPropertyFilter(), UsernamePasswordAuthenticationFilter::class.java)
+                .addFilterAfter(tokenIdFilter(), UsernamePasswordAuthenticationFilter::class.java)
+                .addFilterAfter(ImgPropertyFilter(), TokenIdFilter::class.java)
                 .cors().configurationSource(corsResource()).and()
                 .build()
     }
