@@ -9,10 +9,10 @@
 
 
   <div class="right">
-    <img routerLink="/admin/notification" *ngIf="((isLoggedIn | async) && (team | async)?.role ==='ROLE_ADMIN')" class="btn-icon mobile-none" src="assets/svg/notification-plus.svg" alt="Notification-manager">
-    <img (click)="ngRok()" *ngIf="!isNgRok" class="btn-icon mobile-none" src="assets/svg/warning.svg" alt="Warning">
-    <a routerLink="/user/profile" class="btn-profile"></a>
-    <button (click)="toggleNoti($event)" class="btn-notification hasNew" [class.hasNew]="hasNewNoti()"></button>
+    <img (click)="ngRok()" *ngIf="!isNgRok" class="btn-icon mobile-none disableSelectAndTap" src="assets/svg/warning.svg" alt="Warning">
+    <img routerLink="/admin/notification" *ngIf="((isLoggedIn | async) && (team | async)?.role ==='ROLE_ADMIN')" class="btn-icon mobile-none disableSelectAndTap" src="assets/svg/notification-plus.svg" alt="Notification-manager">
+    <a routerLink="/user/profile" class="btn-profile disableSelectAndTap"></a>
+    <button (click)="toggleNoti($event)" class="btn-notification hasNew disableSelectAndTap" [class.hasNew]="hasNewNoti()"></button>
     <div class="flex flex-row mobile:hidden tablet:block">
 
       <a class="btn-simple" *ngIf="!(isLoggedIn | async)" routerLink="/auth/login">Bejelentkezés</a>
@@ -45,8 +45,8 @@
   <div class="mobileMenu" [class.z-navbar-mobile-menu-open]="isMobileMenuOpen">
     <div class="darkPart" (click)="changeIsMobileMenuOpen(false)" [ngClass]="isMobileMenuOpen ? 'animateDarkPart' : ''"></div>
     <div class="whitePart" [ngClass]="isMobileMenuOpen ? 'whitePartOpen' : ''">
-<!--
-      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="600" height="800" preserveAspectRatio="none" viewBox="0 0 600 800">
+
+     <!--  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="600" height="800" preserveAspectRatio="none" viewBox="0 0 600 800">
         <g mask="url(&quot;#SvgjsMask6145&quot;)" fill="none">
           <rect width="600" height="800" x="0" y="0" fill="url(&quot;#SvgjsLinearGradient6146&quot;)"></rect>
           <g>
@@ -81,11 +81,12 @@
             <stop stop-color="rgba(0, 137, 1, 0.4)" offset="0.89"></stop>
           </linearGradient>
         </defs>
-      </svg>
--->
+      </svg> -->
+
 
       <a *ngIf="(isLoggedIn | async)" routerLink="/user/home" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Főoldal</a>
       <a *ngIf="(isLoggedIn | async) && (team | async)?.role ==='ROLE_ADMIN'" routerLink="/admin" (click)="changeIsMobileMenuOpen(false)" class="font-semibold text-size-lg cursor-pointer">Admin Panel</a>
+      <a *ngIf="(isLoggedIn | async) && (team | async)?.role ==='ROLE_ADMIN'" routerLink="/user" (click)="changeIsMobileMenuOpen(false)" class="font-semibold text-size-lg cursor-pointer">Felhasználói oldal</a>
       <a *ngIf="(isLoggedIn | async) && (team | async)?.role ==='ROLE_ADMIN'" routerLink="/admin/notification" (click)="changeIsMobileMenuOpen(false)" class="font-semibold text-size-lg cursor-pointer">Push értesítések</a>
       <a *ngIf="(isLoggedIn | async)" routerLink="/user/profile" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Profil</a>
       <a *ngIf="(isLoggedIn | async)" (click)="changeIsMobileMenuOpen(false); logout()" class=" font-semibold text-size-lg cursor-pointer">Kijelentkezés</a>

@@ -125,7 +125,9 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
-    this.http.post<NetworkResponse>(`${this.baseUrl}/logout`, null).pipe(take(1)).subscribe();
+    if(this.getToken() !== null) {
+      this.http.post<NetworkResponse>(`${this.baseUrl}/logout`, null).pipe(take(1)).subscribe();
+    }
     this.removeToken();
     this.store.dispatch(logout());
     this.router.navigateByUrl(CONST_ROUTES.auth.call);

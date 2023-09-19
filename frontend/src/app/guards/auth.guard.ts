@@ -25,7 +25,7 @@ export class AuthGuard  {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     if (this.currentTeamRole) {
       if (route.data?.["roles"] && route.data?.["roles"].indexOf(this.currentTeamRole) === -1) {
-        this.currentTeamRole === "ROLE_ADMIN" ? this.router.navigate(["/admin"]) : this.currentTeamRole === "ROLE_USER" ? this.router.navigate(["/home"]) /* todo user page */ : this.router.navigate(["/login"]);
+        this.currentTeamRole === "ROLE_ADMIN" ? this.router.navigate(["/admin"]) : this.currentTeamRole === "ROLE_USER" ? this.router.navigate(["/home"]) : this.router.navigate(["/login"]);
         return false;
       }
       return true;
@@ -37,7 +37,7 @@ export class AuthGuard  {
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     if (this.currentTeamRole) {
       if (childRoute.data?.["roles"] && childRoute.data?.["roles"].indexOf(this.currentTeamRole) === -1) {
-        this.currentTeamRole === "ROLE_ADMIN" ? this.router.navigate(["/admin"]) : this.currentTeamRole === "ROLE_USER" ? this.router.navigate(["/home"]) /* todo user page */ : this.router.navigate(["/login"]);
+        this.currentTeamRole === "ROLE_ADMIN" ? this.router.navigate(["/admin"]) : this.currentTeamRole === "ROLE_USER" ? this.router.navigate(["/home"]) : this.router.navigate(["/login"]);
         return false;
       }
       return true;
@@ -52,7 +52,7 @@ export class AuthGuard  {
       // here we need to use the passed object role
       if (route.data?.["roles"] && route.data?.["roles"].indexOf(this.currentTeamRole) === -1) {
         // role not authorised so redirect to home page
-        this.currentTeamRole === "ROLE_ADMIN" ? this.router.navigate(["/admin"]) : this.currentTeamRole === "ROLE_USER" ? this.router.navigate(["/home"]) /* todo user page */ : this.router.navigate(["/login"]);
+        this.currentTeamRole === "ROLE_ADMIN" ? this.router.navigate(["/admin"]) : this.currentTeamRole === "ROLE_USER" ? this.router.navigate(["/home"]) : this.router.navigate(["/login"]);
         return false;
       }
       // authorised so return true
