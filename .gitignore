@@ -1,2 +1,5 @@
 
 backend/src/main/resources/application.properties
+package-lock.json
+frontend/.vscode/extensions.json
+frontend/.vscode/settings.json
