@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy, WritableSignal, computed, signal } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable, Subject, takeUntil, tap } from "rxjs";
+import { Observable, Subject, take, takeUntil, tap } from "rxjs";
 import { Store } from "@ngrx/store";
 import { Team } from "../types/team";
 import { login, logout } from "../store/actions/auth.actions";
@@ -17,6 +17,15 @@ export interface RegisterData {
   email: string;
   password: string;
   name: string;
+}
+
+export interface ClientData {
+  platform: string;
+  isMobile: string;
+  brand: string;
+  tokenId?: string;
+  isGoogle?: boolean;
+  ipAddress?: string;
 }
 
 @Injectable({ providedIn: "root" })
@@ -78,14 +87,13 @@ export class AuthService implements OnDestroy {
   }
 
   public login(email: string, password: string): Observable<NetworkLoginResponse> {
-
     const usernamePassword = `${email}:${password}`;
     const encoded = btoa(usernamePassword);
     const authHeader = `Basic ${encoded}`;
     const headers = new HttpHeaders()
       .set("Authorization", authHeader);
 
-    return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, null, { headers: headers }).pipe(tap(evt => {
+    return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, this.getClientData(), { headers: headers }).pipe(tap(evt => {
       if (evt.success) {
         this.store.dispatch(login({ team: evt.team, notAuto: true }));
       }
@@ -96,7 +104,7 @@ export class AuthService implements OnDestroy {
     const headers = new HttpHeaders()
       .set("googleToken", token);
 
-    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}/login/google`, { headers: headers }).pipe(tap(evt => {
+    return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login/google`, this.getClientData(), { headers: headers }).pipe(tap(evt => {
       if (evt.success) {
         this.store.dispatch(login({ team: evt.team, notAuto: true }));
       }
@@ -117,6 +125,7 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
+    this.http.post<NetworkResponse>(`${this.baseUrl}/logout`, null).pipe(take(1)).subscribe();
     this.removeToken();
     this.store.dispatch(logout());
     this.router.navigateByUrl(CONST_ROUTES.auth.call);
@@ -157,4 +166,14 @@ export class AuthService implements OnDestroy {
   getUsername(): string {
     return this.username;
   }
+
+  private getClientData(): ClientData {
+    const data = (navigator as any).userAgentData;
+    return {
+      isMobile: data.mobile ?? false,
+      brand: `${data.brands[0].brand} ${data.brands[0].version}`,
+      platform: data.platform ?? ""
+    };
+  }
 }
+
