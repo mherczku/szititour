@@ -84,7 +84,7 @@ class SecurityController(private val teamService: TeamService, private val secur
 
     @PostMapping("login")
     fun login(auth: Authentication, @RequestBody clientData: ClientData, request: HttpServletRequest, response: HttpServletResponse): ResponseEntity<LoginResponse> {
-        logger.info("Login for ${auth.name} - ${request.remoteAddr} - ${request.getHeader("x-Forwarded-For")}")
+        logger.info("Login for ${auth.name} - remote: ${request.remoteAddr} - forwarded: ${request.getHeader("X-Forwarded-For")} - real: ${request.getHeader("X-Real-IP")}")
 
         val team = teamService.getTeamByEmail(email = auth.name)
         if(!team.enabled) {
