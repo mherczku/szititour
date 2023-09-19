@@ -31,7 +31,6 @@ export class Modal2Component {
   }
 
   setDisplay(ds: Observable<ModalData>) {
-    console.log({ds});
     this.display$ = ds;
     this.display$.subscribe(data => {
       this.display_ = data;
