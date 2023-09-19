@@ -65,7 +65,6 @@ function initializeAuth(authService: AuthService, alert: HotToastService): Funct
   return () => new Promise<void>((resolve) => {
     const token = authService.getToken();
     if (token) {
-      console.warn("Token ready");
       const timeoutLimit = 1500;
       authService.authorizeMe().pipe(timeout(timeoutLimit)).subscribe({
         next: value => {
@@ -85,7 +84,6 @@ function initializeAuth(authService: AuthService, alert: HotToastService): Funct
         }
       });
     } else {
-      console.warn("No token");
       resolve();
     }
   });

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { SimpleUser } from "../chat.component";
 import { CommonModule } from "@angular/common";
 
@@ -8,6 +8,7 @@ import { CommonModule } from "@angular/common";
   templateUrl: "./user-selector.component.html",
   styleUrls: ["./user-selector.component.scss"],
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserSelectorComponent implements OnInit {
   @Input({ required: true }) users!: SimpleUser[];

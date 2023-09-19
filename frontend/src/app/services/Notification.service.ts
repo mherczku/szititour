@@ -64,10 +64,6 @@ export class NotificationService {
   constructor(private readonly pushNoti: PushNotificationService) {
 
     effect(() => {
-      console.log(`The current noti count is: ${this.notis().length}`);
-    },);
-
-    effect(() => {
       if (this.isOpen()) {
         this.latestNoti.set(undefined);
       }
