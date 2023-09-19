@@ -23,7 +23,7 @@ import { ChatComponent } from "./ui/components/chat/chat.component";
 import { provideFirebaseApp, initializeApp} from "@angular/fire/app";
 import { MessagingModule } from "@angular/fire/messaging";
 import { environment } from "src/environments/environment";
-import { LoginEffects } from "./store/effects/login.effects";
+import { AuthEffects } from "./store/effects/auth.effects";
 import { EffectsModule } from "@ngrx/effects";
 @NgModule({
     declarations: [
@@ -51,7 +51,7 @@ import { EffectsModule } from "@ngrx/effects";
         StoreModule.forRoot({}, {}),
         StoreModule.forFeature("game", GameStateReducer),
         StoreModule.forFeature("auth", AuthReducer),
-        EffectsModule.forRoot([LoginEffects]),
+        EffectsModule.forRoot([AuthEffects]),
         NavbarComponent,
         ChatComponent,
         provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),

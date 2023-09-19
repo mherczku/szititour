@@ -5,13 +5,15 @@ import { PushNotificationService } from "src/app/services/PushNotification.servi
 import { tap } from "rxjs";
 import { CONST_ROUTES } from "src/app/constants/routes.constants";
 import { Router } from "@angular/router";
+import { NotificationService } from "src/app/services/Notification.service";
 
 @Injectable()
-export class LoginEffects {
+export class AuthEffects {
 
   constructor(
     private readonly actions$: Actions,
     private readonly pushNoti: PushNotificationService,
+    private readonly noti: NotificationService,
     private readonly router: Router
   ) {
   }
@@ -30,6 +32,15 @@ export class LoginEffects {
           }
         }
         this.pushNoti.initializePushNoti();
+      }),
+    ), { dispatch: false }
+  );
+
+  logoutEffect = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.logout),
+      tap(() => {
+        this.noti.removeAllNotifications();
       }),
     ), { dispatch: false }
   );
