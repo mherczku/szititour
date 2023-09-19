@@ -26,7 +26,7 @@ class TokenIdFilter : OncePerRequestFilter() {
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
 
         val token = request.getHeader(TOKEN_NAME)
-        myLogger.info("Inside TokenIdFilter")
+        myLogger.debug("Inside TokenIdFilter")
 
         if(token != null && token.contains("Bearer ")) {
             val verification = securityService.verifyToken(token)

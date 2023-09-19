@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import * as actions from "../actions/auth.actions";
 import { PushNotificationService } from "src/app/services/PushNotification.service";
@@ -14,7 +14,8 @@ export class AuthEffects {
     private readonly actions$: Actions,
     private readonly pushNoti: PushNotificationService,
     private readonly noti: NotificationService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly ng: NgZone
   ) {
   }
 
@@ -24,11 +25,15 @@ export class AuthEffects {
       tap(action => {
         if(action.team.role === "ROLE_ADMIN") {
           if(action.notAuto) {
-            this.router.navigateByUrl(CONST_ROUTES.admin.call);
+            this.ng.run(() => {
+              this.router.navigateByUrl(CONST_ROUTES.admin.call);
+            });
           }
         } else if(action.team.role === "ROLE_USER") {
           if(action.notAuto) {
-            this.router.navigateByUrl(CONST_ROUTES.user.call);
+            this.ng.run(() => {
+              this.router.navigateByUrl(CONST_ROUTES.user.call);
+            });
           }
         }
         this.pushNoti.initializePushNoti();

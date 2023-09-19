@@ -53,8 +53,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    if (this.email === "t" || this.email === "t@test.hu") {
-      this.email = "t@test.hu";
+    if (this.email === "t" || this.email === "tu@test.hu") {
+      this.email = "tu@test.hu";
+      this.password = "T12345678";
+    }
+    else if (this.email === "ta" || this.email === "ta@test.hu") {
+      this.email = "ta@test.hu";
       this.password = "T12345678";
     }
     this.subscriptionLogin = this.authService
