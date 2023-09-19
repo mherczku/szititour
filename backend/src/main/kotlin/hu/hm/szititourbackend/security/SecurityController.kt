@@ -64,7 +64,7 @@ class SecurityController(private val teamService: TeamService, private val secur
 
     }
 
-    @GetMapping("login/google")
+    @PostMapping("login/google")
     fun authorizeByGoogle(
             @RequestHeader(GOOGLE_TOKEN_HEADER) googleToken: String,
             @RequestBody clientData: ClientData,
@@ -74,7 +74,6 @@ class SecurityController(private val teamService: TeamService, private val secur
         logger.debug("Authorize by google")
         val googleAccount = securityService.verifyGoogleToken(googleToken)
         val team = teamService.continueWithGoogle(googleAccount)
-
 
         clientData.ipAddress = request.remoteAddr
         val tokenId = teamService.addClient(team, clientData, true)
@@ -121,6 +120,16 @@ class SecurityController(private val teamService: TeamService, private val secur
         } else {
             throw CustomException("Email or password is invalid", HttpStatus.BAD_REQUEST)
         }
+    }
+
+    @PostMapping("logout")
+    fun logout(@RequestHeader(TOKEN_NAME) token: String): ResponseEntity<Response> {
+        val verification = securityService.verifyToken(token)
+        if(verification.verified) {
+            teamService.revokeClient(verification.tokenId, verification.teamId)
+            return ResponseEntity<Response>(Response(success = true), HttpStatus.OK)
+        }
+        throw CustomException("Logout invalid token", HttpStatus.BAD_REQUEST)
     }
 
 }

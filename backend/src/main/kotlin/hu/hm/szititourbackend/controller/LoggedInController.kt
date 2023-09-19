@@ -4,6 +4,7 @@ import hu.hm.szititourbackend.datamodel.*
 import hu.hm.szititourbackend.dto.*
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
 import hu.hm.szititourbackend.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -119,12 +120,6 @@ class LoggedInController @Autowired constructor(
     @PostMapping("revoke")
     fun revokeToken(@RequestBody tokenId: String, auth: Authentication): ResponseEntity<Team> {
         return ResponseEntity<Team>(teamService.revokeClient(tokenId, auth.name.toInt()), HttpStatus.OK)
-    }
-
-    @PostMapping("logout")
-    fun logout(@RequestBody tokenId: String, auth: Authentication): ResponseEntity<Response> {
-        teamService.revokeClient(tokenId, auth.name.toInt())
-        return ResponseEntity<Response>(Response(success = true), HttpStatus.OK)
     }
 
     //! AVAILABLE ONLY FOR USERS WITH VALID APPLICATION FOR "THE" GAME WHICH IS ACTIVE:
