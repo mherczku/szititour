@@ -46,7 +46,7 @@
 
 .chat-container {
   /* From https://css.glass */
-  background: rgba(0, 0, 0, 0.21);
+  background: rgb(144 144 144 / 40%);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10.3px);
@@ -61,6 +61,7 @@
   left: 0;
   overflow: none;
   width: 400px;
+
   @media (max-width: $breakpoint-mobile) {
     max-width: 90vw;
     //overflow-x: hidden;
@@ -91,10 +92,12 @@
           color: inherit;
           background-color: black;
         }
+
         /* Remove focus outline */
         &:focus {
           outline: none;
         }
+
         /* Remove IE arrow */
         &::-ms-expand {
           display: none;
@@ -105,11 +108,13 @@
     .right {
       .btn-hide {
         cursor: pointer;
+
         line {
           transition: all 100ms ease-in-out;
           stroke-linecap: round;
           stroke: #ffffff;
         }
+
         &:hover {
           line {
             stroke: rgba(255, 255, 255, 0.4);
@@ -132,20 +137,24 @@
     &::-webkit-scrollbar {
       width: 10px;
     }
+
     &::-webkit-scrollbar-track {
       background-color: $smoke;
       border-radius: 10px;
     }
+
     &::-webkit-scrollbar-thumb {
       background: darkgray;
       border-radius: 10px;
     }
+
     &::-webkit-scrollbar-thumb:hover {
       background: #6f6f6f;
     }
 
     .chat-message-received {
       margin: 0 10px;
+
       p {
         display: flex;
         align-items: center;
@@ -163,6 +172,7 @@
       margin: 0 10px;
       display: flex;
       justify-content: flex-end;
+
       p {
         display: flex;
         align-items: center;
@@ -184,16 +194,45 @@
       align-items: center;
       text-align: center;
     }
+    .info-bold {
+      @extend .info;
+      font-weight: bold;
+    }
   }
 
   .chat-footer {
     position: relative;
+    display: flex;
+    justify-content: space-between;
     margin: 5px;
+    gap: 10px;
+
+    input {
+      width: 90%;
+    }
 
     button {
-      position: absolute;
-      right: 0px;
-      top: -2px;
+      background-color: $kon-blue;
+      border-radius: 100%;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+
+      &:disabled,
+      &:hover {
+
+        -webkit-box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.38);
+        -moz-box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.38);
+        box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.38);
+      }
+
+      img {
+        height: 40px;
+        aspect-ratio: 1;
+        object-fit: contain;
+      }
     }
   }
 }

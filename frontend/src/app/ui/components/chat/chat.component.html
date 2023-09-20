@@ -61,15 +61,13 @@
         <div
           [@popInOut]
           *ngFor="let m of msgs"
-          [ngClass]="
-            (isAdmin() && m.sender === 'ADMIN') ||
-            (!isAdmin() && m.sender !== 'ADMIN')
-              ? 'chat-message-sent'
-              : 'chat-message-received'
-          "
+          [class.chat-message-sent]="(m.sender === 'ADMIN') ||
+          (m.sender !== 'ADMIN')"
+          [class.chat-message-received]="!( m.sender === 'ADMIN') ||(m.sender !== 'ADMIN')"
         >
           <p>{{ m.content }}</p>
         </div>
+        <p class="info-bold" *ngIf="noAdmin()">Szervezők nem elérhetőek!</p>
       </ng-container>
 
       <ng-container *ngIf="isAdmin()">
@@ -97,7 +95,7 @@
         [(ngModel)]="content"
         type="text"
       />
-      <button class="btn btn-simple" [disabled]="!canSend()" (click)="sendMsg()">SEND</button>
+      <button class="btn" [disabled]="!canSend()" (click)="sendMsg()"><img src="assets/svg/send.svg" alt=""></button>
     </div>
   </div>
 </div>

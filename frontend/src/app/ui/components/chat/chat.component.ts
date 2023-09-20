@@ -57,7 +57,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   isHidden = true;
   isConnected: WritableSignal<boolean> = signal(false);
-  canSend: Signal<boolean> = computed(() => ((this.adminChat().selectedUser?.online ?? false) || !this.isAdmin()) && this.isConnected());
+  canSend: Signal<boolean> = computed(() => ((this.adminChat().selectedUser?.online ?? false) || (!this.isAdmin() && !this.noAdmin())) && this.isConnected());
 
   adminChat: WritableSignal<AdminChat> = signal({
     users: defaultAdminUsers,
@@ -74,6 +74,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   content = "";
   msgs: Message[] = [];
+  noAdmin = signal(false);
 
   timeOut?: any;
 
@@ -140,6 +141,14 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   handleINFO(msg: Message) {
+    if(msg.content === "NO_ADMIN") {
+      this.noAdmin.set(true);
+      return;
+    }
+    else if(msg.content === "YES_ADMIN") {
+      this.noAdmin.set(false);
+      return;
+    }
     this.adminChat().users = defaultAdminUsers;
     msg.info.forEach((name) => {
       if (name.length > 0) {
