@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { Store } from "@ngrx/store";
+import { ChangeDetectionStrategy, Component, computed } from "@angular/core";
 import { AuthService } from "../../../services/AuthService";
-import { selectIsLoggedIn, selectLoggedInTeam } from "../../../store/selectors/auth.selector";
 import { FormsModule } from "@angular/forms";
 import { AsyncPipe, NgClass, NgIf } from "@angular/common";
 import { RouterLink } from "@angular/router";
@@ -28,14 +26,14 @@ import { LatestNotificationComponent } from "../notifications/latest-notificatio
 export class NavbarComponent {
 
   isNgRok: boolean = document.cookie.includes("ngrok");
-  isLoggedIn = this.store.select(selectIsLoggedIn);
-  team = this.store.select(selectLoggedInTeam);
+  $isLoggedIn = computed(() => this.$team !== undefined);
+  $isAdmin = this.authService.isAdminSignal;
+  $team = this.authService.currentUserSignalR;
   isMobileMenuOpen = false;
 
-  hasNewNoti = this.notiService.hasNew;
+  $hasNewNoti = this.notiService.hasNew;
 
   constructor(
-    private readonly store: Store,
     private readonly authService: AuthService,
     private readonly notiService: NotificationService) { }
 

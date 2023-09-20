@@ -1,3 +1,6 @@
+import { ClientData } from "../services/AuthService";
+import { Application } from "./application";
+
 export type Team = {
   id: number,
   name: string,
@@ -7,10 +10,10 @@ export type Team = {
   role: "ROLE_ADMIN" | "ROLE_USER",
   createdAt?: Date,
   updatedAt?: Date,
-  applications?: any[],
-  members: string[]
+  applications?: Application[],
+  members: string[],
+  clients: ClientData[]
 }
-
 
 export type UpdateTeam = {
   name?: string,
