@@ -26,9 +26,9 @@ import { LatestNotificationComponent } from "../notifications/latest-notificatio
 export class NavbarComponent {
 
   $isNgRok = signal(document.cookie.includes("ngrok"));
-  $isLoggedIn = computed(() => this.$team !== undefined);
-  $isAdmin = this.authService.isAdminSignal;
-  $team = this.authService.currentUserSignalR;
+  $isLoggedIn = computed(() => this.$team() !== undefined);
+  $isAdmin = this.authService.$isAdmin;
+  $team = this.authService.$currentTeamR;
   $isMobileMenuOpen = signal(false);
   $hasNewNoti = this.notiService.hasNew;
 
