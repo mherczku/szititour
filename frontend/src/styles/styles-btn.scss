@@ -71,9 +71,19 @@
 .btn-hover-bold {
   @extend .btn;
   color: $m-blue;
+  align-items: center;
 
   &:hover {
     color: $m-blue;
     font-weight: 600;
+  }
+  &::after {
+    display: block;
+    content: attr(bold) '';
+    visibility: hidden;
+    overflow: hidden;
+    height: 0;
+    font-weight: 600;
+
   }
 }

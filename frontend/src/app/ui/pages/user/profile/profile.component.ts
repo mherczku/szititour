@@ -1,35 +1,58 @@
-import {Component, OnInit} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {Store} from "@ngrx/store";
-import {selectLoggedInTeam} from "../../../../store/selectors/auth.selector";
-import {TextInputComponent} from "../../../components/admin/inputs/text-input/text-input.component";
-import {ButtonsComponent} from "../../../components/buttons/buttons.component";
-import {Team, UpdateTeam} from "../../../../types/team";
-import {Subject, takeUntil, tap} from "rxjs";
-import {UserService} from "../../../../services/UserService";
-import {AutoDestroy} from "../../../../decorators/autodestroy.decorator";
-import {login} from "../../../../store/actions/auth.actions";
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, WritableSignal, effect, signal } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Store } from "@ngrx/store";
+import { TextInputComponent } from "../../../components/admin/inputs/text-input/text-input.component";
+import { ButtonsComponent } from "../../../components/buttons/buttons.component";
+import { Team, UpdateTeam } from "../../../../types/team";
+import { UserService } from "../../../../services/UserService";
+import { AuthService } from "src/app/services/AuthService";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { confirmPassword } from "src/app/validators/same-pass.validator";
 
 @Component({
   standalone: true,
-  imports: [CommonModule, TextInputComponent, ButtonsComponent],
+  imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent],
   templateUrl: "./profile.component.html",
-  styleUrls: ["./profile.component.scss"]
+  styleUrls: ["./profile.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileComponent implements OnInit {
 
-  teamProfile$ = this.store.select(selectLoggedInTeam).pipe(tap(p => {
-    p ? this.profile = {...p} : undefined;
-    p ? this.profileBase = {...p} : undefined;
-  }));
-  public profile?: Team;
-  public profileBase?: Team;
+  $profile: WritableSignal<Team> = signal({
+    id: -1,
+    name: "Ismeretlen",
+    email: "",
+    nextEmail: "",
+    role: "ROLE_USER",
+    members: [],
+    clients: []
+  });
 
-  saving = false;
-  @AutoDestroy destroy = new Subject();
+  $saving = signal(false);
 
-  constructor(private store: Store, private userService: UserService) {
+  passwordForm!: FormGroup;
 
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+    private readonly destroyRef: DestroyRef,
+    private readonly fb: FormBuilder,
+    ) {
+
+    effect(() => {
+      const team = this.authService.$currentTeamR();
+      if (team) {
+        const a = { ...team };
+        a.members = [...a.members];
+        this.$profile.set(a);
+      }
+    }, { allowSignalWrites: true });
+
+    this.passwordForm = this.fb.group({
+      oldPassword: ["", [Validators.required]],
+      password: ["", [Validators.required]],
+      confirmPassword: ["", [Validators.required, confirmPassword()]],
+    });
   }
 
   ngOnInit(): void {
@@ -37,38 +60,38 @@ export class ProfileComponent implements OnInit {
   }
 
   addMember() {
-    const name: string | null = prompt("Új csapattag neve?");
-    if (name) {
-      let a: string[] = [];
-      a = a.concat(this.profile?.members ?? []).flat(1);
-      a.push(name);
-      this.profile?.members ? this.profile.members = a : undefined;
-    }
+    this.$profile().members.push("Játékos neve");
+    /*  this.$profile.update(p => {
+      p.members.push("Játékos neve");
+      return p;
+     }); */
   }
 
   get isSame(): boolean {
-    return JSON.stringify(this.profile) === JSON.stringify(this.profileBase)
+    return JSON.stringify(this.$profile()) === JSON.stringify(this.authService.$currentTeamR());
+  }
+
+  get isEmailSame(): boolean {
+    return this.$profile().email === this.authService.$currentTeamR()?.email;
   }
 
 
   saveProfile() {
-    this.saving = true;
-    const update: UpdateTeam = {};
-    if (this.profile?.name !== this.profileBase?.name) {
-      update.name = this.profile?.name;
-    }
-    if (this.profile?.email !== this.profileBase?.email) {
-      update.email = this.profile?.email;
-    }
-    if (this.profile?.img !== this.profileBase?.img) {
-      update.img = this.profile?.img;
-    }
-    update.members = this.profile?.members;
-    // todo password
-    this.userService.saveProfile(update).pipe(takeUntil(this.destroy)).subscribe(team => {
+    this.$saving.set(true);
+
+    /* this.userService.saveProfile(update).pipe(takeUntil(this.destroy)).subscribe(team => {
       this.store.dispatch(login({team: team}));
       this.saving = false;
-    });
+    }); */
 
   }
+
+  saveEmail() {
+    this.$saving.set(true);
+  }
+
+  savePassword() {
+    this.$saving.set(true);
+  }
+
 }

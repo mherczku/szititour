@@ -1,33 +1,61 @@
 <section class="profile bg-smoke">
-  <div class="profile-inside" *ngIf="(teamProfile$ | async) && profile">
+
+  <div>
+    <!-- ! TODO ide profile inside - kivul legyen az if not undefined -->
+
+    <div class="profile-clients">
+
+    </div>
+  </div>
+
+  <div class="profile-inside" *ngIf="this.$profile() !== undefined">
     <div class="profile-data">
       <div class="infos">
 
-        <app-text-input type="editable" [label]="'Csapatnév:'" [(value)]="profile.name"></app-text-input>
-        <app-text-input type="editable" [label]="'Email:'" [(value)]="profile.email"></app-text-input>
+        <img [src]="$profile().img" alt="Avatar">
 
+
+        <app-text-input type="editable" [label]="'Csapatnév:'" [(value)]="$profile().name"></app-text-input>
         <div class="members">
           <div class="title">
             <p class="text-size-base">Csapattagok:</p>
-            <app-buttons *ngIf="profile.members.length < 4" (click)="addMember()" classes="hover:scale-110 active:opacity-70 transition"
-                         iconSrc="assets/svg/add.svg" type="icon"></app-buttons>
+            <app-buttons *ngIf="$profile().members.length < 4" (click)="addMember()"
+              classes="hover:scale-110 active:opacity-70 transition" iconSrc="assets/svg/add.svg"
+              type="icon"></app-buttons>
           </div>
-          <app-text-input *ngIf="profile.members[0]" type="editable" [label]="'Tag1:'"
-                          [(value)]="profile.members[0]"></app-text-input>
-          <app-text-input *ngIf="profile.members[1]" type="editable" [label]="'Tag2:'"
-                          [(value)]="profile.members[1]"></app-text-input>
-          <app-text-input *ngIf="profile.members[2]" type="editable" [label]="'Tag3:'"
-                          [(value)]="profile.members[2]"></app-text-input>
-          <app-text-input *ngIf="profile.members[3]" type="editable" [label]="'Tag4:'"
-                          [(value)]="profile.members[3]"></app-text-input>
+          <app-text-input *ngIf="$profile().members[0]" type="editable" [label]="'Tag 1:'"
+            [(value)]="$profile().members[0]"></app-text-input>
+          <app-text-input *ngIf="$profile().members[1]" type="editable" [label]="'Tag 2:'"
+            [(value)]="$profile().members[1]"></app-text-input>
+          <app-text-input *ngIf="$profile().members[2]" type="editable" [label]="'Tag 3:'"
+            [(value)]="$profile().members[2]"></app-text-input>
+          <app-text-input *ngIf="$profile().members[3]" type="editable" [label]="'Tag 4:'"
+            [(value)]="$profile().members[3]"></app-text-input>
+
 
         </div>
+        <button [disabled]="isSame || $saving()" (click)="saveProfile()"
+          class="btn-simple w-fit self-center">Mentés</button>
       </div>
-<!--
-      <img [src]="'https://d33wubrfki0l68.cloudfront.net/13bf89d50e5f30da5f4cbb39403e7bac64fec93b/ed6a4/blog/customising-your-rprofile/original.jpg'" alt="">
--->
+
     </div>
-    <button [disabled]="isSame || saving" (click)="saveProfile()" class="btn-simple w-fit self-center">Mentés</button>
+    <div class="profile-email">
+      <div>
+        <p class="txt-warning-red" *ngIf="$profile().nextEmail !== ''">*Változtatás alatt {{$profile().nextEmail}}</p>
+        <app-text-input type="editable" [label]="'Email:'" [(value)]="$profile().email"></app-text-input>
+      </div>
+      <button [disabled]="$saving() || isEmailSame" (click)="saveEmail()"
+        class="btn-simple-red w-fit self-center">Módosítás</button>
+    </div>
+
+    <form [formGroup]="passwordForm" class="profile-password">
+      <h3 class="text-center text-size-base bold">Jelszó módosítása:</h3>
+      <input autocomplete="false" formControlName="oldPassword" class="simpleInput" type="password" placeholder="Régi jelszó">
+      <input autocomplete="false" formControlName="password" class="simpleInput" type="password" placeholder="Új jelszó">
+      <input autocomplete="false" formControlName="confirmPassword" class="simpleInput" type="password" placeholder="Új jelszó mégegyszer">
+      <button [disabled]="$saving() || !passwordForm.valid" (click)="savePassword()"
+        class="btn-simple-red w-fit self-center">Módosítás</button>
+    </form>
   </div>
 
 </section>

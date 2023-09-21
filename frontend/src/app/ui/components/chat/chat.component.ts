@@ -51,8 +51,8 @@ const defaultAdminUsers = [{
 })
 export class ChatComponent implements OnInit, OnDestroy {
 
-  readonly isAdmin = this.authService.isAdminSignal;
-  readonly isLoggedIn = computed(() => this.authService.currentUserSignalR() !== undefined);
+  readonly isAdmin = this.authService.$isAdmin;
+  readonly isLoggedIn = computed(() => this.authService.$currentTeamR() !== undefined);
   isAlreadyOpen = signal(false);
 
   isHidden = true;
@@ -132,6 +132,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         },
         complete: () => {
           this.isConnected.set(false);
+          this.msgs = [];
         },
       });
   }

@@ -36,9 +36,9 @@ export class AuthService implements OnDestroy {
   private destroy$ = new Subject();
   private username = "GUEST";
 
-  private currentUserSignal: WritableSignal<Team | undefined> = signal(undefined);
-  public currentUserSignalR = computed(() => this.currentUserSignal());
-  public isAdminSignal = computed(() => this.currentUserSignal()?.role === "ROLE_ADMIN");
+  private $currentTeam: WritableSignal<Team | undefined> = signal(undefined);
+  public $currentTeamR = computed(() => this.$currentTeam());
+  public $isAdmin = computed(() => this.$currentTeam()?.role === "ROLE_ADMIN");
 
   constructor(
     private http: HttpClient,
@@ -47,8 +47,8 @@ export class AuthService implements OnDestroy {
     private alertService: HotToastService) {
 
     this.store.select(selectLoggedInTeam).pipe(takeUntil(this.destroy$)).subscribe(team => {
-      this.currentUserSignal.set(team ?? undefined);
-      console.log(`set current user Signal ${team?.email}, , , ${this.currentUserSignalR()?.email}`);
+      this.$currentTeam.set(team ?? undefined);
+      console.log(`set current user Signal ${team?.email}, , , ${this.$currentTeamR()?.email}`);
 
       this.currentRole = team?.role ?? "ROLE_GUEST";
       this.username = team?.name ?? "GUEST";

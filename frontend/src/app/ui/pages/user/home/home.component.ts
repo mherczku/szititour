@@ -16,7 +16,7 @@ import {selectLoggedInTeam} from "../../../../store/selectors/auth.selector";
 })
 
 export class HomeComponent implements OnInit {
-  /*@AutoDestroy destroy = new Subject();*/
+  
   games!: Observable<Game[]>;
   profile = this.store.select(selectLoggedInTeam);
 
@@ -26,12 +26,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.games = this.userService.getGames();
-    /*this.userService.getCucc().pipe(takeUntil(this.destroy)).subscribe(
-      res => {
-        console.log(res)
-      }
-    )*/
-
   }
 
 }

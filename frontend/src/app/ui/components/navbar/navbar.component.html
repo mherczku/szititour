@@ -16,7 +16,7 @@
     <div class="flex flex-row mobile:hidden tablet:block">
 
       <a class="btn-simple" *ngIf="!$isLoggedIn()" routerLink="/auth/login">Bejelentkezés</a>
-      <button class="btn-simple" (click)="logout()" *ngIf="$isLoggedIn()">Kijelentkezés</button>
+      <button bold="Kijelentkezés" class="btn-hover-bold" (click)="logout()" *ngIf="$isLoggedIn()">Kijelentkezés</button>
     </div>
 
     <div class="hidden z-navbar-hamburger-container mobile:block relative disableSelectAndTap">

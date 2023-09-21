@@ -36,6 +36,7 @@ export class AuthEffects {
             });
           }
         }
+        // TOdo ez kell ide? mikor dispatchel? kell e itt init?
         this.pushNoti.initializePushNoti();
       }),
     ), { dispatch: false }

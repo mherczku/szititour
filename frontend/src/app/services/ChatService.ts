@@ -23,8 +23,8 @@ export class ChatService {
 
   private ws!: WebSocket;
 
-  readonly isAdmin = this.authService.isAdminSignal;
-  user = this.authService.currentUserSignalR;
+  readonly isAdmin = this.authService.$isAdmin;
+  user = this.authService.$currentTeamR;
   initialized = false;
   signalToComponent: WritableSignal<Subject<Message> | undefined> = signal(undefined);
 
