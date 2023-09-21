@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, DestroyRef, OnInit, inject } from "@angular/core";
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, WritableSignal, inject, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HotToastService } from "@ngneat/hot-toast";
@@ -12,9 +12,11 @@ import { AuthService } from "src/app/services/AuthService";
   templateUrl: "./verify.component.html",
   styleUrls: ["./verify.component.scss"],
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VerifyComponent implements OnInit {
-  state: "loading" | "success" | "failure" = "loading";
+
+  $state: WritableSignal<"loading" | "success" | "failure"> = signal("loading");
   private token = "";
   destroyRef = inject(DestroyRef);
   title = "Fiók aktiválása";
@@ -43,7 +45,7 @@ export class VerifyComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            this.state = "success";
+            this.$state.set("success");
             this.alertService.success(
               "Sikeres verifikáció, mostmár bejelentkezhetsz!"
             );
@@ -51,7 +53,7 @@ export class VerifyComponent implements OnInit {
             this.router.navigateByUrl(CONST_ROUTES.auth.login.call);
           },
           error: () => {
-            this.state = "failure";
+            this.$state.set("failure");
             this.alertService.error("Sikertelen verifikáció!");
             this.title = "Fiók aktiválás sikertelen!";
           },

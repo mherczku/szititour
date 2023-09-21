@@ -1,8 +1,8 @@
 <div class="relative flex justify-center mt-10 p-5">
-  <div class="relative flex flex-col neumorphism mobile:p-5 p-10 mobile:w-full" [class.success]="state === 'success'">
+  <div class="relative flex flex-col neumorphism mobile:p-5 p-10 mobile:w-full" [class.success]="$state() === 'success'">
     <p class="text-size-h2 text-center font-bold">{{title}}</p>
 
-    <div *ngIf="state === 'loading'" class="spinner mt-10">
+    <div *ngIf="$state() === 'loading'" class="spinner mt-10">
       <div class="shape">
         <div></div>
       </div>
