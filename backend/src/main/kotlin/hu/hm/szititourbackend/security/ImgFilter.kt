@@ -63,7 +63,7 @@ class ImgPropertyFilter : OncePerRequestFilter() {
             node.fields().forEachRemaining { (fieldName, fieldValue): Map.Entry<String, JsonNode> ->
                 if ("img" == fieldName) {
                     val value = fieldValue.asText()
-                    if(!value.contains("https") && !value.contains("resToken")) {
+                    if(!value.contains("https") && !value.contains("resToken") && value.isNotBlank()) {
                         (node as ObjectNode).set<JsonNode>(fieldName, TextNode(securityService?.genImgUrl(imagePath = value, "-1")))
                         modified = true
                     }
