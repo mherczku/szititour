@@ -21,7 +21,7 @@ export class GoogleSignInService {
     // @ts-ignore
     google.accounts.id.renderButton(
       document.getElementById(btnName),
-      { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+      { theme: "outline", size: "large", width: "230px", text: "continue_with" }
     );
   }
 
