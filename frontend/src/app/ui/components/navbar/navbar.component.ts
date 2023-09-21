@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, signal } from "@angular/core";
 import { AuthService } from "../../../services/AuthService";
 import { FormsModule } from "@angular/forms";
 import { AsyncPipe, NgClass, NgIf } from "@angular/common";
@@ -25,12 +25,11 @@ import { LatestNotificationComponent } from "../notifications/latest-notificatio
 })
 export class NavbarComponent {
 
-  isNgRok: boolean = document.cookie.includes("ngrok");
+  $isNgRok = signal(document.cookie.includes("ngrok"));
   $isLoggedIn = computed(() => this.$team !== undefined);
   $isAdmin = this.authService.isAdminSignal;
   $team = this.authService.currentUserSignalR;
-  isMobileMenuOpen = false;
-
+  $isMobileMenuOpen = signal(false);
   $hasNewNoti = this.notiService.hasNew;
 
   constructor(
@@ -50,7 +49,7 @@ export class NavbarComponent {
     else {
       document.body.style.overflow = "auto";
     }
-    this.isMobileMenuOpen = event;
+    this.$isMobileMenuOpen.set(event);
   }
 
   logout() {
@@ -60,7 +59,7 @@ export class NavbarComponent {
   ngRok() {
     window.open("https://dolphin-casual-deer.ngrok-free.app/", "_blank");
     this.setCookie("ngrok", "ngrok", 7);
-    this.isNgRok = true;
+    this.$isNgRok.set(true);
   }
 
   setCookie(cname: string, cvalue: string, exdays: number) {

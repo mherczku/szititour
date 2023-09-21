@@ -9,7 +9,7 @@
 
 
   <div class="right">
-    <img (click)="ngRok()" *ngIf="!isNgRok" class="btn-icon mobile-none disableSelectAndTap" src="assets/svg/warning.svg" alt="Warning">
+    <img (click)="ngRok()" *ngIf="!$isNgRok()" class="btn-icon mobile-none disableSelectAndTap" src="assets/svg/warning.svg" alt="Warning">
     <img routerLink="/admin/notification" *ngIf="$isAdmin()" class="btn-icon mobile-none disableSelectAndTap" src="assets/svg/notification-plus.svg" alt="Notification-manager">
     <a routerLink="/user/profile" class="btn-profile disableSelectAndTap"></a>
     <button (click)="toggleNoti($event)" class="btn-notification hasNew disableSelectAndTap" [class.hasNew]="$hasNewNoti()"></button>
@@ -21,7 +21,7 @@
 
     <div class="hidden z-navbar-hamburger-container mobile:block relative disableSelectAndTap">
       <div class="nav-container">
-        <input [ngModel]="isMobileMenuOpen" (ngModelChange)="changeIsMobileMenuOpen($event)" class="checkbox"
+        <input [ngModel]="$isMobileMenuOpen()" (ngModelChange)="changeIsMobileMenuOpen($event)" class="checkbox"
                type="checkbox"/>
         <div class="hamburger-lines">
           <span class="line line1"></span>
@@ -42,9 +42,9 @@
 
 
 
-  <div class="mobileMenu" [class.z-navbar-mobile-menu-open]="isMobileMenuOpen">
-    <div class="darkPart" (click)="changeIsMobileMenuOpen(false)" [ngClass]="isMobileMenuOpen ? 'animateDarkPart' : ''"></div>
-    <div class="whitePart" [ngClass]="isMobileMenuOpen ? 'whitePartOpen' : ''">
+  <div class="mobileMenu" [class.z-navbar-mobile-menu-open]="$isMobileMenuOpen()">
+    <div class="darkPart" (click)="changeIsMobileMenuOpen(false)" [ngClass]="$isMobileMenuOpen() ? 'animateDarkPart' : ''"></div>
+    <div class="whitePart" [ngClass]="$isMobileMenuOpen() ? 'whitePartOpen' : ''">
 
       <a *ngIf="$isLoggedIn()" routerLink="/user/home" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Főoldal</a>
       <a *ngIf="$isAdmin()" routerLink="/admin" (click)="changeIsMobileMenuOpen(false)" class="font-semibold text-size-lg cursor-pointer">Admin Panel</a>
@@ -53,7 +53,7 @@
       <a *ngIf="$isLoggedIn()" routerLink="/user/profile" (click)="changeIsMobileMenuOpen(false)" class=" font-semibold text-size-lg cursor-pointer">Profil</a>
       <a *ngIf="$isLoggedIn()" (click)="changeIsMobileMenuOpen(false); logout()" class=" font-semibold text-size-lg cursor-pointer">Kijelentkezés</a>
       <a *ngIf="!$isLoggedIn()" routerLink="/auth/login" class=" font-semibold text-size-lg cursor-pointer">Bejelentkezés</a>
-      <img (click)="ngRok()" *ngIf="!isNgRok" class="btn-warning" src="assets/svg/warning.svg" alt="Warning">
+      <img (click)="ngRok()" *ngIf="!$isNgRok()" class="btn-warning" src="assets/svg/warning.svg" alt="Warning">
     </div>
 
   </div>

@@ -7,6 +7,7 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
       - Auth problémák javítása
       - TODO -val jelzett hibák javítása (+ design)
       - Backend tesztek írása
+      - Profile oldal
       - Deployed test környezet elkészítése
 
     - Októbertől: Diploma írás (max kisebb észrevételek javítása)
