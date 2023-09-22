@@ -9,9 +9,7 @@
   &:disabled {
     cursor: default;
     opacity: 0.6;
-    &:hover {
-      background: $m-blue;
-    }
+
   }
 }
 
@@ -28,6 +26,12 @@
 
   &:hover {
     background: $m-green;
+  }
+
+  &:disabled {
+    &:hover {
+      background: $m-blue;
+    }
   }
 }
 

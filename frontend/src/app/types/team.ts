@@ -15,11 +15,12 @@ export type Team = {
   clients: ClientData[]
 }
 
-export type UpdateTeam = {
-  name?: string,
-  email?: string,
-  password?: string,
-  passwordBefore?: string,
-  img?: string,
-  members?: string[]
+export type TeamUpdateProfile = {
+  name: string,
+  members: string[]
+}
+
+export type TeamUpdatePassword = {
+  oldPassword: string,
+  newPassword: string
 }

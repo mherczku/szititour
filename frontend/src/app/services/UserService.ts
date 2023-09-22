@@ -1,9 +1,10 @@
 import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {Observable, Subject} from "rxjs";
+import {Observable, Subject, tap} from "rxjs";
 import {Game} from "../types/game";
-import {Team, UpdateTeam} from "../types/team";
+import {Team, TeamUpdatePassword, TeamUpdateProfile} from "../types/team";
+import { AuthService } from "./AuthService";
 
 
 @Injectable({providedIn: "root"})
@@ -11,14 +12,9 @@ export class UserService {
 
   private baseUrl = environment.apiBaseUrl + "/user";
 
-  constructor(private http: HttpClient) {
-    /*setInterval(() => {
-      this.obs.next(this.i++);
-    }, 500);*/
-  }
-
-  obs = new Subject<number>();
-  i = 1;
+  constructor(
+    private readonly http: HttpClient,
+    private readonly authService: AuthService) {}
 
   public getGames(): Observable<Game[]> {
     return this.http.get<Game[]>(`${this.baseUrl}/games`);
@@ -32,12 +28,28 @@ export class UserService {
     return this.http.post<Game>(`${this.baseUrl}/cancel`, gameId);
   }
 
-  getCucc(): Observable<number> {
-    return this.obs.asObservable();
+  updateProfile(team: TeamUpdateProfile): Observable<Team> {
+    return this.http.post<Team>(`${this.baseUrl}/update`, team).pipe(tap(t => {
+      this.authService.dispatchLogin(t);
+    }));
   }
 
-  saveProfile(team: UpdateTeam): Observable<Team> {
-    return this.http.post<Team>(`${this.baseUrl}/update`, team);
+  updatePassword(team: TeamUpdatePassword): Observable<Team> {
+    return this.http.post<Team>(`${this.baseUrl}/update/password`, team).pipe(tap(t => {
+      this.authService.dispatchLogin(t);
+    }));
+  }
+
+  updateEmail(newEmail: string): Observable<Team> {
+    return this.http.post<Team>(`${this.baseUrl}/update/email`, newEmail).pipe(tap(t => {
+      this.authService.dispatchLogin(t);
+    }));
+  }
+
+  revokeToken(tokenId: string): Observable<Team> {
+    return this.http.post<Team>(`${this.baseUrl}/revoke`, tokenId).pipe(tap(t => {
+      this.authService.dispatchLogin(t);
+    }));
   }
 
 }

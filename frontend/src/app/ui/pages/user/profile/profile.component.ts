@@ -1,22 +1,23 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, WritableSignal, effect, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { Store } from "@ngrx/store";
 import { TextInputComponent } from "../../../components/admin/inputs/text-input/text-input.component";
 import { ButtonsComponent } from "../../../components/buttons/buttons.component";
-import { Team, UpdateTeam } from "../../../../types/team";
+import { Team, TeamUpdatePassword, TeamUpdateProfile } from "../../../../types/team";
 import { UserService } from "../../../../services/UserService";
 import { AuthService } from "src/app/services/AuthService";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { confirmPassword } from "src/app/validators/same-pass.validator";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ClientCardComponent } from "../../../components/user/client-card/client-card.component";
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent],
-  templateUrl: "./profile.component.html",
-  styleUrls: ["./profile.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    standalone: true,
+    templateUrl: "./profile.component.html",
+    styleUrls: ["./profile.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent]
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
 
   $profile: WritableSignal<Team> = signal({
     id: -1,
@@ -55,9 +56,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-
-  }
 
   addMember() {
     this.$profile().members.push("Játékos neve");
@@ -78,20 +76,26 @@ export class ProfileComponent implements OnInit {
 
   saveProfile() {
     this.$saving.set(true);
-
-    /* this.userService.saveProfile(update).pipe(takeUntil(this.destroy)).subscribe(team => {
-      this.store.dispatch(login({team: team}));
-      this.saving = false;
-    }); */
-
+    const updateData: TeamUpdateProfile = {
+      name: this.$profile().name,
+      members: this.$profile().members
+    };
+    this.userService.updateProfile(updateData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({complete: () => this.$saving.set(false)});
   }
 
   saveEmail() {
     this.$saving.set(true);
+    this.userService.updateEmail(this.$profile().email).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({complete: () => this.$saving.set(false)});
   }
 
   savePassword() {
     this.$saving.set(true);
+    const updateData: TeamUpdatePassword = {
+      oldPassword: this.passwordForm.value.oldPassword,
+      newPassword: this.passwordForm.value.password
+    };
+    this.userService.updatePassword(updateData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({complete: () => this.$saving.set(false)});
   }
 
+  //TODOS bfejezni
 }

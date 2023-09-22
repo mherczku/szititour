@@ -1,0 +1,14 @@
+<div class="client-card">
+
+    <div class="platform">
+        <p class="text-size-base">Rendszer: {{client.platform}} {{client.isMobile}}</p>
+        <img title="Mobil kliens" class="img" *ngIf="client.isMobile || client.platform === 'Android'" src="assets/svg/mobile.svg" alt="MobileLogin">
+    </div>
+    <p class="browser text-size-base">Böngésző: {{client.brand}}</p>
+    <p class="ip text-size-base">IP cím: {{client.ipAddress}}</p>
+
+    <img title="Google azonosítás" class="img img-google" *ngIf="client.isGoogle" src="assets/svg/google.svg" alt="GoogleLogin">
+
+    <button [disabled]="$loading()" (click)="revokeAccess()" title="Törlés" class="btn-remove btn"><img class="img" src="assets/svg/remove.svg" alt="Remove"></button>
+
+</div>
