@@ -21,8 +21,9 @@ export class AuthInterceptor implements HttpInterceptor {
         if (evt instanceof HttpResponse) {
           if (evt.headers.has("Authorization")) {
             const token = evt.headers.get("Authorization")?.substring(7);
+            console.log("header:", evt.headers, evt.headers.get("Tokenid"));
             if (token) {
-              this.authService.setToken(token);
+              this.authService.setToken(token, evt.headers.get("Tokenid") ?? "");
             }
           }
         }

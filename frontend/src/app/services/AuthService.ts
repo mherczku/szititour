@@ -133,16 +133,22 @@ export class AuthService implements OnDestroy {
     this.router.navigateByUrl(CONST_ROUTES.auth.call);
   }
 
-  setToken(token: string) {
+  setToken(token: string, tokenId: string) {
     localStorage.setItem("auth-token", token);
+    localStorage.setItem("auth-token-id", tokenId);
   }
 
   getToken(): string | null {
     return localStorage.getItem("auth-token");
   }
 
+  getTokenId(): string | null {
+    return localStorage.getItem("auth-token-id");
+  }
+
   removeToken() {
     localStorage.removeItem("auth-token");
+    localStorage.removeItem("auth-token-id");
   }
 
   dispatchLogin(team: Team) {

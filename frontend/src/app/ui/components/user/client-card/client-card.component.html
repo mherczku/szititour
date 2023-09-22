@@ -1,5 +1,7 @@
 <div class="client-card">
 
+    <span title="Aktív eszköz" *ngIf="isActive" class="active"></span>
+
     <div class="platform">
         <p class="text-size-base">Rendszer: {{client.platform}} {{client.isMobile}}</p>
         <img title="Mobil kliens" class="img" *ngIf="client.isMobile || client.platform === 'Android'" src="assets/svg/mobile.svg" alt="MobileLogin">

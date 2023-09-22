@@ -29,6 +29,18 @@ p {
     flex-direction: row;
 }
 
+.active {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    background: rgb(78, 255, 47);
+    width: 10px;
+    display: block;
+
+}
+
 .client-card {
     overflow: hidden;
     position: relative;

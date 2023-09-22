@@ -6,7 +6,7 @@
 
 .profile-clients {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 350px));
   gap: 18px;
   justify-content: center;
 }
@@ -44,7 +44,6 @@
 
     flex-direction: column;
     gap: 1rem;
-    //justify-content: center;
     align-items: center;
   }
 
