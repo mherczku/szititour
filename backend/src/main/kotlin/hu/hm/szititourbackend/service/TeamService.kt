@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
+import java.time.Instant
 import java.util.*
 
 
@@ -50,7 +51,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
     fun updateTeamPassword(teamId: Int, passwordUpdateDto: TeamPasswordUpdateDto): Team {
         val team = getTeamById(teamId)
         if (passwordUpdateDto.oldPassword.isNotBlank() && passwordUpdateDto.newPassword.isNotBlank()) {
-            if (PasswordUtils.encryptPassword(passwordUpdateDto.oldPassword) == team.password) {
+            if (PasswordUtils.comparePassword(passwordUpdateDto.oldPassword, team.password)) {
                 if (Utils.validatePassword(passwordUpdateDto.newPassword)) {
                     if (team.nextEmail.isNotBlank()) {
                         throw CustomException("Cannot modify password while email is not verified", HttpStatus.FORBIDDEN)
@@ -247,12 +248,14 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         return updateTeam(team, true)
     }
 
-    fun addClient(team: Team, clientData: ClientData, isGoogle: Boolean): String {
+    fun addClient(team: Team, clientData: ClientData, isGoogle: Boolean): ClientData {
         clientData.isGoogle = isGoogle
         val tokenId = UUID.randomUUID().toString()
         clientData.tokenId = tokenId
+        val now = Instant.now()
+        clientData.expireAt = Instant.now().plusSeconds(SecurityService.JWT_TOKEN_VALIDITY_1HOUR.toLong())
         team.clients.add(clientData)
         updateTeam(team, true)
-        return tokenId
+        return clientData
     }
 }

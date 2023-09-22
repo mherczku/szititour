@@ -46,12 +46,12 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
 
     
     // AUTH TOKEN
-    fun generateToken(team: Team, tokenId: String): String {
+    fun generateToken(team: Team, tokenId: String, expiresAt: Instant): String {
         val now = Instant.now()
         val claims = JwtClaimsSet.builder()
                 .issuer(ISSUER)
                 .issuedAt(now)
-                .expiresAt(now.plusSeconds(JWT_TOKEN_VALIDITY_1HOUR.toLong()))
+                .expiresAt(expiresAt)
                 .subject(team.id.toString())
                 .claim(CLAIM_TYPE, CLAIM_TYPE_AUTH_TOKEN)
                 .claim(CLAIM_USERNAME, team.email)

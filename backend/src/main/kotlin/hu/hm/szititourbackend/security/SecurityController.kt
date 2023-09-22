@@ -76,8 +76,8 @@ class SecurityController(private val teamService: TeamService, private val secur
         val team = teamService.continueWithGoogle(googleAccount)
 
         clientData.ipAddress = request.remoteAddr
-        val tokenId = teamService.addClient(team, clientData, true)
-        val token = securityService.generateToken(team = team, tokenId)
+        val client = teamService.addClient(team, clientData, true)
+        val token = securityService.generateToken(team = team, client.tokenId, client.expireAt)
         response.addHeader(TOKEN_NAME, "Bearer $token")
         return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
     }
@@ -91,8 +91,8 @@ class SecurityController(private val teamService: TeamService, private val secur
             throw CustomException("User is not activated", HttpStatus.FORBIDDEN)
         }
         clientData.ipAddress = request.remoteAddr
-        val tokenId = teamService.addClient(team, clientData, false)
-        val token = securityService.generateToken(team = team, tokenId)
+        val client = teamService.addClient(team, clientData, false)
+        val token = securityService.generateToken(team = team, client.tokenId, client.expireAt)
         response.addHeader(TOKEN_NAME, "Bearer $token")
         return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
     }

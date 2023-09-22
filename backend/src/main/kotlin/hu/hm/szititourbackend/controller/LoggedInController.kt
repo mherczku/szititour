@@ -63,8 +63,6 @@ class LoggedInController @Autowired constructor(
         return ResponseEntity(updatedTeam.convertToDto(), HttpStatus.OK)
     }
 
-
-
     @GetMapping("games")
     fun getAllAvailableGames(auth: Authentication): ResponseEntity<List<GameOnlyBasicDto>> {
         logger.debug("Get available games")
@@ -118,8 +116,8 @@ class LoggedInController @Autowired constructor(
     }
 
     @PostMapping("revoke")
-    fun revokeToken(@RequestBody tokenId: String, auth: Authentication): ResponseEntity<Team> {
-        return ResponseEntity<Team>(teamService.revokeClient(tokenId, auth.name.toInt()), HttpStatus.OK)
+    fun revokeToken(@RequestBody tokenId: String, auth: Authentication): ResponseEntity<TeamDto> {
+        return ResponseEntity<TeamDto>(teamService.revokeClient(tokenId, auth.name.toInt()).convertToDto(), HttpStatus.OK)
     }
 
     //! AVAILABLE ONLY FOR USERS WITH VALID APPLICATION FOR "THE" GAME WHICH IS ACTIVE:

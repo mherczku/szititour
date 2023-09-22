@@ -56,7 +56,8 @@ class ClientData (
         val isMobile: Boolean = false,
         val brand: String = "",
         var isGoogle: Boolean = false,
-        var ipAddress: String = ""
+        var ipAddress: String = "",
+        var expireAt: Instant = Instant.now()
 )
 
 fun Team.convertToDto(): TeamDto {
@@ -71,7 +72,7 @@ fun Team.convertToDto(): TeamDto {
             updatedAt = this.updatedAt,
             applications = this.applications.convertToDto(),
             members = this.members,
-            clients = this.clients
+            clients = this.clients.filter { it.expireAt?.isAfter(Instant.now()) == true }.toMutableList()
     )
 }
 
