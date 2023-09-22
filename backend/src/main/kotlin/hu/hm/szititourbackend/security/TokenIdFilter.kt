@@ -1,7 +1,7 @@
 package hu.hm.szititourbackend.security
 
 import hu.hm.szititourbackend.exception.CustomException
-import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
+import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
 import hu.hm.szititourbackend.service.TeamService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -25,7 +25,7 @@ class TokenIdFilter : OncePerRequestFilter() {
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
 
-        val token = request.getHeader(TOKEN_NAME)
+        val token = request.getHeader(HEADER_TOKEN)
         myLogger.debug("Inside TokenIdFilter")
 
         if(token != null && token.contains("Bearer ")) {

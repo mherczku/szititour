@@ -8,7 +8,8 @@ import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityService.Companion.CLAIM_ROLE
 import hu.hm.szititourbackend.security.SecurityService.Companion.CLAIM_TYPE
 import hu.hm.szititourbackend.security.SecurityService.Companion.CLAIM_TYPE_AUTH_TOKEN
-import hu.hm.szititourbackend.security.SecurityService.Companion.GOOGLE_TOKEN_HEADER
+import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_GOOGLE_TOKEN
+import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN_ID
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter
@@ -121,11 +122,11 @@ class SecurityConfig2(
         corsConfiguration.allowedHeaders = listOf(
                 "Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Authorization", "Origin, Accept", "X-Requested-With",
-                "Access-Control-Request-Method", "Access-Control-Request-Headers", "longitude", "latitude", "gameid", GOOGLE_TOKEN_HEADER, "ngrok-skip-browser-warning"
+                "Access-Control-Request-Method", "Access-Control-Request-Headers", "longitude", "latitude", "gameid", HEADER_GOOGLE_TOKEN, "ngrok-skip-browser-warning"
         )
         corsConfiguration.exposedHeaders = listOf(
                 "Origin", "Content-Type", "Accept", "Authorization",
-                "Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"
+                "Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", HEADER_TOKEN_ID
         )
         corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
 

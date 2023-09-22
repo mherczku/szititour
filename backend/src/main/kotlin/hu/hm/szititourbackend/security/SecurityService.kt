@@ -36,9 +36,10 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         const val JWT_TOKEN_VALIDITY_1MIN = 1 * 1 * 60          // 1 min
         const val JWT_TOKEN_VALIDITY_1HOUR = 1 * 60 * 60    // 1 hour
         const val JWT_TOKEN_VALIDITY_1DAY = 24 * 60 * 60     // 1 hour
-        const val TOKEN_NAME = "Authorization"
-        const val TOKEN_RESOURCE_NAME = "resToken"
-        const val GOOGLE_TOKEN_HEADER = "googleToken"
+        const val HEADER_TOKEN = "Authorization"
+        const val HEADER_RESOURCE_TOKEN = "resToken"
+        const val HEADER_GOOGLE_TOKEN = "googleToken"
+        const val HEADER_TOKEN_ID = "Tokenid"
     }
 
     @Value("\${google.clientId}")

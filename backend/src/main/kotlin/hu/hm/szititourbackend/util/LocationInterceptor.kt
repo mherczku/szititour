@@ -2,7 +2,7 @@ package hu.hm.szititourbackend.util
 
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityService
-import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_NAME
+import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.LocationUtils.GAMEID
 import hu.hm.szititourbackend.util.LocationUtils.LATITUDE
@@ -41,7 +41,7 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
     ) {
         super.postHandle(request, response, handler, modelAndView)
 
-        val token = request.getHeader(TOKEN_NAME)
+        val token = request.getHeader(HEADER_TOKEN)
         val lat = request.getHeader(LATITUDE)
         val lon = request.getHeader(LONGITUDE)
         val gameId = request.getHeader(GAMEID)

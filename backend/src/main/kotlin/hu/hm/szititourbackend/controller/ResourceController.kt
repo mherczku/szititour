@@ -2,7 +2,7 @@ package hu.hm.szititourbackend.controller
 
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityService
-import hu.hm.szititourbackend.security.SecurityService.Companion.TOKEN_RESOURCE_NAME
+import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_RESOURCE_TOKEN
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.UrlResource
@@ -29,7 +29,7 @@ class ResourceController @Autowired constructor(
 
     @GetMapping("/images")
     fun getResourceV2(
-            @RequestParam(TOKEN_RESOURCE_NAME) token: String,
+            @RequestParam(HEADER_RESOURCE_TOKEN) token: String,
             @RequestParam("img") imagePath: String
     ): ResponseEntity<UrlResource> {
 
