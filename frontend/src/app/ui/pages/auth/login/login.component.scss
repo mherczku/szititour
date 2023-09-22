@@ -3,5 +3,8 @@
 #google-button {
     display: flex;
     justify-content: center;
+    width: 250px;
+    height: 50px;
+    overflow: hidden;
     margin: 1rem auto;
 }

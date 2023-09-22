@@ -50,9 +50,9 @@
 
     <form [formGroup]="passwordForm" class="profile-password">
       <h3 class="text-center text-size-base bold">Jelszó módosítása:</h3>
-      <input autocomplete="false" formControlName="oldPassword" class="simpleInput" type="password" placeholder="Régi jelszó">
-      <input autocomplete="false" formControlName="password" class="simpleInput" type="password" placeholder="Új jelszó">
-      <input autocomplete="false" formControlName="confirmPassword" class="simpleInput" type="password" placeholder="Új jelszó mégegyszer">
+      <input autocomplete="off" formControlName="oldPassword" class="simpleInput" type="password" placeholder="Régi jelszó">
+      <input autocomplete="off" formControlName="password" class="simpleInput" type="password" placeholder="Új jelszó">
+      <input autocomplete="off" formControlName="confirmPassword" class="simpleInput" type="password" placeholder="Új jelszó mégegyszer">
       <button [disabled]="$saving() || !passwordForm.valid" (click)="savePassword()"
         class="btn-simple-red w-fit self-center">Módosítás</button>
     </form>

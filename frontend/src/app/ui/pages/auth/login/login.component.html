@@ -6,36 +6,16 @@
 
     <form name="login">
       <label class="text-size-base block mb-2">E-mail</label>
-      <input
-        tabindex="1"
-        autofocus
-        [(ngModel)]="email"
-        name="szititourLoginEmail"
-        type="email"
-        class="simpleInput mb-5"
-        placeholder="E-mail cím"
-      />
+      <input tabindex="1" autofocus [(ngModel)]="email" name="szititourLoginEmail" type="email" class="simpleInput mb-5"
+        placeholder="E-mail cím" />
       <label class="text-size-base block mb-2">Jelszó</label>
-      <input
-        tabindex="2"
-        [(ngModel)]="password"
-        name="szititourLoginPassword"
-        type="password"
-        class="simpleInput mb-5"
-        placeholder="Jelszó"
-        autocomplete="szititourLoginPassword"
-      />
+      <input tabindex="2" [(ngModel)]="password" name="szititourLoginPassword" type="password" class="simpleInput mb-5"
+        placeholder="Jelszó" autocomplete="szititourLoginPassword" />
 
       <div class="flex justify-between items-center">
-        <a
-          #button1
-          class="btn-hover-bold-textChange"
-          title="Még nincs fiókod?"
-          (mouseenter)="button1.innerText = 'Regisztrálj!'"
-          (mouseleave)="button1.innerText = 'Még nincs fiókod?'"
-          routerLink="/auth/register"
-          >Még nincs fiókod?</a
-        >
+        <a #button1 class="btn-hover-bold-textChange" title="Még nincs fiókod?"
+          (mouseenter)="button1.innerText = 'Regisztrálj!'" (mouseleave)="button1.innerText = 'Még nincs fiókod?'"
+          routerLink="/auth/register">Még nincs fiókod?</a>
         <button (click)="login()" tabindex="3" class="btn-simple">
           Bejelentkezés
         </button>

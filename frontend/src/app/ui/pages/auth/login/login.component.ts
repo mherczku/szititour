@@ -14,7 +14,6 @@ import { HotToastService } from "@ngneat/hot-toast";
 import { Subscription } from "rxjs";
 import { FormsModule } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { environment } from "src/environments/environment";
 import { GoogleSignInService } from "src/app/services/GoogleSignIn.service";
 
 @Component({
