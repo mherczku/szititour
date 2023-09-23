@@ -15,11 +15,11 @@ import { Observable, Subscription, forkJoin, tap } from "rxjs";
 import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
 
 @Component({
-    standalone: true,
-    templateUrl: "./profile.component.html",
-    styleUrls: ["./profile.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent, ImgSrcModule]
+  standalone: true,
+  templateUrl: "./profile.component.html",
+  styleUrls: ["./profile.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent, ImgSrcModule]
 })
 export class ProfileComponent {
 
@@ -34,6 +34,7 @@ export class ProfileComponent {
   });
 
   $saving = signal(false);
+  $deleting = signal(false);
 
   $pushState = this.pushService.$state;
 
@@ -87,20 +88,20 @@ export class ProfileComponent {
   saveProfile() {
     this.$saving.set(true);
     const obs: Observable<unknown>[] = [];
-    if(!this.isSame) {
+    if (!this.isSame) {
       const updateData: TeamUpdateProfile = {
         name: this.$profile().name,
         members: this.$profile().members
       };
-     obs.push(this.userService.updateProfile(updateData).pipe(takeUntilDestroyed(this.destroyRef)));
+      obs.push(this.userService.updateProfile(updateData).pipe(takeUntilDestroyed(this.destroyRef)));
     }
-    if(this.$newImageSrc() && this.newImgFile) {
+    if (this.$newImageSrc() && this.newImgFile) {
       obs.push(this.userService.updateImage(this.newImgFile).pipe(tap(() => {
         this.newImgFile = undefined;
         this.$newImageSrc.set(undefined);
       }), takeUntilDestroyed(this.destroyRef)));
     }
-    forkJoin(obs).subscribe({complete: () => this.$saving.set(false), error: () => this.$saving.set(false)});
+    forkJoin(obs).subscribe({ complete: () => this.$saving.set(false), error: () => this.$saving.set(false) });
   }
 
   saveEmail() {
@@ -134,6 +135,13 @@ export class ProfileComponent {
       reader.onload = () => this.$newImageSrc.set(reader.result);
       reader.readAsDataURL(file);
     }
+  }
 
+  deleteAccount(pass: string | undefined = undefined) {
+    if (this.$deleting() && pass && pass.length > 0) {
+      this.userService.deleteAccount(pass).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+    } else {
+      this.$deleting.set(true);
+    }
   }
 }

@@ -37,7 +37,7 @@
     </div>
     <div class="profile-email">
       <div>
-        <p class="txt-warning-red" *ngIf="$profile().nextEmail !== ''">*Változtatás alatt {{$profile().nextEmail}}</p>
+        <p class="txt-warning-red" *ngIf="$profile().nextEmail !== ''">*Változtatás alatt: {{$profile().nextEmail}}</p>
         <app-text-input type="editable" [label]="'Email:'" [(value)]="$profile().email"></app-text-input>
       </div>
       <button [disabled]="$saving() || isEmailSame" (click)="saveEmail()"
@@ -68,9 +68,18 @@
       </div>
     </div>
 
-    <h3 class="text-size-lg text-center bold">Bejelentkezett eszközök:</h3>
-    <div class="profile-clients">
-      <app-client-card [client]="client" *ngFor="let client of this.$profile().clients"></app-client-card>
+    <div class="profile-loggedin">
+      <h3 class="text-size-lg text-center bold">Bejelentkezett eszközök:</h3>
+      <div class="profile-clients">
+        <app-client-card [client]="client" *ngFor="let client of this.$profile().clients"></app-client-card>
+      </div>
+    </div>
+
+    <div class="delete-card">
+      <h3 class="text-size-lg bold">Felhasználó törlése</h3>
+      <input [class.nodeleting]="!this.$deleting()" #pass autocomplete="off" class="simpleInput" type="password"
+        placeholder="Jelszó">
+      <button (click)="deleteAccount(pass.value)" class="btn-simple-red">Felhasználó törlése</button>
     </div>
   </div>
 

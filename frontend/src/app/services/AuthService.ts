@@ -129,7 +129,7 @@ export class AuthService implements OnDestroy {
       this.http.post<NetworkResponse>(`${this.baseUrl}/logout`, null).pipe(take(1)).subscribe();
     }
     this.removeToken();
-    this.store.dispatch(logout());
+    this.dispatchLogout();
     this.router.navigateByUrl(CONST_ROUTES.auth.call);
   }
 
@@ -153,6 +153,10 @@ export class AuthService implements OnDestroy {
 
   dispatchLogin(team: Team) {
     this.store.dispatch(login({ team: team }));
+  }
+
+  dispatchLogout() {
+    this.store.dispatch(logout());
   }
 
   ngOnDestroy(): void {

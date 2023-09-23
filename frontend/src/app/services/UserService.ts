@@ -5,6 +5,7 @@ import { Observable, Subject, tap } from "rxjs";
 import { Game } from "../types/game";
 import { Team, TeamUpdatePassword, TeamUpdateProfile } from "../types/team";
 import { AuthService } from "./AuthService";
+import { NetworkResponse } from "../types/network-response";
 
 
 @Injectable({ providedIn: "root" })
@@ -57,6 +58,12 @@ export class UserService {
     formData.append("image", image);
     return this.http.post<Team>(`${this.baseUrl}/update/image`, formData).pipe(tap(t => {
       this.authService.dispatchLogin(t);
+    }));
+  }
+
+  deleteAccount(password: string): Observable<NetworkResponse> {
+    return this.http.delete<NetworkResponse>(this.baseUrl, {body: {password: password}}).pipe(tap(() => {
+      this.authService.dispatchLogout();
     }));
   }
 
