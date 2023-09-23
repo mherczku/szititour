@@ -74,14 +74,17 @@ class SecurityController(private val teamService: TeamService, private val secur
     ): ResponseEntity<LoginResponse> {
         logger.debug("Authorize by google")
         val googleAccount = securityService.verifyGoogleToken(googleToken)
-        val team = teamService.continueWithGoogle(googleAccount)
+        val googleResponse = teamService.continueWithGoogle(googleAccount)
 
         clientData.ipAddress = request.remoteAddr
-        val client = teamService.addClient(team, clientData, true)
-        val token = securityService.generateToken(team = team, client.tokenId, client.expireAt)
+        val client = teamService.addClient(googleResponse.team, clientData, true)
+        val token = securityService.generateToken(team = googleResponse.team, client.tokenId, client.expireAt)
         response.addHeader(HEADER_TOKEN, "Bearer $token")
         response.addHeader(HEADER_TOKEN_ID, client.tokenId)
-        return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
+        if(googleResponse.isCreation) {
+            return ResponseEntity(LoginResponse(true, "", "Register Successful", googleResponse.team.convertToDto()), HttpStatus.OK)
+        }
+        return ResponseEntity(LoginResponse(true, "", "Login Successful", googleResponse.team.convertToDto()), HttpStatus.OK)
     }
 
     @PostMapping("login")

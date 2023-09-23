@@ -3,6 +3,7 @@ package hu.hm.szititourbackend.controller
 import hu.hm.szititourbackend.datamodel.*
 import hu.hm.szititourbackend.dto.*
 import hu.hm.szititourbackend.exception.CustomException
+import hu.hm.szititourbackend.extramodel.Response
 import hu.hm.szititourbackend.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -126,6 +127,17 @@ class LoggedInController @Autowired constructor(
     @PostMapping("revoke")
     fun revokeToken(@RequestBody tokenId: String, auth: Authentication): ResponseEntity<TeamDto> {
         return ResponseEntity<TeamDto>(teamService.revokeClient(tokenId, auth.name.toInt()).convertToDto(), HttpStatus.OK)
+    }
+
+    @DeleteMapping
+    fun deleteTeam(@RequestBody password: String, auth: Authentication): ResponseEntity<Response> {
+        logger.info("Delete team - ${auth.name}")
+        return try {
+            teamService.deleteTeamByUser(auth.name.toInt(), password)
+            ResponseEntity(Response(success = true, successMessage = "Successfully deleted team"), HttpStatus.OK)
+        } catch (e: Exception) {
+            throw CustomException("Team not found", HttpStatus.NOT_FOUND)
+        }
     }
 
     //! AVAILABLE ONLY FOR USERS WITH VALID APPLICATION FOR "THE" GAME WHICH IS ACTIVE:

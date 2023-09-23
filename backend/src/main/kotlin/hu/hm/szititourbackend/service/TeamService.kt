@@ -6,6 +6,7 @@ import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.dto.TeamPasswordUpdateDto
 import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
 import hu.hm.szititourbackend.exception.CustomException
+import hu.hm.szititourbackend.extramodel.ContinueGoogleResponse
 import hu.hm.szititourbackend.extramodel.GoogleAccount
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.repository.TeamRepository
@@ -194,7 +195,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         }
     }
 
-    fun continueWithGoogle(googleAccount: GoogleAccount): Team {
+    fun continueWithGoogle(googleAccount: GoogleAccount): ContinueGoogleResponse {
         if (!googleAccount.emailVerified) {
             throw CustomException("Google email not verified", HttpStatus.BAD_REQUEST)
         }
@@ -204,18 +205,18 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
             if (team.enabled) {
                 if (!team.isGoogle) {
                     team.isGoogle = true
-                    updateTeam(team)
+                    ContinueGoogleResponse(updateTeam(team, true), false)
                 } else {
-                    team
+                    ContinueGoogleResponse(team, false)
                 }
             } else {
                 // activate since he is logged in to gmail
                 team.enabled = true
                 team.isGoogle = true
-                updateTeam(team)
+                ContinueGoogleResponse(updateTeam(team, true), false)
             }
         } else {
-            addTeamByGoogle(googleAccount)
+            ContinueGoogleResponse(addTeamByGoogle(googleAccount), true)
         }
     }
 
@@ -265,5 +266,14 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         val imagePath = Utils.saveImage(img, Utils.imageDirectoryTeamsName, team.img)
         team.img = imagePath
         return updateTeam(team, true)
+    }
+
+    fun deleteTeamByUser(teamId: Int, password: String) {
+        val team = getTeamById(teamId)
+        if(PasswordUtils.comparePassword(password, team.password)) {
+            return deleteTeamById(teamId);
+        } else {
+            throw CustomException("Password invalid", HttpStatus.BAD_REQUEST)
+        }
     }
 }

@@ -11,7 +11,6 @@ import hu.hm.szititourbackend.extramodel.SubscriptionRequest
 import hu.hm.szititourbackend.extramodel.TopicNotification
 import hu.hm.szititourbackend.repository.NotiSubscriberRepository
 import org.springframework.http.HttpStatus
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 
@@ -32,6 +31,8 @@ class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscri
                                         WebpushNotification.builder()
                                                 .setTitle(notification.title)
                                                 .setBody(notification.message)
+                                                .setSilent(true)
+                                                .setBadge("https://mherczku.github.io/szititour/assets/svg/szititour.svg")
                                                 .setIcon("https://mherczku.github.io/szititour/assets/svg/szititour.svg")
                                                 .build()
                                 ).build()
@@ -53,6 +54,8 @@ class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscri
                                         WebpushNotification.builder()
                                                 .setTitle(notification.title)
                                                 .setBody(notification.message)
+                                                .setSilent(true)
+                                                .setBadge("https://mherczku.github.io/szititour/assets/svg/szititour.svg")
                                                 .setIcon("https://mherczku.github.io/szititour/assets/svg/szititour.svg")
                                                 .build()
                                 ).build()
