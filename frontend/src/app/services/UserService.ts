@@ -1,20 +1,20 @@
-import {Injectable} from "@angular/core";
-import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {Observable, Subject, tap} from "rxjs";
-import {Game} from "../types/game";
-import {Team, TeamUpdatePassword, TeamUpdateProfile} from "../types/team";
+import { Injectable } from "@angular/core";
+import { environment } from "../../environments/environment";
+import { HttpClient } from "@angular/common/http";
+import { Observable, Subject, tap } from "rxjs";
+import { Game } from "../types/game";
+import { Team, TeamUpdatePassword, TeamUpdateProfile } from "../types/team";
 import { AuthService } from "./AuthService";
 
 
-@Injectable({providedIn: "root"})
+@Injectable({ providedIn: "root" })
 export class UserService {
 
   private baseUrl = environment.apiBaseUrl + "/user";
 
   constructor(
     private readonly http: HttpClient,
-    private readonly authService: AuthService) {}
+    private readonly authService: AuthService) { }
 
   public getGames(): Observable<Game[]> {
     return this.http.get<Game[]>(`${this.baseUrl}/games`);
@@ -48,6 +48,14 @@ export class UserService {
 
   revokeToken(tokenId: string): Observable<Team> {
     return this.http.post<Team>(`${this.baseUrl}/revoke`, tokenId).pipe(tap(t => {
+      this.authService.dispatchLogin(t);
+    }));
+  }
+
+  updateImage(image: File): Observable<Team> {
+    const formData: FormData = new FormData();
+    formData.append("image", image);
+    return this.http.post<Team>(`${this.baseUrl}/update/image`, formData).pipe(tap(t => {
       this.authService.dispatchLogin(t);
     }));
   }

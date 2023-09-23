@@ -11,13 +11,15 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ClientCardComponent } from "../../../components/user/client-card/client-card.component";
 import { TogglerComponent } from "../../../components/toggler/toggler.component";
 import { PushNotificationService } from "src/app/services/PushNotification.service";
+import { Observable, Subscription, forkJoin, tap } from "rxjs";
+import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
 
 @Component({
-  standalone: true,
-  templateUrl: "./profile.component.html",
-  styleUrls: ["./profile.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent]
+    standalone: true,
+    templateUrl: "./profile.component.html",
+    styleUrls: ["./profile.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent, ImgSrcModule]
 })
 export class ProfileComponent {
 
@@ -34,6 +36,9 @@ export class ProfileComponent {
   $saving = signal(false);
 
   $pushState = this.pushService.$state;
+
+  $newImageSrc: WritableSignal<string | undefined | ArrayBuffer | null> = signal(undefined);
+  newImgFile?: File;
 
   passwordForm!: FormGroup;
 
@@ -81,11 +86,21 @@ export class ProfileComponent {
 
   saveProfile() {
     this.$saving.set(true);
-    const updateData: TeamUpdateProfile = {
-      name: this.$profile().name,
-      members: this.$profile().members
-    };
-    this.userService.updateProfile(updateData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ complete: () => this.$saving.set(false) });
+    const obs: Observable<unknown>[] = [];
+    if(!this.isSame) {
+      const updateData: TeamUpdateProfile = {
+        name: this.$profile().name,
+        members: this.$profile().members
+      };
+     obs.push(this.userService.updateProfile(updateData).pipe(takeUntilDestroyed(this.destroyRef)));
+    }
+    if(this.$newImageSrc() && this.newImgFile) {
+      obs.push(this.userService.updateImage(this.newImgFile).pipe(tap(() => {
+        this.newImgFile = undefined;
+        this.$newImageSrc.set(undefined);
+      }), takeUntilDestroyed(this.destroyRef)));
+    }
+    forkJoin(obs).subscribe({complete: () => this.$saving.set(false), error: () => this.$saving.set(false)});
   }
 
   saveEmail() {
@@ -103,12 +118,22 @@ export class ProfileComponent {
   }
 
   togglePushNoti() {
-    if(this.$pushState() === "true") {
+    if (this.$pushState() === "true") {
       this.pushService.unsubscribeFromTopic().subscribe();
-    } else if(this.$pushState() === "false" || this.$pushState() === "blocked") {
+    } else if (this.$pushState() === "false" || this.$pushState() === "blocked") {
       this.pushService.requestPushNoti();
     }
   }
 
-  //TODOS bfejezni kép csere
+  readFile(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      this.newImgFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => this.$newImageSrc.set(reader.result);
+      reader.readAsDataURL(file);
+    }
+
+  }
 }

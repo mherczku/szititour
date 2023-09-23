@@ -132,6 +132,36 @@
     width: 300px;
     gap: 20px;
 
+    .img-container {
+      position: relative;
+
+      input[type=file]::-webkit-file-upload-button {
+        cursor: pointer;
+      }
+
+      input[type=file] {
+        top: 0;
+        z-index: 2;
+        cursor: pointer;
+        opacity: 0;
+        width: 20px;
+        overflow: hidden;
+        right: 0;
+        position: absolute;
+      }
+
+      .img-edit {
+        top: 0;
+        right: 0;
+        z-index: 1;
+        border-radius: 0;
+        width: 20px;
+        object-fit: contain;
+        aspect-ratio: 1;
+        position: absolute;
+      }
+    }
+
     .members {
       display: flex;
       flex-direction: column;

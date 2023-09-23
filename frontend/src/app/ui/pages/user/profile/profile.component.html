@@ -4,7 +4,11 @@
     <div class="profile-data">
       <div class="infos">
 
-        <img [src]="$profile().img" alt="Avatar">
+        <div class="img-container">
+          <img class="img-edit" src="assets/svg/edit.svg" alt="Edit">
+          <input type="file" (change)="readFile($event)">
+          <img [src]="$newImageSrc() ?? ($profile().img | imgSrc)" alt="Avatar">
+        </div>
 
 
         <app-text-input type="editable" [label]="'Csapatnév:'" [(value)]="$profile().name"></app-text-input>
@@ -26,7 +30,7 @@
 
 
         </div>
-        <button [disabled]="isSame || $saving()" (click)="saveProfile()"
+        <button [disabled]="(isSame || $saving()) && !$newImageSrc()" (click)="saveProfile()"
           class="btn-simple w-fit self-center">Mentés</button>
       </div>
 
@@ -58,7 +62,8 @@
       <h3 class="text-size-lg text-center bold">Push értesítések</h3>
       <p class="text-size-base text-center bold">Engedély ezen az eszközön</p>
       <div class="push-t">
-        <img *ngIf="$pushState() === 'blocked'" title="Értesítések Kikapcsolva az eszközön" src="assets/svg/warning-yellow.svg" alt="Push blocked Warning">
+        <img *ngIf="$pushState() === 'blocked'" title="Értesítések Kikapcsolva az eszközön"
+          src="assets/svg/warning-yellow.svg" alt="Push blocked Warning">
         <app-toggler (click)="togglePushNoti()" [isOn]="$pushState() === 'true'"></app-toggler>
       </div>
     </div>
