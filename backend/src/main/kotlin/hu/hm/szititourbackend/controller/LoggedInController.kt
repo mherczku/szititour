@@ -31,6 +31,16 @@ class LoggedInController @Autowired constructor(
 
     val logger: Logger = LoggerFactory.getLogger(LoggedInController::class.java)
 
+    @PostMapping("update/image")
+    fun updateProfile(
+            @RequestParam("image") file: MultipartFile,
+            auth: Authentication
+    ): ResponseEntity<TeamDto> {
+        logger.debug("Update user image ${auth.name}")
+        val updatedTeam = teamService.updateTeamImage(auth.name.toInt(), file)
+        return ResponseEntity(updatedTeam.convertToDto(), HttpStatus.OK)
+    }
+
     @PostMapping("update")
     fun updateProfile(
         @RequestBody profileUpdate: TeamUpdateProfileDto,

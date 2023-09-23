@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.multipart.MultipartFile
 import java.sql.Timestamp
 import java.time.Instant
 import java.util.*
@@ -257,5 +258,12 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         team.clients.add(clientData)
         updateTeam(team, true)
         return clientData
+    }
+
+    fun updateTeamImage(teamId: Int, img: MultipartFile): Team {
+        val team = getTeamById(teamId)
+        val imagePath = Utils.saveImage(img, Utils.imageDirectoryTeamsName, team.img)
+        team.img = imagePath
+        return updateTeam(team)
     }
 }

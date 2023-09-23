@@ -89,17 +89,17 @@ object Utils {
             val newFileName = RandomString.make(8)
             val fileNameAndPath: Path = Paths.get(directoryToSavePath, "$newFileName.$extension")
             val newFile = fileNameAndPath.toFile()
-            val tempPath: Path = Paths.get("images/temp")
-            val tempFile = kotlin.io.path.createTempFile(directory = tempPath).toFile()
+            //val tempPath: Path = Paths.get("images/temp")
+            //val tempFile = kotlin.io.path.createTempFile(directory = tempPath).toFile()
 
             try {
-                Files.write(tempFile.toPath(), file.bytes)
+                //Files.write(tempFile.toPath(), file.bytes)
                 Files.write(newFile.toPath(), file.bytes)
                 //ImageCompressor.compressImage(tempFile, newFile)
-                tempFile.delete()
+                //tempFile.delete()
             } catch(ex: Exception) {
                 newFile.delete()
-                tempFile.delete()
+                //tempFile.delete()
                 throw CustomException("This png does not support compression, please try with another or use jpg", HttpStatus.BAD_REQUEST)
             }
 
