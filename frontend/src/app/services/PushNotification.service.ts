@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, Signal, WritableSignal, signal } from "@angular/core";
 import { FirebaseApp } from "@angular/fire/app";
 import { Messaging, getMessaging, getToken, onMessage } from "@angular/fire/messaging";
-import { Observable } from "rxjs";
+import { Observable, tap } from "rxjs";
 import { environment } from "src/environments/environment";
 import { NetworkResponse } from "../types/network-response";
 import { SzititourNotification } from "./Notification.service";
@@ -41,26 +41,47 @@ export class PushNotificationService {
     return this.notifications.asReadonly();
   }
 
-  public initializePushNoti() {
-    Notification.requestPermission().then((res) => {
+  $state: WritableSignal<"true" | "false" | "loading" | "blocked"> = signal("false");
 
+  public requestPushNoti() {
+    this.$state.set("loading");
+    Notification.requestPermission().then((res) => {
       if (res === "granted") {
         const m: any = getMessaging(this.fireApp);
-        if(environment.production) {
+        if (environment.production) {
           navigator.serviceWorker.register("/szititour/firebase-messaging-sw.js").then((registration) => {
             m.swRegistration = registration;
-            this.handleRegistration(m, registration);
+            this.handleRegistration(m, registration, true);
           });
         } else {
-          this.handleRegistration(m);
+          this.handleRegistration(m, undefined, true);
         }
+      } else {
+        this.$state.set("blocked");
       }
     });
   }
 
+  public initializePushNoti() {
+    this.$state.set("loading");
+    if (Notification.permission === "granted") {
+      const m: any = getMessaging(this.fireApp);
+      if (environment.production) {
+        navigator.serviceWorker.register("/szititour/firebase-messaging-sw.js").then((registration) => {
+          m.swRegistration = registration;
+          this.handleRegistration(m, registration);
+        });
+      } else {
+        this.handleRegistration(m);
+      }
+    } else {
+      this.$state.set("blocked");
+    }
+  }
+
   public trigger(noti?: SzititourNotification, inPush = false) {
 
-    if(inPush) {
+    if (inPush) {
       new Notification(noti?.title ?? "Test", {
         body: noti?.message ?? "Test message",
         icon: "../../assets/svg/szititour.svg"
@@ -68,7 +89,7 @@ export class PushNotificationService {
       return;
     }
 
-    if(noti) {
+    if (noti) {
       this.notifications.update(n => {
         n.push(noti);
         return n;
@@ -89,13 +110,25 @@ export class PushNotificationService {
     });
   }
 
-  private handleRegistration(messaging: Messaging, prodReg?: ServiceWorkerRegistration) {
+  private handleRegistration(messaging: Messaging, prodReg?: ServiceWorkerRegistration, isRequest = false) {
 
     getToken(messaging, { vapidKey: environment.vpKey, serviceWorkerRegistration: prodReg }).then((res) => {
       this.token = res;
-      this.getTopics({topic: "default"}).subscribe(r => {
-        if(!r.includes("default")) {
-          this.subscribeToTopic({topic: "default"}).subscribe();
+      this.getTopics({ topic: "default" }).subscribe(r => {
+        if (r.includes("default")) {
+          this.$state.set("true");
+        } else {
+
+          if (isRequest) {
+            this.subscribeToTopic().subscribe(r => {
+              if (r.includes("default")) {
+                this.$state.set("true");
+              }
+            });
+          } else {
+            this.$state.set("false");
+          }
+
         }
       });
     });
@@ -139,7 +172,7 @@ export class PushNotificationService {
     }
   }
 
-  public subscribeToTopic(request: SubscriptionRequest): Observable<string[]> {
+  public subscribeToTopic(request: SubscriptionRequest = { topic: "default" }): Observable<string[]> {
     if (this.token) {
       const req = {
         ...request,
@@ -151,13 +184,20 @@ export class PushNotificationService {
     }
   }
 
-  public unsubscribeFromTopic(request: SubscriptionRequest): Observable<string[]> {
+  public unsubscribeFromTopic(request: SubscriptionRequest = { topic: "default" }): Observable<string[]> {
     if (this.token) {
       const req = {
         ...request,
         subscriber: this.token
       };
-      return this.http.post<string[]>(`${this.baseUrl}/notification/unsubscribe`, req);
+      this.$state.set("loading");
+      return this.http.post<string[]>(`${this.baseUrl}/notification/unsubscribe`, req).pipe(tap(r => {
+        if (r.includes("default")) {
+          this.$state.set("true");
+        } else {
+          this.$state.set("false");
+        }
+      }));
     } else {
       throw new Error("Push Noti Unsubscribe error: No Token");
     }

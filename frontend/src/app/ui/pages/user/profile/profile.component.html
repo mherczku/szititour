@@ -52,7 +52,17 @@
     </form>
   </div>
 
-  <div>
+  <div class="right">
+
+    <div class="push">
+      <h3 class="text-size-lg text-center bold">Push értesítések</h3>
+      <p class="text-size-base text-center bold">Engedély ezen az eszközön</p>
+      <div class="push-t">
+        <img *ngIf="$pushState() === 'blocked'" title="Értesítések Kikapcsolva az eszközön" src="assets/svg/warning-yellow.svg" alt="Push blocked Warning">
+        <app-toggler (click)="togglePushNoti()" [isOn]="$pushState() === 'true'"></app-toggler>
+      </div>
+    </div>
+
     <h3 class="text-size-lg text-center bold">Bejelentkezett eszközök:</h3>
     <div class="profile-clients">
       <app-client-card [client]="client" *ngFor="let client of this.$profile().clients"></app-client-card>

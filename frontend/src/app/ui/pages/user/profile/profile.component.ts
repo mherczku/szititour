@@ -9,13 +9,15 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { confirmPassword } from "src/app/validators/same-pass.validator";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ClientCardComponent } from "../../../components/user/client-card/client-card.component";
+import { TogglerComponent } from "../../../components/toggler/toggler.component";
+import { PushNotificationService } from "src/app/services/PushNotification.service";
 
 @Component({
-    standalone: true,
-    templateUrl: "./profile.component.html",
-    styleUrls: ["./profile.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent]
+  standalone: true,
+  templateUrl: "./profile.component.html",
+  styleUrls: ["./profile.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent]
 })
 export class ProfileComponent {
 
@@ -31,14 +33,17 @@ export class ProfileComponent {
 
   $saving = signal(false);
 
+  $pushState = this.pushService.$state;
+
   passwordForm!: FormGroup;
 
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
+    private readonly pushService: PushNotificationService,
     private readonly destroyRef: DestroyRef,
     private readonly fb: FormBuilder,
-    ) {
+  ) {
 
     effect(() => {
       const team = this.authService.$currentTeamR();
@@ -80,12 +85,12 @@ export class ProfileComponent {
       name: this.$profile().name,
       members: this.$profile().members
     };
-    this.userService.updateProfile(updateData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({complete: () => this.$saving.set(false)});
+    this.userService.updateProfile(updateData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ complete: () => this.$saving.set(false) });
   }
 
   saveEmail() {
     this.$saving.set(true);
-    this.userService.updateEmail(this.$profile().email).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({complete: () => this.$saving.set(false)});
+    this.userService.updateEmail(this.$profile().email).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ complete: () => this.$saving.set(false) });
   }
 
   savePassword() {
@@ -94,8 +99,16 @@ export class ProfileComponent {
       oldPassword: this.passwordForm.value.oldPassword,
       newPassword: this.passwordForm.value.password
     };
-    this.userService.updatePassword(updateData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({complete: () => this.$saving.set(false)});
+    this.userService.updatePassword(updateData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ complete: () => this.$saving.set(false) });
   }
 
-  //TODOS bfejezni
+  togglePushNoti() {
+    if(this.$pushState() === "true") {
+      this.pushService.unsubscribeFromTopic().subscribe();
+    } else if(this.$pushState() === "false" || this.$pushState() === "blocked") {
+      this.pushService.requestPushNoti();
+    }
+  }
+
+  //TODOS bfejezni kép csere
 }
