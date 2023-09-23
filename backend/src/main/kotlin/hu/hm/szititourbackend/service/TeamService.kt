@@ -264,6 +264,6 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         val team = getTeamById(teamId)
         val imagePath = Utils.saveImage(img, Utils.imageDirectoryTeamsName, team.img)
         team.img = imagePath
-        return updateTeam(team)
+        return updateTeam(team, true)
     }
 }
