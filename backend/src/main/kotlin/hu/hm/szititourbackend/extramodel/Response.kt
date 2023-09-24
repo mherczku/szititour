@@ -4,7 +4,7 @@ import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.util.MessageConstants
 
 
-class Response(
+data class Response(
         val success: Boolean = true,
         val message: String = "",
         val messageCode: String= MessageConstants.UNKNOWN,

@@ -1,6 +1,9 @@
 package hu.hm.szititourbackend.security
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.ObjectWriter
 import hu.hm.szititourbackend.exception.CustomException
+import hu.hm.szititourbackend.extramodel.Response
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.MessageConstants
@@ -9,6 +12,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.filter.OncePerRequestFilter
+import java.nio.charset.StandardCharsets
 import javax.servlet.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -40,7 +44,16 @@ class TokenIdFilter : OncePerRequestFilter() {
                 }
             }
             myLogger.info("TokenIdFilter stopped chain")
-            throw CustomException("TokenId not found in clients", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKENID_NOT_FOUND)
+            val r = Response(message = "TokenId not found in clients", success = false, messageCode = MessageConstants.AUTH_TOKENID_NOT_FOUND)
+            val ow: ObjectWriter = ObjectMapper().writer().withDefaultPrettyPrinter()
+            val json: String = ow.writeValueAsString(r)
+            val byteArray = json.toByteArray(StandardCharsets.UTF_8)
+            response.resetBuffer()
+            response.status = HttpStatus.UNAUTHORIZED.value()
+            response.setContentLength(json.length)
+            response.outputStream.write(byteArray)
+            response.outputStream.flush()
+            return
         }
 
         // Continue the filter chain if no token - not authenticated request

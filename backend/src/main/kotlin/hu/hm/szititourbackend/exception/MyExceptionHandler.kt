@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.security.oauth2.jwt.JwtValidationException
 
 @ControllerAdvice
 class MyExceptionHandler {
@@ -61,6 +62,14 @@ class MyExceptionHandler {
         logger.error("HttpRequestMethodNotSupportedException occured: ${ex.message}")
         return ResponseEntity<Response>(
                 Response(message = "Request method not supported: ${ex.localizedMessage}", success = false, messageCode =  MessageConstants.REQUEST_METHOD_NOT_SUPPORTED),
+                HttpStatus.BAD_REQUEST
+        )
+    }
+    @ExceptionHandler(JwtValidationException::class)
+    fun handleJwtValidationException(ex: JwtValidationException): ResponseEntity<Response> {
+        logger.error("JwtValidationException occured: ${ex.message}")
+        return ResponseEntity<Response>(
+                Response(message = "JwtValidationException ${ex.localizedMessage}", success = false, messageCode =  MessageConstants.AUTH_TOKEN_INVALID),
                 HttpStatus.BAD_REQUEST
         )
     }
