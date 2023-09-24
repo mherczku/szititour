@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { Modal2Component } from './modal2.component';
+import { Modal2Component } from "./modal2.component";
 
-describe('Modal2Component', () => {
+describe("Modal2Component", () => {
   let component: Modal2Component;
   let fixture: ComponentFixture<Modal2Component>;
 
@@ -17,7 +17,7 @@ describe('Modal2Component', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

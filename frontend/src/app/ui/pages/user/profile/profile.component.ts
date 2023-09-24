@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, WritableSignal, effect, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, DestroyRef, WritableSignal, effect, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { TextInputComponent } from "../../../components/admin/inputs/text-input/text-input.component";
 import { ButtonsComponent } from "../../../components/buttons/buttons.component";
@@ -11,7 +11,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ClientCardComponent } from "../../../components/user/client-card/client-card.component";
 import { TogglerComponent } from "../../../components/toggler/toggler.component";
 import { PushNotificationService } from "src/app/services/PushNotification.service";
-import { Observable, Subscription, forkJoin, tap } from "rxjs";
+import { Observable, forkJoin, tap } from "rxjs";
 import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
 
 @Component({
