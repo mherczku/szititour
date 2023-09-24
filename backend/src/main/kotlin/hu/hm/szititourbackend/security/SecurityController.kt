@@ -43,7 +43,7 @@ class SecurityController(private val teamService: TeamService, private val secur
         }
         try {
             val t = teamService.getTeamById(verification.teamId)
-            return ResponseEntity(LoginResponse(true, "", "", t.convertToDto()), HttpStatus.OK)
+            return ResponseEntity(LoginResponse(true, "Login successful", MessageConstants.LOGIN_SUCCESS, t.convertToDto()), HttpStatus.OK)
         } catch (e: CustomException) {
             if (e.statusCode == HttpStatus.NOT_FOUND) {
                 throw CustomException("Team not found", HttpStatus.UNAUTHORIZED, MessageConstants.TEAM_NOT_FOUND)
@@ -83,9 +83,9 @@ class SecurityController(private val teamService: TeamService, private val secur
         response.addHeader(HEADER_TOKEN, "Bearer $token")
         response.addHeader(HEADER_TOKEN_ID, client.tokenId)
         if (googleResponse.isCreation) {
-            return ResponseEntity(LoginResponse(true, "", "Register Successful", googleResponse.team.convertToDto()), HttpStatus.OK)
+            return ResponseEntity(LoginResponse(true, "Register successful", MessageConstants.REGISTER_SUCCESS, googleResponse.team.convertToDto()), HttpStatus.OK)
         }
-        return ResponseEntity(LoginResponse(true, "", "Login Successful", googleResponse.team.convertToDto()), HttpStatus.OK)
+        return ResponseEntity(LoginResponse(true, "Login successful", MessageConstants.LOGIN_SUCCESS, googleResponse.team.convertToDto()), HttpStatus.OK)
     }
 
     @PostMapping("login")
@@ -101,7 +101,7 @@ class SecurityController(private val teamService: TeamService, private val secur
         val token = securityService.generateToken(team = team, client.tokenId, client.expireAt)
         response.addHeader(HEADER_TOKEN, "Bearer $token")
         response.addHeader(HEADER_TOKEN_ID, client.tokenId)
-        return ResponseEntity(LoginResponse(true, "", "Login Successful", team.convertToDto()), HttpStatus.OK)
+        return ResponseEntity(LoginResponse(true, "Login Successful", MessageConstants.LOGIN_SUCCESS, team.convertToDto()), HttpStatus.OK)
     }
 
     @PostMapping("register")

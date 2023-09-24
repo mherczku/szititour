@@ -5,7 +5,7 @@ import hu.hm.szititourbackend.dto.TeamDto
 
 class LoginResponse(
     val success: Boolean = true,
-    val errorMessage: String = "",
-    val successMessage: String = "",
+    val message: String = "",
+    val messageCode: String = "",
     val team: TeamDto?
 )
