@@ -5,6 +5,7 @@ import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.TeamDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.TeamService
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -54,7 +55,7 @@ class TeamController @Autowired constructor(private val teamService: TeamService
             teamService.deleteTeamById(id)
             ResponseEntity(null, HttpStatus.OK)
         } catch (e: Exception) {
-            throw CustomException("Team not found", HttpStatus.NOT_FOUND)
+            throw CustomException("Team not found", HttpStatus.NOT_FOUND, MessageConstants.TEAM_NOT_FOUND)
         }
     }
 }

@@ -65,7 +65,7 @@ object Utils {
         val directoryToSavePath = getImageDirectoryFromName(directoryToSaveName)
 
         if (directoryToSavePath == "") {
-            throw CustomException("Image resource not found - directory not exist", HttpStatus.NOT_FOUND)
+            throw CustomException("Image resource not found - directory not exist", HttpStatus.NOT_FOUND, MessageConstants.RESOURCE_DIRECTORY_NOT_FOUND)
         }
 
         var imagePath = ""
@@ -100,12 +100,12 @@ object Utils {
             } catch(ex: Exception) {
                 newFile.delete()
                 //tempFile.delete()
-                throw CustomException("This png does not support compression, please try with another or use jpg", HttpStatus.BAD_REQUEST)
+                throw CustomException("This png does not support compression, please try with another or use jpg", HttpStatus.BAD_REQUEST, MessageConstants.IMG_COMPRESSION_NOT_SUPPORTED)
             }
 
             imagePath = "$directoryToSaveName-$newFileName.$extension"
         } else {
-            throw CustomException("Image format must be png or jpg", HttpStatus.BAD_REQUEST)
+            throw CustomException("Image format must be png or jpg", HttpStatus.BAD_REQUEST, MessageConstants.IMG_FORMAT_NOT_SUPPORTED)
         }
         return imagePath
     }

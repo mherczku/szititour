@@ -6,6 +6,8 @@ import hu.hm.szititourbackend.datamodel.convertToStatusDto
 import hu.hm.szititourbackend.dto.GameDto
 import hu.hm.szititourbackend.dto.GameWithStatusesDto
 import hu.hm.szititourbackend.service.GameService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,8 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.sql.Timestamp
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -32,10 +32,10 @@ class GameController @Autowired constructor(private val gameService: GameService
 
     @PostMapping("/image")
     fun addGameWithImage(
-        @RequestParam("image") file: MultipartFile?,
-        @RequestParam("gameTitle") gameTitle: String,
-        @RequestParam("gameStart") gameStart: String,
-        @RequestParam("gameEnd") gameEnd: String
+            @RequestParam("image") file: MultipartFile?,
+            @RequestParam("gameTitle") gameTitle: String,
+            @RequestParam("gameStart") gameStart: String,
+            @RequestParam("gameEnd") gameEnd: String
     ): ResponseEntity<GameDto> {
 
         logger.debug("Add new game with image ${gameTitle}")
@@ -44,9 +44,9 @@ class GameController @Autowired constructor(private val gameService: GameService
         val dateStart = Timestamp(gameStart.toLong())
 
         val game = Game(
-            title = gameTitle,
-            dateEnd = dateEnd,
-            dateStart = dateStart
+                title = gameTitle,
+                dateEnd = dateEnd,
+                dateStart = dateStart
         )
         val createdGame: Game = if (file != null) {
             gameService.addGameWithImage(game, file)
@@ -91,12 +91,12 @@ class GameController @Autowired constructor(private val gameService: GameService
 
     @PutMapping
     fun updateGame(
-        @RequestParam("image") file: MultipartFile?,
-        @RequestParam("currentImage") img: String,
-        @RequestParam("gameId") gameId: String,
-        @RequestParam("gameTitle") gameTitle: String,
-        @RequestParam("gameStart") gameStart: String,
-        @RequestParam("gameEnd") gameEnd: String
+            @RequestParam("image") file: MultipartFile?,
+            @RequestParam("currentImage") img: String,
+            @RequestParam("gameId") gameId: String,
+            @RequestParam("gameTitle") gameTitle: String,
+            @RequestParam("gameStart") gameStart: String,
+            @RequestParam("gameEnd") gameEnd: String
     ): ResponseEntity<GameDto> {
 
         logger.debug("Update game by id ${gameId}")
@@ -105,11 +105,11 @@ class GameController @Autowired constructor(private val gameService: GameService
         val dateStart = Timestamp(gameStart.toLong())
 
         val game = Game(
-            id = gameId.toInt(),
-            title = gameTitle,
-            dateEnd = dateEnd,
-            dateStart = dateStart,
-            img = img
+                id = gameId.toInt(),
+                title = gameTitle,
+                dateEnd = dateEnd,
+                dateStart = dateStart,
+                img = img
         )
         val updatedGame: Game = if (file != null) {
             gameService.updateGameWithImage(game, file)

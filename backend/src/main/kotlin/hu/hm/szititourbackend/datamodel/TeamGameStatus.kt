@@ -5,6 +5,7 @@ import hu.hm.szititourbackend.dto.PlaceStatusDto
 import hu.hm.szititourbackend.dto.QAnswers
 import hu.hm.szititourbackend.dto.TeamGameStatusDto
 import hu.hm.szititourbackend.exception.CustomException
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.http.HttpStatus
 import java.sql.Timestamp
 import java.time.Instant
@@ -62,7 +63,7 @@ fun MutableList<TeamGameStatus>.convertToDto(): MutableList<TeamGameStatusDto> {
 
 fun PlaceStatus.convertToDto(team: Team, game: Game): PlaceStatusDto {
     val place = game.places.find { it.id == this.placeId }
-        ?: throw CustomException("PlaceStatus convert error - place not found", HttpStatus.NOT_FOUND)
+        ?: throw CustomException("PlaceStatus convert error - place not found", HttpStatus.NOT_FOUND, MessageConstants.PLACE_NOT_FOUND_CONVERT)
 
     val qAnswers = mutableListOf<AnswerDto>()
     place.questions.forEach { question ->

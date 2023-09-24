@@ -4,6 +4,7 @@ import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.GameRepository
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
+import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -49,14 +50,14 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
         if (game.isPresent) {
             return game.get()
         } else {
-            throw CustomException("Game not found", HttpStatus.NOT_FOUND)
+            throw CustomException("Game not found", HttpStatus.NOT_FOUND, MessageConstants.GAME_NOT_FOUND)
         }
     }
 
     fun updateGameWithImage(game: Game, file: MultipartFile): Game {
         val optional = gameRepository.findByTitle(game.title)
         if (optional.isPresent && optional.get().id != game.id) {
-            throw CustomException("Game name already taken", HttpStatus.BAD_REQUEST)
+            throw CustomException("Game name already taken", HttpStatus.BAD_REQUEST, MessageConstants.GAME_NAME_TAKEN)
         }
         val updated = updateGame(game)
         val imagePath = Utils.saveImage(file, Utils.imageDirectoryGamesName, updated.img)
@@ -78,7 +79,7 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
 
     fun changeActivation(gameId: Int, activation: Boolean): Game {
         val game = getGameById(gameId)
-        if(!activation) {
+        if (!activation) {
             game.teamGameStatuses.forEach {
                 teamGameStatusRepository.deleteById(it.id)
             }

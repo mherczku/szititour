@@ -6,6 +6,7 @@ import hu.hm.szititourbackend.dto.QuestionDto
 import hu.hm.szititourbackend.enum.QuestionType
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.QuestionService
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -96,7 +97,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
             questionService.deleteQuestionById(id)
             ResponseEntity(null, HttpStatus.OK)
         } catch (e: Exception) {
-            throw CustomException("Question not found", HttpStatus.NOT_FOUND)
+            throw CustomException("Question not found", HttpStatus.NOT_FOUND, MessageConstants.QUESTION_NOT_FOUND)
         }
     }
 }

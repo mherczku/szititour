@@ -9,6 +9,7 @@ import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.GoogleAccount
 import hu.hm.szititourbackend.extramodel.VerificationResponse
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
@@ -71,7 +72,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             val jwt: Jwt = jwtDecoder.decode(token)
             val now = Instant.now()
             if(jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
-                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN)
+                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_EXPIRED)
             }
             val type: String = jwt.getClaim(CLAIM_TYPE)
             if (type != CLAIM_TYPE_AUTH_TOKEN) {
@@ -80,7 +81,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             val role: String = jwt.getClaim(CLAIM_ROLE)
             val tokenId: String = jwt.getClaim(CLAIM_TOKEN_ID)
             if(tokenId.isBlank()) {
-                throw CustomException("TokenId cannot be empty", HttpStatus.FORBIDDEN)
+                throw CustomException("TokenId cannot be empty", HttpStatus.FORBIDDEN, MessageConstants.AUTH_EMPTY_TOKENID)
             }
             val isAdmin = role == ROLE_ADMIN
             val teamId: Int = jwt.subject.toInt()
@@ -116,11 +117,11 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             val jwt: Jwt = jwtDecoder.decode(token)
             val now = Instant.now()
             if(jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
-                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN)
+                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_EXPIRED)
             }
             val type: String = jwt.getClaim(CLAIM_TYPE)
             if (type != CLAIM_TYPE_VERIFICATION_TOKEN) {
-                throw Exception("Bad token type")
+                throw CustomException("Bad token type", HttpStatus.FORBIDDEN, MessageConstants.AUTH_INVALID_TOKEN_TYPE)
             }
             val teamId: Int = jwt.subject.toInt()
 
@@ -160,9 +161,9 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
                 )
             }
         } catch (e: Exception) {
-            throw CustomException("Google Token Invalid", HttpStatus.BAD_REQUEST)
+            throw CustomException("Google Token Invalid", HttpStatus.BAD_REQUEST, MessageConstants.INVALID_GOOGLE_TOKEN)
         }
-        throw CustomException("Google Validation Failed", HttpStatus.BAD_REQUEST)
+        throw CustomException("Google Validation Failed", HttpStatus.BAD_REQUEST, MessageConstants.GOOGLE_VALIDATION_FAILED)
     }
 
     // RESOURCE TOKEN:
@@ -189,18 +190,18 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             val jwt: Jwt = jwtDecoder.decode(resToken)
             val now = Instant.now()
             if(jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
-                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN)
+                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_EXPIRED)
             }
             val type: String = jwt.getClaim(CLAIM_TYPE)
             if (type != CLAIM_TYPE_RES_TOKEN) {
-                throw CustomException("Bad token type", HttpStatus.FORBIDDEN)
+                throw CustomException("Bad token type", HttpStatus.FORBIDDEN, MessageConstants.AUTH_INVALID_TOKEN_TYPE)
             }
             //val role: String = jwt.getClaim(CLAIM_ROLE)
             //val isAdmin = role == ROLE_ADMIN
             val teamId: Int = jwt.subject.toInt()
             val resourceId: String = jwt.getClaim(CLAIM_RES_ID)
             if(resourceId != requestedResourceId) {
-                throw CustomException("Bad token resourceId", HttpStatus.FORBIDDEN)
+                throw CustomException("Bad token resourceId", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_BAD_RESOURCE_ID)
             }
 
             VerificationResponse(verified = true, isAdmin = false, teamId = teamId)

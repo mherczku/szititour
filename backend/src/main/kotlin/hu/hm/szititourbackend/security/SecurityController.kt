@@ -11,17 +11,18 @@ import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_GOOGLE_T
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN_ID
 import hu.hm.szititourbackend.service.TeamService
+import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.PasswordUtils
 import hu.hm.szititourbackend.util.Utils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
-import javax.servlet.http.HttpServletResponse
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 
 @RestController
@@ -37,15 +38,15 @@ class SecurityController(private val teamService: TeamService, private val secur
         val verification = securityService.verifyToken(token)
         logger.debug("Authorize me ${verification.teamId}")
 
-        if(!verification.verified) {
-            throw CustomException("VERIFICATION FAILED", HttpStatus.UNAUTHORIZED)
+        if (!verification.verified) {
+            throw CustomException("VERIFICATION FAILED", HttpStatus.UNAUTHORIZED, MessageConstants.VERIFICATION_FAILED)
         }
         try {
             val t = teamService.getTeamById(verification.teamId)
             return ResponseEntity(LoginResponse(true, "", "", t.convertToDto()), HttpStatus.OK)
         } catch (e: CustomException) {
             if (e.statusCode == HttpStatus.NOT_FOUND) {
-                throw CustomException("User not found", HttpStatus.UNAUTHORIZED)
+                throw CustomException("Team not found", HttpStatus.UNAUTHORIZED, MessageConstants.TEAM_NOT_FOUND)
             } else {
                 throw e
             }
@@ -56,11 +57,11 @@ class SecurityController(private val teamService: TeamService, private val secur
     fun verifyEmailWithToken(@PathVariable token: String): ResponseEntity<Response> {
         logger.debug("Verify email")
         val verification = securityService.verifyEmailVerificationToken(token)
-        return if(verification.verified) {
+        return if (verification.verified) {
             teamService.verifyEmail(verification.teamId)
-            ResponseEntity(Response(true, "", "Email verified"), HttpStatus.OK)
+            ResponseEntity(Response(true, message = "Email verified", MessageConstants.EMAIL_VERIFIED), HttpStatus.OK)
         } else {
-            ResponseEntity(Response(false, "verification.errorMessage"), HttpStatus.BAD_REQUEST)
+            ResponseEntity(Response(false, "Email verification failed", MessageConstants.EMAIL_VERIFICATION_FAILED), HttpStatus.BAD_REQUEST)
         }
 
     }
@@ -81,7 +82,7 @@ class SecurityController(private val teamService: TeamService, private val secur
         val token = securityService.generateToken(team = googleResponse.team, client.tokenId, client.expireAt)
         response.addHeader(HEADER_TOKEN, "Bearer $token")
         response.addHeader(HEADER_TOKEN_ID, client.tokenId)
-        if(googleResponse.isCreation) {
+        if (googleResponse.isCreation) {
             return ResponseEntity(LoginResponse(true, "", "Register Successful", googleResponse.team.convertToDto()), HttpStatus.OK)
         }
         return ResponseEntity(LoginResponse(true, "", "Login Successful", googleResponse.team.convertToDto()), HttpStatus.OK)
@@ -92,8 +93,8 @@ class SecurityController(private val teamService: TeamService, private val secur
         logger.info("Login for ${auth.name} - remote: ${request.remoteAddr} - forwarded: ${request.getHeader("X-Forwarded-For")} - real: ${request.getHeader("X-Real-IP")}")
 
         val team = teamService.getTeamByEmail(email = auth.name)
-        if(!team.enabled) {
-            throw CustomException("User is not activated", HttpStatus.FORBIDDEN)
+        if (!team.enabled) {
+            throw CustomException("User is not activated", HttpStatus.FORBIDDEN, MessageConstants.TEAM_INACTIVE)
         }
         clientData.ipAddress = request.remoteAddr
         val client = teamService.addClient(team, clientData, false)
@@ -107,35 +108,39 @@ class SecurityController(private val teamService: TeamService, private val secur
     fun register(@RequestBody credentials: LoginData): ResponseEntity<Response> {
         logger.debug("Register for ${credentials.name}")
         if (credentials.email.isNullOrEmpty() || credentials.password.isNullOrEmpty()) {
-            throw CustomException("Email or password is empty", HttpStatus.BAD_REQUEST)
+            throw CustomException("Email or password is empty", HttpStatus.BAD_REQUEST, MessageConstants.EMPTY_CREDENTIALS)
         }
-        if (Utils.validateEmail(credentials.email) && Utils.validatePassword(credentials.password)) {
-            try {
+        if (Utils.validateEmail(credentials.email)) {
+            if (Utils.validatePassword(credentials.password)) {
+                try {
 
-                teamService.addTeam(
-                        Team(
-                                email = credentials.email,
-                                password = PasswordUtils.encryptPassword(credentials.password),
-                                name = credentials.name
-                        )
-                )
-            } catch (e: DataIntegrityViolationException) {
-                throw CustomException("Email is already in use", HttpStatus.BAD_REQUEST)
+                    teamService.addTeam(
+                            Team(
+                                    email = credentials.email,
+                                    password = PasswordUtils.encryptPassword(credentials.password),
+                                    name = credentials.name
+                            )
+                    )
+                } catch (e: DataIntegrityViolationException) {
+                    throw CustomException("Email is already in use", HttpStatus.BAD_REQUEST, MessageConstants.EMAIL_TAKEN)
+                }
+                return ResponseEntity(Response(true, message = "Register Successful", MessageConstants.REGISTER_SUCCESS), HttpStatus.CREATED)
+            } else {
+                throw CustomException("Password is invalid", HttpStatus.BAD_REQUEST, MessageConstants.PASSWORD_INVALID)
             }
-            return ResponseEntity(Response(true, "", "Register Successful"), HttpStatus.CREATED)
         } else {
-            throw CustomException("Email or password is invalid", HttpStatus.BAD_REQUEST)
+            throw CustomException("Email is invalid", HttpStatus.BAD_REQUEST, MessageConstants.EMAIL_INVALID)
         }
     }
 
     @PostMapping("logout")
     fun logout(@RequestHeader(HEADER_TOKEN) token: String): ResponseEntity<Response> {
         val verification = securityService.verifyToken(token)
-        if(verification.verified) {
+        if (verification.verified) {
             teamService.revokeClient(verification.tokenId, verification.teamId)
-            return ResponseEntity<Response>(Response(success = true), HttpStatus.OK)
+            return ResponseEntity<Response>(Response(success = true, messageCode = MessageConstants.LOGOUT_SUCCESS), HttpStatus.OK)
         }
-        throw CustomException("Logout invalid token", HttpStatus.BAD_REQUEST)
+        throw CustomException("Logout invalid token", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_INVALID)
     }
 
 }

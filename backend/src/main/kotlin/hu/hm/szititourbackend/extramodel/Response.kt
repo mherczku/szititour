@@ -1,12 +1,13 @@
 package hu.hm.szititourbackend.extramodel
 
 import hu.hm.szititourbackend.datamodel.Team
+import hu.hm.szititourbackend.util.MessageConstants
 
 
 class Response(
-    val success: Boolean = true,
-    val errorMessage: String = "",
-    val successMessage: String = ""
+        val success: Boolean = true,
+        val message: String = "",
+        val messageCode: String= MessageConstants.UNKNOWN,
 )
 
 class ContinueGoogleResponse(

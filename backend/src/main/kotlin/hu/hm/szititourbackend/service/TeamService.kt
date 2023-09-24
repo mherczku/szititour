@@ -14,6 +14,7 @@ import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_ADMIN
 import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_USER
 import hu.hm.szititourbackend.util.LocationUtils
+import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.PasswordUtils
 import hu.hm.szititourbackend.util.PasswordUtils.encryptPassword
 import hu.hm.szititourbackend.util.PasswordUtils.generatePassword
@@ -37,7 +38,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         if (team.isPresent) {
             return team.get()
         } else {
-            throw CustomException("Team not found", HttpStatus.NOT_FOUND)
+            throw CustomException("Team not found", HttpStatus.NOT_FOUND, MessageConstants.TEAM_NOT_FOUND)
         }
     }
 
@@ -56,19 +57,19 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
             if (PasswordUtils.comparePassword(passwordUpdateDto.oldPassword, team.password)) {
                 if (Utils.validatePassword(passwordUpdateDto.newPassword)) {
                     if (team.nextEmail.isNotBlank()) {
-                        throw CustomException("Cannot modify password while email is not verified", HttpStatus.FORBIDDEN)
+                        throw CustomException("Cannot modify password while email is not verified", HttpStatus.FORBIDDEN, MessageConstants.EMAIL_NOT_VERIFIED)
                     }
                     team.password = PasswordUtils.encryptPassword(passwordUpdateDto.newPassword)
                     emailService.sendPasswordModifiedEmail(team.email, team.name)
                     return updateTeam(team, true)
                 } else {
-                    throw CustomException("New password is not acceptable", HttpStatus.BAD_REQUEST)
+                throw CustomException("New password is not acceptable", HttpStatus.BAD_REQUEST, MessageConstants.PASSWORD_INVALID)
                 }
             } else {
-                throw CustomException("Old password is incorrect", HttpStatus.BAD_REQUEST)
+                throw CustomException("Old password is incorrect", HttpStatus.BAD_REQUEST, MessageConstants.WRONG_PASSWORD)
             }
         } else {
-            throw CustomException("Password cannot be blank", HttpStatus.BAD_REQUEST)
+            throw CustomException("Password cannot be blank", HttpStatus.BAD_REQUEST, MessageConstants.PASSWORD_EMPTY)
         }
     }
 
@@ -105,7 +106,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         if (team.isPresent) {
             return team.get()
         } else {
-            throw CustomException("Team not found", HttpStatus.NOT_FOUND)
+            throw CustomException("Team not found", HttpStatus.NOT_FOUND, MessageConstants.TEAM_NOT_FOUND)
         }
     }
 
@@ -113,7 +114,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         val team = getTeamById(teamId)
         val teamWithEmail = teamRepository.findByEmail(nextEmail)
         if (teamWithEmail.isPresent) {
-            throw CustomException("Email is already in use", HttpStatus.BAD_REQUEST)
+            throw CustomException("Email is already in use", HttpStatus.BAD_REQUEST, MessageConstants.EMAIL_TAKEN)
         }
         if (team.email == team.nextEmail) {
             team.nextEmail = ""
@@ -141,13 +142,15 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
     }
 
     fun deleteTeamById(id: Int) {
-        getTeamById(id)
+        val team = getTeamById(id)
+        Utils.deleteImage(team.img)
         return teamRepository.deleteById(id)
     }
 
-    fun getTeamsApplicationByTeamId(teamId: Int, gameId: Int): Application? {
+    fun getTeamsApplicationByTeamId(teamId: Int, gameId: Int): Application {
         val team = this.getTeamById(teamId)
         return team.applications.find { it.game.id == gameId }
+                ?: throw CustomException("Application not found", HttpStatus.NOT_FOUND, MessageConstants.APPLICATION_NOT_FOUND)
     }
 
     fun updateGameStatusAuto(gameId: Int, theTeam: Team) {
@@ -185,10 +188,10 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
                     team.isGoogle = false
                     updateTeam(team, true)
                 } else {
-                    throw CustomException("New email is not valid", HttpStatus.BAD_REQUEST)
+                    throw CustomException("New email is not valid", HttpStatus.BAD_REQUEST, MessageConstants.EMAIL_INVALID)
                 }
             } else {
-                throw CustomException("New email is empty", HttpStatus.BAD_REQUEST)
+                throw CustomException("New email is empty", HttpStatus.BAD_REQUEST, MessageConstants.EMAIL_EMPTY)
             }
         } else {
             enableTeam(team)
@@ -197,7 +200,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
 
     fun continueWithGoogle(googleAccount: GoogleAccount): ContinueGoogleResponse {
         if (!googleAccount.emailVerified) {
-            throw CustomException("Google email not verified", HttpStatus.BAD_REQUEST)
+            throw CustomException("Google email not verified", HttpStatus.BAD_REQUEST, MessageConstants.GOOGLE_NOT_VERIFIED)
         }
         val teamOptional = teamRepository.findByEmail(googleAccount.email)
         return if (teamOptional.isPresent) {
@@ -273,7 +276,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         if(PasswordUtils.comparePassword(password, team.password)) {
             return deleteTeamById(teamId);
         } else {
-            throw CustomException("Password invalid", HttpStatus.BAD_REQUEST)
+            throw CustomException("Wrong password", HttpStatus.BAD_REQUEST, MessageConstants.WRONG_PASSWORD)
         }
     }
 }

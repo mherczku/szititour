@@ -5,6 +5,7 @@ import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.ApplicationRepository
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -36,7 +37,7 @@ class ApplicationService @Autowired constructor(private val applicationRepositor
         if (application.isPresent) {
             return application.get()
         } else {
-            throw CustomException("Application not found", HttpStatus.NOT_FOUND)
+            throw CustomException("Application not found", HttpStatus.NOT_FOUND, MessageConstants.APPLICATION_NOT_FOUND)
         }
     }
 

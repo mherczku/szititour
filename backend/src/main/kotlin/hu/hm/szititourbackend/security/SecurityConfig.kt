@@ -10,6 +10,7 @@ import hu.hm.szititourbackend.security.SecurityService.Companion.CLAIM_TYPE
 import hu.hm.szititourbackend.security.SecurityService.Companion.CLAIM_TYPE_AUTH_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_GOOGLE_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN_ID
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter
@@ -149,10 +150,10 @@ class JwtRoleConverter : Converter<Jwt?, Collection<GrantedAuthority?>?> {
         val type = source.getClaimAsString(CLAIM_TYPE)
 
         if(type != CLAIM_TYPE_AUTH_TOKEN) {
-            throw CustomException("AUTH_INVALID_TOKEN_TYPE", HttpStatus.FORBIDDEN)
+            throw CustomException("AUTH_INVALID_TOKEN_TYPE", HttpStatus.FORBIDDEN, MessageConstants.AUTH_INVALID_TOKEN_TYPE)
         }
         if(source.expiresAt == null || source.expiresAt?.isBefore(Instant.now()) == true) {
-            throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN)
+            throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_EXPIRED)
         }
 
         return roles.stream().map { role: String? ->

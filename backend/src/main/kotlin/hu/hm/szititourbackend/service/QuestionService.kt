@@ -4,6 +4,7 @@ import hu.hm.szititourbackend.datamodel.Question
 import hu.hm.szititourbackend.dto.QuestionDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.QuestionRepository
+import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -14,8 +15,8 @@ import org.springframework.web.multipart.MultipartFile
 @Service
 @Transactional
 class QuestionService @Autowired constructor(
-    private val questionRepository: QuestionRepository,
-    private val placeService: PlaceService
+        private val questionRepository: QuestionRepository,
+        private val placeService: PlaceService
 ) {
 
     fun addQuestionToPlaceWithImage(questionDto: QuestionDto, file: MultipartFile): Question {
@@ -34,12 +35,12 @@ class QuestionService @Autowired constructor(
     fun addQuestionToPlace(questionDto: QuestionDto): Question {
         val place = placeService.getPlaceById(questionDto.placeId)
         val newQuestion = Question(
-            place = place,
-            type = questionDto.type,
-            img = questionDto.img,
-            name = questionDto.name,
-            riddle = questionDto.riddle,
-            answers = mutableListOf()
+                place = place,
+                type = questionDto.type,
+                img = questionDto.img,
+                name = questionDto.name,
+                riddle = questionDto.riddle,
+                answers = mutableListOf()
         )
         return questionRepository.save(newQuestion)
     }
@@ -57,7 +58,7 @@ class QuestionService @Autowired constructor(
         if (question.isPresent) {
             return question.get()
         } else {
-            throw CustomException("Question not found", HttpStatus.NOT_FOUND)
+            throw CustomException("Question not found", HttpStatus.NOT_FOUND, MessageConstants.QUESTION_NOT_FOUND)
         }
     }
 

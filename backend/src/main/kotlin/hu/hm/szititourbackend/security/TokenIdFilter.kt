@@ -3,6 +3,7 @@ package hu.hm.szititourbackend.security
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
 import hu.hm.szititourbackend.service.TeamService
+import hu.hm.szititourbackend.util.MessageConstants
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,7 +40,7 @@ class TokenIdFilter : OncePerRequestFilter() {
                 }
             }
             myLogger.info("TokenIdFilter stopped chain")
-            throw CustomException("TokenId not found in clients", HttpStatus.FORBIDDEN)
+            throw CustomException("TokenId not found in clients", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKENID_NOT_FOUND)
         }
 
         // Continue the filter chain if no token - not authenticated request

@@ -4,6 +4,8 @@ import hu.hm.szititourbackend.datamodel.Question
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.AnswerRepository
+import hu.hm.szititourbackend.util.MessageConstants
+import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -43,7 +45,7 @@ class AnswerService @Autowired constructor(private val answerRepository: AnswerR
     fun getAnswerById(id :Int): Answer {
         val answer = answerRepository.findById(id)
         if(!answer.isPresent) {
-            throw CustomException("Answer not Found", HttpStatus.NOT_FOUND)
+            throw CustomException("Answer not Found", HttpStatus.NOT_FOUND, MessageConstants.ANSWER_NOT_FOUND)
         } else {
             return answer.get()
         }
@@ -55,6 +57,8 @@ class AnswerService @Autowired constructor(private val answerRepository: AnswerR
     }
 
     fun deleteAnswerById(id: Int) {
+        val answer = getAnswerById(id)
+        Utils.deleteImage(answer.img)
         return answerRepository.deleteById(id)
     }
 

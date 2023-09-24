@@ -4,6 +4,7 @@ import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.ApplicationService
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -46,7 +47,7 @@ class ApplicationController @Autowired constructor(private val applicationServic
             applicationService.deleteApplicationById(id)
             ResponseEntity(null, HttpStatus.OK)
         } catch (e: Exception) {
-            throw CustomException("Application not found", HttpStatus.NOT_FOUND)
+            throw CustomException("Application not found", HttpStatus.NOT_FOUND, MessageConstants.APPLICATION_NOT_FOUND)
         }
     }
 }

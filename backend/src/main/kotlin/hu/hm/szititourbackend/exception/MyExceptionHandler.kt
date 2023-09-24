@@ -1,6 +1,7 @@
 package hu.hm.szititourbackend.exception
 
 import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,7 +21,7 @@ class MyExceptionHandler {
     @ExceptionHandler(CustomException::class)
     fun handleCustomException(ex: CustomException): ResponseEntity<Response> {
         logger.error("Custom exception occured: ${ex.message}")
-        return ResponseEntity<Response>(Response(errorMessage = ex.message, success = false), ex.statusCode)
+        return ResponseEntity<Response>(Response(message = ex.message, success = false, messageCode = ex.messageCode), ex.statusCode)
     }
 
     @ExceptionHandler(Exception::class)
@@ -29,7 +30,7 @@ class MyExceptionHandler {
         // Todo if debug:
         ex.printStackTrace()
         return ResponseEntity<Response>(
-            Response(errorMessage = ex.message.toString(), success = false),
+            Response(message = ex.message.toString(), success = false, messageCode = MessageConstants.UNKNOWN),
             HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
@@ -37,20 +38,20 @@ class MyExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException::class)
     fun handleCustomException(ex: DataIntegrityViolationException): ResponseEntity<Response> {
         logger.error("DataIntegrityViolationException occured: ${ex.message}")
-        return ResponseEntity<Response>(Response(errorMessage = "Game title is already taken", success = false), HttpStatus.BAD_REQUEST)
+        return ResponseEntity<Response>(Response(message = "Game title is already taken", success = false, messageCode =  MessageConstants.GAME_TITLE_TAKEN), HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(MissingRequestValueException::class)
     fun handleCustomException(ex: MissingRequestValueException): ResponseEntity<Response> {
         logger.error("MissingRequestValueException occured: ${ex.message}")
-        return ResponseEntity<Response>(Response(errorMessage = ex.localizedMessage, success = false), HttpStatus.FORBIDDEN)
+        return ResponseEntity<Response>(Response(message = ex.localizedMessage, success = false, messageCode =  MessageConstants.MISSING_REQUEST_VALUE), HttpStatus.FORBIDDEN)
     }
 
     @ExceptionHandler(UsernameNotFoundException::class)
     fun handleUsernameNotFoundException(ex: UsernameNotFoundException): ResponseEntity<Response> {
         logger.error("UsernameNotFoundException occured: ${ex.message}")
         return ResponseEntity<Response>(
-            Response(errorMessage = "Username (email) not found. SecurityDetailService", success = false),
+            Response(message = "Username (email) not found", success = false, messageCode =  MessageConstants.TEAM_NOT_FOUND),
             HttpStatus.NOT_FOUND
         )
     }
@@ -59,7 +60,7 @@ class MyExceptionHandler {
     fun handleHttpRequestMethodNotSupportedException(ex: HttpRequestMethodNotSupportedException): ResponseEntity<Response> {
         logger.error("HttpRequestMethodNotSupportedException occured: ${ex.message}")
         return ResponseEntity<Response>(
-                Response(errorMessage = "Request method not supported: ${ex.localizedMessage}", success = false),
+                Response(message = "Request method not supported: ${ex.localizedMessage}", success = false, messageCode =  MessageConstants.REQUEST_METHOD_NOT_SUPPORTED),
                 HttpStatus.BAD_REQUEST
         )
     }

@@ -10,6 +10,7 @@ import hu.hm.szititourbackend.extramodel.DirectNotification
 import hu.hm.szititourbackend.extramodel.SubscriptionRequest
 import hu.hm.szititourbackend.extramodel.TopicNotification
 import hu.hm.szititourbackend.repository.NotiSubscriberRepository
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 
@@ -17,9 +18,9 @@ import org.springframework.stereotype.Service
 @Service
 class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscriberRepository) {
 
-    fun sendNotificationToTarget(notification: DirectNotification){
-        if(!notification.isValid()) {
-            throw CustomException("Notification is not valid", HttpStatus.BAD_REQUEST)
+    fun sendNotificationToTarget(notification: DirectNotification) {
+        if (!notification.isValid()) {
+            throw CustomException("Notification is not valid", HttpStatus.BAD_REQUEST, MessageConstants.INVALID_NOTIFICATION)
         }
         val message = Message.builder()
                 // Set the configuration for our web notification
@@ -43,9 +44,9 @@ class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscri
         FirebaseMessaging.getInstance().sendAsync(message)
     }
 
-    fun sendNotificationToTopic(notification: TopicNotification){
-        if(!notification.isValid()) {
-            throw CustomException("Notification is not valid", HttpStatus.BAD_REQUEST)
+    fun sendNotificationToTopic(notification: TopicNotification) {
+        if (!notification.isValid()) {
+            throw CustomException("Notification is not valid", HttpStatus.BAD_REQUEST, MessageConstants.INVALID_NOTIFICATION)
         }
         val message = Message.builder()
                 .setWebpushConfig(
@@ -68,9 +69,9 @@ class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscri
     fun subscribeToTopic(subscription: SubscriptionRequest, userId: Int): List<String> {
         var toReturn = listOf<String>()
         val subscriber = notiSubscriberRepository.findByToken(subscription.subscriber)
-        if(subscriber.isPresent) {
+        if (subscriber.isPresent) {
             val sub = subscriber.get()
-            if(!sub.topics.contains(subscription.topic)) {
+            if (!sub.topics.contains(subscription.topic)) {
                 sub.topics.add(subscription.topic)
                 toReturn = notiSubscriberRepository.save(sub).topics
             }
@@ -93,7 +94,7 @@ class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscri
             val subscriber = optional.get()
             subscriber.topics.remove(subscription.topic)
             toReturn = subscriber.topics
-            if(subscriber.topics.size < 1) {
+            if (subscriber.topics.size < 1) {
                 notiSubscriberRepository.delete(subscriber)
             }
         }
@@ -103,7 +104,7 @@ class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscri
 
     fun getSubscriptions(subscription: SubscriptionRequest): List<String> {
         val subscriber = notiSubscriberRepository.findByToken(subscription.subscriber)
-        if(subscriber.isPresent) {
+        if (subscriber.isPresent) {
             val sub = subscriber.get()
             return sub.topics
         }

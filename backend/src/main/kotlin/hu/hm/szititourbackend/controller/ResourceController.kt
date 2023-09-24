@@ -3,6 +3,7 @@ package hu.hm.szititourbackend.controller
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_RESOURCE_TOKEN
+import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.UrlResource
@@ -43,7 +44,7 @@ class ResourceController @Autowired constructor(
             val directory = Utils.getImageDirectoryFromName(paths[0])
 
             if (directory == "") {
-                throw CustomException("Image resource not found - directory not exist", HttpStatus.BAD_REQUEST)
+                throw CustomException("Image resource not found - directory not exist", HttpStatus.BAD_REQUEST, MessageConstants.RESOURCE_DIRECTORY_NOT_FOUND)
             }
 
             val filename = paths[1]
@@ -52,7 +53,7 @@ class ResourceController @Autowired constructor(
 
             val image = File(path.toUri())
             if (!image.exists()) {
-                throw CustomException("Image not found", HttpStatus.NOT_FOUND)
+                throw CustomException("Image not found", HttpStatus.NOT_FOUND, MessageConstants.RESOURCE_IMG_NOT_FOUND)
             }
 
             val urlRes = UrlResource(path.toUri())
@@ -63,7 +64,7 @@ class ResourceController @Autowired constructor(
                     .body(urlRes)
         }
         else {
-            throw CustomException("Verification unsuccessful", HttpStatus.FORBIDDEN)
+            throw CustomException("Verification unsuccessful", HttpStatus.FORBIDDEN, MessageConstants.VERIFICATION_FAILED)
         }
     }
 

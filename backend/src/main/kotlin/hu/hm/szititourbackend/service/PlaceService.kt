@@ -5,6 +5,7 @@ import hu.hm.szititourbackend.dto.PlaceDto
 import hu.hm.szititourbackend.dto.convertToQuestions
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.PlaceRepository
+import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -15,8 +16,8 @@ import org.springframework.web.multipart.MultipartFile
 @Service
 @Transactional
 class PlaceService @Autowired constructor(
-    private val placeRepository: PlaceRepository,
-    private val gameService: GameService
+        private val placeRepository: PlaceRepository,
+        private val gameService: GameService
 ) {
     fun addPlaceToGameWithImage(placeDto: PlaceDto, file: MultipartFile): Place {
         var imagePath = ""
@@ -34,14 +35,14 @@ class PlaceService @Autowired constructor(
         val game = gameService.getGameById(placeDto.gameId)
 
         val newPlace = Place(
-            ordernumber = game.places.size + 1,
-            game = game,
-            address = placeDto.address,
-            img = placeDto.img,
-            latitude = placeDto.latitude,
-            longitude = placeDto.longitude,
-            name = placeDto.name,
-            questions = placeDto.questions.convertToQuestions()
+                ordernumber = game.places.size + 1,
+                game = game,
+                address = placeDto.address,
+                img = placeDto.img,
+                latitude = placeDto.latitude,
+                longitude = placeDto.longitude,
+                name = placeDto.name,
+                questions = placeDto.questions.convertToQuestions()
         )
         return placeRepository.save(newPlace)
 
@@ -60,7 +61,7 @@ class PlaceService @Autowired constructor(
         if (place.isPresent) {
             return place.get()
         } else {
-            throw CustomException("Place not found", HttpStatus.NOT_FOUND)
+            throw CustomException("Place not found", HttpStatus.NOT_FOUND, MessageConstants.PLACE_NOT_FOUND)
         }
     }
 
@@ -80,7 +81,7 @@ class PlaceService @Autowired constructor(
 
     fun updatePlace(placeDto: PlaceDto, image: Boolean = false): Place {
         val place = getPlaceById(placeDto.id)
-        if(image) {
+        if (image) {
             place.img = placeDto.img
         }
         place.address = placeDto.address

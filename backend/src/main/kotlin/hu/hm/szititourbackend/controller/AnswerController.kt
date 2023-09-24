@@ -4,6 +4,7 @@ import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.AnswerDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.AnswerService
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -58,7 +59,7 @@ class AnswerController @Autowired constructor(private val answerService: AnswerS
             answerService.deleteAnswerById(id)
             ResponseEntity(null, HttpStatus.OK)
         } catch (e: Exception) {
-            throw CustomException("Answer not found", HttpStatus.NOT_FOUND)
+            throw CustomException("Answer not found", HttpStatus.NOT_FOUND, MessageConstants.ANSWER_NOT_FOUND)
         }
     }
 }

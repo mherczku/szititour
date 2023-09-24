@@ -5,6 +5,7 @@ import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.PlaceDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.PlaceService
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -99,7 +100,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
             placeService.deletePlaceById(id)
             ResponseEntity(null, HttpStatus.OK)
         } catch (e: Exception) {
-            throw CustomException("Place not found", HttpStatus.NOT_FOUND)
+            throw CustomException("Place not found", HttpStatus.NOT_FOUND, MessageConstants.PLACE_NOT_FOUND)
         }
     }
 }
