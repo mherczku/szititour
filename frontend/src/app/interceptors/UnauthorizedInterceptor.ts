@@ -8,14 +8,14 @@ import {
   HttpStatusCode
 } from "@angular/common/http";
 import { catchError, Observable, throwError } from "rxjs";
-import { Router } from "@angular/router";
-import {HotToastService} from "@ngneat/hot-toast";
 import {AuthService} from "../services/AuthService";
+import { NotificationService } from "../services/Notification.service";
+import { CONST_MESSAGES, CONST_MESSAGE_KEY } from "../constants/messages-be.constants";
 
 @Injectable()
 export class UnauthorizedInterceptor implements HttpInterceptor {
 
-  constructor(private router: Router, private toastService: HotToastService, private authService: AuthService) {}
+  constructor(private readonly notiService: NotificationService, private readonly authService: AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
@@ -24,7 +24,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
         if(err instanceof HttpErrorResponse) {
           if(err.status === HttpStatusCode.Unauthorized) {
             if(this.authService.getToken() !== null) {
-              this.toastService.error("Unauthorized request");
+              this.notiService.error(CONST_MESSAGES[(err?.error?.messageCode as CONST_MESSAGE_KEY)] ?? CONST_MESSAGES.UNKNOWN_AUTH);
             }
             this.authService.logout();
           }

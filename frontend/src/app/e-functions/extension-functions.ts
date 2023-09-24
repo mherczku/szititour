@@ -18,3 +18,7 @@ export function addMapApiHeader(onLoad: () => void) {
     onLoad();
   }
 }
+
+export function genUUID(): string {
+  return crypto.randomUUID();
+}

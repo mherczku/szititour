@@ -1,5 +1,6 @@
 import { Injectable, Signal, WritableSignal, computed, effect, signal } from "@angular/core";
 import { PushNotificationService } from "./PushNotification.service";
+import { genUUID } from "../e-functions/extension-functions";
 
 
 export interface SzititourNotification {
@@ -48,6 +49,39 @@ export class NotificationService {
     }
   }
 
+  public error(message: string) {
+    if(!message || message.length < 1) {
+      return;
+    }
+    const n: SzititourNotification = {
+      id: genUUID(),
+      title: "Hiba történt",
+      message: message,
+      time: new Date(),
+      icon: "assets/svg/warning-yellow.svg",
+      link: "",
+      type: "APP"
+    };
+    this.pushToNotis(n);
+  }
+
+  public succes(title: string, message = "") {
+    if(!title || title.length < 1) {
+      return;
+    }
+    const n: SzititourNotification = {
+      id: genUUID(),
+      title: title,
+      message: message,
+      time: new Date(),
+      icon: "assets/svg/success.svg",
+      link: "",
+      type: "APP"
+    };
+    this.pushToNotis(n);
+  }
+
+
   trigger() {
     this.pushToNotis({
       id: "1",
@@ -76,7 +110,6 @@ export class NotificationService {
     }, { allowSignalWrites: true });
   }
 
-
   private take1FromPush() {
     const newNoti = this.pushNoti.popOne();
     if (newNoti) {
@@ -100,7 +133,7 @@ export class NotificationService {
   public removeNotiByIndex(index: number) {
     this.notis.update(n => {
       const noti = n[index];
-      if(noti.id === this.latestNoti()?.id) {
+      if (noti.id === this.latestNoti()?.id) {
         this.latestNoti.set(undefined);
       }
       n.splice(index, 1);

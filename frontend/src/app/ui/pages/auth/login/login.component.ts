@@ -1,4 +1,3 @@
-/* eslint-disable no-empty */
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,14 +6,14 @@ import {
   OnInit,
 } from "@angular/core";
 import { AuthService } from "../../../../services/AuthService";
-import { UserService } from "../../../../services/UserService";
 import { NetworkResponse } from "../../../../types/network-response";
-import { Router, RouterLink } from "@angular/router";
-import { HotToastService } from "@ngneat/hot-toast";
+import { RouterLink } from "@angular/router";
 import { Subscription } from "rxjs";
 import { FormsModule } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { GoogleSignInService } from "src/app/services/GoogleSignIn.service";
+import { NotificationService } from "src/app/services/Notification.service";
+import { CONST_MESSAGES } from "src/app/constants/messages-be.constants";
 
 @Component({
   selector: "app-login",
@@ -32,16 +31,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   subscriptionLogin?: Subscription;
 
   constructor(
-    private authService: AuthService,
-    private userService: UserService,
-    private router: Router,
-    private toastService: HotToastService,
-    private destroyRef: DestroyRef,
-    private googleSignInService: GoogleSignInService
+    private readonly authService: AuthService,
+    private readonly notiService: NotificationService,
+    private readonly destroyRef: DestroyRef,
+    private readonly googleSignInService: GoogleSignInService
   ) {}
 
   ngOnInit() {
-    this.googleSignInService.fullCycle("google-button", (res: any)=> {
+    this.googleSignInService.fullCycle("google-button", (res: any) => {
       this.handleCredentialResponse(res);
     });
   }
@@ -62,24 +59,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     this.subscriptionLogin = this.authService
       .login(this.email, this.password)
-      .pipe(
-        this.toastService.observe({
-          loading: "Bejelentkezés...",
-          success: (s) => {
-            if (s.success) {
-              return "Sikeres bejelentkezés";
-            }
-            return "Sikertelen bejelentkezés";
-          },
-          error: (_arg) => {
-            return "Hibás email vagy jelszó";
-          },
-        })
-      )
       .subscribe((res: NetworkResponse) => {
         if (res.success) {
-        } else {
-          this.error = res.errorMessage;
+          this.notiService.succes(CONST_MESSAGES.LOGIN_SUCCESS);
         }
       });
   }

@@ -8,42 +8,42 @@ import {
   HttpStatusCode
 } from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
-import {HotToastService} from "@ngneat/hot-toast";
+import { NotificationService } from "../services/Notification.service";
+import { CONST_MESSAGES, CONST_MESSAGE_KEY } from "../constants/messages-be.constants";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
-  constructor(private toastService: HotToastService) {
+  constructor(private readonly notiService: NotificationService) {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((err: any, _caught: any) => {
         if (err instanceof HttpErrorResponse) {
-          if (err?.error?.errorMessage) {
-            this.toastService.error(err.error.errorMessage);
+          if (err?.error?.messageCode && CONST_MESSAGES[(err?.error?.messageCode as CONST_MESSAGE_KEY)]) {
+            this.notiService.error(CONST_MESSAGES[(err?.error?.messageCode as CONST_MESSAGE_KEY)]);
           }
           else {
             switch (err.status) {
               case HttpStatusCode.GatewayTimeout: {
-                this.toastService.error("Gateway Timed Out");
+                this.notiService.error("Gateway Timed Out");
                 break;
               }
               case HttpStatusCode.RequestTimeout: {
-                this.toastService.error("Request Timed Out");
+                this.notiService.error("Request Timed Out");
                 break;
               }
               case HttpStatusCode.BadRequest: {
-                this.toastService.error("Bad Request");
-                break;
-              }
-              case HttpStatusCode.InternalServerError: {
-                this.toastService.error("Internal Error");
+                this.notiService.error("Hibás kérés");
                 break;
               }
               case HttpStatusCode.NotFound: {
-                this.toastService.error("Requested object not found");
+                this.notiService.error("Keresett elem nem található");
                 break;
+              }
+              default: {
+                this.notiService.error(CONST_MESSAGES["UNKNOWN"]);
               }
             }
           }
