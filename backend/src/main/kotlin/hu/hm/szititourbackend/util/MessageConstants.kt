@@ -3,7 +3,6 @@ package hu.hm.szititourbackend.util
 object MessageConstants {
 
     //! SUCCESS MESSAGES:
-
     const val TOPIC_NOTIFICATION_SENT = "TOPIC_NOTIFICATION_SENT"
     const val DIRECT_NOTIFICATION_SENT = "DIRECT_NOTIFICATION_SENT"
     const val TEAM_DELETE_SUCCESS = "TEAM_DELETE_SUCCESS"
@@ -13,9 +12,8 @@ object MessageConstants {
     const val REGISTER_SUCCESS = "REGISTER_SUCCESS"
 
 
-
     //! ERROR MESSAGES:
-
+    const val TEAM_NOT_VERIFIED = "TEAM_NOT_VERIFIED"
     const val REQUEST_METHOD_NOT_SUPPORTED = "REQUEST_METHOD_NOT_SUPPORTED"
     const val MISSING_REQUEST_VALUE = "MISSING_REQUEST_VALUE"
     const val GAME_TITLE_TAKEN = "GAME_TITLE_TAKEN"

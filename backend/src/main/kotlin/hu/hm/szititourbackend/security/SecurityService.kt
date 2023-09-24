@@ -76,7 +76,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             }
             val type: String = jwt.getClaim(CLAIM_TYPE)
             if (type != CLAIM_TYPE_AUTH_TOKEN) {
-                throw Exception("Bad token type")
+                throw CustomException("Bad token type", HttpStatus.FORBIDDEN, MessageConstants.AUTH_INVALID_TOKEN_TYPE)
             }
             val role: String = jwt.getClaim(CLAIM_ROLE)
             val tokenId: String = jwt.getClaim(CLAIM_TOKEN_ID)

@@ -20,6 +20,7 @@ import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -29,6 +30,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.oauth2.jwt.*
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
+import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
@@ -77,11 +79,15 @@ class SecurityConfig2(
                 .and()
                 .userDetailsService(securityUserDetailService)
                 .httpBasic(Customizer.withDefaults<HttpBasicConfigurer<HttpSecurity>>())
-                //.addFilterBefore(jwtBlackListFilter, UsernamePasswordAuthenticationFilter::class.java)
+                .exceptionHandling(getExceptionHandler())
                 .addFilterAfter(tokenIdFilter(), UsernamePasswordAuthenticationFilter::class.java)
                 .addFilterAfter(ImgPropertyFilter(), TokenIdFilter::class.java)
                 .cors().configurationSource(corsResource()).and()
                 .build()
+    }
+
+    private fun getExceptionHandler(): Customizer<ExceptionHandlingConfigurer<HttpSecurity>> {
+        return CustomAuthExceptionHandler()
     }
 
     @Bean

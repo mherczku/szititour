@@ -44,16 +44,18 @@ class ImgPropertyFilter : OncePerRequestFilter() {
             val modified = modifyImgProperty(String(responseBody, StandardCharsets.UTF_8))
             if(modified != null) {
                 resp.resetBuffer()
-                resp.setContentLength(modified.length);
-                resp.getOutputStream().write(modified.toByteArray(StandardCharsets.UTF_8));
-                resp.getOutputStream().flush();
-                resp.copyBodyToResponse();
+                resp.setContentLength(modified.length)
+                response.contentType = "application/json"
+                response.characterEncoding = "UTF-8"
+                resp.getOutputStream().write(modified.toByteArray(StandardCharsets.UTF_8))
+                resp.getOutputStream().flush()
+                resp.copyBodyToResponse()
             } else {
-                resp.copyBodyToResponse();
+                resp.copyBodyToResponse()
             }
         }
         else {
-            resp.copyBodyToResponse();
+            resp.copyBodyToResponse()
         }
     }
 

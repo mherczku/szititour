@@ -2,7 +2,6 @@ package hu.hm.szititourbackend.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ObjectWriter
-import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.Response
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
 import hu.hm.szititourbackend.service.TeamService
@@ -13,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.filter.OncePerRequestFilter
 import java.nio.charset.StandardCharsets
-import javax.servlet.*
+import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -33,11 +32,11 @@ class TokenIdFilter : OncePerRequestFilter() {
         val token = request.getHeader(HEADER_TOKEN)
         myLogger.debug("Inside TokenIdFilter")
 
-        if(token != null && token.contains("Bearer ")) {
+        if (token != null && token.contains("Bearer ")) {
             val verification = securityService.verifyToken(token)
-            if(verification.verified) {
+            if (verification.verified) {
                 val team = teamService.getTeamById(verification.teamId)
-                if(team.clients.any { it.tokenId == verification.tokenId }) {
+                if (team.clients.any { it.tokenId == verification.tokenId }) {
                     // Continue the filter chain
                     filterChain.doFilter(request, response)
                     return
@@ -51,6 +50,8 @@ class TokenIdFilter : OncePerRequestFilter() {
             response.resetBuffer()
             response.status = HttpStatus.UNAUTHORIZED.value()
             response.setContentLength(json.length)
+            response.contentType = "application/json"
+            response.characterEncoding = StandardCharsets.UTF_8.name()
             response.outputStream.write(byteArray)
             response.outputStream.flush()
             return
@@ -58,8 +59,5 @@ class TokenIdFilter : OncePerRequestFilter() {
 
         // Continue the filter chain if no token - not authenticated request
         filterChain.doFilter(request, response)
-
-
     }
-
 }
