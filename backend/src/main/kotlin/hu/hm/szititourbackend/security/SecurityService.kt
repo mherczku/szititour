@@ -46,7 +46,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
     @Value("\${google.clientId}")
     var CLIENT_ID: String? = null
 
-    
+
     // AUTH TOKEN
     fun generateToken(team: Team, tokenId: String, expiresAt: Instant): String {
         val now = Instant.now()
@@ -70,8 +70,9 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         val token = bearerToken.replace("Bearer ", "")
         return try {
             val jwt: Jwt = jwtDecoder.decode(token)
+
             val now = Instant.now()
-            if(jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
+            if (jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
                 throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_EXPIRED)
             }
             val type: String = jwt.getClaim(CLAIM_TYPE)
@@ -80,7 +81,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             }
             val role: String = jwt.getClaim(CLAIM_ROLE)
             val tokenId: String = jwt.getClaim(CLAIM_TOKEN_ID)
-            if(tokenId.isBlank()) {
+            if (tokenId.isBlank()) {
                 throw CustomException("TokenId cannot be empty", HttpStatus.FORBIDDEN, MessageConstants.AUTH_EMPTY_TOKENID)
             }
             val isAdmin = role == ROLE_ADMIN
@@ -89,15 +90,25 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             VerificationResponse(verified = true, isAdmin = isAdmin, teamId = teamId, tokenId = tokenId, messageCode = MessageConstants.SUCCESS)
         } catch (e: Exception) {
             //Invalid signature/claims
-            if(e is CustomException) {
-                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
-            } else {
-                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+            when (e) {
+                is JwtValidationException -> {
+                    if(e.localizedMessage.contains("Jwt expired at")) {
+                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
+                    } else {
+                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                    }
+                }
+                is CustomException -> {
+                    return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
+                }
+                else -> {
+                    return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                }
             }
         }
     }
-    
-    
+
+
     // EMAIL VERIFY TOKEN
     fun generateEmailVerificationToken(team: Team): String {
         val now = Instant.now()
@@ -120,7 +131,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         return try {
             val jwt: Jwt = jwtDecoder.decode(token)
             val now = Instant.now()
-            if(jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
+            if (jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
                 throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_EXPIRED)
             }
             val type: String = jwt.getClaim(CLAIM_TYPE)
@@ -139,8 +150,8 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             }
         }
     }
-    
-    
+
+
     // GOOGLE TOKEN:
 
     fun verifyGoogleToken(idTokenString: String): GoogleAccount {
@@ -153,7 +164,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         // (Receive idTokenString by HTTPS POST)
         try {
             val idToken: GoogleIdToken? = verifier.verify(idTokenString)
-            if(idToken !== null) {
+            if (idToken !== null) {
                 val payload: IdToken.Payload = idToken.payload
 
                 // Print user identifier
@@ -199,7 +210,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         return try {
             val jwt: Jwt = jwtDecoder.decode(resToken)
             val now = Instant.now()
-            if(jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
+            if (jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
                 throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_EXPIRED)
             }
             val type: String = jwt.getClaim(CLAIM_TYPE)
@@ -210,13 +221,13 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             //val isAdmin = role == ROLE_ADMIN
             val teamId: Int = jwt.subject.toInt()
             val resourceId: String = jwt.getClaim(CLAIM_RES_ID)
-            if(resourceId != requestedResourceId) {
+            if (resourceId != requestedResourceId) {
                 throw CustomException("Bad token resourceId", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_BAD_RESOURCE_ID)
             }
 
             VerificationResponse(verified = true, isAdmin = false, teamId = teamId, messageCode = MessageConstants.SUCCESS)
         } catch (e: Exception) {
-            if(e is CustomException) {
+            if (e is CustomException) {
                 throw e
             } else {
                 throw e
@@ -225,7 +236,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         }
     }
 
-    fun genImgUrl(imagePath: String, teamId: String): String  {
+    fun genImgUrl(imagePath: String, teamId: String): String {
         val token = generateResourceToken(teamId, imagePath)
         return "images?img=$imagePath&&resToken=$token"
     }

@@ -46,7 +46,7 @@ class TokenIdFilter : OncePerRequestFilter() {
                 }
             }
             myLogger.info("TokenIdFilter stopped chain")
-            val r = Response(message = "TokenId not found in clients", success = false, messageCode = code)
+            val r = Response(message = "Authentication failed", success = false, messageCode = code)
             val ow: ObjectWriter = ObjectMapper().writer().withDefaultPrettyPrinter()
             val json: String = ow.writeValueAsString(r)
             val byteArray = json.toByteArray(StandardCharsets.UTF_8)
