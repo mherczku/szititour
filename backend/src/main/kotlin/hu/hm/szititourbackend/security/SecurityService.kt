@@ -65,7 +65,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
 
     fun verifyToken(bearerToken: String): VerificationResponse {
         if (bearerToken.isNullOrEmpty()) {
-            return VerificationResponse(verified = false, errorMessage = "Empty Token")
+            return VerificationResponse(verified = false, errorMessage = "Empty Token", messageCode = MessageConstants.AUTH_TOKEN_EMPTY)
         }
         val token = bearerToken.replace("Bearer ", "")
         return try {
@@ -86,10 +86,14 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             val isAdmin = role == ROLE_ADMIN
             val teamId: Int = jwt.subject.toInt()
 
-            VerificationResponse(verified = true, isAdmin = isAdmin, teamId = teamId, tokenId = tokenId)
+            VerificationResponse(verified = true, isAdmin = isAdmin, teamId = teamId, tokenId = tokenId, messageCode = MessageConstants.SUCCESS)
         } catch (e: Exception) {
             //Invalid signature/claims
-            VerificationResponse(verified = false, errorMessage = e.localizedMessage)
+            if(e is CustomException) {
+                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
+            } else {
+                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+            }
         }
     }
     
@@ -110,7 +114,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
 
     fun verifyEmailVerificationToken(token: String): VerificationResponse {
         if (token.isNullOrEmpty()) {
-            return VerificationResponse(verified = false, errorMessage = "Empty Token")
+            return VerificationResponse(verified = false, errorMessage = "Empty Token", messageCode = MessageConstants.AUTH_TOKEN_EMPTY)
         }
 
         return try {
@@ -125,9 +129,15 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             }
             val teamId: Int = jwt.subject.toInt()
 
-            VerificationResponse(verified = true, isAdmin = false, teamId = teamId)
+            VerificationResponse(verified = true, isAdmin = false, teamId = teamId, messageCode = MessageConstants.SUCCESS)
         } catch (e: Exception) {
-            VerificationResponse(verified = false, errorMessage = e.localizedMessage)        }
+            if (e is CustomException) {
+                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
+            } else {
+                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+
+            }
+        }
     }
     
     
@@ -184,7 +194,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
 
     fun verifyResourceToken(resToken: String, requestedResourceId: String): VerificationResponse {
         if (resToken.isNullOrEmpty()) {
-            return VerificationResponse(verified = false, errorMessage = "Empty Token")
+            return VerificationResponse(verified = false, errorMessage = "Empty Token", messageCode = MessageConstants.AUTH_TOKEN_EMPTY)
         }
         return try {
             val jwt: Jwt = jwtDecoder.decode(resToken)
@@ -204,7 +214,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
                 throw CustomException("Bad token resourceId", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_BAD_RESOURCE_ID)
             }
 
-            VerificationResponse(verified = true, isAdmin = false, teamId = teamId)
+            VerificationResponse(verified = true, isAdmin = false, teamId = teamId, messageCode = MessageConstants.SUCCESS)
         } catch (e: Exception) {
             if(e is CustomException) {
                 throw e

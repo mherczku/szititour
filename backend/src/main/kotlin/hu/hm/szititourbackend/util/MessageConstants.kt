@@ -2,7 +2,9 @@ package hu.hm.szititourbackend.util
 
 object MessageConstants {
 
+
     //! SUCCESS MESSAGES:
+    const val SUCCESS = "SUCCESS"
     const val TOPIC_NOTIFICATION_SENT = "TOPIC_NOTIFICATION_SENT"
     const val DIRECT_NOTIFICATION_SENT = "DIRECT_NOTIFICATION_SENT"
     const val TEAM_DELETE_SUCCESS = "TEAM_DELETE_SUCCESS"
@@ -62,6 +64,7 @@ object MessageConstants {
     const val APPLICATION_NOT_FOUND = "APPLICATION_NOT_FOUND"
     const val ANSWER_NOT_FOUND = "ANSWER_NOT_FOUND"
     const val BAD_CREDENTIALS = "BAD_CREDENTIALS"
+    const val AUTH_TOKEN_EMPTY = "AUTH_TOKEN_EMPTY" //TODO FE
     const val UNKNOWN = "UNKNOWN"
 
 }

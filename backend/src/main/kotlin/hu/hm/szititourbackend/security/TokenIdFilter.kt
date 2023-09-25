@@ -34,16 +34,19 @@ class TokenIdFilter : OncePerRequestFilter() {
 
         if (token != null && token.contains("Bearer ")) {
             val verification = securityService.verifyToken(token)
+            var code = verification.messageCode
             if (verification.verified) {
                 val team = teamService.getTeamById(verification.teamId)
                 if (team.clients.any { it.tokenId == verification.tokenId }) {
                     // Continue the filter chain
                     filterChain.doFilter(request, response)
                     return
+                } else {
+                    code = MessageConstants.AUTH_TOKENID_NOT_FOUND
                 }
             }
             myLogger.info("TokenIdFilter stopped chain")
-            val r = Response(message = "TokenId not found in clients", success = false, messageCode = MessageConstants.AUTH_TOKENID_NOT_FOUND)
+            val r = Response(message = "TokenId not found in clients", success = false, messageCode = code)
             val ow: ObjectWriter = ObjectMapper().writer().withDefaultPrettyPrinter()
             val json: String = ow.writeValueAsString(r)
             val byteArray = json.toByteArray(StandardCharsets.UTF_8)

@@ -6,5 +6,6 @@ class VerificationResponse(
         val isAdmin: Boolean = false,
         val errorMessage: String = "",
         val teamId: Int = -1,
-        val tokenId: String = ""
+        val tokenId: String = "",
+        val messageCode: String
 )
