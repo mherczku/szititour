@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_ADMIN
 import hu.hm.szititourbackend.service.TeamService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
@@ -11,8 +13,6 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import java.io.IOException
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 
 @Component
@@ -20,7 +20,7 @@ class AdminSocketHandler(@Autowired @Lazy private val userSocket: UserSocketHand
 
     val logger: Logger = LoggerFactory.getLogger(AdminSocketHandler::class.java)
 
-    var sessions: MutableMap<String, SessionData> = mutableMapOf()
+    var sessions: MutableList<SessionData> = mutableListOf()
 
     @Throws(InterruptedException::class, IOException::class)
     public override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
@@ -28,18 +28,19 @@ class AdminSocketHandler(@Autowired @Lazy private val userSocket: UserSocketHand
         try {
             val chatMessage: ChatMessage = ObjectMapper().readValue(message.payload, ChatMessage::class.java)
 
-            var sessionData = sessions[session.id]
+            var sessionData = sessions.find { it.session.id == session.id }
 
             if (sessionData == null) {
                 session.close(CloseStatus.NOT_ACCEPTABLE)
             } else {
-                if(!sessionData.authenticated) {
+                if (!sessionData.authenticated) {
                     sessionData = authenticate(session, chatMessage)
-                    notifyUserIfFirstAdminAvailable()
-                    if(sessionData !== null) {
-                        sessions[session.id] = sessionData
+                    if (sessionData !== null) {
+                        sessions.removeIf { it.session.id == sessionData.session.id }
+                        sessions.add(sessionData)
+                        notifyUserIfFirstAdminAvailable()
                         // sending infos:
-                        val infos: List<String> = userSocket.sessions.map { it.value.username }
+                        val infos: List<String> = userSocket.sessions.map { it.username }
                         sendMessageTo(sessionData, ChatMessage(type = "INFO", info = infos))
                         sendMessageTo(sessionData, ChatMessage(content = "SUCCESS", type = "JOIN"))
                         return
@@ -54,21 +55,32 @@ class AdminSocketHandler(@Autowired @Lazy private val userSocket: UserSocketHand
             chatMessage.sender = "ADMIN"
 
             // send admin messages (recipient only admin "én") to admins:
-            if(chatMessage.recipient == "Én") {
-                for (webSocketSession in sessions) {
-                    if(webSocketSession.value.session.isOpen) {
-                        sendMessageTo(webSocketSession.value, message)
+            println("sending to admins: ${sessions.size} ---- ${sessions} ")
+            //sessions.removeIf { !it.session.isOpen }
+            if (chatMessage.recipient == "Én") {
+                sessions.forEach { webSocketSession ->
+                    println("admin_s: ${webSocketSession}")
+                    if (webSocketSession.session.isOpen) {
+                        sendMessageTo(webSocketSession, message)
                     }
                 }
-            }
-            val recipient = userSocket.sessions.values.find { it.username == chatMessage.recipient }
 
-            if(recipient != null && recipient.session.isOpen) {
+
+                /*for (webSocketSession in sessions.values) {
+                    println("admin_s: ${webSocketSession}")
+                    if(webSocketSession.session.isOpen) {
+                        sendMessageTo(webSocketSession, message)
+                    }
+                }*/
+            }
+            val recipient = userSocket.sessions.find { it.username == chatMessage.recipient }
+
+            if (recipient != null && recipient.session.isOpen) {
                 sendMessageTo(recipient, message)
 
                 for (webSocketSession in sessions) {
-                    if(webSocketSession.value.session.isOpen) {
-                        sendMessageTo(webSocketSession.value, message)
+                    if (webSocketSession.session.isOpen) {
+                        sendMessageTo(webSocketSession, message)
                     }
                 }
             }
@@ -82,8 +94,8 @@ class AdminSocketHandler(@Autowired @Lazy private val userSocket: UserSocketHand
 
     private fun notifyUserIfFirstAdminAvailable() {
         // now comes the first admin
-        if(sessions.values.filter { it.authenticated && it.session.isOpen }.isEmpty()) {
-            userSocket.sessions.values.forEach {
+        if (sessions.filter { it.authenticated && it.session.isOpen }.isEmpty()) {
+            userSocket.sessions.forEach {
                 sendMessageTo(it, ChatMessage(type = "INFO", content = "YES_ADMIN"))
             }
         }
@@ -91,12 +103,12 @@ class AdminSocketHandler(@Autowired @Lazy private val userSocket: UserSocketHand
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
         super.afterConnectionClosed(session, status)
-        sessions.remove(session.id)
+        sessions.removeIf { it.session.id == session.id }
     }
 
     @Throws(Exception::class)
     override fun afterConnectionEstablished(session: WebSocketSession) {
-        sessions[session.id] = SessionData("", -1, session, false)
+        sessions.add(SessionData("", -1, session, false))
     }
 
     private fun authenticate(session: WebSocketSession, chatMessage: ChatMessage): SessionData? {
@@ -105,19 +117,29 @@ class AdminSocketHandler(@Autowired @Lazy private val userSocket: UserSocketHand
             val verification = securityService.verifyToken(token)
             if (verification.verified) {
                 val currentTeam = teamService.getTeamById(verification.teamId)
-                if(currentTeam.role == ROLE_ADMIN) {
+                if (currentTeam.role == ROLE_ADMIN) {
 
                     // Already has open connection:
-                    val alreadySession = sessions.values.find { it.userId == currentTeam.id }
-                    if(alreadySession != null && alreadySession.session.isOpen) {
-                        sendMessageTo(session, ChatMessage(type = "ALREADY_OPEN"))
-                        session.close(CloseStatus.SERVICE_OVERLOAD)
-                        null
+                    val alreadySessions = sessions.filter { it.userId == currentTeam.id }
+                    if (alreadySessions.isNotEmpty()) {
+                        var alreadyOpen = false
+                        alreadySessions.forEach {
+                            if(it.session.isOpen) {
+                                alreadyOpen = true
+                            } else {
+                                sessions.remove(it)
+                            }
+                        }
+                        if(alreadyOpen) {
+                            sendMessageTo(session, ChatMessage(type = "ALREADY_OPEN"))
+                            session.close(CloseStatus.SERVICE_OVERLOAD)
+                            null
+                        } else {
+                            SessionData(username = currentTeam.name, session = session, authenticated = true, userId = currentTeam.id)
+                        }
                     } else {
-                        sessions.remove(alreadySession?.session?.id)
                         SessionData(username = currentTeam.name, session = session, authenticated = true, userId = currentTeam.id)
                     }
-
                 } else {
                     null
                 }
