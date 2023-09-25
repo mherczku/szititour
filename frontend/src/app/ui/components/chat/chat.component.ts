@@ -20,6 +20,19 @@ import { ChatService, Message } from "src/app/services/ChatService";
 import { chatCollapse } from "../../animations/chatCollapse.animation";
 import { popInOut } from "../../animations/pupInOut.animation";
 import { UserSelectorComponent } from "./user-selector/user-selector.component";
+import { NotificationService } from "src/app/services/Notification.service";
+
+/*
+effect(() => {
+      if (this.isAdmin() && !this.isConnected2) {
+        console.warn("Connect effect")
+        this.connect();
+        this.adminChat.update((chat: AdminChat) => {
+          chat.selectedUser = chat.users[0];
+          return chat;
+        });
+      }
+    }, {allowSignalWrites: true}); */
 
 interface AdminChat {
   newMessages: Signal<number>;
@@ -82,10 +95,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   chatContentRef?: ElementRef;
 
   constructor(
-    private alertService: HotToastService,
-    private chatService: ChatService,
-    private destroyRef: DestroyRef,
-    private authService: AuthService
+    private readonly notiService: NotificationService,
+    private readonly chatService: ChatService,
+    private readonly destroyRef: DestroyRef,
+    private readonly authService: AuthService
   ) {
     effect(() => {
       this.chatService.signalToComponent();
@@ -95,7 +108,6 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.isAdmin()) {
-      this.connect();
       this.adminChat.update((chat: AdminChat) => {
         chat.selectedUser = chat.users[0];
         return chat;
@@ -113,6 +125,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       ?.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (msg) => {
+
           if (msg?.type === "MSG") {
             this.handleMSG(msg);
           } else if (msg?.type === "INFO") {
@@ -128,7 +141,8 @@ export class ChatComponent implements OnInit, OnDestroy {
 
         error: (error) => {
           this.isConnected.set(false);
-          this.alertService.error("Chat hiba történt: " + error);
+          this.notiService.error(`Chat hiba: ${error}`);
+          console.error("Chat hiba: ", error);
         },
         complete: () => {
           this.isConnected.set(false);
@@ -219,6 +233,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         sender.online = true;
         this.adminChat().selectedUser = sender;
         this.adminChat.set(this.adminChat());
+        this.scrollToBottom();
         return;
       } else {
         const newSender: SimpleUser = {
@@ -230,11 +245,16 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.adminChat().users.push(newSender);
         this.adminChat().selectedUser = newSender;
         this.adminChat.set(this.adminChat());
+        this.scrollToBottom();
         return;
       }
     }
 
     this.msgs.push(msg);
+    this.scrollToBottom();
+  }
+
+  private scrollToBottom() {
     const scrollableDiv = this.chatContentRef?.nativeElement;
     clearTimeout(this.timeOut);
     this.timeOut = setTimeout(() => {

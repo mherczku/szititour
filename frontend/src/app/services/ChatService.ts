@@ -1,5 +1,4 @@
 import { Injectable, WritableSignal, effect, signal } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { Observable, Observer, Subject, map } from "rxjs";
 import { AnonymousSubject } from "rxjs/internal/Subject";
 import { environment } from "src/environments/environment";
@@ -28,10 +27,10 @@ export class ChatService {
   initialized = false;
   signalToComponent: WritableSignal<Subject<Message> | undefined> = signal(undefined);
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private readonly authService: AuthService) {
 
     effect(() => {
-      if (this.user() && this.initialized) {
+      if ((this.user() && this.initialized) || this.user()?.role === "ROLE_ADMIN") {
         this.initializeChat();
       } else {
         this.close();
@@ -42,8 +41,11 @@ export class ChatService {
   obs = new Subject<number>();
 
   public initializeChat() {
+    if(this.ws?.readyState === WebSocket.OPEN) {
+      return;
+    }
     if(this.user() === undefined) {
-      console.error("ChatService - init failed - not logged in")
+      console.error("ChatService - init failed - not logged in");
       return;
     }
     this.initialized = true;
@@ -104,6 +106,7 @@ export class ChatService {
       },
       next: (data: MessageEvent<Message>) => {
         if (this.ws.readyState === WebSocket.OPEN) {
+
           this.ws.send(JSON.stringify(data));
         }
       },

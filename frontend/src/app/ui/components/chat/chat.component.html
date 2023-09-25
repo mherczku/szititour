@@ -3,7 +3,7 @@
   <img class="chatIcon" (click)="toggle()" [class.isHidden]="isHidden" src="assets/svg/chat.svg" alt="Chat icon">
   <div [@chatCollapse]="isHidden" class="chat-container">
     <span *ngIf="isAdmin()" class="badge">{{ adminChat().newMessages() }}</span>
-    <div class="chat-head" (click)="toggle();">
+    <div class="chat-head disableSelectAndTap" (click)="toggle();">
       <div class="left">
         <p *ngIf="!isAdmin()">Szititour Szervezők</p>
         <app-user-selector *ngIf="isAdmin()" [isHidden]="isHidden" [selectedUserI]="adminChat().selectedUser" (selectedUserChange)="setSelecteduser($event)" [users]="adminChat().users"></app-user-selector>
