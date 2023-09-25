@@ -61,6 +61,7 @@ object MessageConstants {
     const val CANNOT_APPLY_ACTIVE_GAME = "CANNOT_APPLY_ACTIVE_GAME"
     const val APPLICATION_NOT_FOUND = "APPLICATION_NOT_FOUND"
     const val ANSWER_NOT_FOUND = "ANSWER_NOT_FOUND"
+    const val BAD_CREDENTIALS = "BAD_CREDENTIALS"
     const val UNKNOWN = "UNKNOWN"
 
 }

@@ -3,6 +3,7 @@ package hu.hm.szititourbackend.security
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ObjectWriter
 import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.util.AuthUtil
 import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.InsufficientAuthenticationException
@@ -16,7 +17,8 @@ class CustomAuthExceptionHandler : Customizer<ExceptionHandlingConfigurer<HttpSe
 
         t.authenticationEntryPoint { request, response, authException ->
             if (authException is InsufficientAuthenticationException) {
-                val r = Response(message = "Team is not enabled", success = false, messageCode = MessageConstants.TEAM_INACTIVE)
+                val r = Response(message = "Authentication failed", success = false, messageCode = AuthUtil.currentError)
+                AuthUtil.currentError = MessageConstants.BAD_CREDENTIALS
                 val ow: ObjectWriter = ObjectMapper().writer().withDefaultPrettyPrinter()
                 val json: String = ow.writeValueAsString(r)
                 val byteArray = json.toByteArray(StandardCharsets.UTF_8)
