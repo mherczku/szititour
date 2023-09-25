@@ -51,27 +51,15 @@ class AdminSocketHandler(@Autowired @Lazy private val userSocket: UserSocketHand
                 chatMessage.sender = sessionData.username
             }
 
-
             chatMessage.sender = "ADMIN"
 
             // send admin messages (recipient only admin "én") to admins:
-            println("sending to admins: ${sessions.size} ---- ${sessions} ")
-            //sessions.removeIf { !it.session.isOpen }
             if (chatMessage.recipient == "Én") {
                 sessions.forEach { webSocketSession ->
-                    println("admin_s: ${webSocketSession}")
                     if (webSocketSession.session.isOpen) {
                         sendMessageTo(webSocketSession, message)
                     }
                 }
-
-
-                /*for (webSocketSession in sessions.values) {
-                    println("admin_s: ${webSocketSession}")
-                    if(webSocketSession.session.isOpen) {
-                        sendMessageTo(webSocketSession, message)
-                    }
-                }*/
             }
             val recipient = userSocket.sessions.find { it.username == chatMessage.recipient }
 
