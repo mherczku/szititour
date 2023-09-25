@@ -26,6 +26,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
             if(this.authService.getToken() !== null) {
               this.notiService.error(CONST_MESSAGES[(err?.error?.messageCode as CONST_MESSAGE_KEY)] ?? CONST_MESSAGES_FE.UNKNOWN_AUTH);
             }
+            this.authService.removeToken();
             this.authService.logout();
           }
         }

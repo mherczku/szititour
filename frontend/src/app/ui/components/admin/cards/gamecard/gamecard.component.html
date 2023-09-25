@@ -22,7 +22,7 @@
         <app-buttons classes="min-w-[20px]" (click)="onEditClicked.emit()" iconSrc="assets/svg/edit.svg"
                      type="icon"></app-buttons>
       </div>
-      <p class="text-size-min">{{game.dateStart | date:'short'}} - {{game.dateEnd | date:'short'}}</p>
+      <p class="text-size-min">{{game.dateStart | date:'y. MM. d. H:mm'}} - {{game.dateEnd | date:'H:mm'}}</p>
     </div>
     <div class="flex-grow">
 

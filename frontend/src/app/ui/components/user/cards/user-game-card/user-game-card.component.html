@@ -2,7 +2,7 @@
   <img [src]="game.img | imgSrc" [alt]="game.title">
   <div class="details">
     <p class="text-size-lg bold">{{game.title}}</p>
-    <p class="text-size-base">{{game.dateStart | date:'short' }} - {{game.dateEnd | date:'short' }}</p>
+    <p class="text-size-base">{{game.dateStart | date:'y. MM. d. H:mm' }} - {{game.dateEnd | date:'H:mm' }}</p>
     <button class="btn-simple" [routerLink]="game.active && game.userApplied === 'accepted' ? '/user/active/' + game.id : undefined" [disabled]="game.userApplied === 'declined'" (click)="applyBtnClicked()" [ngClass]="{'btn-simple-red' : game.userApplied === 'applied' || game.userApplied === 'accepted' && !game.active, 'btn-simple-green' : game.active && game.userApplied === 'accepted'}">{{(game.userApplied === 'applied' || game.userApplied === 'accepted') ? game.active && game.userApplied === 'accepted' ? 'Írány a játék' : 'Visszamondás' : 'Jelentkezés'}}</button>
   </div>
 </div>
