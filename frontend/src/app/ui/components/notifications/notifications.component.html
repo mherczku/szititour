@@ -1,12 +1,17 @@
-<div class="notifications" [@popInOut] *ngIf="isNotiOpen()" (click)="clicInside($event)">
+<div class="notifications" [@popInOut] *ngIf="$isNotiOpen()" (click)="clicInside($event)">
 
-    <div *ngIf="notifications().length > 0" class="actions">
+    <div *ngIf="$notifications().length > 0" class="actions">
         <button (click)="seenAll()" bold="Összes jelölése olvasottnak" class="btn-hover-bold text-size-min">Összes jelölése olvasottnak</button>
         <button (click)="removeAll()" bold="Összes törlése" class="btn-hover-bold text-size-min">Összes törlése</button>
     </div>
 
-    <app-notification [@popInOut] *ngFor="let noti of notifications()" [noti]="noti"></app-notification>
-    <div *ngIf="notifications().length < 1">
+    <div class="push-inactive" *ngIf="!$isPushActive()">
+        <img src="assets/svg/warning-yellow.svg" alt="Warning-push">
+        <p>Push értesítések kikapcsolva</p>
+    </div>
+
+    <app-notification [@popInOut] *ngFor="let noti of $notifications()" [noti]="noti"></app-notification>
+    <div class="center" *ngIf="$notifications().length < 1">
         <p>Nincs új üzenet</p>
     </div>
 

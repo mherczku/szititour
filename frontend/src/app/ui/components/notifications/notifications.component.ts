@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit, Renderer2, Signal } from "@angular/core";
+import { Component, OnDestroy, OnInit, Renderer2, Signal, computed } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { NotificationComponent } from "./notification/notification.component";
 import { NotificationService, SzititourNotification } from "src/app/services/Notification.service";
 import { popInOut } from "../../animations/pupInOut.animation";
+import { PushNotificationService } from "src/app/services/PushNotification.service";
 
 @Component({
     selector: "app-notifications",
@@ -14,14 +15,16 @@ import { popInOut } from "../../animations/pupInOut.animation";
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
 
-    isNotiOpen = this.notiService.isOpenR;
+    $isNotiOpen = this.notiService.isOpenR;
+    $isPushActive = computed(() => this.pushService.$state() === "true");
 
-    notifications: Signal<SzititourNotification[]> = this.notiService.getNotifications();
+    $notifications: Signal<SzititourNotification[]> = this.notiService.getNotifications();
 
     private unlistens?: () => void;
 
     constructor(
         private readonly notiService: NotificationService,
+        private readonly pushService: PushNotificationService,
         private readonly renderer2: Renderer2
     ) { }
 

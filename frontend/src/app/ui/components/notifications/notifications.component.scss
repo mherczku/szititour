@@ -1,5 +1,20 @@
 @import "styles/styles-variables";
 
+.push-inactive {
+
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    img {
+        width: 30px;
+        aspect-ratio: 1;
+        object-fit: contain;
+    }
+
+}
+
 .notifications {
 
     max-width: 400px;
