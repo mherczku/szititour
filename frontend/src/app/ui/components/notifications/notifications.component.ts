@@ -4,6 +4,7 @@ import { NotificationComponent } from "./notification/notification.component";
 import { NotificationService, SzititourNotification } from "src/app/services/Notification.service";
 import { popInOut } from "../../animations/pupInOut.animation";
 import { PushNotificationService } from "src/app/services/PushNotification.service";
+import { AuthService } from "src/app/services/AuthService";
 
 @Component({
     selector: "app-notifications",
@@ -17,6 +18,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
     $isNotiOpen = this.notiService.isOpenR;
     $isPushActive = computed(() => this.pushService.$state() === "true");
+    $isLoggedIn = this.authService.$isLoggedIn;
 
     $notifications: Signal<SzititourNotification[]> = this.notiService.getNotifications();
 
@@ -24,6 +26,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly notiService: NotificationService,
+        private readonly authService: AuthService,
         private readonly pushService: PushNotificationService,
         private readonly renderer2: Renderer2
     ) { }

@@ -38,13 +38,13 @@ export class AuthService implements OnDestroy {
 
   private $currentTeam: WritableSignal<Team | undefined> = signal(undefined);
   public $currentTeamR = computed(() => this.$currentTeam());
+  public $isLoggedIn = computed(() => this.$currentTeam() !== undefined);
   public $isAdmin = computed(() => this.$currentTeam()?.role === "ROLE_ADMIN");
 
   constructor(
     private http: HttpClient,
     private store: Store,
-    private router: Router,
-    private alertService: HotToastService) {
+    private router: Router) {
 
     this.store.select(selectLoggedInTeam).pipe(takeUntil(this.destroy$)).subscribe(team => {
       this.$currentTeam.set(team ?? undefined);

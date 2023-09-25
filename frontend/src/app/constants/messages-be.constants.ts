@@ -22,7 +22,7 @@ export const CONST_MESSAGES = {
     AUTH_INVALID_TOKEN_TYPE: "Authentikációs hiba történt",
     AUTH_TOKEN_BAD_RESOURCE_ID: "Authentikációs hiba történt",
     AUTH_TOKEN_EMPTY: "Authentikációs hiba történt - Token nem lehet üres",
-    AUTH_TOKEN_EXPIRED: "Bejelentkezés idő lejárt",
+    AUTH_TOKEN_EXPIRED: "Bejelentkezési idő lejárt",
     AUTH_TOKEN_INVALID: "Authentikációs hiba történt",
     AUTH_TOKENID_NOT_FOUND: "Authentikációs hiba történt",
     BAD_CREDENTIALS: "Helytelen E-mail vagy Jelszó",

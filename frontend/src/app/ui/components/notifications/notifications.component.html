@@ -5,7 +5,7 @@
         <button (click)="removeAll()" bold="Összes törlése" class="btn-hover-bold text-size-min">Összes törlése</button>
     </div>
 
-    <div class="push-inactive" *ngIf="!$isPushActive()">
+    <div class="push-inactive" *ngIf="!$isPushActive() && $isLoggedIn()">
         <img src="assets/svg/warning-yellow.svg" alt="Warning-push">
         <p>Push értesítések kikapcsolva</p>
     </div>
