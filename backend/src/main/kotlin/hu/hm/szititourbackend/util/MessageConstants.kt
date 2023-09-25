@@ -64,7 +64,7 @@ object MessageConstants {
     const val APPLICATION_NOT_FOUND = "APPLICATION_NOT_FOUND"
     const val ANSWER_NOT_FOUND = "ANSWER_NOT_FOUND"
     const val BAD_CREDENTIALS = "BAD_CREDENTIALS"
-    const val AUTH_TOKEN_EMPTY = "AUTH_TOKEN_EMPTY" //TODO FE
+    const val AUTH_TOKEN_EMPTY = "AUTH_TOKEN_EMPTY"
     const val UNKNOWN = "UNKNOWN"
 
 }
