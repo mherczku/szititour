@@ -14,25 +14,12 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
-import { HotToastService } from "@ngneat/hot-toast";
 import { AuthService } from "src/app/services/AuthService";
 import { ChatService, Message } from "src/app/services/ChatService";
 import { chatCollapse } from "../../animations/chatCollapse.animation";
 import { popInOut } from "../../animations/pupInOut.animation";
 import { UserSelectorComponent } from "./user-selector/user-selector.component";
 import { NotificationService } from "src/app/services/Notification.service";
-
-/*
-effect(() => {
-      if (this.isAdmin() && !this.isConnected2) {
-        console.warn("Connect effect")
-        this.connect();
-        this.adminChat.update((chat: AdminChat) => {
-          chat.selectedUser = chat.users[0];
-          return chat;
-        });
-      }
-    }, {allowSignalWrites: true}); */
 
 interface AdminChat {
   newMessages: Signal<number>;
