@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory
 @RequestMapping("/questions")
 class QuestionController @Autowired constructor(private val questionService: QuestionService) {
 
-    val logger: Logger = LoggerFactory.getLogger(QuestionController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @PostMapping()
     fun addQuestion(

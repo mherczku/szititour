@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory
 @RequestMapping("/notification")
 class NotificationUserController(private val fms: FirebaseMessagingService) {
 
-    val logger: Logger = LoggerFactory.getLogger(NotificationUserController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @PostMapping("subscribe")
     fun subscribeToTopic(@RequestBody subscription: SubscriptionRequest, auth: Authentication): ResponseEntity<List<String>> {

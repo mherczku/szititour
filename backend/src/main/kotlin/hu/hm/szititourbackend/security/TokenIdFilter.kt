@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse
 
 class TokenIdFilter : OncePerRequestFilter() {
 
-    private val myLogger: Logger = LoggerFactory.getLogger(TokenIdFilter::class.java)
+    private val myLogger: Logger = LoggerFactory.getLogger(javaClass)
 
     @Autowired
     lateinit var teamService: TeamService

@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
 @SpringBootApplication(/*exclude = [SecurityAutoConfiguration::class]*/)
 class SzititourBackendApplication {
 
-    val logger: Logger = LoggerFactory.getLogger(SzititourBackendApplication::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     /*@Bean
     fun commandLineRunner(teamService: TeamService, securityService: SecurityService): CommandLineRunner {

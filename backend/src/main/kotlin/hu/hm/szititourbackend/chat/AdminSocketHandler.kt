@@ -18,7 +18,7 @@ import java.io.IOException
 @Component
 class AdminSocketHandler(@Autowired @Lazy private val userSocket: UserSocketHandler, private val teamService: TeamService, private val securityService: SecurityService) : BaseSocketHandler() {
 
-    val logger: Logger = LoggerFactory.getLogger(AdminSocketHandler::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     var sessions: MutableList<SessionData> = mutableListOf()
 

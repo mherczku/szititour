@@ -17,7 +17,7 @@ import org.springframework.security.oauth2.jwt.JwtValidationException
 @ControllerAdvice
 class MyExceptionHandler {
 
-    val logger: Logger = LoggerFactory.getLogger(MyExceptionHandler::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @ExceptionHandler(CustomException::class)
     fun handleCustomException(ex: CustomException): ResponseEntity<Response> {

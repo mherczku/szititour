@@ -16,7 +16,7 @@ import javax.mail.Message
 @Service
 class EmailService @Autowired constructor(private val javaMailSender: JavaMailSender, private val szititourProperties: SzititourProperties) {
 
-    val logger: Logger = LoggerFactory.getLogger(EmailService::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     fun sendWelcomeMail(emailTo: String, username: String, verificationToken: String) {
         logger.debug("Send welcome email to $username")

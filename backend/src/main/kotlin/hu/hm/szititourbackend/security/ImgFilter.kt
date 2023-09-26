@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class ImgPropertyFilter : OncePerRequestFilter() {
 
-    val myLogger: Logger = LoggerFactory.getLogger(ImgPropertyFilter::class.java)
+    val myLogger: Logger = LoggerFactory.getLogger(javaClass)
 
     @Autowired
     var securityService: SecurityService? = null

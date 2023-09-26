@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory
 @RequestMapping("/teams")
 class TeamController @Autowired constructor(private val teamService: TeamService) {
 
-    val logger: Logger = LoggerFactory.getLogger(TeamController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @PostMapping()
     fun addTeam(@RequestBody team: Team): ResponseEntity<TeamDto> {

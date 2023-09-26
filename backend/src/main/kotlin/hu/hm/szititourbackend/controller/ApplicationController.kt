@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory
 @RequestMapping("/applications")
 class ApplicationController @Autowired constructor(private val applicationService: ApplicationService) {
 
-    val logger: Logger = LoggerFactory.getLogger(ApplicationController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @GetMapping("/{id}")
     fun getApplicationById(@PathVariable id: Int): ResponseEntity<ApplicationDto?> {

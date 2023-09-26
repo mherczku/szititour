@@ -30,7 +30,7 @@ class WebMvcConfig(private val teamService: TeamService, private val securitySer
 class LocationInterceptor(private val teamService: TeamService, private val securityService: SecurityService) :
     HandlerInterceptor {
 
-    val logger: Logger = LoggerFactory.getLogger(LocationInterceptor::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
 
     override fun postHandle(

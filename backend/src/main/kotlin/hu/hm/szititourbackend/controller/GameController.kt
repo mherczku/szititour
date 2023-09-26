@@ -21,7 +21,7 @@ import java.sql.Timestamp
 @RequestMapping("/games")
 class GameController @Autowired constructor(private val gameService: GameService) {
 
-    val logger: Logger = LoggerFactory.getLogger(GameController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @PostMapping()
     fun addGame(@RequestBody game: Game): ResponseEntity<GameDto> {

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory
 @RequestMapping("/answers")
 class AnswerController @Autowired constructor(private val answerService: AnswerService) {
 
-    val logger: Logger = LoggerFactory.getLogger(AnswerController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @GetMapping("/{id}/correct")
     fun markAsCorrect(@PathVariable id: Int): ResponseEntity<AnswerDto?> {

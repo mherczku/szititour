@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse
 @RequestMapping("/auth")
 class SecurityController(private val teamService: TeamService, private val securityService: SecurityService) {
 
-    val logger: Logger = LoggerFactory.getLogger(SecurityController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     //!!!  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
 

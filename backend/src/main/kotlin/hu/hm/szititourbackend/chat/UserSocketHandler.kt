@@ -23,7 +23,7 @@ data class SessionData(
 @Component
 class UserSocketHandler(@Autowired @Lazy private val adminSocket: AdminSocketHandler, private val teamService: TeamService, private val securityService: SecurityService) : BaseSocketHandler() {
 
-    val logger: Logger = LoggerFactory.getLogger(UserSocketHandler::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     var sessions: MutableList<SessionData> = mutableListOf()
 

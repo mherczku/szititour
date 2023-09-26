@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/noti")
 class NotificationAdminController(private val fms: FirebaseMessagingService) {
 
-    val logger: Logger = LoggerFactory.getLogger(NotificationAdminController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @PostMapping("direct")
     fun sendTargetedNotification(@RequestBody notification: DirectNotification, auth: Authentication): ResponseEntity<Response> {

@@ -24,7 +24,7 @@ class ResourceController @Autowired constructor(
     private val securityService: SecurityService,
 ) {
 
-    val logger: Logger = LoggerFactory.getLogger(ResourceController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     //!!!  HAS CUSTOM TOKEN VERIFICATION, OUTSIDE OF SPRING SECURITY
 

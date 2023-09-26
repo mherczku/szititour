@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
 @RequestMapping("/places")
 class PlaceController @Autowired constructor(private val placeService: PlaceService) {
 
-    val logger: Logger = LoggerFactory.getLogger(PlaceController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @PostMapping()
     fun addPlaceToGame(

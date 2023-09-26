@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct
 @Service
 class FirebaseInitializer {
 
-    val logger: Logger = LoggerFactory.getLogger(FirebaseInitializer::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @PostConstruct
     fun initialize(){

@@ -31,7 +31,7 @@ class LoggedInController @Autowired constructor(
 
     //! AVAILABLE ONLY FOR LOGGED-IN USERS:
 
-    val logger: Logger = LoggerFactory.getLogger(LoggedInController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @PostMapping("update/image")
     fun updateProfile(
