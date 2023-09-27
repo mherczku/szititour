@@ -1,40 +1,37 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   Output,
-  SimpleChanges,
-  ViewChild
 } from "@angular/core";
-import {Game} from "../../../../types/game";
-import {Subscription} from "rxjs";
-import {AdminService} from "../../../../services/AdminService";
-import {HotToastService} from "@ngneat/hot-toast";
-import {ModalService} from "../../../../services/ModalService";
-import {DateInputComponent} from "../inputs/date-input/date-input.component";
-import {TextInputComponent} from "../inputs/text-input/text-input.component";
+import { Game } from "../../../../types/game";
+import { Subscription } from "rxjs";
+import { AdminService } from "../../../../services/AdminService";
+import { HotToastService } from "@ngneat/hot-toast";
+import { ModalService } from "../../../../services/ModalService";
+import { DateInputComponent } from "../inputs/date-input/date-input.component";
+import { TextInputComponent } from "../inputs/text-input/text-input.component";
+import { ImageUploaderComponent } from "../../image-uploader/image-uploader.component";
+import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
 
 @Component({
   selector: "app-edit-game",
   templateUrl: "./edit-game.component.html",
   styleUrls: ["./edit-game.component.css"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DateInputComponent,
-    TextInputComponent
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    TextInputComponent,
+    ImageUploaderComponent,
+    ImgSrcModule
+  ]
 })
-export class EditGameComponent implements OnChanges, OnDestroy {
+export class EditGameComponent implements OnDestroy {
 
   file?: File;
-
-  @ViewChild("fileInput")
-  fileInput?: ElementRef;
 
   @Input() isEdit = true;
   @Input() game: Game = {
@@ -49,7 +46,7 @@ export class EditGameComponent implements OnChanges, OnDestroy {
   };
   @Output() onClose: EventEmitter<unknown> = new EventEmitter<unknown>();
 
-  public setGame(data: {game: Game, isEdit: boolean}) {
+  public setGame(data: { game: Game, isEdit: boolean }) {
     this.game = data.game;
     this.isEdit = data.isEdit;
   }
@@ -59,14 +56,10 @@ export class EditGameComponent implements OnChanges, OnDestroy {
   subscriptionSave?: Subscription;
 
   constructor(private adminService: AdminService, private alert: HotToastService, private modalS: ModalService) {
-    const a = this.modalS.getExtra() as {game: Game, isEdit: boolean};
-    if(a !== undefined){
+    const a = this.modalS.getExtra() as { game: Game, isEdit: boolean };
+    if (a !== undefined) {
       this.setGame(a);
     }
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.fileInput?.nativeElement?.value ? this.fileInput.nativeElement.value = null : undefined;
   }
 
   close() {
@@ -87,7 +80,6 @@ export class EditGameComponent implements OnChanges, OnDestroy {
       active: false
     };
     this.file = undefined;
-    this.fileInput?.nativeElement?.value ? this.fileInput.nativeElement.value = null : undefined;
 
   }
 
@@ -113,7 +105,7 @@ export class EditGameComponent implements OnChanges, OnDestroy {
                 this.close();
               }
             },
-            error: _err => {
+            error: () => {
               this.saving = false;
             }
           });
@@ -129,7 +121,7 @@ export class EditGameComponent implements OnChanges, OnDestroy {
                 this.close();
               }
             },
-            error: _err => {
+            error: () => {
               this.saving = false;
             }
           });
@@ -143,7 +135,7 @@ export class EditGameComponent implements OnChanges, OnDestroy {
 
   }
 
-  setFile(event: any) {
-    this.file = event.target.files[0];
+  setFile(file: File) {
+    this.file = file;
   }
 }

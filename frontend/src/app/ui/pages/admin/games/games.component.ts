@@ -1,14 +1,15 @@
-import {Component, OnDestroy, OnInit, Type} from "@angular/core";
-import {Game} from "../../../../types/game";
-import {AdminService} from "../../../../services/AdminService";
-import {Subscription} from "rxjs";
-import {ModalService} from "../../../../services/ModalService";
-import {EditGameComponent} from "../../../components/admin/edit-game/edit-game.component";
-import {ButtonsComponent} from "../../../components/buttons/buttons.component";
-import {GamecardComponent} from "../../../components/admin/cards/gamecard/gamecard.component";
-import {ModalModule} from "../../../components/admin/modal/modal.module";
-import {ListsComponent} from "../../../components/admin/lists/lists.component";
-import {NgForOf} from "@angular/common";
+import { Component, DestroyRef, OnDestroy, OnInit, Type } from "@angular/core";
+import { Game } from "../../../../types/game";
+import { AdminService } from "../../../../services/AdminService";
+import { Subscription } from "rxjs";
+import { ModalService } from "../../../../services/ModalService";
+import { EditGameComponent } from "../../../components/admin/edit-game/edit-game.component";
+import { ButtonsComponent } from "../../../components/buttons/buttons.component";
+import { GamecardComponent } from "../../../components/admin/cards/gamecard/gamecard.component";
+import { ModalModule } from "../../../components/admin/modal/modal.module";
+import { ListsComponent } from "../../../components/admin/lists/lists.component";
+import { NgForOf } from "@angular/common";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 
 @Component({
@@ -30,8 +31,8 @@ import {NgForOf} from "@angular/common";
     NgForOf
   ]
 })
-export class GamesComponent implements OnInit, OnDestroy {
-  games: Game[] = [];
+export class GamesComponent implements OnInit {
+  $games = this.adminService.$games;
   EDIT = "EDIT";
   TEAMS = "TEAMS";
   PLACES = "PLACES";
@@ -39,12 +40,13 @@ export class GamesComponent implements OnInit, OnDestroy {
   teamsModalVisible = false;
   placesModalVisible = false;
 
-  selectedGame: Game = {applications: [], id: 0, places: [], active: false, title: "", dateStart: new Date(), dateEnd: new Date()};
+  selectedGame: Game = { applications: [], id: 0, places: [], active: false, title: "", dateStart: new Date(), dateEnd: new Date() };
   isGameEditing = false;
 
-  subscriptionGetGames?: Subscription;
-
-  constructor(private adminService: AdminService, private modalService: ModalService) {
+  constructor(
+    private readonly adminService: AdminService,
+    private readonly modalService: ModalService,
+    private readonly destroyRef: DestroyRef) {
   }
 
   ngOnInit(): void {
@@ -52,20 +54,16 @@ export class GamesComponent implements OnInit, OnDestroy {
   }
 
   getGames() {
-    this.subscriptionGetGames = this.adminService.getAllGames().subscribe((res: Game[]) => {
-      this.games = res;
-    });
+    this.adminService.getAllGames().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
   }
 
   editGame(g: Game) {
-    this.modalService.open(EditGameComponent as Type<Component>,{game: g, isEdit: true});
-    //this.isGameEditing = true;
-    //this.changeModal(this.EDIT, g);
+    this.modalService.open(EditGameComponent as Type<Component>, { game: g, isEdit: true });
   }
 
   openNewGameDialog() {
-    const newGame = {applications: [], id: 0, places: [], title: "", dateStart: new Date(), dateEnd: new Date()};
-    this.modalService.open(EditGameComponent as Type<Component>,{game: newGame, isEdit: false});
+    const newGame = { applications: [], id: 0, places: [], title: "", dateStart: new Date(), dateEnd: new Date() };
+    this.modalService.open(EditGameComponent as Type<Component>, { game: newGame, isEdit: false });
   }
 
   closeEditModal() {
@@ -74,7 +72,7 @@ export class GamesComponent implements OnInit, OnDestroy {
   }
 
   changeModal(m: string, selected: Game) {
-    this.selectedGame = {...selected};
+    this.selectedGame = { ...selected };
     this.editModalVisible = false;
     this.teamsModalVisible = false;
     this.placesModalVisible = false;
@@ -92,10 +90,6 @@ export class GamesComponent implements OnInit, OnDestroy {
         break;
       }
     }
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptionGetGames?.unsubscribe();
   }
 
 }

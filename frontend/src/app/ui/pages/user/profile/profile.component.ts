@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, WritableSignal, effect, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, WritableSignal, effect, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { TextInputComponent } from "../../../components/admin/inputs/text-input/text-input.component";
 import { ButtonsComponent } from "../../../components/buttons/buttons.component";
@@ -22,7 +22,7 @@ import { ImageUploaderComponent } from "../../../components/image-uploader/image
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent, ImgSrcModule, ImageUploaderComponent]
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
 
   $profile: WritableSignal<Team> = signal({
     id: -1,
@@ -65,6 +65,10 @@ export class ProfileComponent {
       password: ["", [Validators.required]],
       confirmPassword: ["", [Validators.required, confirmPassword()]],
     });
+  }
+  
+  ngOnInit(): void {
+    this.authService.authorizeMe().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
   }
 
 

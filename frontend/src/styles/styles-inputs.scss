@@ -2,7 +2,6 @@
 
 
 .simpleInput {
-
   /*neumorphism-2 border-1 focus:border-green-500 hover:border-green-500 bg-transparent text-size-base outline-0 w-full*/
   background: transparent;
   padding: 10px;
@@ -22,7 +21,10 @@
 }
 
 .input_container {
-  width: 100%;
+  margin: auto;
+  height: 200px;
+  aspect-ratio: 16/9;
+  max-width: 100%;
   border: 1px solid #e5e5e5;
 }
 .simpleFileInput {

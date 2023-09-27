@@ -59,6 +59,7 @@ export const CONST_MESSAGES = {
     TEAM_INACTIVE: "Csapat nem aktivált",
     TEAM_NOT_FOUND: "Csapat nem található",
     UNKNOWN: "Ismeretlen hiba történt",
+    UPLOAD_SIZE_LIMIT: "Feltöltendő kép mérete maximum 5 MB",
     VERIFICATION_FAILED: "Authentikációs hiba történt",
     WRONG_PASSWORD: "Hibás jelszó",
 
@@ -66,5 +67,4 @@ export const CONST_MESSAGES = {
 
 export const CONST_MESSAGES_FE = {
     UNKNOWN_AUTH: "Ismeretlen authentkációs hiba történt",
-
-}
+};

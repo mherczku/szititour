@@ -1,5 +1,5 @@
 <div class="img-uploader" >
-    <input type="file" (dragenter)="onEnter()" (dragleave)="onLeave()" (change)="readFile($event)">
+    <input type="file" accept="image/png, image/jpeg" (dragenter)="onEnter()" (dragleave)="onLeave()" (change)="readFile($event)">
 
     <div class="drag-drop" [class.dragging]="$dragging()">
         <img src="assets/svg/upload.svg" alt="Upload">

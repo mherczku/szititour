@@ -7,7 +7,7 @@
     </div>
     <app-gamecard (onDeleted)="getGames()" (onEditClicked)="editGame(game)"
                   (onPlacesClicked)="changeModal(PLACES, game)"
-                  (onTeamsClicked)="changeModal(TEAMS, game)" *ngFor="let game of games" [game]="game"></app-gamecard>
+                  (onTeamsClicked)="changeModal(TEAMS, game)" *ngFor="let game of $games()" [game]="game"></app-gamecard>
   </div>
 
 </div>

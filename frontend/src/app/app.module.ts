@@ -12,7 +12,6 @@ import {StoreModule} from "@ngrx/store";
 import {AuthReducer} from "./store/reducers/auth.reducer";
 import {AuthService} from "./services/AuthService";
 import {timeout} from "rxjs";
-import {Team} from "./types/team";
 import {Modal2Component} from "./ui/components/modal2/modal2.component";
 import {HostDirective} from "./directives/hostDirective";
 import {GameStateReducer} from "./store/reducers/game-status.reducer";
@@ -67,15 +66,7 @@ function initializeAuth(authService: AuthService, alert: HotToastService): Funct
     if (token) {
       const timeoutLimit = 1500;
       authService.authorizeMe().pipe(timeout(timeoutLimit)).subscribe({
-        next: value => {
-          if (value.success) {
-            if(value.team) {
-              const team: Team = value.team;
-              authService.dispatchLogin(team);
-            }
-          }
-          resolve();
-        },
+        next: () => resolve(),
         error: _err => {
           if(_err.name === "TimeOutError") {
             alert.error("Request timeout, server might be down");

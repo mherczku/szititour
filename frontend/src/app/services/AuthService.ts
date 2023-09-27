@@ -116,7 +116,14 @@ export class AuthService implements OnDestroy {
   }
 
   public authorizeMe(): Observable<NetworkLoginResponse> {
-    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`);
+    return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`).pipe(tap(res => {
+      if (res.success) {
+        if(res.team) {
+          const team: Team = res.team;
+          this.dispatchLogin(team);
+        }
+      }
+    }));
   }
 
 
