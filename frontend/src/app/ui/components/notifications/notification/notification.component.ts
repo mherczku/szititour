@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { NotificationService, SzititourNotification } from "src/app/services/Notification.service";
 import { ButtonsComponent } from "../../buttons/buttons.component";
@@ -8,7 +8,8 @@ import { ButtonsComponent } from "../../buttons/buttons.component";
   standalone: true,
   templateUrl: "./notification.component.html",
   styleUrls: ["./notification.component.scss"],
-  imports: [CommonModule, ButtonsComponent]
+  imports: [CommonModule, ButtonsComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationComponent {
 

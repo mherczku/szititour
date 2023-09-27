@@ -1,0 +1,56 @@
+.img-uploader {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        .drag-drop {
+            opacity: 0.8;
+        }
+    }
+
+    .drag-drop {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        transition: all 300ms;
+        background-color: rgb(92 180 180 / 41%);
+        opacity: 0;
+
+        &.dragging {
+            background-color: rgba(132, 188, 188, 0.681);
+            opacity: 0.8;
+        }
+
+        img {
+            width: 50px;
+            aspect-ratio: 1;
+            object-fit: contain;
+        }
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    input {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        opacity: 0;
+    }
+}

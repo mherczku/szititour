@@ -13,13 +13,14 @@ import { TogglerComponent } from "../../../components/toggler/toggler.component"
 import { PushNotificationService } from "src/app/services/PushNotification.service";
 import { Observable, forkJoin, tap } from "rxjs";
 import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
+import { ImageUploaderComponent } from "../../../components/image-uploader/image-uploader.component";
 
 @Component({
-  standalone: true,
-  templateUrl: "./profile.component.html",
-  styleUrls: ["./profile.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent, ImgSrcModule]
+    standalone: true,
+    templateUrl: "./profile.component.html",
+    styleUrls: ["./profile.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent, ImgSrcModule, ImageUploaderComponent]
 })
 export class ProfileComponent {
 
@@ -38,8 +39,7 @@ export class ProfileComponent {
 
   $pushState = this.pushService.$state;
 
-  $newImageSrc: WritableSignal<string | undefined | ArrayBuffer | null> = signal(undefined);
-  newImgFile?: File;
+  $newImgFile: WritableSignal<File | undefined> = signal(undefined);
 
   passwordForm!: FormGroup;
 
@@ -95,10 +95,10 @@ export class ProfileComponent {
       };
       obs.push(this.userService.updateProfile(updateData).pipe(takeUntilDestroyed(this.destroyRef)));
     }
-    if (this.$newImageSrc() && this.newImgFile) {
-      obs.push(this.userService.updateImage(this.newImgFile).pipe(tap(() => {
-        this.newImgFile = undefined;
-        this.$newImageSrc.set(undefined);
+    const newFile = this.$newImgFile();
+    if (newFile) {
+      obs.push(this.userService.updateImage(newFile).pipe(tap(() => {
+        this.$newImgFile.set(undefined);
       }), takeUntilDestroyed(this.destroyRef)));
     }
     forkJoin(obs).subscribe({ complete: () => this.$saving.set(false), error: () => this.$saving.set(false) });
@@ -126,15 +126,8 @@ export class ProfileComponent {
     }
   }
 
-  readFile(event: any) {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      this.newImgFile = file;
-
-      const reader = new FileReader();
-      reader.onload = () => this.$newImageSrc.set(reader.result);
-      reader.readAsDataURL(file);
-    }
+  fileChange(file: File) {
+      this.$newImgFile.set(file);
   }
 
   deleteAccount(pass: string | undefined = undefined) {

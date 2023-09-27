@@ -5,11 +5,8 @@
       <div class="infos">
 
         <div class="img-container">
-          <img class="img-edit" src="assets/svg/edit.svg" alt="Edit">
-          <input type="file" (change)="readFile($event)">
-          <img [src]="$newImageSrc() ?? ($profile().img | imgSrc)" alt="Avatar">
+          <app-image-uploader [src]="($profile().img | imgSrc) ?? 'assets/svg/avatar.svg'" (fileChanged)="fileChange($event)"></app-image-uploader>
         </div>
-
 
         <app-text-input type="editable" [label]="'Csapatnév:'" [(value)]="$profile().name"></app-text-input>
         <div class="members">
@@ -30,7 +27,7 @@
 
 
         </div>
-        <button [disabled]="(isSame || $saving()) && !$newImageSrc()" (click)="saveProfile()"
+        <button [disabled]="((isSame || $saving()) && $newImgFile() === undefined)" (click)="saveProfile()"
           class="btn-simple w-fit self-center">Mentés</button>
       </div>
 

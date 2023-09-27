@@ -6,9 +6,9 @@ import {environment} from "../../../environments/environment";
 })
 export class ImgSrcPipe implements PipeTransform {
 
-  transform(value?: string): string {
+  transform(value?: string): string | undefined {
     if(value === null || value === "") {
-      return "";
+      return undefined;
     }
     return environment.apiBaseUrl + "/resources/" + value;
   }

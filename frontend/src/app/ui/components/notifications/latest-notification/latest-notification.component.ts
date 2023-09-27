@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { NotificationComponent } from "../notification/notification.component";
 import { NotificationService, SzititourNotification } from "src/app/services/Notification.service";
@@ -10,11 +10,12 @@ import { popInOut } from "src/app/ui/animations/pupInOut.animation";
     templateUrl: "./latest-notification.component.html",
     styleUrls: ["./latest-notification.component.scss"],
     imports: [CommonModule, NotificationComponent],
-    animations: [popInOut]
+    animations: [popInOut],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LatestNotificationComponent {
 
-    latestNoti = this.notiService.latestNoti;
+    $latestNoti = this.notiService.latestNoti;
     defaultNoti: SzititourNotification = { id: "-1", title: "", message: "", time: new Date(), icon: "", link: "", type: "APP" };
 
     constructor(

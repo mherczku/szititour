@@ -143,28 +143,6 @@
   padding: 1.5rem;
   border-radius: 8px;
 
-
-
-  img {
-    border-radius: 100%;
-    object-fit: cover;
-    aspect-ratio: 1;
-    width: 100%;
-
-    &::before {
-      content: " ";
-      display: block;
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-image: url("../../../../../assets/svg/avatar.svg");
-    }
-
-  }
-
-
   .infos {
     display: flex;
     flex-direction: column;
@@ -173,32 +151,9 @@
 
     .img-container {
       position: relative;
-
-      input[type=file]::-webkit-file-upload-button {
-        cursor: pointer;
-      }
-
-      input[type=file] {
-        top: 0;
-        z-index: 2;
-        cursor: pointer;
-        opacity: 0;
-        width: 20px;
-        overflow: hidden;
-        right: 0;
-        position: absolute;
-      }
-
-      .img-edit {
-        top: 0;
-        right: 0;
-        z-index: 1;
-        border-radius: 0;
-        width: 20px;
-        object-fit: contain;
-        aspect-ratio: 1;
-        position: absolute;
-      }
+      border-radius: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
     }
 
     .members {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Renderer2, Signal, computed } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, Renderer2, Signal, computed } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { NotificationComponent } from "./notification/notification.component";
 import { NotificationService, SzititourNotification } from "src/app/services/Notification.service";
@@ -12,7 +12,8 @@ import { AuthService } from "src/app/services/AuthService";
     templateUrl: "./notifications.component.html",
     styleUrls: ["./notifications.component.scss"],
     imports: [CommonModule, NotificationComponent],
-    animations: [popInOut]
+    animations: [popInOut],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
 
