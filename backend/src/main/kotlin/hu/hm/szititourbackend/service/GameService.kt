@@ -55,10 +55,6 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
     }
 
     fun updateGameWithImage(game: Game, file: MultipartFile): Game {
-        val optional = gameRepository.findByTitle(game.title)
-        if (optional.isPresent && optional.get().id != game.id) {
-            throw CustomException("Game name already taken", HttpStatus.BAD_REQUEST, MessageConstants.GAME_TITLE_TAKEN)
-        }
         val updated = updateGame(game)
         val imagePath = Utils.saveImage(file, Utils.imageDirectoryGamesName, updated.img)
         updated.img = imagePath
@@ -67,6 +63,10 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
 
     fun updateGame(game: Game): Game {
         getGameById(game.id)
+        val optional = gameRepository.findByTitle(game.title)
+        if (optional.isPresent && optional.get().id != game.id) {
+            throw CustomException("Game title already in use", HttpStatus.BAD_REQUEST, MessageConstants.GAME_TITLE_TAKEN)
+        }
         game.updatedAt = Timestamp(System.currentTimeMillis())
         return gameRepository.save(game)
     }

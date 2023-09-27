@@ -9,30 +9,30 @@ import javax.persistence.*
 @Entity
 class Game(
 
-    @Id
+        @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     val id: Int = 0,
-    @Column(unique = true)
-    val title: String = "",
-    val dateStart: Timestamp = Timestamp(Instant.now().epochSecond),
-    val dateEnd: Timestamp = Timestamp(Instant.now().epochSecond),
-    var img: String = "",
-    var active: Boolean = false,
+        @Column(unique = true)
+    var title: String = "",
+        var dateStart: Timestamp = Timestamp(Instant.now().epochSecond),
+        var dateEnd: Timestamp = Timestamp(Instant.now().epochSecond),
+        var img: String = "",
+        var active: Boolean = false,
 
-    var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
-    var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
+        var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
+        var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
 
-    @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
+        @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     @OrderBy("ordernumber")
     val places: MutableList<Place> = mutableListOf(),
 
-    @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
+        @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     @OrderBy("id")
     val applications: MutableList<Application> = mutableListOf(),
 
-    @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
+        @OneToMany(mappedBy = "game", cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     @OrderBy("id")
     val teamGameStatuses: MutableList<TeamGameStatus> = mutableListOf()
 

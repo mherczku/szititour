@@ -103,19 +103,18 @@ class GameController @Autowired constructor(private val gameService: GameService
         val dateEnd = Timestamp(gameEnd.toLong())
         val dateStart = Timestamp(gameStart.toLong())
 
-        val game = Game(
-                id = gameId.toInt(),
-                title = gameTitle,
-                dateEnd = dateEnd,
-                dateStart = dateStart,
-        )
+        val updateGame = gameService.getGameById(gameId.toInt())
+        updateGame.title = gameTitle
+        updateGame.dateStart = dateStart
+        updateGame.dateEnd = dateEnd
+
         val updatedGame: Game = if (file != null) {
-            gameService.updateGameWithImage(game, file)
+            gameService.updateGameWithImage(updateGame, file)
         } else {
-            gameService.updateGame(game)
+            gameService.updateGame(updateGame)
         }
 
-        return ResponseEntity(gameService.updateGame(updatedGame).convertToDto(), HttpStatus.OK)
+        return ResponseEntity(updatedGame.convertToDto(), HttpStatus.OK)
     }
 
 

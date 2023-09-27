@@ -3,6 +3,7 @@ package hu.hm.szititourbackend.util
 object MessageConstants {
 
 
+
     //! SUCCESS MESSAGES:
     const val DIRECT_NOTIFICATION_SENT = "DIRECT_NOTIFICATION_SENT"
     const val EMAIL_VERIFIED = "EMAIL_VERIFIED"
@@ -59,6 +60,7 @@ object MessageConstants {
     const val TEAM_INACTIVE = "TEAM_INACTIVE"
     const val TEAM_NOT_FOUND = "TEAM_NOT_FOUND"
     const val UNKNOWN = "UNKNOWN"
+    const val UPLOAD_SIZE_LIMIT = "UPLOAD_SIZE_LIMIT"
     const val VERIFICATION_FAILED = "VERIFICATION_FAILED"
     const val WRONG_PASSWORD = "WRONG_PASSWORD"
 
