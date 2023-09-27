@@ -67,7 +67,6 @@ class QuestionController @Autowired constructor(private val questionService: Que
     fun updateQuestion(
         @RequestParam("image") file: MultipartFile?,
         @RequestParam("questionId") questionId: String,
-        @RequestParam("currentImage") img: String,
         @RequestParam("type") type: String,
         @RequestParam("name") name: String,
         @RequestParam("riddle") riddle: String
@@ -80,7 +79,6 @@ class QuestionController @Autowired constructor(private val questionService: Que
             id = questionId.toInt(),
             type = QuestionType.valueOf(type),
             riddle = riddle == "true",
-            img = img
         )
         val updatedQuestion: Question = if (file != null) {
             questionService.updateQuestionWithImage(questionDto, file)

@@ -92,7 +92,6 @@ class GameController @Autowired constructor(private val gameService: GameService
     @PutMapping
     fun updateGame(
             @RequestParam("image") file: MultipartFile?,
-            @RequestParam("currentImage") img: String,
             @RequestParam("gameId") gameId: String,
             @RequestParam("gameTitle") gameTitle: String,
             @RequestParam("gameStart") gameStart: String,
@@ -109,7 +108,6 @@ class GameController @Autowired constructor(private val gameService: GameService
                 title = gameTitle,
                 dateEnd = dateEnd,
                 dateStart = dateStart,
-                img = img
         )
         val updatedGame: Game = if (file != null) {
             gameService.updateGameWithImage(game, file)
