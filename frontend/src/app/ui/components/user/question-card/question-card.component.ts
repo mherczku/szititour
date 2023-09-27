@@ -1,18 +1,19 @@
-import {Component, ElementRef, Input, ViewChild} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {Question} from "../../../../types/question";
-import {QuestionType} from "../../../../enums/question-type";
-import {AnswerDto, TeamGameStatus} from "../../../../types/team-game-status";
-import {FormsModule} from "@angular/forms";
-import {ActiveGameService} from "../../../../services/ActiveGameService";
-import {ImgSrcModule} from "../../../../pipes/img-src/img-src.module";
+import { Component, Input } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Question } from "../../../../types/question";
+import { QuestionType } from "../../../../enums/question-type";
+import { AnswerDto, TeamGameStatus } from "../../../../types/team-game-status";
+import { FormsModule } from "@angular/forms";
+import { ActiveGameService } from "../../../../services/ActiveGameService";
+import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
+import { ImageUploaderComponent } from "../../image-uploader/image-uploader.component";
 
 @Component({
   selector: "app-question-card",
   standalone: true,
-  imports: [CommonModule, FormsModule, ImgSrcModule],
   templateUrl: "./question-card.component.html",
-  styleUrls: ["./question-card.component.scss"]
+  styleUrls: ["./question-card.component.scss"],
+  imports: [CommonModule, FormsModule, ImgSrcModule, ImageUploaderComponent]
 })
 export class QuestionCardComponent {
   @Input() index!: number;
@@ -27,9 +28,6 @@ export class QuestionCardComponent {
     this.setCurrentAnswerData();
   }
 
-  @ViewChild("questionFileInput")
-  fileInputRef: ElementRef | undefined;
-
   _question!: Question;
   _teamStatus!: TeamGameStatus | null;
   _savedAnswer?: AnswerDto;
@@ -39,7 +37,7 @@ export class QuestionCardComponent {
   currentAnswer: string | number = "";
   answerIsSame = false;
 
-  currentImg?: string;
+  currentImgChanged = false;
 
   constructor(private activeGameService: ActiveGameService) {
 
@@ -63,8 +61,7 @@ export class QuestionCardComponent {
           break;
 
         case QuestionType.imgOnly:
-          this.fileInputRef?.nativeElement ? this.fileInputRef.nativeElement.value = null : undefined;
-          this.currentImg = undefined;
+          this.currentImgChanged = false;
           break;
 
         case QuestionType.year:
@@ -91,7 +88,7 @@ export class QuestionCardComponent {
         break;
 
       case QuestionType.imgOnly:
-        this.answerIsSame = !this.currentImg;
+        this.answerIsSame = !this.currentImgChanged;
         break;
 
       case QuestionType.year:
@@ -101,43 +98,37 @@ export class QuestionCardComponent {
     }
   }
 
-  changed($event: any) {
+  changed($event: number | string) {
     this.currentAnswer = $event;
     this.setIsAnswerSameAsStatus();
     if (!this.answerIsSame) {
       switch (this._question.type) {
         case QuestionType.shortText:
-          this.activeGameService.addAnswer(this._question.id, {answerText: $event});
+          this.activeGameService.addAnswer(this._question.id, { answerText: String($event) });
           break;
 
         case QuestionType.longText:
-          this.activeGameService.addAnswer(this._question.id, {answerText: $event});
+          this.activeGameService.addAnswer(this._question.id, { answerText: String($event) });
           break;
 
         case QuestionType.number:
-          this.activeGameService.addAnswer(this._question.id, {answerNumber: $event});
+          this.activeGameService.addAnswer(this._question.id, { answerNumber: Number($event) });
           break;
 
         case QuestionType.imgOnly:
           return;
 
         case QuestionType.year:
-          this.activeGameService.addAnswer(this._question.id, {answerNumber: $event});
+          this.activeGameService.addAnswer(this._question.id, { answerNumber: Number($event) });
           break;
       }
     }
     //this.setIsAnswerSameAsStatus();
   }
 
-  inputFileChanged($event: any) {
-    if ($event.target.files[0]) {
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        this.currentImg = fileReader.result as string;
-        this.setIsAnswerSameAsStatus();
-      };
-      fileReader.readAsDataURL($event.target.files[0]);
-      this.activeGameService.addAnswer(this._question.id, {imgFile: $event.target.files[0]});
-    }
+  inputFileChanged(file: File) {
+    this.currentImgChanged = true;
+    this.activeGameService.addAnswer(this._question.id, { imgFile: file });
+    this.setIsAnswerSameAsStatus();
   }
 }

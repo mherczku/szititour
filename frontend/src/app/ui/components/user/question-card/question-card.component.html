@@ -8,18 +8,18 @@
     <ng-container [ngSwitch]="_question.type">
 
       <ng-container *ngSwitchCase="QuestionType.imgOnly">
-        <input #questionFileInput (change)="inputFileChanged($event)" type="file">
-        <img id="questionImageAnswer" class="object-contain max-h-[300px] aspect-video" *ngIf="currentImg || _savedAnswer?.img" [src]="currentImg ?? (_savedAnswer?.img | imgSrc)" alt="">
+        <app-image-uploader class="max-h-[300px] aspect-video" [src]="_savedAnswer?.img | imgSrc"
+          (fileChanged)="inputFileChanged($event)"></app-image-uploader>
       </ng-container>
 
       <input (ngModelChange)="changed($event)" [ngModel]="currentAnswer" *ngSwitchCase="QuestionType.longText"
-             placeholder="Válasz" type="text">
+        placeholder="Válasz" type="text">
       <input (ngModelChange)="changed($event)" [ngModel]="currentAnswer" *ngSwitchCase="QuestionType.shortText"
-             placeholder="Válasz" type="text">
+        placeholder="Válasz" type="text">
       <input (ngModelChange)="changed($event)" [ngModel]="currentAnswer" *ngSwitchCase="QuestionType.number"
-             placeholder="0" type="number">
+        placeholder="0" type="number">
       <input (ngModelChange)="changed($event)" [ngModel]="currentAnswer" *ngSwitchCase="QuestionType.year"
-             placeholder="0" type="number">
+        placeholder="0" type="number">
     </ng-container>
 
   </div>

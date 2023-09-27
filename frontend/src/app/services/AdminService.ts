@@ -60,7 +60,6 @@ export class AdminService {
       formData.append("image", image);
     }
     return this.http.put<Game>(`${this.baseUrl}/games`, formData).pipe(tap(res => {
-      console.log(res);
       this.$games.update(games => {
         const remove = games.findIndex(g => g.id === res.id);
         if (remove > -1) {

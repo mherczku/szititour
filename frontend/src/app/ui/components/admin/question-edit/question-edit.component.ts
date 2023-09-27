@@ -1,34 +1,33 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  ElementRef,
+  DestroyRef,
   EventEmitter,
   Input,
-  OnChanges,
-  OnDestroy,
-  Output,
-  SimpleChanges,
-  ViewChild
+  Output
 } from "@angular/core";
 import {Question} from "../../../../types/question";
 import {QuestionType} from "../../../../enums/question-type";
-import {Subscription} from "rxjs";
 import {AdminService} from "../../../../services/AdminService";
 import {HotToastService} from "@ngneat/hot-toast";
 import {FormsModule} from "@angular/forms";
+import { ImageUploaderComponent } from "../../image-uploader/image-uploader.component";
+import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
-  selector: "app-question-edit",
-  templateUrl: "./question-edit.component.html",
-  styleUrls: ["./question-edit.component.scss"],
-  imports: [
-    FormsModule
-  ],
-  standalone: true
+    selector: "app-question-edit",
+    templateUrl: "./question-edit.component.html",
+    styleUrls: ["./question-edit.component.scss"],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ImageUploaderComponent,
+        ImgSrcModule
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class QuestionEditComponent implements OnChanges, OnDestroy {
-
-  @ViewChild("fileInput")
-  fileInput?: ElementRef;
+export class QuestionEditComponent {
 
   @Input() isEdit = false;
   @Input() question: Question = {
@@ -43,43 +42,38 @@ export class QuestionEditComponent implements OnChanges, OnDestroy {
 
   saving = false;
   deleting = false;
-  subscriptionSave?: Subscription;
-  subscriptionDelete?: Subscription;
 
   file?: File;
 
-  constructor(private adminService: AdminService, private alert: HotToastService) {
-  }
+  constructor(
+    private readonly adminService: AdminService,
+    private readonly alert: HotToastService,
+    private readonly destroyRef: DestroyRef) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.fileInput?.nativeElement.value ? this.fileInput.nativeElement.value = null : undefined;
-  }
 
   save() {
     if (this.isEdit) {
       console.log(this.question.riddle, "saving");
       this.saving = true;
-      this.subscriptionSave = this.adminService.updateQuestion(this.question, this.file).subscribe({
+      this.adminService.updateQuestion(this.question, this.file).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: value => {
           this.alert.success("Kérdés sikeresen frissítve");
           this.saving = false;
-          this.fileInput?.nativeElement.value ? this.fileInput.nativeElement.value = null : undefined;
           this.onExit.emit({action: "update", question: value});
         },
-        error: err => {
+        error: () => {
           this.saving = false;
         }
       });
     } else {
       this.saving = true;
-      this.subscriptionSave = this.adminService.createQuestion(this.question, this.file).subscribe({
+      this.adminService.createQuestion(this.question, this.file).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: value => {
           this.alert.success("Kérdés sikeresen létrehozva");
           this.saving = false;
-          this.fileInput?.nativeElement.value ? this.fileInput.nativeElement.value = null : undefined;
           this.onExit.emit({action: "create", question: value});
         },
-        error: err => {
+        error: () => {
           this.saving = false;
         }
       });
@@ -90,25 +84,20 @@ export class QuestionEditComponent implements OnChanges, OnDestroy {
     const sure = window.confirm("Biztos törlöd ezt a kérdést?");
     if (sure) {
       this.deleting = true;
-      this.subscriptionDelete = this.adminService.deleteQuestion(this.question.id).subscribe({
-        next: value => {
+      this.adminService.deleteQuestion(this.question.id).subscribe({
+        next: () => {
           this.alert.success("Kérdés sikeresen törölve");
           this.deleting = false;
           this.onExit.emit({action: "delete", question: this.question});
         },
-        error: err => {
+        error: () => {
           this.deleting = false;
         }
       });
     }
   }
 
-  ngOnDestroy(): void {
-    this.subscriptionSave?.unsubscribe();
-    this.subscriptionDelete?.unsubscribe();
-  }
-
-  setFile(event: any) {
-    this.file = event.target.files[0];
+  setFile(file: File) {
+    this.file = file;
   }
 }

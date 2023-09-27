@@ -51,7 +51,6 @@ export class EditGameComponent implements OnDestroy {
     this.isEdit = data.isEdit;
   }
 
-
   saving = false;
   subscriptionSave?: Subscription;
 
@@ -91,7 +90,6 @@ export class EditGameComponent implements OnDestroy {
     const dateStartNumber: number = isNaN(Date.parse(this.game.dateStart.valueOf().toString())) ? this.game.dateStart.valueOf() : Date.parse(this.game.dateStart.valueOf().toString());
     const dateEndNumber: number = isNaN(Date.parse(this.game.dateEnd.valueOf().toString())) ? this.game.dateEnd.valueOf() : Date.parse(this.game.dateEnd.valueOf().toString());
 
-    console.log(dateEndNumber, ">", dateStartNumber, dateEndNumber > dateStartNumber);
     if (dateEndNumber > dateStartNumber) {
       if (this.game.title !== "") {
         // edit

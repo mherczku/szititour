@@ -3,9 +3,7 @@
     <div class="w-[45%] flex flex-col p-5 mobile:w-full">
       <p class="text-size-lg mb-5 bold">Helyszín információk:</p>
       <app-text-input classes="w-fit mb-5" [(value)]="place.name" (valueChange)="changed = true" [label]="'Neve:'"
-                      type="editable"></app-text-input>
-      <!--<app-text-input (click)="mapModalVisible = true" classes="w-fit mb-5" [(value)]="place.address" (valueChange)="changed = true" [label]="'Címe:'"
-                      type="label"></app-text-input>-->
+        type="editable"></app-text-input>
       <div class="w-fit mb-5 flex gap-2 ">
         <p class="text-size-base cursor-default">Címe:</p>
         <p (click)="mapModalVisible = true" class="text-size-base cursor-text">{{place.address}}</p>
@@ -13,38 +11,40 @@
       <div class="flex flex-col gap-2 mb-5 w-full">
         <label class="text-size-base">Kép:</label>
         <div class="input_container">
-          <input class="simpleFileInput text-size-min" #fileInput type="file" accept="image/png, image/jpeg" (change)="setFile($event)">
+          <app-image-uploader [src]="place.img | imgSrc" (fileChanged)="setFile($event)"></app-image-uploader>
         </div>
       </div>
-      <div class=" flex-grow ">
-        <img class="aspect-video border-1 max-h-[30vh] object-contain" [src]="place.img | imgSrc" alt="place image">
-      </div>
+
     </div>
-    <div class="w-[45%] p-5 max-h-[75vh] mobile:w-full rounded border-kon-blue mobile:border-transparent border-1 overflow-y-auto">
+    <div
+      class="w-[45%] p-5 max-h-[75vh] mobile:w-full rounded border-kon-blue mobile:border-transparent border-1 overflow-y-auto">
       <div class="flex gap-2 mb-2 items-center">
         <p class="text-size-lg bold">Kérdések:</p>
         <app-buttons (onClicked)="openNewQuestionDialog()" [isDisabledBlocked]="!isEdit"
-                     classes="aspect-square w-[30px] hover:scale-110 active:opacity-70 transition"
-                     type="icon" iconSrc="assets/svg/add.svg"></app-buttons>
+          classes="aspect-square w-[30px] hover:scale-110 active:opacity-70 transition" type="icon"
+          iconSrc="assets/svg/add.svg"></app-buttons>
       </div>
-      <app-question [question]="question" [number]="index + 1" (onEditPressed)="openEditQuestionDialog(question)" *ngFor="let question of place.questions; let index = index; trackBy: myTrackBy"></app-question>
+      <app-question [question]="question" [number]="index + 1" (onEditPressed)="openEditQuestionDialog(question)"
+        *ngFor="let question of place.questions; let index = index; trackBy: myTrackBy"></app-question>
     </div>
   </div>
 
   <div class="flex justify-between w-full">
     <button class="btn-simple-red" [disabled]="!isEdit || deleting" (click)="deletePlace()">Törlés</button>
-    <button class="btn-simple" (click)="savePlace()"
-                 [disabled]="saving || !changed">{{isEdit ? 'Mentés' : 'Létrehozás'}}</button>
+    <button class="btn-simple" (click)="savePlace()" [disabled]="saving || !changed">{{isEdit ? 'Mentés' :
+      'Létrehozás'}}</button>
   </div>
 
   <!-- Edit modal -->
   <app-modal [(isDisplayed)]="editModalVisible">
-    <app-question-edit (onExit)="editQuestionDialogExited($event)" [isEdit]="isEditQuestion" [question]="selectedQuestion"></app-question-edit>
+    <app-question-edit (onExit)="editQuestionDialogExited($event)" [isEdit]="isEditQuestion"
+      [question]="selectedQuestion"></app-question-edit>
   </app-modal>
 
   <!--Map modal-->
   <app-modal [(isDisplayed)]="mapModalVisible">
-    <app-place-map-marker [markerPosition]="markerStartPosition" [title]="place.name" (locationDataChanged)="locationDataChanged($event)"></app-place-map-marker>
+    <app-place-map-marker [markerPosition]="markerStartPosition" [title]="place.name"
+      (locationDataChanged)="locationDataChanged($event)"></app-place-map-marker>
   </app-modal>
 
 </div>
