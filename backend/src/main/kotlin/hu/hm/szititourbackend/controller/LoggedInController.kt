@@ -90,8 +90,7 @@ class LoggedInController @Autowired constructor(
         if (game.active) {
             throw CustomException("Cannot apply for an active game", HttpStatus.FORBIDDEN, MessageConstants.CANNOT_APPLY_ACTIVE_GAME)
         }
-        val application = teamService.getTeamsApplicationByTeamId(auth.name.toInt(), gameId)
-        if (application != null) {
+        if (teamService.hasTeamApplication(auth.name.toInt(), gameId)) {
             throw CustomException("This Team has an application already", HttpStatus.BAD_REQUEST, MessageConstants.TEAM_ALREADY_APPLIED)
         }
         val newApplication = applicationService.createApplication(gameId, auth.name.toInt())

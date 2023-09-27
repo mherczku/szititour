@@ -153,6 +153,11 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
                 ?: throw CustomException("Application not found", HttpStatus.NOT_FOUND, MessageConstants.APPLICATION_NOT_FOUND)
     }
 
+    fun hasTeamApplication(teamId: Int, gameId: Int): Boolean {
+        val team = this.getTeamById(teamId)
+        return team.applications.any { it.game.id == gameId }
+    }
+
     fun updateGameStatusAuto(gameId: Int, theTeam: Team) {
         val gameStatus = theTeam.teamGameStatuses.find { it.game.id == gameId }
         if (gameStatus !== null && gameStatus.game.active) {
