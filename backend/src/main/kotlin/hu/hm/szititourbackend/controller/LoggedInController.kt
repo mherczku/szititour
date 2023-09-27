@@ -231,7 +231,7 @@ class LoggedInController @Autowired constructor(
         logger.debug("Check team application to game ${gameId} by user ${teamId}")
 
         val application = teamService.getTeamsApplicationByTeamId(teamId, gameId)
-        if (application?.accepted == null || !application.accepted!!) {
+        if (application.accepted == null || !application.accepted!!) {
             throw CustomException("Your application is not accepted", HttpStatus.FORBIDDEN, MessageConstants.APPLICATION_NOT_ACCEPTED)
         }
     }
