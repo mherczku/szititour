@@ -118,7 +118,6 @@ export class NotificationService {
   }
 
   private pushToNotis(noti: SzititourNotification) {
-    console.log("pushing")
     if (!this.isOpen()) {
       this.latestNoti.set(noti);
       setTimeout(() => {

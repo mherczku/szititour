@@ -112,13 +112,13 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
 
     fun updateProfileEmail(teamId: Int, nextEmail: String): Team {
         val team = getTeamById(teamId)
+        if (team.email == nextEmail) {
+            team.nextEmail = ""
+            return updateTeam(team)
+        }
         val teamWithEmail = teamRepository.findByEmail(nextEmail)
         if (teamWithEmail.isPresent) {
             throw CustomException("Email is already in use", HttpStatus.BAD_REQUEST, MessageConstants.EMAIL_TAKEN)
-        }
-        if (team.email == team.nextEmail) {
-            team.nextEmail = ""
-            return updateTeam(team)
         }
         team.nextEmail = nextEmail
         val updated = updateTeam(team, true)

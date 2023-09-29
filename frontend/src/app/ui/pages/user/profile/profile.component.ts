@@ -66,7 +66,7 @@ export class ProfileComponent implements OnInit {
       confirmPassword: ["", [Validators.required, confirmPassword()]],
     });
   }
-  
+
   ngOnInit(): void {
     this.authService.authorizeMe().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
   }
@@ -111,6 +111,11 @@ export class ProfileComponent implements OnInit {
   saveEmail() {
     this.$saving.set(true);
     this.userService.updateEmail(this.$profile().email).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ complete: () => this.$saving.set(false) });
+  }
+
+  cancelEmailChange() {
+    this.$saving.set(true);
+    this.userService.updateEmail(this.authService.$currentTeamR()?.email ?? "").pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ complete: () => this.$saving.set(false) });
   }
 
   savePassword() {

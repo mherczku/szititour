@@ -93,6 +93,19 @@
   flex-direction: column;
   gap: 14px;
 
+  .changing {
+    img {
+      width: 12px;
+      aspect-ratio: 1;
+      object-fit: contain;
+
+    }
+    display: flex;
+    justify-content: right;
+    gap: 5px;
+    align-items: center;
+  }
+
   .txt-warning-red {
     color: red;
     text-align: right;

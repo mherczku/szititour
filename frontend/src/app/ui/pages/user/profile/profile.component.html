@@ -34,7 +34,12 @@
     </div>
     <div class="profile-email">
       <div>
-        <p class="txt-warning-red" *ngIf="$profile().nextEmail !== ''">*Változtatás alatt: {{$profile().nextEmail}}</p>
+        <div *ngIf="$profile().nextEmail !== ''" class="changing">
+          <button title="Változtatás visszavonása" [disabled]="$saving()" (click)="cancelEmailChange()">
+            <img src="assets/svg/cancel.svg" alt="Cancel">
+          </button>
+          <p class="txt-warning-red" >*Változtatás alatt: {{$profile().nextEmail}}</p>
+        </div>
         <app-text-input type="editable" [label]="'Email:'" [(value)]="$profile().email"></app-text-input>
       </div>
       <button [disabled]="$saving() || isEmailSame" (click)="saveEmail()"
