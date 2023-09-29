@@ -28,38 +28,38 @@ import { ContainerLoaderComponent } from "./ui/components/container-loader/conta
 import { NotificationService } from "./services/Notification.service";
 import { LoaderService } from "./services/Loader.service";
 @NgModule({
-  declarations: [
-    AppComponent,
-    HostDirective,
-    Modal2Component
-  ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: LocationInterceptor, multi: true },
-    { provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService, NotificationService, LoaderService], multi: true }
-  ],
-  exports: [],
-  bootstrap: [AppComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    HotToastModule.forRoot({
-      autoClose: true
-    }),
-    StoreModule.forRoot({}, {}),
-    StoreModule.forFeature("game", GameStateReducer),
-    StoreModule.forFeature("auth", AuthReducer),
-    EffectsModule.forRoot([AuthEffects]),
-    NavbarComponent,
-    ChatComponent,
-    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-    MessagingModule,
-    ContainerLoaderComponent
-  ]
+    declarations: [
+        AppComponent,
+        HostDirective,
+        Modal2Component
+    ],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: LocationInterceptor, multi: true },
+        { provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService, NotificationService, LoaderService], multi: true }
+    ],
+    exports: [],
+    bootstrap: [AppComponent],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        HotToastModule.forRoot({
+            autoClose: true
+        }),
+        StoreModule.forRoot({}, {}),
+        StoreModule.forFeature("game", GameStateReducer),
+        StoreModule.forFeature("auth", AuthReducer),
+        EffectsModule.forRoot([AuthEffects]),
+        NavbarComponent,
+        ChatComponent,
+        provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+        MessagingModule,
+        ContainerLoaderComponent
+    ]
 })
 export class AppModule {
 }

@@ -16,7 +16,7 @@ export class ImageUploaderComponent {
 
   $dragging = signal(false);
 
-  @Input({ required: true }) src?: string;
+  @Input({ required: true }) src?: string | null;
 
   @Output() fileChanged: EventEmitter<File> = new EventEmitter();
 

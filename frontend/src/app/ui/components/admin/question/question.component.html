@@ -5,18 +5,18 @@
 
     <div class="flex w-fit max-w-full gap-[10%] items-center">
       <p class="text-size-base font-bold whitespace-nowrap">{{number}}. Kérdés</p>
-      <app-buttons *ngIf="open" (click)="$event.stopPropagation(); openEditDialog()" classes="min-w-[18px]" iconSrc="assets/svg/edit.svg" type="icon"></app-buttons>
+      <app-buttons *ngIf="$open()" (click)="$event.stopPropagation(); openEditDialog()" classes="min-w-[18px]" iconSrc="assets/svg/edit.svg" type="icon"></app-buttons>
     </div>
 
-    <img class="cursor-pointer" [ngClass]="open ? 'rotate-180' : ''" src="assets/svg/anchor-down-black.svg"
+    <img class="cursor-pointer" [ngClass]="$open() ? 'rotate-180' : ''" src="assets/svg/anchor-down-black.svg"
          alt="Dropdown">
 
   </div>
 
   <div class="transition-all"
        (click)="$event.stopPropagation()"
-       [ngClass]="open ? 'h-fit mt-5' : 'h-0'">
-    <div *ngIf="open" class="flex flex-col gap-4">
+       [ngClass]="$open() ? 'h-fit mt-5' : 'h-0'">
+    <div *ngIf="$open()" class="flex flex-col gap-4">
       <div class="flex gap-2 mobile:flex-col">
         <p class="text-size-base font-bold">Kérdés:</p>
         <p class="text-size-base">{{question.name}}</p>
@@ -29,7 +29,7 @@
         <p class="text-size-base font-bold">Típusa:</p>
         <p class="text-size-base">{{question.type | questionType}}</p>
       </div>
-      <img class="object-contain max-h-[300px] aspect-video" *ngIf="question.img" [src]="question.img | imgSrc" alt="">
+      <img class="object-contain max-h-[300px] aspect-video" *ngIf="question.img" [src]="question.img | imgSrc | imgLoader | async" alt="">
     </div>
 
   </div>

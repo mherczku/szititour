@@ -2,7 +2,7 @@
 
   <div class="relative flex flex-col h-full">
     <div class="relative">
-      <img class="aspect-video object-cover w-full rounded-t" src="{{game.img | imgSrc}}" alt="Game's image">
+      <img class="aspect-video object-cover w-full rounded-t" [src]="game.img | imgSrc | imgLoader | async" alt="Game's image">
 
       <span title="Játék aktíválás" class="switch" (click)="changeGameActivation()">
         <input disabled [ngModel]="game.active" type="checkbox">

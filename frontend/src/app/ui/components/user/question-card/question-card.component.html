@@ -3,12 +3,13 @@
   <p class="text-size-base bold question-title">{{_question.riddle ? 'Rejtvény' : ''}} Kérdés {{index + 1}}</p>
   <div class="question-body" [ngClass]="{'differentAnswer' : !answerIsSame}">
     <p class="text-size-base">{{_question.name}}</p>
-    <img class="object-contain max-h-[300px] aspect-video" *ngIf="_question.img" [src]="_question.img | imgSrc">
+    <img class="object-contain max-h-[300px] aspect-video" *ngIf="_question.img"
+      [src]="_question.img | imgSrc | imgLoader | async">
 
     <ng-container [ngSwitch]="_question.type">
 
       <ng-container *ngSwitchCase="QuestionType.imgOnly">
-        <app-image-uploader class="max-h-[300px] aspect-video" [src]="_savedAnswer?.img | imgSrc"
+        <app-image-uploader class="max-h-[300px] aspect-video" [src]="_savedAnswer?.img | imgSrc | imgLoader | async"
           (fileChanged)="inputFileChanged($event)"></app-image-uploader>
       </ng-container>
 

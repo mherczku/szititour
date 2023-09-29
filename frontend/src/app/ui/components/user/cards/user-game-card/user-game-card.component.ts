@@ -6,14 +6,15 @@ import {Subject, takeUntil} from "rxjs";
 import {AutoDestroy} from "../../../../../decorators/autodestroy.decorator";
 import {RouterLink} from "@angular/router";
 import {ImgSrcModule} from "../../../../../pipes/img-src/img-src.module";
+import { ImgLoaderPipe } from "../../../../../pipes/img-loader.pipe";
 
 @Component({
-  selector: "app-user-game-card",
-  standalone: true,
-  imports: [CommonModule, RouterLink, ImgSrcModule],
-  templateUrl: "./user-game-card.component.html",
-  styleUrls: ["./user-game-card.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: "app-user-game-card",
+    standalone: true,
+    templateUrl: "./user-game-card.component.html",
+    styleUrls: ["./user-game-card.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, RouterLink, ImgSrcModule, ImgLoaderPipe]
 })
 export class UserGameCardComponent {
   @Input() game: Game = {

@@ -20,7 +20,8 @@
   <div class="flex gap-2">
     <label class="text-size-base">Kép:</label>
     <div class="input_container">
-      <app-image-uploader [src]="question.img | imgSrc" (fileChanged)="setFile($event)"></app-image-uploader>
+      <app-image-uploader [src]="question.img | imgSrc | imgLoader | async"
+        (fileChanged)="setFile($event)"></app-image-uploader>
     </div>
   </div>
 

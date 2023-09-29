@@ -14,13 +14,14 @@ import { PushNotificationService } from "src/app/services/PushNotification.servi
 import { Observable, forkJoin, tap } from "rxjs";
 import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
 import { ImageUploaderComponent } from "../../../components/image-uploader/image-uploader.component";
+import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 
 @Component({
     standalone: true,
     templateUrl: "./profile.component.html",
     styleUrls: ["./profile.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent, ImgSrcModule, ImageUploaderComponent]
+    imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent, ImgSrcModule, ImageUploaderComponent, ImgLoaderPipe]
 })
 export class ProfileComponent implements OnInit {
 

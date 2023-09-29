@@ -14,18 +14,22 @@ import {FormsModule} from "@angular/forms";
 import { ImageUploaderComponent } from "../../image-uploader/image-uploader.component";
 import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
+import { CommonModule } from "@angular/common";
 
 @Component({
     selector: "app-question-edit",
     templateUrl: "./question-edit.component.html",
     styleUrls: ["./question-edit.component.scss"],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         FormsModule,
         ImageUploaderComponent,
-        ImgSrcModule
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+        ImgSrcModule,
+        ImgLoaderPipe,
+        CommonModule
+    ]
 })
 export class QuestionEditComponent {
 

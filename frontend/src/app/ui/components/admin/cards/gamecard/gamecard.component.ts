@@ -3,27 +3,30 @@ import {Game} from "../../../../../types/game";
 import {AdminService} from "../../../../../services/AdminService";
 import {FormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
-import {DatePipe, NgIf} from "@angular/common";
+import {CommonModule, DatePipe, NgIf} from "@angular/common";
 import {ImgSrcModule} from "../../../../../pipes/img-src/img-src.module";
 import {ButtonsComponent} from "../../../buttons/buttons.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { NotificationService } from "src/app/services/Notification.service";
+import { ImgLoaderPipe } from "../../../../../pipes/img-loader.pipe";
 
 
 @Component({
-  selector: "app-gamecard",
-  templateUrl: "./gamecard.component.html",
-  styleUrls: ["./gamecard.component.scss"],
-  imports: [
-    FormsModule,
-    RouterLink,
-    DatePipe,
-    ImgSrcModule,
-    ButtonsComponent,
-    NgIf
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: "app-gamecard",
+    templateUrl: "./gamecard.component.html",
+    styleUrls: ["./gamecard.component.scss"],
+    standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterLink,
+        DatePipe,
+        ImgSrcModule,
+        ButtonsComponent,
+        NgIf,
+        ImgLoaderPipe
+    ]
 })
 export class GamecardComponent {
 

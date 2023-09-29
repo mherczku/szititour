@@ -6,13 +6,14 @@ import {ImgSrcModule} from "../../../../pipes/img-src/img-src.module";
 import {AdminActiveGameService} from "../../../../services/AdminActiveGameService";
 import {AutoDestroy} from "../../../../decorators/autodestroy.decorator";
 import {Subject, takeUntil} from "rxjs";
+import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 
 @Component({
-  selector: "app-answer",
-  standalone: true,
-  imports: [CommonModule, ImgSrcModule],
-  templateUrl: "./answer.component.html",
-  styleUrls: ["./answer.component.scss"]
+    selector: "app-answer",
+    standalone: true,
+    templateUrl: "./answer.component.html",
+    styleUrls: ["./answer.component.scss"],
+    imports: [CommonModule, ImgSrcModule, ImgLoaderPipe]
 })
 export class AnswerComponent {
 

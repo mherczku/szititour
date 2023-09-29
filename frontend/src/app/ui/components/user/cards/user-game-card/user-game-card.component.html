@@ -1,5 +1,5 @@
 <div class="card-game">
-  <img [src]="game.img | imgSrc" [alt]="game.title">
+  <img [src]="game.img | imgSrc | imgLoader | async" [alt]="game.title">
   <div class="details">
     <p class="text-size-lg bold">{{game.title}}</p>
     <p class="text-size-base">{{game.dateStart | date:'y. MM. d. H:mm' }} - {{game.dateEnd | date:'H:mm' }}</p>

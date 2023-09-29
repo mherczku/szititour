@@ -15,19 +15,23 @@ import { DateInputComponent } from "../inputs/date-input/date-input.component";
 import { TextInputComponent } from "../inputs/text-input/text-input.component";
 import { ImageUploaderComponent } from "../../image-uploader/image-uploader.component";
 import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
+import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: "app-edit-game",
-  templateUrl: "./edit-game.component.html",
-  styleUrls: ["./edit-game.component.css"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    DateInputComponent,
-    TextInputComponent,
-    ImageUploaderComponent,
-    ImgSrcModule
-  ]
+    selector: "app-edit-game",
+    templateUrl: "./edit-game.component.html",
+    styleUrls: ["./edit-game.component.css"],
+    standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        DateInputComponent,
+        TextInputComponent,
+        ImageUploaderComponent,
+        ImgSrcModule,
+        ImgLoaderPipe,
+        CommonModule
+    ]
 })
 export class EditGameComponent implements OnDestroy {
 

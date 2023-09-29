@@ -5,7 +5,7 @@
       <div class="infos">
 
         <div class="img-container">
-          <app-image-uploader [src]="($profile().img | imgSrc) ?? 'assets/svg/avatar.svg'" (fileChanged)="fileChange($event)"></app-image-uploader>
+          <app-image-uploader [src]="($profile().img | imgSrc | imgLoader | async) ?? 'assets/svg/avatar.svg'" (fileChanged)="fileChange($event)"></app-image-uploader>
         </div>
 
         <app-text-input type="editable" [label]="'Csapatnév:'" [(value)]="$profile().name"></app-text-input>

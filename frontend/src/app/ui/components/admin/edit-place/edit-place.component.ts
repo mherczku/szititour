@@ -11,18 +11,20 @@ import { TextInputComponent } from "../inputs/text-input/text-input.component";
 import { QuestionComponent } from "../question/question.component";
 import { QuestionEditComponent } from "../question-edit/question-edit.component";
 import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
-import { NgForOf } from "@angular/common";
+import { CommonModule, NgForOf } from "@angular/common";
 import { myTrackBy } from "../../../../e-functions/extension-functions";
 import { PlaceLocationData, PlaceMapMarkerComponent } from "../place-map-marker/place-map-marker.component";
 import { CONST_ROUTES } from "src/app/constants/routes.constants";
 import { ImageUploaderComponent } from "../../image-uploader/image-uploader.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 
 @Component({
   selector: "app-edit-place",
   templateUrl: "./edit-place.component.html",
   styleUrls: ["./edit-place.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ButtonsComponent,
     ModalModule,
@@ -32,9 +34,10 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     ImgSrcModule,
     NgForOf,
     PlaceMapMarkerComponent,
-    ImageUploaderComponent
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    ImageUploaderComponent,
+    ImgLoaderPipe,
+    CommonModule
+  ]
 })
 export class EditPlaceComponent implements OnInit {
   @Input() isEdit = false;

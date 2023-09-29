@@ -7,13 +7,14 @@ import { FormsModule } from "@angular/forms";
 import { ActiveGameService } from "../../../../services/ActiveGameService";
 import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
 import { ImageUploaderComponent } from "../../image-uploader/image-uploader.component";
+import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 
 @Component({
-  selector: "app-question-card",
-  standalone: true,
-  templateUrl: "./question-card.component.html",
-  styleUrls: ["./question-card.component.scss"],
-  imports: [CommonModule, FormsModule, ImgSrcModule, ImageUploaderComponent]
+    selector: "app-question-card",
+    standalone: true,
+    templateUrl: "./question-card.component.html",
+    styleUrls: ["./question-card.component.scss"],
+    imports: [CommonModule, FormsModule, ImgSrcModule, ImageUploaderComponent, ImgLoaderPipe]
 })
 export class QuestionCardComponent {
   @Input() index!: number;
