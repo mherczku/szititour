@@ -35,7 +35,9 @@ export class PushNotificationService {
 
   private notifications: WritableSignal<SzititourNotification[]> = signal([]);
 
-  constructor(private readonly http: HttpClient, private readonly fireApp: FirebaseApp) { }
+  constructor(
+    private readonly http: HttpClient,
+    private readonly fireApp: FirebaseApp) { }
 
   public getNotis(): Signal<SzititourNotification[]> {
     return this.notifications.asReadonly();

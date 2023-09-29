@@ -50,6 +50,7 @@ export class NotificationService {
   }
 
   public error(message: string) {
+    console.log("Errr")
     if(!message || message.length < 1) {
       return;
     }
@@ -117,6 +118,7 @@ export class NotificationService {
   }
 
   private pushToNotis(noti: SzititourNotification) {
+    console.log("pushing")
     if (!this.isOpen()) {
       this.latestNoti.set(noti);
       setTimeout(() => {

@@ -23,21 +23,24 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(actions.login),
       tap(action => {
-        if(action.team.role === "ROLE_ADMIN") {
-          if(action.notAuto) {
+        if (action.team.role === "ROLE_ADMIN") {
+          if (action.notAuto) {
             this.ng.run(() => {
               this.router.navigateByUrl(CONST_ROUTES.admin.call);
             });
           }
-        } else if(action.team.role === "ROLE_USER") {
-          if(action.notAuto) {
+        } else if (action.team.role === "ROLE_USER") {
+          if (action.notAuto) {
             this.ng.run(() => {
               this.router.navigateByUrl(CONST_ROUTES.user.call);
             });
           }
         }
-        // TOdo ez kell ide? mikor dispatchel? kell e itt init?
-        this.pushNoti.initializePushNoti();
+        if (action.pushInit) {
+          this.ng.run(() => {
+            this.pushNoti.initializePushNoti();
+          });
+        }
       }),
     ), { dispatch: false }
   );

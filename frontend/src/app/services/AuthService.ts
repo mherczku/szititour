@@ -47,8 +47,6 @@ export class AuthService implements OnDestroy {
 
     this.store.select(selectLoggedInTeam).pipe(takeUntil(this.destroy$)).subscribe(team => {
       this.$currentTeam.set(team ?? undefined);
-      console.log(`set current user Signal ${team?.email}, , , ${this.$currentTeamR()?.email}`);
-
       this.currentRole = team?.role ?? "ROLE_GUEST";
       this.username = team?.name ?? "GUEST";
     });
@@ -94,7 +92,7 @@ export class AuthService implements OnDestroy {
 
     return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login`, this.getClientData(), { headers: headers }).pipe(tap(evt => {
       if (evt.success) {
-        this.store.dispatch(login({ team: evt.team, notAuto: true }));
+        this.store.dispatch(login({ team: evt.team, notAuto: true, pushInit: true }));
       }
     }));
   }
@@ -105,7 +103,7 @@ export class AuthService implements OnDestroy {
 
     return this.http.post<NetworkLoginResponse>(`${this.baseUrl}/login/google`, this.getClientData(), { headers: headers }).pipe(tap(evt => {
       if (evt.success) {
-        this.store.dispatch(login({ team: evt.team, notAuto: true }));
+        this.store.dispatch(login({ team: evt.team, notAuto: true, pushInit: true }));
       }
     }));
   }
@@ -114,12 +112,16 @@ export class AuthService implements OnDestroy {
     return this.http.post<NetworkResponse>(`${this.baseUrl}/register`, registerData);
   }
 
-  public authorizeMe(): Observable<NetworkLoginResponse> {
+  public authorizeMe(initializer = false): Observable<NetworkLoginResponse> {
     return this.http.get<NetworkLoginResponse>(`${this.baseUrl}`).pipe(tap(res => {
       if (res.success) {
-        if(res.team) {
+        if (res.team) {
           const team: Team = res.team;
-          this.dispatchLogin(team);
+          if (initializer) {
+            this.store.dispatch(login({ team: team, pushInit: true }));
+          } else {
+            this.dispatchLogin(team);
+          }
         }
       }
     }));
@@ -131,7 +133,7 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
-    if(this.getToken() !== null) {
+    if (this.getToken() !== null) {
       this.http.post<NetworkResponse>(`${this.baseUrl}/logout`, null).pipe(take(1)).subscribe();
     }
     this.removeToken();
