@@ -70,8 +70,14 @@ function initializeAuth(authService: AuthService, alert: NotificationService, lo
     if (token) {
       const timeoutLimit = 1500;
       authService.authorizeMe(true).pipe(timeout(timeoutLimit)).subscribe({
-        next: () => resolve(),
+        next: () => {
+          const shell = document.getElementById("szititour-shell");
+          shell?.parentNode?.removeChild(shell);
+          resolve();
+        },
         error: _err => {
+          const shell = document.getElementById("szititour-shell");
+          shell?.parentNode?.removeChild(shell);
           loader.stop();
           if (_err instanceof TimeoutError) {
             alert.error("Időtúllépés, előfordulhat, hogy szerver nem elérhető. Kérlek próbáld újra késöbb!");
@@ -80,6 +86,8 @@ function initializeAuth(authService: AuthService, alert: NotificationService, lo
         }
       });
     } else {
+      const shell = document.getElementById("szititour-shell");
+      shell?.parentNode?.removeChild(shell);
       resolve();
     }
   });
