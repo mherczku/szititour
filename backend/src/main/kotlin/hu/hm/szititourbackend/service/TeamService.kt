@@ -114,7 +114,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         val team = getTeamById(teamId)
         if (team.email == nextEmail) {
             team.nextEmail = ""
-            return updateTeam(team)
+            return updateTeam(team, true)
         }
         val teamWithEmail = teamRepository.findByEmail(nextEmail)
         if (teamWithEmail.isPresent) {
@@ -127,7 +127,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
             return updated
         } catch (e: Exception) {
             updated.nextEmail = ""
-            updateTeam(updated)
+            updateTeam(updated, true)
             throw e
         }
     }
