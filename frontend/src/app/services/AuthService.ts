@@ -8,7 +8,6 @@ import { login, logout } from "../store/actions/auth.actions";
 import { Router } from "@angular/router";
 import { NetworkLoginResponse } from "../types/network-login-response";
 import { NetworkResponse } from "../types/network-response";
-import { HotToastService } from "@ngneat/hot-toast";
 import { selectLoggedInTeam } from "../store/selectors/auth.selector";
 import { CONST_ROUTES } from "../constants/routes.constants";
 
@@ -24,7 +23,7 @@ export interface ClientData {
   isMobile: string;
   brand: string;
   tokenId?: string;
-  isGoogle?: boolean;
+  google?: boolean;
   ipAddress?: string;
 }
 

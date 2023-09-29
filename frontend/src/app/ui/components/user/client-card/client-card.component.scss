@@ -5,7 +5,6 @@
     object-fit: cover;
 }
 p {
-    width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -27,6 +26,8 @@ p {
     display: flex;
     gap: 10px;
     flex-direction: row;
+    width: 90%;
+    overflow: hidden;
 }
 
 .active {

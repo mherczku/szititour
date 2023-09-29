@@ -24,7 +24,7 @@ export const CONST_MESSAGES = {
     AUTH_TOKEN_EMPTY: "Authentikációs hiba történt - Token nem lehet üres",
     AUTH_TOKEN_EXPIRED: "Bejelentkezési idő lejárt",
     AUTH_TOKEN_INVALID: "Authentikációs hiba történt",
-    AUTH_TOKENID_NOT_FOUND: "Authentikációs hiba történt",
+    AUTH_TOKENID_NOT_FOUND: "Bejelentkezés visszavonva, kérlek jelentkezz be újra!",
     BAD_CREDENTIALS: "Helytelen E-mail vagy Jelszó",
     CANNOT_APPLY_ACTIVE_GAME: "Aktív játékra nem lehet jelentkezni",
     CANNOT_CANCEL_ACTIVE: "Aktív játékról a jelentkezést nem lehet visszavonni",

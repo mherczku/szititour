@@ -9,7 +9,7 @@
     <p class="browser text-size-base">Böngésző: {{client.brand}}</p>
     <p class="ip text-size-base">IP cím: {{client.ipAddress}}</p>
 
-    <img title="Google azonosítás" class="img img-google" *ngIf="client.isGoogle" src="assets/svg/google.svg" alt="GoogleLogin">
+    <img title="Google azonosítás" class="img img-google" *ngIf="client.google" src="assets/svg/google.svg" alt="GoogleLogin">
 
     <button [disabled]="$loading()" (click)="revokeAccess()" title="Törlés" class="btn-remove btn"><img class="img" src="assets/svg/remove.svg" alt="Remove"></button>
 
