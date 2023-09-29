@@ -135,7 +135,6 @@ export class PushNotificationService {
       });
     });
     onMessage(messaging, (payload) => {
-      console.log("Message received. ", payload);
       this.notifications.update(v => {
         v.push({
           id: crypto.randomUUID(),

@@ -45,7 +45,6 @@ export class UserGameCardComponent {
   private applyForGame() {
     this.userService.applyForGame(this.game.id).pipe(takeUntil(this.destroy$)).subscribe({
       next: value => {
-        console.log(value);
         this.game = value;
         this.cd.markForCheck();
       },
@@ -58,7 +57,6 @@ export class UserGameCardComponent {
   private cancelApplicationForGame() {
     this.userService.cancelApplicationForGame(this.game.id).pipe(takeUntil(this.destroy$)).subscribe({
       next: value => {
-        console.log(value);
         this.game = value;
         this.cd.markForCheck();
       },

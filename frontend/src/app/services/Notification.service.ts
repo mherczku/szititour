@@ -50,7 +50,6 @@ export class NotificationService {
   }
 
   public error(message: string) {
-    console.log("Errr")
     if(!message || message.length < 1) {
       return;
     }

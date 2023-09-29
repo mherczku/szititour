@@ -253,7 +253,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   resetSelectedCounter() {
-    console.log("resetSelectedCounter");
     this.adminChat.update((chat) => {
       chat.selectedUser?.newMessages ? (chat.selectedUser.newMessages = 0) : 0;
       return chat;
