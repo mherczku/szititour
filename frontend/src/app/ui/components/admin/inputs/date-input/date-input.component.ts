@@ -1,16 +1,17 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {DatePipe} from "@angular/common";
 
 @Component({
   selector: "app-date-input",
   templateUrl: "./date-input.component.html",
-  styleUrls: ["./date-input.component.css"],
+  styleUrls: ["./date-input.component.scss"],
   imports: [
     FormsModule,
     DatePipe
   ],
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DateInputComponent {
 

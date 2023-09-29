@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .login(this.email, this.password)
       .subscribe((res: NetworkResponse) => {
         if (res.success) {
-          this.notiService.succes(CONST_MESSAGES.LOGIN_SUCCESS);
+          this.notiService.success(CONST_MESSAGES.LOGIN_SUCCESS);
         }
       });
   }

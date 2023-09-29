@@ -1,14 +1,13 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output, signal} from "@angular/core";
 import {Game} from "../../../../../types/game";
-import {HotToastService} from "@ngneat/hot-toast";
 import {AdminService} from "../../../../../services/AdminService";
-import {Subject,takeUntil} from "rxjs";
-import {AutoDestroy} from "../../../../../decorators/autodestroy.decorator";
 import {FormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {DatePipe, NgIf} from "@angular/common";
 import {ImgSrcModule} from "../../../../../pipes/img-src/img-src.module";
 import {ButtonsComponent} from "../../../buttons/buttons.component";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { NotificationService } from "src/app/services/Notification.service";
 
 
 @Component({
@@ -23,7 +22,8 @@ import {ButtonsComponent} from "../../../buttons/buttons.component";
     ButtonsComponent,
     NgIf
   ],
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GamecardComponent {
 
@@ -42,36 +42,37 @@ export class GamecardComponent {
   @Output() onPlacesClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
   @Output() onDeleted: EventEmitter<unknown> = new EventEmitter<unknown>();
 
-  deleting = false;
-  @AutoDestroy destroy$ = new Subject();
+  $deleting = signal(false);
 
-  constructor(private alert: HotToastService, private adminService: AdminService) {
+  constructor(
+    private readonly alert: NotificationService,
+    private readonly adminService: AdminService,
+    private readonly destroyRef: DestroyRef) {
   }
 
   deleteGame() {
     const sure = window.confirm(`Biztos törlöd a ${this.game.title} játékot?`);
     if (sure) {
-      this.deleting = true;
-      this.adminService.deleteGame(this.game.id).pipe(takeUntil(this.destroy$)).subscribe({
-        next: res => {
-          this.deleting = false;
-          this.alert.success(`${this.game.title} sikeresen törölve`);
+      this.$deleting.set(true);
+      this.adminService.deleteGame(this.game.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: () => {
+          this.$deleting.set(false);
+          this.alert.success(`${this.game.title} játék sikeresen törölve`);
           this.onDeleted.emit();
         },
-        error: err => {
-          this.deleting = false;
+        error: () => {
+          this.$deleting.set(false);
         }
       });
     }
   }
 
-  getAcceptedApplicationsLength() {
-    //todo filter data check string? or application
-    //this.game.applications.filter(e => e.)
+  get acceptedApplicationsLength(): number {
+    return this.game.applications.filter(e => e.accepted === true).length;
   }
 
   changeGameActivation() {
-    this.adminService.changeGameActivation(this.game.id, !this.game.active).pipe(takeUntil(this.destroy$)).subscribe(res => {
+    this.adminService.changeGameActivation(this.game.id, !this.game.active).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {
       this.game = res;
     });
   }

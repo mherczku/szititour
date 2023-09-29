@@ -1,7 +1,7 @@
 <div class="relative bg-white p-5 rounded overflow-y-auto max-h-[80vh] flex-col flex">
   <p class="text-size-h3 text-center w-full font-bold mb-6">{{isEdit ? "Játék szerkesztése" : "Új játék létrehozása"}}
   </p>
-  <app-text-input [(value)]="game.title" classes="mb-4" label="Neve"></app-text-input>
+  <app-text-input [(value)]="game.title" classes="mb-4" label="Neve:"></app-text-input>
   <app-date-input name="Kezdő időpont" classes="mb-4" [(date)]="game.dateStart"></app-date-input>
   <app-date-input name="Befejező időpont" classes="mb-4" [(date)]="game.dateEnd"></app-date-input>
   <div class="flex flex-col gap-2 mb-5 items-center">

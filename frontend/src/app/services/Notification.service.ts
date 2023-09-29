@@ -65,7 +65,7 @@ export class NotificationService {
     this.pushToNotis(n);
   }
 
-  public succes(title: string, message = "") {
+  public success(title: string, message = "") {
     if(!title || title.length < 1) {
       return;
     }
@@ -80,7 +80,6 @@ export class NotificationService {
     };
     this.pushToNotis(n);
   }
-
 
   trigger() {
     this.pushToNotis({
