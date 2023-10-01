@@ -9,15 +9,19 @@ export class ImageService {
   loader = "assets/svg/loader.svg";
 
   getImageUrl(src: string): Observable<string> {
+    const resToken = src.split("&&resToken=")[1];
+    const url = src.split("&&resToken=")[0];
+
     const Sb = new ReplaySubject<string>();
 
-    if (this.images.has(src)) {
-      Sb.next(this.getUrl(this.images.get(src)));
+    if (this.images.has(url)) {
+      Sb.next(this.getUrl(this.images.get(url)));
       Sb.complete();
     }
     else {
       Sb.next(this.loader);
-      this.fetchImage(src).then((b) => {
+
+      this.fetchImage(url, resToken).then((b) => {
         Sb.next(this.getUrl(b));
         Sb.complete();
 
@@ -26,19 +30,19 @@ export class ImageService {
     return Sb.asObservable();
   }
 
-  private async fetchImage(src: string): Promise<Blob> {
-    const response = await fetch(src, {
+  private async fetchImage(url: string, resToken: string): Promise<Blob> {
+
+    const response = await fetch(url, {
+      cache: "default",
       mode: "cors",
       credentials: "same-origin",
       headers: {
-        "Ngrok-Skip-Browser-Warning": "yes"
+        "Ngrok-Skip-Browser-Warning": "yes",
+        "resToken": resToken
       }
     });
     const image = await response.blob();
-
-    if (!src.includes("resources/images")) {
-      this.images.set(src, image);
-    }
+    this.images.set(url, image);
     return image;
   }
 

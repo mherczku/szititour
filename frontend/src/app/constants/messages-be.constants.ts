@@ -4,10 +4,13 @@ export const CONST_MESSAGES = {
 
     //* SUCCESS MESSAGES:
     //! Make them short!
+    DELETE_TEAM_REQUESTED: "Fiók törléséhez megerősítő E-mail kiküldve",
     DIRECT_NOTIFICATION_SENT: "Direkt push értesítés sikeresen kiküldve",
     EMAIL_VERIFIED: "Sikeres E-mail aktiválás",
     LOGIN_SUCCESS: "Sikeres bejelentkezés",
     LOGOUT_SUCCESS: "Sikeres kijelentkezés",
+    PASSWORD_CHANGED: "Jelszó sikeresen módosítva",
+    PASSWORD_CHANGE_EMAIL_SENT: "Jelszó módosításához E-mail kiküldve",
     REGISTER_SUCCESS: "Sikeres regisztráció",
     SUCCESS: "Siker", // never comes to frontend
     TEAM_DELETE_SUCCESS: "Csapat sikeresen törölve",
@@ -31,10 +34,12 @@ export const CONST_MESSAGES = {
     CANNOT_CANCEL_REFUSED: "A jelentkezést már elutasították",
     EMAIL_EMPTY: "Üres E-mail cím",
     EMAIL_INVALID: "Hibás E-mail cím",
+    EMAIL_INVALID_TOKEN_TYPE: "E-mail cím módosító link már érvénytelen",
     EMAIL_NOT_VERIFIED: "E-mail cím nem aktivált",
+    EMAIL_NOT_VERIFIED_DELETE: "Fiók nem törölhető, amíg az új E-mail nincs aktiválva",
     EMAIL_SEND_FAILED_TEMPLATE_NULL: "E-mail kiküldése sikertelen",
     EMAIL_TAKEN: "E-mail cím már foglalt",
-    EMAIL_VERIFICATION_FAILED: "Sikertelen E-mail aktiválás",
+    EMAIL_TOKEN_EXPIRED: "E-mail módosító link felhasználási ideje lejárt",
     EMPTY_CREDENTIALS: "Üres bejelentkezési adatok",
     GAME_GAMEID_QUESTIONID_NULL: "GAME_GAMEID_QUESTIONID_NULL",
     GAME_INACTIVE: "Játék nem aktív",
@@ -49,6 +54,9 @@ export const CONST_MESSAGES = {
     MISSING_REQUEST_VALUE: "Hiányzó paraméter",
     PASSWORD_EMPTY: "Üres jelszó",
     PASSWORD_INVALID: "Hibás jelsző - komplexitás",
+    PASSWORD_TOKEN_INVALID: "Jelszó módosító link már nem érvényes",
+    PASSWORD_INVALID_TOKEN_TYPE: "Jelszó módosítása meghiúsult",
+    PASSWORD_TOKEN_EXPIRED: "Jelszó módosító link felhasználási ideje lejárt",
     PLACE_NOT_FOUND_CONVERT: "Helyszín nem található",
     PLACE_NOT_FOUND: "Helyszín nem található",
     QUESTION_NOT_FOUND: "Kérdés nem található",
@@ -56,12 +64,14 @@ export const CONST_MESSAGES = {
     RESOURCE_DIRECTORY_NOT_FOUND: "Keresett kép nem található",
     RESOURCE_IMG_NOT_FOUND: "Keresett kép nem található",
     TEAM_ALREADY_APPLIED: "A csapat már jelentkezett a játékra",
+    TEAM_DELETE_INVALID_TOKEN_TYPE: "Fiók törlése link már nem érvényes",
+    TEAM_DELETE_TOKEN_EXPIRED: "Foók törlése meghiúsult",
+    TEAM_DELETE_TOKEN_INVALID: "Fiók törlése link felhasználási ideje lejárt",
     TEAM_INACTIVE: "Csapat nem aktivált",
     TEAM_NOT_FOUND: "Csapat nem található",
     UNKNOWN: "Ismeretlen hiba történt",
     UPLOAD_SIZE_LIMIT: "Feltöltendő kép mérete maximum 5 MB",
     VERIFICATION_FAILED: "Authentikációs hiba történt",
-    WRONG_PASSWORD: "Hibás jelszó",
 
 };
 
