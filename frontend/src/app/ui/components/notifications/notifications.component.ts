@@ -5,13 +5,14 @@ import { NotificationService, SzititourNotification } from "src/app/services/Not
 import { popInOut } from "../../animations/pupInOut.animation";
 import { PushNotificationService } from "src/app/services/PushNotification.service";
 import { AuthService } from "src/app/services/AuthService";
+import { RouterLink } from "@angular/router";
 
 @Component({
     selector: "app-notifications",
     standalone: true,
     templateUrl: "./notifications.component.html",
     styleUrls: ["./notifications.component.scss"],
-    imports: [CommonModule, NotificationComponent],
+    imports: [CommonModule, NotificationComponent, RouterLink],
     animations: [popInOut],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
