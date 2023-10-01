@@ -8,6 +8,7 @@ import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.LoginData
 import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_DELETE_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_GOOGLE_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_PASSWORD_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
@@ -159,7 +160,7 @@ class SecurityController(private val teamService: TeamService, private val secur
     }
 
     @DeleteMapping
-    fun deleteTeam(@RequestHeader(HEADER_PASSWORD_TOKEN) token: String): ResponseEntity<Response> {
+    fun deleteTeam(@RequestHeader(HEADER_DELETE_TOKEN) token: String): ResponseEntity<Response> {
         logger.info("Delete team")
         teamService.deleteTeamByUser(token)
         return ResponseEntity(Response(success = true, message = "Team Deleted", messageCode = MessageConstants.TEAM_DELETE_SUCCESS), HttpStatus.OK)
