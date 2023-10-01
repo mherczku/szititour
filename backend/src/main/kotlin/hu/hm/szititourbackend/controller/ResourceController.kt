@@ -30,7 +30,7 @@ class ResourceController @Autowired constructor(
 
     @GetMapping("/images")
     fun getResourceV2(
-            @RequestParam(HEADER_RESOURCE_TOKEN) token: String,
+            @RequestHeader(HEADER_RESOURCE_TOKEN) token: String,
             @RequestParam("img") imagePath: String
     ): ResponseEntity<UrlResource> {
 

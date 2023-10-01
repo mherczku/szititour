@@ -27,7 +27,10 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         const val CLAIM_USERNAME = "username"
         const val CLAIM_TYPE = "claim_type"
         const val CLAIM_TOKEN_ID = "claim_token_id"
+        const val CLAIM_PASSWORD_CHANGE_ID = "claim_password_change_id"
         const val CLAIM_TYPE_VERIFICATION_TOKEN = "claim_type_verification_token"
+        const val CLAIM_TYPE_TEAM_DELETE_TOKEN = "claim_type_team_delete_token"
+        const val CLAIM_TYPE_PASSWORD_CHANGE_TOKEN = "claim_type_password_change_token"
         const val CLAIM_TYPE_AUTH_TOKEN = "claim_type_auth_token"
         const val CLAIM_TYPE_RES_TOKEN = "claim_type_res_token"
         const val CLAIM_RES_ID = "claim_res_id"
@@ -38,6 +41,8 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         const val JWT_TOKEN_VALIDITY_1HOUR = 1 * 60 * 60    // 1 hour
         const val JWT_TOKEN_VALIDITY_1DAY = 24 * 60 * 60     // 1 hour
         const val HEADER_TOKEN = "Authorization"
+        const val HEADER_PASSWORD_TOKEN = "passwordToken"
+        const val HEADER_DELETE_TOKEN = "deleteToken"
         const val HEADER_RESOURCE_TOKEN = "resToken"
         const val HEADER_GOOGLE_TOKEN = "googleToken"
         const val HEADER_TOKEN_ID = "Tokenid"
@@ -108,6 +113,92 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         }
     }
 
+    //* TEAM DELETE:
+    fun generateTeamDeleteToken(team: Team): String {
+        val now = Instant.now()
+        val claims = JwtClaimsSet.builder()
+                .issuer(ISSUER)
+                .issuedAt(now)
+                .expiresAt(now.plusSeconds(JWT_TOKEN_VALIDITY_1HOUR.toLong()))
+                .subject(team.id.toString())
+                .claim(CLAIM_TYPE, CLAIM_TYPE_TEAM_DELETE_TOKEN)
+                .claim(CLAIM_PASSWORD_CHANGE_ID, team.passwordChangeId)
+                .claim(CLAIM_USERNAME, team.email)
+                .build()
+        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).tokenValue
+    }
+    fun verifyTeamDeleteToken(token: String): VerificationResponse {
+        if (token.isNullOrEmpty()) {
+            return VerificationResponse(verified = false, errorMessage = "Empty Token", messageCode = MessageConstants.AUTH_TOKEN_EMPTY)
+        }
+
+        return try {
+            val jwt: Jwt = jwtDecoder.decode(token)
+            val now = Instant.now()
+            if (jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
+                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN, MessageConstants.TEAM_DELETE_TOKEN_EXPIRED)
+            }
+            val type: String = jwt.getClaim(CLAIM_TYPE)
+            if (type != CLAIM_TYPE_TEAM_DELETE_TOKEN) {
+                throw CustomException("Bad token type", HttpStatus.FORBIDDEN, MessageConstants.TEAM_DELETE_INVALID_TOKEN_TYPE)
+            }
+            val teamId: Int = jwt.subject.toInt()
+            val passwordChangeId: String = jwt.getClaim(CLAIM_PASSWORD_CHANGE_ID)
+
+            VerificationResponse(verified = true, isAdmin = false, teamId = teamId, messageCode = passwordChangeId)
+        } catch (e: Exception) {
+            if (e is CustomException) {
+                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
+            } else {
+                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+
+            }
+        }
+    }
+
+
+    //* PASSWORD CHANGE
+    fun generatePasswordChangeToken(team: Team): String {
+        val now = Instant.now()
+        val claims = JwtClaimsSet.builder()
+                .issuer(ISSUER)
+                .issuedAt(now)
+                .expiresAt(now.plusSeconds(JWT_TOKEN_VALIDITY_1HOUR.toLong()))
+                .subject(team.id.toString())
+                .claim(CLAIM_TYPE, CLAIM_TYPE_PASSWORD_CHANGE_TOKEN)
+                .claim(CLAIM_PASSWORD_CHANGE_ID, team.passwordChangeId)
+                .claim(CLAIM_USERNAME, team.email)
+                .build()
+        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).tokenValue
+    }
+    fun verifyPasswordChangeToken(token: String): VerificationResponse {
+        if (token.isNullOrEmpty()) {
+            return VerificationResponse(verified = false, errorMessage = "Empty Token", messageCode = MessageConstants.AUTH_TOKEN_EMPTY)
+        }
+
+        return try {
+            val jwt: Jwt = jwtDecoder.decode(token)
+            val now = Instant.now()
+            if (jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
+                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN, MessageConstants.PASSWORD_TOKEN_EXPIRED)
+            }
+            val type: String = jwt.getClaim(CLAIM_TYPE)
+            if (type != CLAIM_TYPE_PASSWORD_CHANGE_TOKEN) {
+                throw CustomException("Bad token type", HttpStatus.FORBIDDEN, MessageConstants.PASSWORD_INVALID_TOKEN_TYPE)
+            }
+            val teamId: Int = jwt.subject.toInt()
+            val passwordChangeId: String = jwt.getClaim(CLAIM_PASSWORD_CHANGE_ID)
+
+            VerificationResponse(verified = true, isAdmin = false, teamId = teamId, messageCode = passwordChangeId)
+        } catch (e: Exception) {
+            if (e is CustomException) {
+                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
+            } else {
+                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+
+            }
+        }
+    }
 
     // EMAIL VERIFY TOKEN
     fun generateEmailVerificationToken(team: Team): String {
@@ -132,11 +223,11 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
             val jwt: Jwt = jwtDecoder.decode(token)
             val now = Instant.now()
             if (jwt.expiresAt == null || jwt.expiresAt?.isBefore(now) == true) {
-                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_EXPIRED)
+                throw CustomException("TOKEN EXPIRED", HttpStatus.FORBIDDEN, MessageConstants.EMAIL_TOKEN_EXPIRED)
             }
             val type: String = jwt.getClaim(CLAIM_TYPE)
             if (type != CLAIM_TYPE_VERIFICATION_TOKEN) {
-                throw CustomException("Bad token type", HttpStatus.FORBIDDEN, MessageConstants.AUTH_INVALID_TOKEN_TYPE)
+                throw CustomException("Bad token type", HttpStatus.FORBIDDEN, MessageConstants.EMAIL_INVALID_TOKEN_TYPE)
             }
             val teamId: Int = jwt.subject.toInt()
 

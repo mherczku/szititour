@@ -25,6 +25,7 @@ class Team(
         var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
         var enabled: Boolean = false,
         var isGoogle: Boolean = false,
+        var passwordChangeId: String = "",
 
         var lastLatitude: Double = 0.0,
         var lastLongitude: Double = 0.0,

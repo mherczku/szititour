@@ -4,6 +4,7 @@ import hu.hm.szititourbackend.datamodel.*
 import hu.hm.szititourbackend.dto.*
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.service.*
 import hu.hm.szititourbackend.util.MessageConstants
 import org.slf4j.Logger
@@ -53,14 +54,24 @@ class LoggedInController @Autowired constructor(
         return ResponseEntity(updatedTeam.convertToDto(), HttpStatus.OK)
     }
 
+    @GetMapping("update/password-request")
+    fun updateProfilePasswordRequest(
+            auth: Authentication
+    ): ResponseEntity<Response> {
+        logger.debug("Update user password request for ${auth.name}")
+        teamService.updateTeamPasswordRequest(auth.name.toInt())
+        return ResponseEntity(Response(success = true, messageCode = MessageConstants.PASSWORD_CHANGE_EMAIL_SENT, message = "Password modify email sent to user"), HttpStatus.OK)
+    }
+
     @PostMapping("update/password")
     fun updateProfilePassword(
-            @RequestBody profileUpdate: TeamPasswordUpdateDto,
+            @RequestHeader(SecurityService.HEADER_PASSWORD_TOKEN) token: String,
+            @RequestBody passwordUpdateDto: TeamPasswordUpdateDto,
             auth: Authentication
-    ): ResponseEntity<TeamDto> {
-        logger.debug("Update user password ${auth.name}")
-        val updatedTeam = teamService.updateTeamPassword(auth.name.toInt(), profileUpdate)
-        return ResponseEntity(updatedTeam.convertToDto(), HttpStatus.OK)
+    ): ResponseEntity<Response> {
+        logger.debug("Updating user password for ${auth.name}")
+        teamService.updateTeamPassword(passwordUpdateDto, token)
+        return ResponseEntity(Response(success = true, messageCode = MessageConstants.PASSWORD_CHANGED, message = "Password changed"), HttpStatus.OK)
     }
 
     @PostMapping("update/email")
@@ -126,14 +137,10 @@ class LoggedInController @Autowired constructor(
     }
 
     @DeleteMapping
-    fun deleteTeam(@RequestBody password: String, auth: Authentication): ResponseEntity<Response> {
-        logger.info("Delete team - ${auth.name}")
-        return try {
-            teamService.deleteTeamByUser(auth.name.toInt(), password)
-            ResponseEntity(Response(success = true, message = "Successfully deleted team", messageCode = MessageConstants.TEAM_DELETE_SUCCESS), HttpStatus.OK)
-        } catch (e: Exception) {
-            throw CustomException("Team not found", HttpStatus.NOT_FOUND, MessageConstants.TEAM_NOT_FOUND)
-        }
+    fun deleteTeamRequest(auth: Authentication): ResponseEntity<Response> {
+        logger.info("Delete team request - ${auth.name}")
+        teamService.deleteTeamRequest(auth.name.toInt())
+        return ResponseEntity(Response(success = true, message = "Delete team email sent", messageCode = MessageConstants.DELETE_TEAM_REQUESTED), HttpStatus.OK)
     }
 
     //! AVAILABLE ONLY FOR USERS WITH VALID APPLICATION FOR "THE" GAME WHICH IS ACTIVE:

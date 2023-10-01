@@ -3,11 +3,13 @@ package hu.hm.szititourbackend.security
 import hu.hm.szititourbackend.datamodel.ClientData
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
+import hu.hm.szititourbackend.dto.TeamPasswordUpdateDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.LoginData
 import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.extramodel.Response
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_GOOGLE_TOKEN
+import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_PASSWORD_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN_ID
 import hu.hm.szititourbackend.service.TeamService
@@ -61,9 +63,8 @@ class SecurityController(private val teamService: TeamService, private val secur
             teamService.verifyEmail(verification.teamId)
             ResponseEntity(Response(true, message = "Email verified", MessageConstants.EMAIL_VERIFIED), HttpStatus.OK)
         } else {
-            ResponseEntity(Response(false, "Email verification failed", MessageConstants.EMAIL_VERIFICATION_FAILED), HttpStatus.BAD_REQUEST)
+            ResponseEntity(Response(false, "Email verification failed", verification.messageCode), HttpStatus.BAD_REQUEST)
         }
-
     }
 
     @PostMapping("login/google")
@@ -141,6 +142,27 @@ class SecurityController(private val teamService: TeamService, private val secur
             return ResponseEntity<Response>(Response(success = true, messageCode = MessageConstants.LOGOUT_SUCCESS), HttpStatus.OK)
         }
         throw CustomException("Logout invalid token", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_INVALID)
+    }
+
+    @GetMapping("forgot-password")
+    fun forgotPasswordRequest(@RequestBody email: String): ResponseEntity<Response> {
+        logger.debug("Forgot password request")
+        teamService.forgotTeamPasswordRequest(email)
+        return ResponseEntity(Response(success = true, messageCode = MessageConstants.PASSWORD_CHANGE_EMAIL_SENT, message = "Password forgot email sent to user"), HttpStatus.OK)
+    }
+
+    @PostMapping("password")
+    fun forgotPassword(@RequestHeader(HEADER_PASSWORD_TOKEN) token: String, @RequestBody passwordUpdateDto: TeamPasswordUpdateDto): ResponseEntity<Response> {
+        logger.debug("Forgot password change")
+        teamService.updateTeamPassword(passwordUpdateDto, token)
+        return ResponseEntity(Response(true, message = "Password changed", MessageConstants.PASSWORD_CHANGED), HttpStatus.OK)
+    }
+
+    @DeleteMapping
+    fun deleteTeam(@RequestHeader(HEADER_PASSWORD_TOKEN) token: String): ResponseEntity<Response> {
+        logger.info("Delete team")
+        teamService.deleteTeamByUser(token)
+        return ResponseEntity(Response(success = true, message = "Team Deleted", messageCode = MessageConstants.TEAM_DELETE_SUCCESS), HttpStatus.OK)
     }
 
 }

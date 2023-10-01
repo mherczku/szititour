@@ -47,7 +47,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
         logger.debug("Send modify email to $username")
         val mimeMessage = javaMailSender.createMimeMessage()
         mimeMessage.setFrom("szititour.nxt@gmail.com")
-        mimeMessage.subject = "Verify your new E-mail"
+        mimeMessage.subject = "E-mail cím módosítása"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
         val messageTemplateIs = szititourProperties.emailUpdateTemplate?.inputStream
@@ -67,14 +67,14 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
         }
     }
 
-    fun sendPasswordModifiedEmail(emailTo: String, username: String) {
+    fun sendPasswordUpdatedEmail(emailTo: String, username: String) {
         logger.debug("Send password update email to $username")
         val mimeMessage = javaMailSender.createMimeMessage()
         mimeMessage.setFrom("szititour.nxt@gmail.com")
         mimeMessage.subject = "Jelszavad módosítva"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
-        val messageTemplateIs = szititourProperties.passwordUpdateTemplate?.inputStream
+        val messageTemplateIs = szititourProperties.passwordUpdatedTemplate?.inputStream
         if (messageTemplateIs != null) {
 
             var content = String(messageTemplateIs.readAllBytes())
@@ -86,6 +86,81 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
             javaMailSender.send(mimeMessage)
         } else {
             logger.error("Send password update email to $username message template file was null")
+            throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
+        }
+    }
+
+    //* PASSWORD:
+    fun sendModifyPasswordMail(emailTo: String, username: String, verificationToken: String) {
+        logger.debug("Send modify password email to $username")
+        val mimeMessage = javaMailSender.createMimeMessage()
+        mimeMessage.setFrom("szititour.nxt@gmail.com")
+        mimeMessage.subject = "Jelszó módosítása"
+        mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
+
+        val messageTemplateIs = szititourProperties.passwordModifyTemplate?.inputStream
+        if (messageTemplateIs != null) {
+
+            var content = String(messageTemplateIs.readAllBytes())
+
+            content = content.replace("[USERNAME]", username)
+            content = content.replace("[VERIFICATION_TOKEN]", verificationToken)
+            val helper = MimeMessageHelper(mimeMessage, true)
+            helper.setText(content, true)
+
+            javaMailSender.send(mimeMessage)
+        } else {
+            logger.error("Send modify-password email to $username message template file was null")
+            throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
+        }
+    }
+
+    fun sendForgotPasswordMail(emailTo: String, username: String, verificationToken: String) {
+        logger.debug("Send forgot password email to $username")
+        val mimeMessage = javaMailSender.createMimeMessage()
+        mimeMessage.setFrom("szititour.nxt@gmail.com")
+        mimeMessage.subject = "Jelszó módosítása"
+        mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
+
+        val messageTemplateIs = szititourProperties.passwordForgotTemplate?.inputStream
+        if (messageTemplateIs != null) {
+
+            var content = String(messageTemplateIs.readAllBytes())
+
+            content = content.replace("[USERNAME]", username)
+            content = content.replace("[VERIFICATION_TOKEN]", verificationToken)
+            val helper = MimeMessageHelper(mimeMessage, true)
+            helper.setText(content, true)
+
+            javaMailSender.send(mimeMessage)
+        } else {
+            logger.error("Send forgot-password email to $username message template file was null")
+            throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
+        }
+    }
+
+
+    //* TEAM:
+    fun sendTeamDeleteMail(emailTo: String, username: String, verificationToken: String) {
+        logger.info("Send team delete to $username")
+        val mimeMessage = javaMailSender.createMimeMessage()
+        mimeMessage.setFrom("szititour.nxt@gmail.com")
+        mimeMessage.subject = "Fiók törlése"
+        mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
+
+        val messageTemplateIs = szititourProperties.teamDeleteTemplate?.inputStream
+        if (messageTemplateIs != null) {
+
+            var content = String(messageTemplateIs.readAllBytes())
+
+            content = content.replace("[USERNAME]", username)
+            content = content.replace("[VERIFICATION_TOKEN]", verificationToken)
+            val helper = MimeMessageHelper(mimeMessage, true)
+            helper.setText(content, true)
+
+            javaMailSender.send(mimeMessage)
+        } else {
+            logger.error("Send team delete email to $username message template file was null")
             throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
         }
     }

@@ -46,31 +46,8 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
 
         val updateTeam = getTeamById(teamId)
         updateTeam.name = teamUpdateProfileDto.name ?: updateTeam.name
-        // TODO limit 4-5?
         updateTeam.members = teamUpdateProfileDto.members?.toMutableList() ?: updateTeam.members
         return this.updateTeam(updateTeam, true)
-    }
-
-    fun updateTeamPassword(teamId: Int, passwordUpdateDto: TeamPasswordUpdateDto): Team {
-        val team = getTeamById(teamId)
-        if (passwordUpdateDto.oldPassword.isNotBlank() && passwordUpdateDto.newPassword.isNotBlank()) {
-            if (PasswordUtils.comparePassword(passwordUpdateDto.oldPassword, team.password)) {
-                if (Utils.validatePassword(passwordUpdateDto.newPassword)) {
-                    if (team.nextEmail.isNotBlank()) {
-                        throw CustomException("Cannot modify password while email is not verified", HttpStatus.FORBIDDEN, MessageConstants.EMAIL_NOT_VERIFIED)
-                    }
-                    team.password = PasswordUtils.encryptPassword(passwordUpdateDto.newPassword)
-                    emailService.sendPasswordModifiedEmail(team.email, team.name)
-                    return updateTeam(team, true)
-                } else {
-                throw CustomException("New password is not acceptable", HttpStatus.BAD_REQUEST, MessageConstants.PASSWORD_INVALID)
-                }
-            } else {
-                throw CustomException("Old password is incorrect", HttpStatus.BAD_REQUEST, MessageConstants.WRONG_PASSWORD)
-            }
-        } else {
-            throw CustomException("Password cannot be blank", HttpStatus.BAD_REQUEST, MessageConstants.PASSWORD_EMPTY)
-        }
     }
 
     fun addTeam(team: Team, isAdmin: Boolean = false, isTester: Boolean = false): Team {
@@ -262,7 +239,6 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         clientData.isGoogle = isGoogle
         val tokenId = UUID.randomUUID().toString()
         clientData.tokenId = tokenId
-        val now = Instant.now()
         clientData.expireAt = Instant.now().plusSeconds(SecurityService.JWT_TOKEN_VALIDITY_1HOUR.toLong())
         team.clients.add(clientData)
         updateTeam(team, true)
@@ -276,12 +252,74 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         return updateTeam(team, true)
     }
 
-    fun deleteTeamByUser(teamId: Int, password: String) {
-        val team = getTeamById(teamId)
-        if(PasswordUtils.comparePassword(password, team.password)) {
-            return deleteTeamById(teamId);
+    fun deleteTeamByUser(deleteToken: String) {
+        val verification = securityService.verifyTeamDeleteToken(deleteToken)
+        if(verification.verified) {
+            val team = getTeamById(verification.teamId)
+            if(verification.messageCode != team.passwordChangeId) {
+                throw CustomException("Invalid Token PasswordChangeID", HttpStatus.FORBIDDEN, MessageConstants.TEAM_DELETE_TOKEN_INVALID)
+            }
+            deleteTeamById(team.id)
+
         } else {
-            throw CustomException("Wrong password", HttpStatus.BAD_REQUEST, MessageConstants.WRONG_PASSWORD)
+            throw CustomException("Team delete failed", HttpStatus.BAD_REQUEST, verification.messageCode)
+        }
+    }
+
+    fun deleteTeamRequest(teamId: Int) {
+        val team = getTeamById(teamId)
+        if (team.nextEmail.isNotBlank() || !team.enabled) {
+            throw CustomException("Cannot delete team while email is not verified", HttpStatus.FORBIDDEN, MessageConstants.EMAIL_NOT_VERIFIED_DELETE)
+        }
+        team.passwordChangeId = UUID.randomUUID().toString()
+        updateTeam(team, true)
+        emailService.sendModifyPasswordMail(team.email, team.name, securityService.generateTeamDeleteToken(team))
+    }
+
+    fun updateTeamPasswordRequest(teamId: Int) {
+        val team = getTeamById(teamId)
+        if (team.nextEmail.isNotBlank() || !team.enabled) {
+            throw CustomException("Cannot modify password while email is not verified", HttpStatus.FORBIDDEN, MessageConstants.EMAIL_NOT_VERIFIED)
+        }
+        team.passwordChangeId = UUID.randomUUID().toString()
+        updateTeam(team, true)
+        emailService.sendModifyPasswordMail(team.email, team.name, securityService.generatePasswordChangeToken(team))
+    }
+
+    fun forgotTeamPasswordRequest(email: String) {
+        val team = getTeamByEmail(email)
+        if (team.nextEmail.isNotBlank() || !team.enabled) {
+            throw CustomException("Cannot modify password while email is not verified", HttpStatus.FORBIDDEN, MessageConstants.EMAIL_NOT_VERIFIED)
+        }
+        team.passwordChangeId = UUID.randomUUID().toString()
+        updateTeam(team, true)
+        emailService.sendModifyPasswordMail(team.email, team.name, securityService.generatePasswordChangeToken(team))
+    }
+
+    fun updateTeamPassword(passwordUpdateDto: TeamPasswordUpdateDto, passwordChangeToken: String): Team {
+        val verification = securityService.verifyPasswordChangeToken(passwordChangeToken)
+        if(verification.verified) {
+            val team = getTeamById(verification.teamId)
+            if(verification.messageCode != team.passwordChangeId) {
+                throw CustomException("Invalid Token PasswordChangeID", HttpStatus.FORBIDDEN, MessageConstants.PASSWORD_TOKEN_INVALID)
+            }
+            if (passwordUpdateDto.newPassword.isNotBlank()) {
+                if (Utils.validatePassword(passwordUpdateDto.newPassword)) {
+                    if (team.nextEmail.isNotBlank()) {
+                        throw CustomException("Cannot modify password while email is not verified", HttpStatus.FORBIDDEN, MessageConstants.EMAIL_NOT_VERIFIED)
+                    }
+                    team.passwordChangeId = ""
+                    team.password = PasswordUtils.encryptPassword(passwordUpdateDto.newPassword)
+                    emailService.sendPasswordUpdatedEmail(team.email, team.name)
+                    return updateTeam(team, true)
+                } else {
+                    throw CustomException("New password is not acceptable", HttpStatus.BAD_REQUEST, MessageConstants.PASSWORD_INVALID)
+                }
+            } else {
+                throw CustomException("Password cannot be blank", HttpStatus.BAD_REQUEST, MessageConstants.PASSWORD_EMPTY)
+            }
+        } else {
+            throw CustomException("Password changed failed", HttpStatus.BAD_REQUEST, verification.messageCode)
         }
     }
 }

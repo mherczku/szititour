@@ -13,6 +13,17 @@ class SzititourProperties {
     @Value("classpath:templates/email-update.template.html")
     var emailUpdateTemplate: Resource? = null
 
-    @Value("classpath:templates/password-update.template.html")
-    var passwordUpdateTemplate: Resource? = null
+    @Value("classpath:templates/password-updated.template.html")
+    var passwordUpdatedTemplate: Resource? = null
+
+    @Value("classpath:templates/password-forgot.template.html")
+    var passwordForgotTemplate: Resource? = null
+
+    @Value("classpath:templates/password-modify.template.html")
+    var passwordModifyTemplate: Resource? = null
+
+    @Value("classpath:templates/team-delete.template.html")
+    var teamDeleteTemplate: Resource? = null
+
+
 }
