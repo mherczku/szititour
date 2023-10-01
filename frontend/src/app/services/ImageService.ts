@@ -24,7 +24,9 @@ export class ImageService {
       this.fetchImage(url, resToken).then((b) => {
         Sb.next(this.getUrl(b));
         Sb.complete();
-
+      }, () => {
+        Sb.next("");
+        Sb.complete();
       });
     }
     return Sb.asObservable();
