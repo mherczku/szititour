@@ -76,7 +76,6 @@
   @extend .btn;
   color: $m-blue;
   align-items: center;
-  position: relative;
 
   &:hover {
     color: $m-blue;
@@ -88,10 +87,8 @@
     visibility: hidden;
     overflow: hidden;
     height: 0;
+    width: max-content;
     font-weight: 600;
-    position: absolute;
-    top: 0;
-    left: 0;
-
+    position: inherit;
   }
 }

@@ -12,7 +12,7 @@
       <input tabindex="2" [(ngModel)]="password" name="szititourLoginPassword" type="password" class="simpleInput mb-5"
         placeholder="Jelszó" autocomplete="szititourLoginPassword" />
 
-      <a [routerLink]="'/auth/forgot'" class="btn-hover-bold forgot" bold="Elfelejtett jelszó">Elfelejtett jelszó</a>
+      <button type="button" [routerLink]="'/auth/forgot'" class="btn-hover-bold forgot" bold="Elfelejtett jelszó">Elfelejtett jelszó</button>
 
       <div class="flex justify-between items-center">
         <a #button1 class="btn-hover-bold-textChange" title="Még nincs fiókod?"
