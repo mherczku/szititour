@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, WritableSignal,
 import { CommonModule } from "@angular/common";
 import { TextInputComponent } from "../../../components/admin/inputs/text-input/text-input.component";
 import { ButtonsComponent } from "../../../components/buttons/buttons.component";
-import { Team, TeamUpdatePassword, TeamUpdateProfile } from "../../../../types/team";
+import { Team, TeamUpdateProfile } from "../../../../types/team";
 import { UserService } from "../../../../services/UserService";
 import { AuthService } from "src/app/services/AuthService";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -15,13 +15,14 @@ import { Observable, forkJoin, tap } from "rxjs";
 import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
 import { ImageUploaderComponent } from "../../../components/image-uploader/image-uploader.component";
 import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
+import { ConfirmService } from "src/app/services/Confirm.service";
 
 @Component({
-    standalone: true,
-    templateUrl: "./profile.component.html",
-    styleUrls: ["./profile.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent, ImgSrcModule, ImageUploaderComponent, ImgLoaderPipe]
+  standalone: true,
+  templateUrl: "./profile.component.html",
+  styleUrls: ["./profile.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, ReactiveFormsModule, TextInputComponent, ButtonsComponent, ClientCardComponent, TogglerComponent, ImgSrcModule, ImageUploaderComponent, ImgLoaderPipe]
 })
 export class ProfileComponent implements OnInit {
 
@@ -48,6 +49,7 @@ export class ProfileComponent implements OnInit {
     private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly pushService: PushNotificationService,
+    private readonly confirmS: ConfirmService,
     private readonly destroyRef: DestroyRef,
     private readonly fb: FormBuilder,
   ) {
@@ -120,12 +122,17 @@ export class ProfileComponent implements OnInit {
   }
 
   savePassword() {
-    this.$saving.set(true);
-    const updateData: TeamUpdatePassword = {
-      oldPassword: this.passwordForm.value.oldPassword,
-      newPassword: this.passwordForm.value.password
-    };
-    this.userService.updatePassword(updateData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ complete: () => this.$saving.set(false) });
+
+    this.confirmS.confirm(
+      {
+        question: "Biztosan módosítani szeretnéd a jelszavad?",
+        confirmText: "Módosítás"
+      },
+      () => {
+        this.$saving.set(true);
+        this.userService.updatePasswordRequest().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ complete: () => this.$saving.set(false) });
+      });
+
   }
 
   togglePushNoti() {
@@ -137,14 +144,18 @@ export class ProfileComponent implements OnInit {
   }
 
   fileChange(file: File) {
-      this.$newImgFile.set(file);
+    this.$newImgFile.set(file);
   }
 
-  deleteAccount(pass: string | undefined = undefined) {
-    if (this.$deleting() && pass && pass.length > 0) {
-      this.userService.deleteAccount(pass).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
-    } else {
-      this.$deleting.set(true);
-    }
+  deleteAccount() {
+    this.confirmS.confirm(
+      {
+        question: "Biztosan törölni szeretnéd a fiókod?",
+        confirmText: "Fiók törlése!"
+      },
+      () => {
+        this.$deleting.set(true);
+        this.userService.deleteAccountRequest().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ next: () => this.$deleting.set(false), error: () => this.$deleting.set(false) });
+      });
   }
 }

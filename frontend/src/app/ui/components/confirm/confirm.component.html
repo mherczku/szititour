@@ -1,0 +1,14 @@
+<div class="container-confirm" *ngIf="this.$active()" (click)="reject()">
+
+    <div class="confirm-card">
+
+        <p class="text-center text-size-base">{{$confirmData().question}}</p>
+
+        <div class="actions" (click)="$event.stopPropagation()">
+            <button class="btn-simple" (click)="reject()">{{$confirmData().rejectText}}</button>
+            <button class="btn-simple-red" (click)="confirm()">{{$confirmData().confirmText}}</button>
+        </div>
+
+    </div>
+
+</div>

@@ -5,7 +5,8 @@
       <div class="infos">
 
         <div class="img-container">
-          <app-image-uploader [src]="($profile().img | imgSrc | imgLoader | async) ?? 'assets/svg/avatar.svg'" (fileChanged)="fileChange($event)"></app-image-uploader>
+          <app-image-uploader [src]="($profile().img | imgSrc | imgLoader | async) ?? 'assets/svg/avatar.svg'"
+            (fileChanged)="fileChange($event)"></app-image-uploader>
         </div>
 
         <app-text-input type="editable" [label]="'Csapatnév:'" [(value)]="$profile().name"></app-text-input>
@@ -16,14 +17,10 @@
               classes="hover:scale-110 active:opacity-70 transition" iconSrc="assets/svg/add.svg"
               type="icon"></app-buttons>
           </div>
-          <app-text-input type="editable" [label]="'Tag1:'"
-            [(value)]="$profile().members[0]"></app-text-input>
-          <app-text-input type="editable" [label]="'Tag2:'"
-            [(value)]="$profile().members[1]"></app-text-input>
-          <app-text-input type="editable" [label]="'Tag3:'"
-            [(value)]="$profile().members[2]"></app-text-input>
-          <app-text-input type="editable" [label]="'Tag4:'"
-            [(value)]="$profile().members[3]"></app-text-input>
+          <app-text-input type="editable" [label]="'Tag1:'" [(value)]="$profile().members[0]"></app-text-input>
+          <app-text-input type="editable" [label]="'Tag2:'" [(value)]="$profile().members[1]"></app-text-input>
+          <app-text-input type="editable" [label]="'Tag3:'" [(value)]="$profile().members[2]"></app-text-input>
+          <app-text-input type="editable" [label]="'Tag4:'" [(value)]="$profile().members[3]"></app-text-input>
 
 
         </div>
@@ -38,24 +35,13 @@
           <button title="Változtatás visszavonása" [disabled]="$saving()" (click)="cancelEmailChange()">
             <img src="assets/svg/cancel.svg" alt="Cancel">
           </button>
-          <p class="txt-warning-red" >*Változtatás alatt: {{$profile().nextEmail}}</p>
+          <p class="txt-warning-red">*Változtatás alatt: {{$profile().nextEmail}}</p>
         </div>
         <app-text-input type="editable" [label]="'Email:'" [(value)]="$profile().email"></app-text-input>
       </div>
       <button [disabled]="$saving() || isEmailSame" (click)="saveEmail()"
         class="btn-simple-red w-fit self-center">Módosítás</button>
     </div>
-
-    <form [formGroup]="passwordForm" class="profile-password">
-      <h3 class="text-center text-size-base bold">Jelszó módosítása:</h3>
-      <input autocomplete="off" formControlName="oldPassword" class="simpleInput" type="password"
-        placeholder="Régi jelszó">
-      <input autocomplete="off" formControlName="password" class="simpleInput" type="password" placeholder="Új jelszó">
-      <input autocomplete="off" formControlName="confirmPassword" class="simpleInput" type="password"
-        placeholder="Új jelszó mégegyszer">
-      <button [disabled]="$saving() || !passwordForm.valid" (click)="savePassword()"
-        class="btn-simple-red w-fit self-center">Módosítás</button>
-    </form>
   </div>
 
   <div class="right">
@@ -77,11 +63,15 @@
       </div>
     </div>
 
+    <div class="password-card">
+      <h3 class="text-size-lg bold text-center">Jelszó módosítása E-mail kérése</h3>
+      <button [disabled]="$saving()" (click)="savePassword()" class="btn-simple w-fit self-center">Jelszó
+        módosítása</button>
+    </div>
+
     <div class="delete-card">
       <h3 class="text-size-lg bold">Felhasználó törlése</h3>
-      <input [class.nodeleting]="!this.$deleting()" #pass autocomplete="off" class="simpleInput" type="password"
-        placeholder="Jelszó">
-      <button (click)="deleteAccount(pass.value)" class="btn-simple-red">Felhasználó törlése</button>
+      <button [disabled]="$deleting()" (click)="deleteAccount()" class="btn-simple-red">Felhasználó törlése</button>
     </div>
   </div>
 

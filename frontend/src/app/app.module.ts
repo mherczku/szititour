@@ -27,6 +27,7 @@ import { EffectsModule } from "@ngrx/effects";
 import { ContainerLoaderComponent } from "./ui/components/container-loader/container-loader.component";
 import { NotificationService } from "./services/Notification.service";
 import { LoaderService } from "./services/Loader.service";
+import { ConfirmComponent } from "./ui/components/confirm/confirm.component";
 @NgModule({
     declarations: [
         AppComponent,
@@ -58,7 +59,8 @@ import { LoaderService } from "./services/Loader.service";
         ChatComponent,
         provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
         MessagingModule,
-        ContainerLoaderComponent
+        ContainerLoaderComponent,
+        ConfirmComponent
     ]
 })
 export class AppModule {
