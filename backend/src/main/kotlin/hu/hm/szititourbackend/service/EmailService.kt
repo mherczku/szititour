@@ -119,7 +119,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
         logger.debug("Send forgot password email to $username")
         val mimeMessage = javaMailSender.createMimeMessage()
         mimeMessage.setFrom("szititour.nxt@gmail.com")
-        mimeMessage.subject = "Jelszó módosítása"
+        mimeMessage.subject = "Elfelejtett jelszó"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
         val messageTemplateIs = szititourProperties.passwordForgotTemplate?.inputStream

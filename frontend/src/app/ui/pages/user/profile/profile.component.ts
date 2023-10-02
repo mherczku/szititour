@@ -5,7 +5,7 @@ import { ButtonsComponent } from "../../../components/buttons/buttons.component"
 import { Team, TeamUpdateProfile } from "../../../../types/team";
 import { UserService } from "../../../../services/UserService";
 import { AuthService } from "src/app/services/AuthService";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ClientCardComponent } from "../../../components/user/client-card/client-card.component";
 import { TogglerComponent } from "../../../components/toggler/toggler.component";

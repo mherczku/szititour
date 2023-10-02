@@ -273,7 +273,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         }
         team.passwordChangeId = UUID.randomUUID().toString()
         updateTeam(team, true)
-        emailService.sendModifyPasswordMail(team.email, team.name, securityService.generateTeamDeleteToken(team))
+        emailService.sendTeamDeleteMail(team.email, team.name, securityService.generateTeamDeleteToken(team))
     }
 
     fun updateTeamPasswordRequest(teamId: Int) {
@@ -293,7 +293,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         }
         team.passwordChangeId = UUID.randomUUID().toString()
         updateTeam(team, true)
-        emailService.sendModifyPasswordMail(team.email, team.name, securityService.generatePasswordChangeToken(team))
+        emailService.sendForgotPasswordMail(team.email, team.name, securityService.generatePasswordChangeToken(team))
     }
 
     fun updateTeamPassword(passwordUpdateDto: TeamPasswordUpdateDto, passwordChangeToken: String): Team {

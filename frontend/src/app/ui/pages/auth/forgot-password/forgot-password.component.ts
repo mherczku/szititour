@@ -26,7 +26,7 @@ export class ForgotPasswordComponent {
 
   sendForgotRequest() {
     if(validateEmail(this.email)){
-      this.authS.requestForgotPassword(this.email).pipe(takeUntilDestroyed(this.destroyRef)).subscribe()
+      this.authS.requestForgotPassword(this.email).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
     } else {
       this.notiS.error("E-mail cím formátuma nem megfelelő!");
     }
