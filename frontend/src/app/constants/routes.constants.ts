@@ -35,6 +35,14 @@ export const CONST_ROUTES = {
         profile: {
             path: "profile",
             call: "/user/profile"
+        },
+        password: {
+            path: "password/:token",
+            call: "/user/password"
+        },
+        delete: {
+            path: "delete/:token",
+            call: "/user/delete"
         }
     },
 
@@ -52,6 +60,14 @@ export const CONST_ROUTES = {
         verify: {
             path: "verify/:token",
             call: "/auth/verify/"
+        },
+        forgot: {
+            path: "forgot",
+            call: "/auth/forgot/"
+        },
+        password: {
+            path: "password/:token",
+            call: "/auth/password/"
         }
     }
 

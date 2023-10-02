@@ -22,10 +22,10 @@ export class VerifyComponent implements OnInit {
   title = "Fiók aktiválása";
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private alertService: HotToastService
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly authService: AuthService,
+    private readonly alertService: HotToastService
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +34,6 @@ export class VerifyComponent implements OnInit {
       setTimeout(() => {
         this.verifyEmail();
       }, 1000);
-
     });
   }
 

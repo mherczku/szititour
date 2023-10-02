@@ -6,7 +6,6 @@ import { Team, TeamUpdateProfile } from "../../../../types/team";
 import { UserService } from "../../../../services/UserService";
 import { AuthService } from "src/app/services/AuthService";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { confirmPassword } from "src/app/validators/same-pass.validator";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ClientCardComponent } from "../../../components/user/client-card/client-card.component";
 import { TogglerComponent } from "../../../components/toggler/toggler.component";
@@ -43,15 +42,12 @@ export class ProfileComponent implements OnInit {
 
   $newImgFile: WritableSignal<File | undefined> = signal(undefined);
 
-  passwordForm!: FormGroup;
-
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly pushService: PushNotificationService,
     private readonly confirmS: ConfirmService,
     private readonly destroyRef: DestroyRef,
-    private readonly fb: FormBuilder,
   ) {
 
     effect(() => {
@@ -63,11 +59,6 @@ export class ProfileComponent implements OnInit {
       }
     }, { allowSignalWrites: true });
 
-    this.passwordForm = this.fb.group({
-      oldPassword: ["", [Validators.required]],
-      password: ["", [Validators.required]],
-      confirmPassword: ["", [Validators.required, confirmPassword()]],
-    });
   }
 
   ngOnInit(): void {

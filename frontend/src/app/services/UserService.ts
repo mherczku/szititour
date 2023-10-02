@@ -73,4 +73,10 @@ export class UserService {
     return this.http.delete<NetworkResponse>(this.baseUrl);
   }
 
+  public deleteAccount(token: string): Observable<NetworkResponse> {
+    const headers = new HttpHeaders()
+      .set("deleteToken", token);
+    return this.http.delete<NetworkResponse>(`${this.baseUrl}`, { headers: headers });
+  }
+
 }

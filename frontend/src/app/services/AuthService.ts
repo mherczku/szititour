@@ -140,13 +140,6 @@ export class AuthService implements OnDestroy {
     return this.http.post<NetworkResponse>(`${this.baseUrl}/password`, data, { headers: headers });
   }
 
-  public deleteAccount(token: string): Observable<NetworkResponse> {
-    const headers = new HttpHeaders()
-      .set("deleteToken", token);
-    return this.http.delete<NetworkResponse>(`${this.baseUrl}`, { headers: headers });
-  }
-
-
   verifyEmail(token: string): Observable<NetworkResponse> {
     return this.http.get<NetworkResponse>(`${this.baseUrl}/verifyEmail/${token}`);
   }
