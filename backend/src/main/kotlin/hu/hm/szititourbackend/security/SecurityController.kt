@@ -145,7 +145,7 @@ class SecurityController(private val teamService: TeamService, private val secur
         throw CustomException("Logout invalid token", HttpStatus.FORBIDDEN, MessageConstants.AUTH_TOKEN_INVALID)
     }
 
-    @GetMapping("forgot-password")
+    @PostMapping("forgot-password")
     fun forgotPasswordRequest(@RequestBody email: String): ResponseEntity<Response> {
         logger.debug("Forgot password request")
         teamService.forgotTeamPasswordRequest(email)

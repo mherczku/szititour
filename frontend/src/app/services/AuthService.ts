@@ -127,6 +127,25 @@ export class AuthService implements OnDestroy {
     }));
   }
 
+  public requestForgotPassword(email: string): Observable<NetworkResponse> {
+    return this.http.post<NetworkResponse>(`${this.baseUrl}/forgot-password`, email);
+  }
+
+  public forgotPasswordChange(token: string, newPassword: string): Observable<NetworkResponse> {
+    const data = {
+      newPassword: newPassword
+    };
+    const headers = new HttpHeaders()
+      .set("passwordToken", token);
+    return this.http.post<NetworkResponse>(`${this.baseUrl}/password`, data, { headers: headers });
+  }
+
+  public deleteAccount(token: string): Observable<NetworkResponse> {
+    const headers = new HttpHeaders()
+      .set("deleteToken", token);
+    return this.http.delete<NetworkResponse>(`${this.baseUrl}`, { headers: headers });
+  }
+
 
   verifyEmail(token: string): Observable<NetworkResponse> {
     return this.http.get<NetworkResponse>(`${this.baseUrl}/verifyEmail/${token}`);

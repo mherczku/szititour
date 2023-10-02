@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, Subject, tap } from "rxjs";
 import { Game } from "../types/game";
 import { Team, TeamUpdatePassword, TeamUpdateProfile } from "../types/team";
@@ -35,10 +35,18 @@ export class UserService {
     }));
   }
 
-  updatePassword(team: TeamUpdatePassword): Observable<Team> {
-    return this.http.post<Team>(`${this.baseUrl}/update/password`, team).pipe(tap(t => {
-      this.authService.dispatchLogin(t);
-    }));
+  updatePasswordRequest(): Observable<NetworkResponse> {
+    return this.http.get<NetworkResponse>(`${this.baseUrl}/update/password-request`);
+  }
+
+  updatePassword(token: string, newPassword: string): Observable<NetworkResponse> {
+    const data = {
+      newPassword: newPassword
+    };
+    const headers = new HttpHeaders()
+      .set("passwordToken", token);
+
+    return this.http.post<NetworkResponse>(`${this.baseUrl}/update/password`, data, { headers: headers });
   }
 
   updateEmail(newEmail: string): Observable<Team> {
@@ -61,10 +69,8 @@ export class UserService {
     }));
   }
 
-  deleteAccount(password: string): Observable<NetworkResponse> {
-    return this.http.delete<NetworkResponse>(this.baseUrl, {body: {password: password}}).pipe(tap(() => {
-      this.authService.dispatchLogout();
-    }));
+  deleteAccountRequest(): Observable<NetworkResponse> {
+    return this.http.delete<NetworkResponse>(this.baseUrl);
   }
 
 }
