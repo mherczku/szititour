@@ -159,11 +159,4 @@ class SecurityController(private val teamService: TeamService, private val secur
         return ResponseEntity(Response(true, message = "Password changed", MessageConstants.PASSWORD_CHANGED), HttpStatus.OK)
     }
 
-    @DeleteMapping
-    fun deleteTeam(@RequestHeader(HEADER_DELETE_TOKEN) token: String): ResponseEntity<Response> {
-        logger.info("Delete team")
-        teamService.deleteTeamByUser(token)
-        return ResponseEntity(Response(success = true, message = "Team Deleted", messageCode = MessageConstants.TEAM_DELETE_SUCCESS), HttpStatus.OK)
-    }
-
 }

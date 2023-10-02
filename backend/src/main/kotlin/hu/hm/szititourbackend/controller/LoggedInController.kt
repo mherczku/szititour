@@ -143,6 +143,13 @@ class LoggedInController @Autowired constructor(
         return ResponseEntity(Response(success = true, message = "Delete team email sent", messageCode = MessageConstants.DELETE_TEAM_REQUESTED), HttpStatus.OK)
     }
 
+    @DeleteMapping("delete")
+    fun deleteTeam(@RequestHeader(SecurityService.HEADER_DELETE_TOKEN) token: String): ResponseEntity<Response> {
+        logger.info("Delete team")
+        teamService.deleteTeamByUser(token)
+        return ResponseEntity(Response(success = true, message = "Team Deleted", messageCode = MessageConstants.TEAM_DELETE_SUCCESS), HttpStatus.OK)
+    }
+
     //! AVAILABLE ONLY FOR USERS WITH VALID APPLICATION FOR "THE" GAME WHICH IS ACTIVE:
 
     @GetMapping("activegame/{gameId}")
