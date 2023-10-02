@@ -22,3 +22,8 @@ export function addMapApiHeader(onLoad: () => void) {
 export function genUUID(): string {
   return crypto.randomUUID();
 }
+
+export function validateEmail(email: string | undefined | null): boolean {
+  const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  return (email && email.match(validRegex)) ? true : false;
+}
