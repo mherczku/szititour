@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Question } from "../../../../types/question";
 import { QuestionType } from "../../../../enums/question-type";
@@ -14,7 +14,8 @@ import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
   standalone: true,
   templateUrl: "./question-card.component.html",
   styleUrls: ["./question-card.component.scss"],
-  imports: [CommonModule, FormsModule, ImgSrcModule, ImageUploaderComponent, ImgLoaderPipe]
+  imports: [CommonModule, FormsModule, ImgSrcModule, ImageUploaderComponent, ImgLoaderPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionCardComponent {
   @Input() index!: number;

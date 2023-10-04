@@ -1,12 +1,12 @@
-<div *ngIf="isLoggedIn()" class="chat">
-  <span *ngIf="isAdmin() && isHidden" class="badge">{{ adminChat().newMessages() }}</span>
-  <img class="chatIcon" (click)="toggle()" [class.isHidden]="isHidden" src="assets/svg/chat.svg" alt="Chat icon">
-  <div [@chatCollapse]="isHidden" class="chat-container">
-    <span *ngIf="isAdmin()" class="badge">{{ adminChat().newMessages() }}</span>
+<div *ngIf="$isLoggedIn()" class="chat">
+  <span *ngIf="$isAdmin() && $isHidden()" class="badge">{{ $adminChat().newMessages() }}</span>
+  <img class="chatIcon" (click)="toggle()" [class.isHidden]="$isHidden()" src="assets/svg/chat.svg" alt="Chat icon">
+  <div [@chatCollapse]="$isHidden()" class="chat-container">
+    <span *ngIf="$isAdmin()" class="badge">{{ $adminChat().newMessages() }}</span>
     <div class="chat-head disableSelectAndTap" (click)="toggle();">
       <div class="left">
-        <p *ngIf="!isAdmin()">Szititour Szervezők</p>
-        <app-user-selector *ngIf="isAdmin()" [isHidden]="isHidden" [selectedUserI]="adminChat().selectedUser" (selectedUserChange)="setSelecteduser($event)" [users]="adminChat().users"></app-user-selector>
+        <p *ngIf="!$isAdmin()">Szititour Szervezők</p>
+        <app-user-selector *ngIf="$isAdmin()" [isHidden]="$isHidden()" [selectedUserI]="$adminChat().selectedUser" (selectedUserChange)="setSelecteduser($event)" [users]="$adminChat().users"></app-user-selector>
       </div>
 
       <div class="right">
@@ -35,13 +35,13 @@
       <div class="info">
         <p>Az ablak újratöltése esetén az üzenetek elvesznek</p>
       </div>
-      <div class="info" *ngIf="!isAdmin()">
+      <div class="info" *ngIf="!$isAdmin()">
         <p>Itt felveheted a kapcsolatot a szervezőkkel</p>
       </div>
-      <div class="info" *ngIf="isAlreadyOpen()">
+      <div class="info" *ngIf="$isAlreadyOpen()">
         <p class="bold">A chat kliens csak egy ablakban lehet aktív</p>
       </div>
-      <div class="info" *ngIf="!isConnected()">
+      <div class="info" *ngIf="!$isConnected()">
         <button (click)="connect()" class="btn-hover-bold">Start</button>
       </div>
 
@@ -57,45 +57,46 @@
       </div> -->
 
 
-      <ng-container *ngIf="!isAdmin()">
+      <ng-container *ngIf="!$isAdmin()">
         <div
           [@popInOut]
-          *ngFor="let m of msgs"
+          *ngFor="let m of $msgs()"
           [class.chat-message-sent]="(m.sender === 'ADMIN') ||
           (m.sender !== 'ADMIN')"
           [class.chat-message-received]="!( m.sender === 'ADMIN') ||(m.sender !== 'ADMIN')"
         >
           <p>{{ m.content }}</p>
         </div>
-        <p class="info-bold" *ngIf="noAdmin()">Szervezők nem elérhetőek!</p>
+        <p class="info-bold" *ngIf="$noAdmin()">Szervezők nem elérhetőek!</p>
       </ng-container>
 
-      <ng-container *ngIf="isAdmin()">
+      <ng-container *ngIf="$isAdmin()">
         <div
           [@popInOut]
-          *ngFor="let m of adminChat().selectedUser?.messages"
+          *ngFor="let m of $adminChat().selectedUser?.messages"
           [ngClass]="
-            (isAdmin() && m.sender === 'ADMIN') ||
-            (!isAdmin() && m.sender !== 'ADMIN')
+            ($isAdmin() && m.sender === 'ADMIN') ||
+            (!$isAdmin() && m.sender !== 'ADMIN')
               ? 'chat-message-sent'
               : 'chat-message-received'
           "
         >
           <p>{{ m.content }}</p>
         </div>
-        <p class="info" *ngIf="adminChat().selectedUser?.online === false">Csapat nem elérhető!</p>
+        <p class="info" *ngIf="$adminChat().selectedUser?.online === false">Csapat nem elérhető!</p>
       </ng-container>
     </div>
 
-    <div *ngIf="!isHidden" class="chat-footer">
+    <div *ngIf="!$isHidden()" class="chat-footer">
       <input
-        [disabled]="!canSend()"
+        [disabled]="!$canSend()"
         (keyup.enter)="sendMsg()"
         class="simpleInput"
-        [(ngModel)]="content"
+        (ngModelChange)="$content.set($event)"
+        [ngModel]="$content()"
         type="text"
       />
-      <button class="btn" [disabled]="!canSend()" (click)="sendMsg()"><img src="assets/svg/send.svg" alt=""></button>
+      <button class="btn" [disabled]="!$canSend()" (click)="sendMsg()"><img src="assets/svg/send.svg" alt=""></button>
     </div>
   </div>
 </div>
