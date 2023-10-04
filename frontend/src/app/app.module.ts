@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { AuthInterceptor } from "./interceptors/AuthInterceptor";
 import { AppRoutingModule } from "./app-routing.module";
-import { HotToastModule } from "@ngneat/hot-toast";
 import { ErrorInterceptor } from "./interceptors/ErrorInterceptor";
 import { UnauthorizedInterceptor } from "./interceptors/UnauthorizedInterceptor";
 import { StoreModule } from "@ngrx/store";
@@ -48,9 +47,6 @@ import { ConfirmComponent } from "./ui/components/confirm/confirm.component";
         AppRoutingModule,
         BrowserAnimationsModule,
         HttpClientModule,
-        HotToastModule.forRoot({
-            autoClose: true
-        }),
         StoreModule.forRoot({}, {}),
         StoreModule.forFeature("game", GameStateReducer),
         StoreModule.forFeature("auth", AuthReducer),

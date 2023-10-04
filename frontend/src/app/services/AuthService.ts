@@ -84,6 +84,7 @@ export class AuthService implements OnDestroy {
   }
 
   public login(email: string, password: string): Observable<NetworkLoginResponse> {
+    this.removeToken();
     const usernamePassword = `${email}:${password}`;
     const encoded = btoa(usernamePassword);
     const authHeader = `Basic ${encoded}`;
@@ -98,6 +99,7 @@ export class AuthService implements OnDestroy {
   }
 
   public continueWithGoogle(token: string): Observable<NetworkLoginResponse> {
+    this.removeToken();
     const headers = new HttpHeaders()
       .set("googleToken", token);
 
