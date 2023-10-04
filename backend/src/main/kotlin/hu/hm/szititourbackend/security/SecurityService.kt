@@ -147,11 +147,20 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
 
             VerificationResponse(verified = true, isAdmin = false, teamId = teamId, messageCode = passwordChangeId)
         } catch (e: Exception) {
-            if (e is CustomException) {
-                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
-            } else {
-                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
-
+            when (e) {
+                is JwtValidationException -> {
+                    if(e.localizedMessage.contains("Jwt expired at")) {
+                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
+                    } else {
+                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                    }
+                }
+                is CustomException -> {
+                    return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
+                }
+                else -> {
+                    return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                }
             }
         }
     }
@@ -191,11 +200,20 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
 
             VerificationResponse(verified = true, isAdmin = false, teamId = teamId, messageCode = passwordChangeId)
         } catch (e: Exception) {
-            if (e is CustomException) {
-                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
-            } else {
-                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
-
+            when (e) {
+                is JwtValidationException -> {
+                    if(e.localizedMessage.contains("Jwt expired at")) {
+                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
+                    } else {
+                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                    }
+                }
+                is CustomException -> {
+                    return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
+                }
+                else -> {
+                    return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                }
             }
         }
     }
@@ -233,11 +251,20 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
 
             VerificationResponse(verified = true, isAdmin = false, teamId = teamId, messageCode = MessageConstants.SUCCESS)
         } catch (e: Exception) {
-            if (e is CustomException) {
-                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
-            } else {
-                VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
-
+            when (e) {
+                is JwtValidationException -> {
+                    if(e.localizedMessage.contains("Jwt expired at")) {
+                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
+                    } else {
+                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                    }
+                }
+                is CustomException -> {
+                    return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
+                }
+                else -> {
+                    return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                }
             }
         }
     }
