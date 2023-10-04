@@ -6,8 +6,8 @@
                    classes="hover:scale-110 active:opacity-70 transition" iconSrc="assets/svg/add.svg"></app-buttons>
     </div>
     <app-gamecard (onDeleted)="getGames()" (onEditClicked)="editGame(game)"
-                  (onPlacesClicked)="changeModal(PLACES, game)"
-                  (onTeamsClicked)="changeModal(TEAMS, game)" *ngFor="let game of $games()" [game]="game"></app-gamecard>
+                  (onPlacesClicked)="changeModal('PLACES', game)"
+                  (onTeamsClicked)="changeModal('TEAMS', game)" *ngFor="let game of $games()" [game]="game"></app-gamecard>
   </div>
 
 </div>

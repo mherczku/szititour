@@ -4,7 +4,6 @@ import {Observable, tap} from "rxjs";
 import {GameWithStatuses} from "../../../../types/game";
 import {AdminActiveGameService} from "../../../../services/AdminActiveGameService";
 import {ActivatedRoute} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
 import {GoogleMap, GoogleMapsModule, MapInfoWindow, MapMarker} from "@angular/google-maps";
 import {FormsModule} from "@angular/forms";
 import {PlaceStatusDto, TeamGameStatus} from "../../../../types/team-game-status";
@@ -33,7 +32,6 @@ export class ActiveGameComponent implements OnInit {
 
   gameMarkers: GameMarker[] = [];
 
-
   circleOption: google.maps.CircleOptions = {
     draggable: false, radius: 50, strokeColor: "#FF0000",
     strokeOpacity: 0.8,
@@ -51,13 +49,16 @@ export class ActiveGameComponent implements OnInit {
   selectedMarker?: GameMarker;
   selectedTeamStatus?: TeamGameStatus;
   selectedTeamPlace?: PlaceStatusDto;
+
   private gameStatuses: TeamGameStatus[] = [];
   private places: Place[] = [];
 
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
   @ViewChild(GoogleMap) googleMap?: GoogleMap;
 
-  constructor(httpClient: HttpClient, private route: ActivatedRoute, private adminService: AdminActiveGameService) {
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly adminService: AdminActiveGameService) {
     this.apiLoaded = false;
     addMapApiHeader(() => {
       this.apiLoaded = true;
@@ -88,7 +89,6 @@ export class ActiveGameComponent implements OnInit {
     }> = new Map();
     this.gameMarkers = [];
     const teams: { id: number; name: string; lat: number; lng: number; date: Date }[] = [];
-    //const places = [];
 
     gameData.places.forEach(place => {
       placeMap.set(place.id, {name: place.name, lat: place.latitude, lng: place.longitude, teams: []});
@@ -111,9 +111,6 @@ export class ActiveGameComponent implements OnInit {
       });
       //placeMap.set(ps.placeId, {teamName: teamStatus.teamName, reached: ps.reachedAt})
     });
-
-    console.log("t", teams);
-    console.log(placeMap);
 
     this.gameMarkers.length = 0;
 
@@ -150,10 +147,6 @@ export class ActiveGameComponent implements OnInit {
         }
       });
     });
-
-    console.log("markers: ", this.gameMarkers);
-
-
   }
 
   openInfoWindow(marker: MapMarker, tmarker: GameMarker) {

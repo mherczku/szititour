@@ -53,7 +53,9 @@ export class PlaceComponent implements OnInit, OnDestroy {
 
   currentGame$?: Observable<Game>;
 
-  constructor(private route: ActivatedRoute, private adminService: AdminService) {
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly adminService: AdminService) {
   }
 
   selectPlace(place: Place) {
@@ -96,8 +98,6 @@ export class PlaceComponent implements OnInit, OnDestroy {
     this.subscriptionGet = this.adminService.getPlaceById(this.placeId).subscribe({
       next: value => {
         this.place = value;
-      },
-      error: _err => {
       }
     });
   }

@@ -32,9 +32,6 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 })
 export class GamesComponent implements OnInit {
   $games = this.adminService.$games;
-  EDIT = "EDIT";
-  TEAMS = "TEAMS";
-  PLACES = "PLACES";
   editModalVisible = false;
   teamsModalVisible = false;
   placesModalVisible = false;
@@ -70,21 +67,21 @@ export class GamesComponent implements OnInit {
     this.getGames();
   }
 
-  changeModal(m: string, selected: Game) {
+  changeModal(m: "TEAMS" | "EDIT" | "PLACES", selected: Game) {
     this.selectedGame = { ...selected };
     this.editModalVisible = false;
     this.teamsModalVisible = false;
     this.placesModalVisible = false;
     switch (m) {
-      case this.EDIT: {
+      case "EDIT": {
         this.editModalVisible = true;
         break;
       }
-      case this.TEAMS: {
+      case "TEAMS": {
         this.teamsModalVisible = true;
         break;
       }
-      case this.PLACES: {
+      case "PLACES": {
         this.placesModalVisible = true;
         break;
       }
