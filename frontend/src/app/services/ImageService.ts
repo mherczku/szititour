@@ -35,7 +35,6 @@ export class ImageService {
   private async fetchImage(url: string, resToken: string): Promise<Blob> {
 
     const response = await fetch(url, {
-      cache: "default",
       mode: "cors",
       credentials: "same-origin",
       headers: {

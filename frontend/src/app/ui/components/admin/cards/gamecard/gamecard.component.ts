@@ -1,32 +1,33 @@
-import {ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output, signal} from "@angular/core";
-import {Game} from "../../../../../types/game";
-import {AdminService} from "../../../../../services/AdminService";
-import {FormsModule} from "@angular/forms";
-import {RouterLink} from "@angular/router";
-import {CommonModule, DatePipe, NgIf} from "@angular/common";
-import {ImgSrcModule} from "../../../../../pipes/img-src/img-src.module";
-import {ButtonsComponent} from "../../../buttons/buttons.component";
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output, signal } from "@angular/core";
+import { Game } from "../../../../../types/game";
+import { AdminService } from "../../../../../services/AdminService";
+import { FormsModule } from "@angular/forms";
+import { RouterLink } from "@angular/router";
+import { CommonModule, DatePipe, NgIf } from "@angular/common";
+import { ImgSrcModule } from "../../../../../pipes/img-src/img-src.module";
+import { ButtonsComponent } from "../../../buttons/buttons.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { NotificationService } from "src/app/services/Notification.service";
 import { ImgLoaderPipe } from "../../../../../pipes/img-loader.pipe";
+import { ConfirmService } from "src/app/services/Confirm.service";
 
 
 @Component({
-    selector: "app-gamecard",
-    templateUrl: "./gamecard.component.html",
-    styleUrls: ["./gamecard.component.scss"],
-    standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        CommonModule,
-        FormsModule,
-        RouterLink,
-        DatePipe,
-        ImgSrcModule,
-        ButtonsComponent,
-        NgIf,
-        ImgLoaderPipe
-    ]
+  selector: "app-gamecard",
+  templateUrl: "./gamecard.component.html",
+  styleUrls: ["./gamecard.component.scss"],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    DatePipe,
+    ImgSrcModule,
+    ButtonsComponent,
+    NgIf,
+    ImgLoaderPipe
+  ]
 })
 export class GamecardComponent {
 
@@ -50,24 +51,29 @@ export class GamecardComponent {
   constructor(
     private readonly alert: NotificationService,
     private readonly adminService: AdminService,
-    private readonly destroyRef: DestroyRef) {
+    private readonly destroyRef: DestroyRef,
+    private readonly confirmS: ConfirmService) {
   }
 
   deleteGame() {
-    const sure = window.confirm(`Biztos törlöd a ${this.game.title} játékot?`);
-    if (sure) {
-      this.$deleting.set(true);
-      this.adminService.deleteGame(this.game.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-        next: () => {
-          this.$deleting.set(false);
-          this.alert.success(`${this.game.title} játék sikeresen törölve`);
-          this.onDeleted.emit();
-        },
-        error: () => {
-          this.$deleting.set(false);
-        }
+    this.confirmS.confirm(
+      {
+        question: `Biztos törlöd a ${this.game.title} játékot?`,
+        confirmText: "Törlés"
+      },
+      () => {
+        this.$deleting.set(true);
+        this.adminService.deleteGame(this.game.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+          next: () => {
+            this.$deleting.set(false);
+            this.alert.success(`${this.game.title} játék sikeresen törölve`);
+            this.onDeleted.emit();
+          },
+          error: () => {
+            this.$deleting.set(false);
+          }
+        });
       });
-    }
   }
 
   get acceptedApplicationsLength(): number {

@@ -18,6 +18,7 @@ import { CONST_ROUTES } from "src/app/constants/routes.constants";
 import { ImageUploaderComponent } from "../../image-uploader/image-uploader.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
+import { ConfirmService } from "src/app/services/Confirm.service";
 
 @Component({
   selector: "app-edit-place",
@@ -65,7 +66,8 @@ export class EditPlaceComponent implements OnInit {
     private readonly adminService: AdminService,
     private readonly alert: HotToastService,
     private readonly router: Router,
-    private readonly destroyRef: DestroyRef
+    private readonly destroyRef: DestroyRef,
+    private readonly confirmS: ConfirmService
   ) {
   }
 
@@ -121,20 +123,24 @@ export class EditPlaceComponent implements OnInit {
   }
 
   deletePlace() {
-    const sure = window.confirm(`Biztos törlöd a ${this.place.name} helyszínt?`);
-    if (sure) {
-      this.deleting = true;
-      this.adminService.deletePlace(this.place.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-        next: () => {
-          this.alert.success(`${this.place.name} helyszín sikeresen törölve`);
-          this.deleting = false;
-          this.router.navigateByUrl(CONST_ROUTES.admin.call);
-        },
-        error: () => {
-          this.deleting = false;
-        }
+    this.confirmS.confirm(
+      {
+        question: `Biztos törlöd a ${this.place.name} helyszínt?`,
+        confirmText: "Törlés"
+      },
+      () => {
+        this.deleting = true;
+        this.adminService.deletePlace(this.place.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+          next: () => {
+            this.alert.success(`${this.place.name} helyszín sikeresen törölve`);
+            this.deleting = false;
+            this.router.navigateByUrl(CONST_ROUTES.admin.call);
+          },
+          error: () => {
+            this.deleting = false;
+          }
+        });
       });
-    }
   }
 
   openNewQuestionDialog() {

@@ -6,30 +6,31 @@ import {
   Input,
   Output
 } from "@angular/core";
-import {Question} from "../../../../types/question";
-import {QuestionType} from "../../../../enums/question-type";
-import {AdminService} from "../../../../services/AdminService";
-import {HotToastService} from "@ngneat/hot-toast";
-import {FormsModule} from "@angular/forms";
+import { Question } from "../../../../types/question";
+import { QuestionType } from "../../../../enums/question-type";
+import { AdminService } from "../../../../services/AdminService";
+import { HotToastService } from "@ngneat/hot-toast";
+import { FormsModule } from "@angular/forms";
 import { ImageUploaderComponent } from "../../image-uploader/image-uploader.component";
 import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 import { CommonModule } from "@angular/common";
+import { ConfirmService } from "src/app/services/Confirm.service";
 
 @Component({
-    selector: "app-question-edit",
-    templateUrl: "./question-edit.component.html",
-    styleUrls: ["./question-edit.component.scss"],
-    standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        FormsModule,
-        ImageUploaderComponent,
-        ImgSrcModule,
-        ImgLoaderPipe,
-        CommonModule
-    ]
+  selector: "app-question-edit",
+  templateUrl: "./question-edit.component.html",
+  styleUrls: ["./question-edit.component.scss"],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    FormsModule,
+    ImageUploaderComponent,
+    ImgSrcModule,
+    ImgLoaderPipe,
+    CommonModule
+  ]
 })
 export class QuestionEditComponent {
 
@@ -52,7 +53,8 @@ export class QuestionEditComponent {
   constructor(
     private readonly adminService: AdminService,
     private readonly alert: HotToastService,
-    private readonly destroyRef: DestroyRef) {}
+    private readonly destroyRef: DestroyRef,
+    private readonly confirmS: ConfirmService) { }
 
 
   save() {
@@ -63,7 +65,7 @@ export class QuestionEditComponent {
         next: value => {
           this.alert.success("Kérdés sikeresen frissítve");
           this.saving = false;
-          this.onExit.emit({action: "update", question: value});
+          this.onExit.emit({ action: "update", question: value });
         },
         error: () => {
           this.saving = false;
@@ -75,7 +77,7 @@ export class QuestionEditComponent {
         next: value => {
           this.alert.success("Kérdés sikeresen létrehozva");
           this.saving = false;
-          this.onExit.emit({action: "create", question: value});
+          this.onExit.emit({ action: "create", question: value });
         },
         error: () => {
           this.saving = false;
@@ -85,20 +87,25 @@ export class QuestionEditComponent {
   }
 
   delete() {
-    const sure = window.confirm("Biztos törlöd ezt a kérdést?");
-    if (sure) {
-      this.deleting = true;
-      this.adminService.deleteQuestion(this.question.id).subscribe({
-        next: () => {
-          this.alert.success("Kérdés sikeresen törölve");
-          this.deleting = false;
-          this.onExit.emit({action: "delete", question: this.question});
-        },
-        error: () => {
-          this.deleting = false;
-        }
-      });
-    }
+    this.confirmS.confirm(
+      {
+        question: "Biztos törlöd ezt a kérdést?",
+        confirmText: "Törlés"
+      },
+      () => {
+        this.deleting = true;
+        this.adminService.deleteQuestion(this.question.id).subscribe({
+          next: () => {
+            this.alert.success("Kérdés sikeresen törölve");
+            this.deleting = false;
+            this.onExit.emit({ action: "delete", question: this.question });
+          },
+          error: () => {
+            this.deleting = false;
+          }
+        });
+      }
+    );
   }
 
   setFile(file: File) {
