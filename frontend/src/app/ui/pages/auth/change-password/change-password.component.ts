@@ -4,6 +4,8 @@ import { PasswordChangeComponent } from "../../../components/password-change/pas
 
 @Component({
     standalone: true,
+    selector: "app-password-change-auth",
+
     templateUrl: "./change-password.component.html",
     styleUrls: ["./change-password.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
