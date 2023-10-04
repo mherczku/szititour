@@ -17,7 +17,7 @@
 </section>
 
 <section class="selectors text-size-base">
-  <select [ngModel]="selectedTeamStatus?.id ?? 'none'" (ngModelChange)="selectTeamStatus($event)"  name="teams">
+  <select [ngModel]="selectedTeamStatus?.id ?? 'none'" (ngModelChange)="selectTeamStatus($event)" name="teams">
     <option *ngIf="!selectedTeamStatus" value="none">Válassz</option>
     <option *ngFor="let teamStatus of (gameData | async)?.teamGameStatuses; trackBy: myTrackBy" [value]="teamStatus.id">{{teamStatus.teamName}} csapat</option>
   </select>

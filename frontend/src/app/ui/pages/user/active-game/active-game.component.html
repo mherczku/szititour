@@ -1,12 +1,12 @@
 <div class="holder-places">
-  <app-place-card [selected]="selectedPlace === place" (click)="selectPlace(place)"
+  <app-place-card [selected]="$selectedPlace() === place" (click)="selectPlace(place)"
                   *ngFor="let place of (activeGame$ | async)?.places; let i = index; trackBy: myTrackBy" [place]="place"
                   [index]="i"></app-place-card>
 </div>
 
 
 <div class="holder-questions">
-  <app-question-card [teamStatus]="teamStatus | async" *ngFor="let question of selectedPlace?.questions; let i = index; trackBy: myTrackBy"
+  <app-question-card [teamStatus]="teamStatus$ | async" *ngFor="let question of $selectedPlace()?.questions; let i = index; trackBy: myTrackBy"
                      [index]="i" [question]="question"></app-question-card>
 </div>
 
