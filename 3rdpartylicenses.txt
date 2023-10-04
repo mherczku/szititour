@@ -94,12 +94,6 @@ Apache-2.0
 @firebase/util
 Apache-2.0
 
-@ngneat/hot-toast
-MIT
-
-@ngneat/overview
-MIT
-
 @ngrx/effects
 MIT
 The MIT License (MIT)
