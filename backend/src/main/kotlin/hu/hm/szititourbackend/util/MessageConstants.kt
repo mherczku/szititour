@@ -2,7 +2,10 @@ package hu.hm.szititourbackend.util
 
 object MessageConstants {
 
+
+
     //! SUCCESS MESSAGES:
+    const val AUTH_SUCCESS = "AUTH_SUCCESS"
     const val DELETE_TEAM_REQUESTED = "DELETE_TEAM_REQUESTED"
     const val DIRECT_NOTIFICATION_SENT = "DIRECT_NOTIFICATION_SENT"
     const val EMAIL_VERIFIED = "EMAIL_VERIFIED"

@@ -46,7 +46,7 @@ class SecurityController(private val teamService: TeamService, private val secur
         }
         try {
             val t = teamService.getTeamById(verification.teamId)
-            return ResponseEntity(LoginResponse(true, "Login successful", MessageConstants.LOGIN_SUCCESS, t.convertToDto()), HttpStatus.OK)
+            return ResponseEntity(LoginResponse(true, "Authorization successful", MessageConstants.AUTH_SUCCESS, t.convertToDto()), HttpStatus.OK)
         } catch (e: CustomException) {
             if (e.statusCode == HttpStatus.NOT_FOUND) {
                 throw CustomException("Team not found", HttpStatus.UNAUTHORIZED, MessageConstants.TEAM_NOT_FOUND)
