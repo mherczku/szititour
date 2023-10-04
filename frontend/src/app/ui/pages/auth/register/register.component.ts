@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
-import { HotToastService } from "@ngneat/hot-toast";
 import { AuthService, RegisterData } from "../../../../services/AuthService";
 import { Subscription } from "rxjs";
 import { Router, RouterLink } from "@angular/router";
@@ -8,6 +7,7 @@ import { confirmPassword } from "../../../../validators/same-pass.validator";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { GoogleSignInService } from "src/app/services/GoogleSignIn.service";
 import { CONST_ROUTES } from "src/app/constants/routes.constants";
+import { NotificationService } from "src/app/services/Notification.service";
 
 @Component({
   selector: "app-register",
@@ -25,12 +25,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
   registerForm!: FormGroup;
 
   constructor(
-    private alertService: HotToastService,
-    private authService: AuthService,
-    private router: Router,
-    private fb: FormBuilder,
-    private destroyRef: DestroyRef,
-    private googleSignInService: GoogleSignInService
+    private readonly alertService: NotificationService,
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly destroyRef: DestroyRef,
+    private readonly googleSignInService: GoogleSignInService
   ) {
     this.registerForm = this.fb.group({
       name: ["", [Validators.required]],

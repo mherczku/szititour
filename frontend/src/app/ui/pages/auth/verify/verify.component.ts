@@ -2,9 +2,9 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, WritableSignal, inject, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
-import { HotToastService } from "@ngneat/hot-toast";
 import { CONST_ROUTES } from "src/app/constants/routes.constants";
 import { AuthService } from "src/app/services/AuthService";
+import { NotificationService } from "src/app/services/Notification.service";
 
 @Component({
   standalone: true,
@@ -25,7 +25,7 @@ export class VerifyComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
-    private readonly alertService: HotToastService
+    private readonly alertService: NotificationService
   ) {}
 
   ngOnInit(): void {

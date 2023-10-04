@@ -153,7 +153,7 @@ export class NotificationService {
   }
 
   public getNotifications(): Signal<SzititourNotification[]> {
-    return this.notis;
+    return this.notis.asReadonly();
   }
 
   seenAllNotifications() {

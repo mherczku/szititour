@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, Input, OnInit } from "@angular/core";
 import { Place } from "../../../../types/place";
 import { AdminService } from "../../../../services/AdminService";
-import { HotToastService } from "@ngneat/hot-toast";
 import { Router } from "@angular/router";
 import { Question } from "../../../../types/question";
 import { QuestionType } from "../../../../enums/question-type";
@@ -19,6 +18,7 @@ import { ImageUploaderComponent } from "../../image-uploader/image-uploader.comp
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 import { ConfirmService } from "src/app/services/Confirm.service";
+import { NotificationService } from "src/app/services/Notification.service";
 
 @Component({
   selector: "app-edit-place",
@@ -64,7 +64,7 @@ export class EditPlaceComponent implements OnInit {
 
   constructor(
     private readonly adminService: AdminService,
-    private readonly alert: HotToastService,
+    private readonly alert: NotificationService,
     private readonly router: Router,
     private readonly destroyRef: DestroyRef,
     private readonly confirmS: ConfirmService

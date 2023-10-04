@@ -9,7 +9,6 @@ import {
 import { Question } from "../../../../types/question";
 import { QuestionType } from "../../../../enums/question-type";
 import { AdminService } from "../../../../services/AdminService";
-import { HotToastService } from "@ngneat/hot-toast";
 import { FormsModule } from "@angular/forms";
 import { ImageUploaderComponent } from "../../image-uploader/image-uploader.component";
 import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
@@ -17,6 +16,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 import { CommonModule } from "@angular/common";
 import { ConfirmService } from "src/app/services/Confirm.service";
+import { NotificationService } from "src/app/services/Notification.service";
 
 @Component({
   selector: "app-question-edit",
@@ -52,7 +52,7 @@ export class QuestionEditComponent {
 
   constructor(
     private readonly adminService: AdminService,
-    private readonly alert: HotToastService,
+    private readonly alert: NotificationService,
     private readonly destroyRef: DestroyRef,
     private readonly confirmS: ConfirmService) { }
 

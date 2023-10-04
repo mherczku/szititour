@@ -3,7 +3,8 @@ export type CONST_MESSAGE_KEY = keyof typeof CONST_MESSAGES;
 export const CONST_MESSAGES = {
 
     //* SUCCESS MESSAGES:
-    //! Make them short!
+    //! Make them short! - comment to disable
+    // AUTH_SUCCESS: "Sikeres authentikáció",
     DELETE_TEAM_REQUESTED: "Fiók törléséhez megerősítő E-mail kiküldve",
     DIRECT_NOTIFICATION_SENT: "Direkt push értesítés sikeresen kiküldve",
     EMAIL_VERIFIED: "Sikeres E-mail aktiválás",
