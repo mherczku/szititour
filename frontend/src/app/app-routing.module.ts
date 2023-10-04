@@ -5,8 +5,6 @@ import { CONST_ROUTES } from "./constants/routes.constants";
 
 const routes: Routes = [
 
-  /*{path: '', loadChildren: () => import('./pages/').then(m => m.HomeModule)},*/
-
   {
     path: CONST_ROUTES.auth.path,
     canMatch: [() => inject(AuthService).isRoleGuest()],
@@ -27,57 +25,6 @@ const routes: Routes = [
     data: { roles: ["ROLE_USER"] },
     loadChildren: () => import("./ui/pages/user/user.routes").then(r => r.USER_ROUTES)
   },
-
-
-  /* {
-    path: "register",
-    canMatch: [() => inject(AuthService).isRoleGuest()],
-    data: {roles: ["ROLE_GUEST"]},
-    loadComponent: () => import("./ui/pages/auth/register/register.component").then(c => c.RegisterComponent)
-  },
-  {
-    path: "login",
-    canMatch: [() => inject(AuthService).isRoleGuest()],
-    data: {roles: ["ROLE_GUEST"]},
-    loadComponent: () => import("./ui/pages/auth/login/login.component").then(c => c.LoginComponent)
-  },
-  {
-    path: "verify/:token",
-    canMatch: [() => inject(AuthService).isRoleGuest()],
-    data: {roles: ["ROLE_GUEST"]},
-    loadComponent: () => import("./ui/pages/auth/verify/verify.component").then(c => c.VerifyComponent)
-  }, */
-
-
-
-  /* {
-    path: "admin",
-    canMatch: [() => inject(AuthService).isRoleAdmin()],
-    data: {roles: ["ROLE_ADMIN"]},
-    loadComponent: () => import("./ui/pages/admin/games/games.component").then(c => c.GamesComponent)
-  },
-
-  {
-    path: "admin/active/:id",
-    canMatch: [() => inject(AuthService).isRoleAdmin()],
-    data: {roles: ["ROLE_ADMIN"]},
-    component: ActiveGameComponent
-  },
-
-  {
-    path: "admin/place/:gameId/:placeId",
-    canMatch: [() => inject(AuthService).isRoleAdmin()],
-    data: {roles: ["ROLE_ADMIN"]},
-    component: PlaceComponent
-  }, */
-
-  /* ...["user", "felhasznalo"].map(path => ({
-     path,
-   //canActivateChild: [AuthGuard],
-   data: {roles: ["ROLE_USER"]},
-   loadChildren: () => import("./pages/user/user.routes").then(r => r.USER_ROUTES)
-   })),*/
-
 
   { path: "**", redirectTo: CONST_ROUTES.auth.path },
 ];

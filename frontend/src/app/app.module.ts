@@ -17,7 +17,6 @@ import { GameStateReducer } from "./store/reducers/game-status.reducer";
 import { NavbarComponent } from "./ui/components/navbar/navbar.component";
 import { LocationInterceptor } from "./interceptors/LocationInterceptor";
 import { ChatComponent } from "./ui/components/chat/chat.component";
-
 import { provideFirebaseApp, initializeApp } from "@angular/fire/app";
 import { MessagingModule } from "@angular/fire/messaging";
 import { environment } from "src/environments/environment";
@@ -27,40 +26,41 @@ import { ContainerLoaderComponent } from "./ui/components/container-loader/conta
 import { NotificationService } from "./services/Notification.service";
 import { LoaderService } from "./services/Loader.service";
 import { ConfirmComponent } from "./ui/components/confirm/confirm.component";
+
 @NgModule({
-    declarations: [
-        AppComponent,
-        HostDirective,
-        Modal2Component
-    ],
-    providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: LocationInterceptor, multi: true },
-        { provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService, NotificationService, LoaderService], multi: true }
-    ],
-    exports: [],
-    bootstrap: [AppComponent],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        StoreModule.forRoot({}, {}),
-        StoreModule.forFeature("game", GameStateReducer),
-        StoreModule.forFeature("auth", AuthReducer),
-        EffectsModule.forRoot([AuthEffects]),
-        NavbarComponent,
-        ChatComponent,
-        provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-        MessagingModule,
-        ContainerLoaderComponent,
-        ConfirmComponent
-    ]
+  declarations: [
+    AppComponent,
+    HostDirective,
+    Modal2Component
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LocationInterceptor, multi: true },
+    { provide: APP_INITIALIZER, useFactory: initializeAuth, deps: [AuthService, NotificationService, LoaderService], multi: true }
+  ],
+  exports: [],
+  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    StoreModule.forRoot({}, {}),
+    StoreModule.forFeature("game", GameStateReducer),
+    StoreModule.forFeature("auth", AuthReducer),
+    EffectsModule.forRoot([AuthEffects]),
+    NavbarComponent,
+    ChatComponent,
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    MessagingModule,
+    ContainerLoaderComponent,
+    ConfirmComponent
+  ]
 })
-export class AppModule {
-}
+
+export class AppModule { }
 
 function initializeAuth(authService: AuthService, alert: NotificationService, loader: LoaderService): () => Promise<void> {
   return () => new Promise<void>((resolve) => {
