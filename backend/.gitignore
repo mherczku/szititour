@@ -43,3 +43,4 @@ out/
 /src/main/resources/public.pem
 /images/
 /src/main/resources/firebase.json
+/deploy.sh

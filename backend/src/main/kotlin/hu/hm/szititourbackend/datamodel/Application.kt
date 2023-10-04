@@ -8,32 +8,33 @@ import javax.persistence.*
 @Entity
 class Application(
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
-    val id: Int = 0,
-    @Column(nullable = true)
-    var accepted: Boolean? = null,
-    var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
-    var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(nullable = false, updatable = false)
+        val id: Int = 0,
+        @Column(nullable = true)
+        var accepted: Boolean? = null,
+        var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
+        var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
-    @ManyToOne()
-    val game: Game = Game(),
+        @ManyToOne()
+        val game: Game = Game(),
 
-    @ManyToOne()
-    val team: Team = Team()
+        @ManyToOne()
+        val team: Team = Team()
 
 )
 
 fun Application.convertToDto(): ApplicationDto {
     return ApplicationDto(
-        id = this.id,
-        accepted = this.accepted,
-        createdAt = this.createdAt,
-        updatedAt = this.updatedAt,
-        gameId = this.game.id,
-        teamId = this.team.id,
-        teamName = this.team.name
+            id = this.id,
+            accepted = this.accepted,
+            createdAt = this.createdAt,
+            updatedAt = this.updatedAt,
+            gameId = this.game.id,
+            teamId = this.team.id,
+            teamName = this.team.name,
+            img = this.team.img
     )
 }
 
