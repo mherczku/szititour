@@ -9,12 +9,12 @@
 
   <div *ngSwitchCase="'editable'" class="relative place-items-center flex gap-3 {{classes}}">
     <label class="text-size-base">{{label}}</label>
-    <input *ngIf="editing" [ngModel]="value" (ngModelChange)="valueChange.emit($event)"
+    <input *ngIf="$editing()" [ngModel]="value" (ngModelChange)="valueChange.emit($event)"
            class="simpleInput"
            [type]="inputType" [placeholder]="placeholder">
-    <p *ngIf="!editing" class="text-size-base w-full">{{value}}</p>
-    <app-buttons classes="min-w-[20px]" *ngIf="!editing" (onClicked)="editing = !editing" iconSrc="assets/svg/edit.svg" type="icon"></app-buttons>
-    <app-buttons classes="min-w-[30px]" *ngIf="editing" (onClicked)="editing = !editing" iconSrc="assets/svg/tick.svg" type="icon"></app-buttons>
+    <p *ngIf="!$editing()" class="text-size-base w-full">{{value}}</p>
+    <app-buttons classes="min-w-[20px]" *ngIf="!$editing()" (onClicked)="$editing.set(!this.$editing())" iconSrc="assets/svg/edit.svg" type="icon"></app-buttons>
+    <app-buttons classes="min-w-[30px]" *ngIf="$editing()" (onClicked)="$editing.set(!$editing())" iconSrc="assets/svg/tick.svg" type="icon"></app-buttons>
 
   </div>
 

@@ -1,13 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   EventEmitter,
   Input,
-  OnDestroy,
   Output,
 } from "@angular/core";
 import { Game } from "../../../../types/game";
-import { Subscription } from "rxjs";
 import { AdminService } from "../../../../services/AdminService";
 import { ModalService } from "../../../../services/ModalService";
 import { DateInputComponent } from "../inputs/date-input/date-input.component";
@@ -17,23 +16,24 @@ import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
 import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 import { CommonModule } from "@angular/common";
 import { NotificationService } from "src/app/services/Notification.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
-    selector: "app-edit-game",
-    templateUrl: "./edit-game.component.html",
-    styleUrls: ["./edit-game.component.css"],
-    standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        DateInputComponent,
-        TextInputComponent,
-        ImageUploaderComponent,
-        ImgSrcModule,
-        ImgLoaderPipe,
-        CommonModule
-    ]
+  selector: "app-edit-game",
+  templateUrl: "./edit-game.component.html",
+  styleUrls: ["./edit-game.component.css"],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    DateInputComponent,
+    TextInputComponent,
+    ImageUploaderComponent,
+    ImgSrcModule,
+    ImgLoaderPipe,
+    CommonModule
+  ]
 })
-export class EditGameComponent implements OnDestroy {
+export class EditGameComponent {
 
   file?: File;
 
@@ -56,9 +56,13 @@ export class EditGameComponent implements OnDestroy {
   }
 
   saving = false;
-  subscriptionSave?: Subscription;
 
-  constructor(private adminService: AdminService, private alert: NotificationService, private modalS: ModalService) {
+  constructor(
+    private readonly adminService: AdminService,
+    private readonly alert: NotificationService,
+    private readonly modalS: ModalService,
+    private readonly destroyRef: DestroyRef) {
+
     const a = this.modalS.getExtra() as { game: Game, isEdit: boolean };
     if (a !== undefined) {
       this.setGame(a);
@@ -86,10 +90,6 @@ export class EditGameComponent implements OnDestroy {
 
   }
 
-  ngOnDestroy(): void {
-    this.subscriptionSave?.unsubscribe();
-  }
-
   save() {
     const dateStartNumber: number = isNaN(Date.parse(this.game.dateStart.valueOf().toString())) ? this.game.dateStart.valueOf() : Date.parse(this.game.dateStart.valueOf().toString());
     const dateEndNumber: number = isNaN(Date.parse(this.game.dateEnd.valueOf().toString())) ? this.game.dateEnd.valueOf() : Date.parse(this.game.dateEnd.valueOf().toString());
@@ -99,7 +99,7 @@ export class EditGameComponent implements OnDestroy {
         // edit
         this.saving = true;
         if (this.isEdit) {
-          this.subscriptionSave = this.adminService.updateGame(this.game, this.file).subscribe({
+          this.adminService.updateGame(this.game, this.file).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next: (res) => {
               if (res) {
                 this.alert.success(`${res.title} sikeresen frissítve`);
@@ -115,7 +115,7 @@ export class EditGameComponent implements OnDestroy {
 
         //create new
         else {
-          this.subscriptionSave = this.adminService.createGame(this.game, this.file).subscribe({
+          this.adminService.createGame(this.game, this.file).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next: (res) => {
               if (res) {
                 this.alert.success(`${res.title} sikeresen létrehozva`);

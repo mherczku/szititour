@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, signal} from "@angular/core";
 import {NgClass, NgSwitch, NgSwitchCase} from "@angular/common";
 
 @Component({
@@ -10,7 +10,8 @@ import {NgClass, NgSwitch, NgSwitchCase} from "@angular/common";
     NgSwitch,
     NgSwitchCase
   ],
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ButtonsComponent {
 
@@ -22,7 +23,8 @@ export class ButtonsComponent {
   @Input() isDisabledProgress = false;
   @Input() isDisabledBlocked = false;
   @Output() onClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
-  mouseOver = false;
+
+  $mouseOver = signal(false);
 
   onClick() {
     if(!this.isDisabledBlocked && !this.isDisabledProgress){

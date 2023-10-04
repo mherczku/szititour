@@ -7,15 +7,14 @@
 
       <div class="flex w-fit gap-[10%] items-center">
         <img class="max-w-[50px] aspect-square rounded-[100%] object-cover max-h-[50px]"
-             src="assets/img/team-placeholder.jpg" alt="{{application.teamName}}">
-             <!-- TODO application team image? -->
+             [src]="application.img | imgSrc | imgLoader | async" alt="{{application.teamName}}">
         <p class="text-size-base font-bold whitespace-nowrap">{{application.teamName}}</p>
       </div>
 
       <div class="flex h-full w-fit gap-[10%] items-center">
-        <app-buttons [isDisabledProgress]="reviewing" [isDisabledBlocked]="application.accepted === false" (onClicked)="reviewApplication(application, false)" [ngClass]="application.accepted === false ? '' : 'hover:opacity-80'" classes="w-[3rem]" type="icon"
+        <app-buttons [isDisabledBlocked]="application.accepted === false" (onClicked)="reviewApplication(application, false)" [ngClass]="application.accepted === false ? '' : 'hover:opacity-80'" classes="w-[3rem]" type="icon"
                      iconSrc="assets/svg/remove.svg"></app-buttons>
-        <app-buttons [isDisabledProgress]="reviewing" [isDisabledBlocked]="application.accepted === true" (onClicked)="reviewApplication(application, true)" [ngClass]="application.accepted === true ? '' : 'hover:opacity-80'" classes="w-[3rem]" type="icon"
+        <app-buttons [isDisabledBlocked]="application.accepted === true" (onClicked)="reviewApplication(application, true)" [ngClass]="application.accepted === true ? '' : 'hover:opacity-80'" classes="w-[3rem]" type="icon"
                      iconSrc="assets/svg/accept.svg"></app-buttons>
       </div>
     </div>

@@ -5,5 +5,6 @@ export type Application = {
   createdAt: Date,
   updatedAt: Date,
   accepted?: boolean,
-  teamName: string
+  teamName: string,
+  img?: string
 }

@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
-import {FormsModule} from "@angular/forms";
-import {ButtonsComponent} from "../../../buttons/buttons.component";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, signal } from "@angular/core";
+import { NgIf, NgSwitch, NgSwitchCase } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { ButtonsComponent } from "../../../buttons/buttons.component";
 
 @Component({
   selector: "app-text-input",
@@ -14,7 +14,8 @@ import {ButtonsComponent} from "../../../buttons/buttons.component";
     ButtonsComponent,
     NgIf
   ],
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TextInputComponent implements OnInit {
 
@@ -27,9 +28,11 @@ export class TextInputComponent implements OnInit {
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
 
   inputType = "text";
-  editing = false;
+
+  $editing = signal(false);
+
   ngOnInit(): void {
-    if(this.password) {
+    if (this.password) {
       this.inputType = "password";
     }
   }

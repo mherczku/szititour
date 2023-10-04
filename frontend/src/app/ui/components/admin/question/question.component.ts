@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, signal} from "@angular/core";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, signal} from "@angular/core";
 import {Question} from "../../../../types/question";
 import {ButtonsComponent} from "../../buttons/buttons.component";
 import {CommonModule, NgClass, NgIf} from "@angular/common";
@@ -19,7 +19,8 @@ import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
         ImgSrcModule,
         ImgLoaderPipe,
         CommonModule
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionComponent {
   @Input() question!: Question;

@@ -10,11 +10,11 @@ import { ImageUploaderComponent } from "../../image-uploader/image-uploader.comp
 import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 
 @Component({
-    selector: "app-question-card",
-    standalone: true,
-    templateUrl: "./question-card.component.html",
-    styleUrls: ["./question-card.component.scss"],
-    imports: [CommonModule, FormsModule, ImgSrcModule, ImageUploaderComponent, ImgLoaderPipe]
+  selector: "app-question-card",
+  standalone: true,
+  templateUrl: "./question-card.component.html",
+  styleUrls: ["./question-card.component.scss"],
+  imports: [CommonModule, FormsModule, ImgSrcModule, ImageUploaderComponent, ImgLoaderPipe]
 })
 export class QuestionCardComponent {
   @Input() index!: number;
@@ -33,16 +33,13 @@ export class QuestionCardComponent {
   _teamStatus!: TeamGameStatus | null;
   _savedAnswer?: AnswerDto;
 
-
   QuestionType = QuestionType;
   currentAnswer: string | number = "";
   answerIsSame = false;
 
   currentImgChanged = false;
 
-  constructor(private activeGameService: ActiveGameService) {
-
-  }
+  constructor(private readonly activeGameService: ActiveGameService) { }
 
   setCurrentAnswerData() {
     if (this._question && this._teamStatus) {

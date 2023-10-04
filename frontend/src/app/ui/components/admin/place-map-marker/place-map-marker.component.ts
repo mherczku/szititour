@@ -8,9 +8,9 @@ import {
   Output,
   ViewChild
 } from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {GoogleMap, GoogleMapsModule, MapMarker} from "@angular/google-maps";
-import {addMapApiHeader} from "../../../../e-functions/extension-functions";
+import { CommonModule } from "@angular/common";
+import { GoogleMap, GoogleMapsModule, MapMarker } from "@angular/google-maps";
+import { addMapApiHeader } from "../../../../e-functions/extension-functions";
 
 
 export type PlaceLocationData = {
@@ -27,14 +27,14 @@ export type PlaceLocationData = {
   styleUrls: ["./place-map-marker.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PlaceMapMarkerComponent implements OnInit{
+export class PlaceMapMarkerComponent implements OnInit {
 
   zoom = 11;
-  @Input() markerPosition: google.maps.LatLngLiteral = {lat: 47.49, lng: 19.04};
+  @Input() markerPosition: google.maps.LatLngLiteral = { lat: 47.49, lng: 19.04 };
   @Input() set title(value: string) {
     this.markerOption.title = value;
   }
-  markerOption: google.maps.MarkerOptions = {draggable: true, optimized: true, clickable: true};
+  markerOption: google.maps.MarkerOptions = { draggable: true, optimized: true, clickable: true };
   apiLoaded = false;
   geocoder?: google.maps.Geocoder;
 
@@ -49,22 +49,22 @@ export class PlaceMapMarkerComponent implements OnInit{
   constructor(private change: ChangeDetectorRef) {
   }
 
- ngOnInit() {
+  ngOnInit() {
     this.apiLoaded = false;
-   addMapApiHeader(() => {
-     this.apiLoaded = true;
-     this.geocoder = new google.maps.Geocoder();
-     this.change.markForCheck();
-   });
- }
+    addMapApiHeader(() => {
+      this.apiLoaded = true;
+      this.geocoder = new google.maps.Geocoder();
+      this.change.markForCheck();
+    });
+  }
 
 
   markerPositionChanged(marker: MapMarker) {
     const lat = marker.getPosition()?.lat();
     const lng = marker.getPosition()?.lng();
     if (lat && lng) {
-      this.newPosition = {lat: lat, lng: lng};
-      this.geocoder?.geocode({location: this.newPosition}).then(res => {
+      this.newPosition = { lat: lat, lng: lng };
+      this.geocoder?.geocode({ location: this.newPosition }).then(res => {
         if (res.results[0] && this.newPosition) {
           this.locationDataChanged.emit({
             address: res.results[0].formatted_address,
@@ -77,7 +77,7 @@ export class PlaceMapMarkerComponent implements OnInit{
   }
 
   mapInit() {
-    if(!this.mapCircle) {
+    if (!this.mapCircle) {
       this.mapCircle = new google.maps.Circle({
         draggable: false, radius: 50, strokeColor: "#FF0000",
         strokeOpacity: 0.8,
@@ -91,6 +91,6 @@ export class PlaceMapMarkerComponent implements OnInit{
   }
 
   onMarkerDrag($event: google.maps.MapMouseEvent) {
-   this.mapCircle?.setCenter($event.latLng);
+    this.mapCircle?.setCenter($event.latLng);
   }
 }

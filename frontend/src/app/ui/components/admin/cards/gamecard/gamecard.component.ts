@@ -1,33 +1,32 @@
-import {ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output, signal} from "@angular/core";
-import {Game} from "../../../../../types/game";
-import {AdminService} from "../../../../../services/AdminService";
-import {FormsModule} from "@angular/forms";
-import {RouterLink} from "@angular/router";
-import {CommonModule, DatePipe, NgIf} from "@angular/common";
-import {ImgSrcModule} from "../../../../../pipes/img-src/img-src.module";
-import {ButtonsComponent} from "../../../buttons/buttons.component";
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output, signal } from "@angular/core";
+import { Game } from "../../../../../types/game";
+import { AdminService } from "../../../../../services/AdminService";
+import { FormsModule } from "@angular/forms";
+import { RouterLink } from "@angular/router";
+import { CommonModule, DatePipe, NgIf } from "@angular/common";
+import { ImgSrcModule } from "../../../../../pipes/img-src/img-src.module";
+import { ButtonsComponent } from "../../../buttons/buttons.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { NotificationService } from "src/app/services/Notification.service";
 import { ImgLoaderPipe } from "../../../../../pipes/img-loader.pipe";
 import { ConfirmService } from "src/app/services/Confirm.service";
 
-
 @Component({
-    selector: "app-gamecard",
-    templateUrl: "./gamecard.component.html",
-    styleUrls: ["./gamecard.component.scss"],
-    standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        CommonModule,
-        FormsModule,
-        RouterLink,
-        DatePipe,
-        ImgSrcModule,
-        ButtonsComponent,
-        NgIf,
-        ImgLoaderPipe
-    ]
+  selector: "app-gamecard",
+  templateUrl: "./gamecard.component.html",
+  styleUrls: ["./gamecard.component.scss"],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    DatePipe,
+    ImgSrcModule,
+    ButtonsComponent,
+    NgIf,
+    ImgLoaderPipe
+  ]
 })
 export class GamecardComponent {
 

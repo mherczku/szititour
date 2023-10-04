@@ -23,7 +23,7 @@ export class ClientCardComponent implements OnInit {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
-    private readonly destroyRef: DestroyRef) {}
+    private readonly destroyRef: DestroyRef) { }
 
   ngOnInit(): void {
     this.isActive = this.authService.getTokenId() === this.client?.tokenId;

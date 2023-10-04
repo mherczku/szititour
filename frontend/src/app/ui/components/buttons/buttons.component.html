@@ -1,10 +1,10 @@
 <div [ngSwitch]="type"
      (click)="onClick()">
 
-  <div *ngSwitchCase="'blueIcon'" (mouseenter)="mouseOver = true" (mouseleave)="mouseOver = false"
+  <div *ngSwitchCase="'blueIcon'" (mouseenter)="$mouseOver.set(true)" (mouseleave)="$mouseOver.set(false)"
        class="{{classes}}  py-3  relative w-full flex cursor-pointer items-center flex-row justify-center gap-4">
-    <img [ngClass]="mouseOver ? 'anim-shake' : ''" class="w-[15%]" [src]="iconSrc" alt="Button Icon">
-    <p [ngClass]="mouseOver ? '' : ''" class="text-size-min italic">{{text}}</p>
+    <img [ngClass]="$mouseOver() ? 'anim-shake' : ''" class="w-[15%]" [src]="iconSrc" alt="Button Icon">
+    <p [ngClass]="$mouseOver() ? '' : ''" class="text-size-min italic">{{text}}</p>
   </div>
 
   <div *ngSwitchCase="'delete'" class="{{classes}} h-[30px] w-[30px] relative z-buttons-delete items-center flex text-size-base deleteButton"

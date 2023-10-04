@@ -1,23 +1,23 @@
-import {Component, Input} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {AnswerDto} from "../../../../types/team-game-status";
-import {QuestionType} from "../../../../enums/question-type";
-import {ImgSrcModule} from "../../../../pipes/img-src/img-src.module";
-import {AdminActiveGameService} from "../../../../services/AdminActiveGameService";
-import {AutoDestroy} from "../../../../decorators/autodestroy.decorator";
-import {Subject, takeUntil} from "rxjs";
+import { ChangeDetectionStrategy, Component, DestroyRef, Input, signal } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { AnswerDto } from "../../../../types/team-game-status";
+import { QuestionType } from "../../../../enums/question-type";
+import { ImgSrcModule } from "../../../../pipes/img-src/img-src.module";
+import { AdminActiveGameService } from "../../../../services/AdminActiveGameService";
 import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
-    selector: "app-answer",
-    standalone: true,
-    templateUrl: "./answer.component.html",
-    styleUrls: ["./answer.component.scss"],
-    imports: [CommonModule, ImgSrcModule, ImgLoaderPipe]
+  selector: "app-answer",
+  standalone: true,
+  templateUrl: "./answer.component.html",
+  styleUrls: ["./answer.component.scss"],
+  imports: [CommonModule, ImgSrcModule, ImgLoaderPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AnswerComponent {
 
-  @Input() answer: AnswerDto = {
+  @Input({ required: true }) answer: AnswerDto = {
     answerBoolean: false,
     answerNumber: 1,
     answerText: "this is an answer",
@@ -37,16 +37,19 @@ export class AnswerComponent {
   @Input() index = 1;
 
   protected readonly QuestionType = QuestionType;
-  evaluateId?: number;
+  $evaluateId = signal(-1);
 
-  @AutoDestroy destroy$ = new Subject();
-
-  constructor(private adminActiveService: AdminActiveGameService) {
-  }
+  constructor(
+    private readonly adminActiveService: AdminActiveGameService,
+    private readonly destroyRef: DestroyRef) { }
 
   evaluateAnswer(isCorrect: boolean) {
-    this.adminActiveService.evaluateAnswer(this.answer.id, isCorrect).pipe(takeUntil(this.destroy$)).subscribe(answer => {
-      this.answer.correct = answer.correct;
+    this.adminActiveService.evaluateAnswer(this.answer.id, isCorrect).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (answer) => {
+        this.answer.correct = answer.correct;
+        this.$evaluateId.set(-1);
+      },
+      error: () => this.$evaluateId.set(-1)
     });
   }
 }

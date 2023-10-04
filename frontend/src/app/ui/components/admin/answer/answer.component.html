@@ -13,12 +13,12 @@
       <img *ngSwitchCase="QuestionType.imgOnly" [src]="answer.img | imgSrc | imgLoader | async">
     </div>
     <p class="text-size-base">Értékelése: {{answer.correct ?? "Nem értékelt"}}</p>
-    <button class="btn-hover-bold" (click)="evaluateId = answer.id">Értékelés</button>
+    <button class="btn-hover-bold" (click)="$evaluateId.set(answer.id)">Értékelés</button>
   </div>
 
 </div>
 
-<div class="evaluate" *ngIf="evaluateId !== undefined" (click)="evaluateId = undefined">
+<div class="evaluate" *ngIf="$evaluateId() !== -1" (click)="$evaluateId.set(-1)">
   <div class="evaluate-buttons" (click)="$event.stopPropagation()">
     <button (click)="evaluateAnswer(false)" class="btn-simple-red">Helytelen</button>
     <button (click)="evaluateAnswer(true)" class="btn-simple">Helyes</button>

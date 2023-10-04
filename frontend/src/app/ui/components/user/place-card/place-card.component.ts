@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {ActivePlace} from "../../../../types/place";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { ActivePlace } from "../../../../types/place";
 
 @Component({
   selector: "app-place-card",

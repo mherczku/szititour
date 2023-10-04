@@ -36,7 +36,7 @@ export class NotificationComponent {
 
   constructor(
     private readonly notiService: NotificationService
-  ) { }
+  ) {}
 
   removeNoti() {
     this.notiService.removeNoti(this.$noti());

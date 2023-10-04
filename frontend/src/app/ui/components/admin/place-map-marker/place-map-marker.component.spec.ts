@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { PlaceMapMarkerComponent } from './place-map-marker.component';
+import { PlaceMapMarkerComponent } from "./place-map-marker.component";
 
-describe('PlaceMapMarkerComponent', () => {
+describe("PlaceMapMarkerComponent", () => {
   let component: PlaceMapMarkerComponent;
   let fixture: ComponentFixture<PlaceMapMarkerComponent>;
 
@@ -17,7 +17,7 @@ describe('PlaceMapMarkerComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
