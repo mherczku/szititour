@@ -10,7 +10,8 @@
         <p>Push értesítések kikapcsolva</p>
     </a>
 
-    <app-notification [@popInOut] *ngFor="let noti of $notifications()" [noti]="noti"></app-notification>
+    <app-notification [@popInOut] *ngFor="let noti of $notifications()" [setNoti]="noti" [setNotiSeen]="noti.isSeen ?? false"></app-notification>
+    <p *ngFor="let noti of $notifications()">{{noti.isSeen}}</p>
     <div class="center" *ngIf="$notifications().length < 1">
         <p>Nincs új üzenet</p>
     </div>

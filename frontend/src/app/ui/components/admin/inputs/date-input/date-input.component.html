@@ -2,7 +2,7 @@
   <label class="text-size-base" for="dateInput">{{name}}: </label>
   <div class="relative" title="Szerkesztés">
     <input id="dateInput" class="text-size-base" [ngModel]="date | date:'yyyy-MM-ddTHH:mm'" (ngModelChange)="changed($event)" type="datetime-local">
-    <p class="cover">{{date | date:'y. MM. d. H:mm'}}</p>
+    <p class="cover">{{date | date:'y.MM.d. H:mm'}}</p>
   </div>
 
 </div>

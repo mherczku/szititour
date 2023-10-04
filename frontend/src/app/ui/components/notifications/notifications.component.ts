@@ -33,7 +33,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         private readonly renderer2: Renderer2
     ) { }
 
-
     ngOnInit() {
         this.renderer2.listen("document", "click", () => {
             this.close();

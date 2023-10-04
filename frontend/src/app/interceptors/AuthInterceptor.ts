@@ -35,7 +35,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
           //* Success message:
           const response = evt?.body as any;
-          if (response.messageCode && CONST_MESSAGES[(response?.messageCode as CONST_MESSAGE_KEY)]) {
+          if (response?.messageCode && CONST_MESSAGES[(response?.messageCode as CONST_MESSAGE_KEY)]) {
             this.notiService.success(CONST_MESSAGES[(response?.messageCode as CONST_MESSAGE_KEY)]);
           }
 
