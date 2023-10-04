@@ -9,7 +9,7 @@
         <span class="slider round"></span>
       </span>
 
-      <a *ngIf="game.active" [routerLink]="'/admin/active/' + game.id" class="activeLink text-size-base">Státusz</a>
+      <a title="Élő" *ngIf="game.active" [routerLink]="'/admin/active/' + game.id" class="activeLink text-size-base"><img src="assets/svg/live.svg" alt="live"></a>
 
       <div class="absolute top-0 right-0 p-1 z-delete">
         <app-buttons [isDisabledProgress]="$deleting()" (onClicked)="deleteGame()"

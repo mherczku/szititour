@@ -7,13 +7,18 @@
 
 .activeLink {
   position: absolute;
-  top: 30px;
-  left: 5px;
+  top: 2px;
+  left: 60px;
   display: inline-block;
-  width: fit-content;
-  height: fit-content;
+  width: 30px;
+  aspect-ratio: 1;
   cursor: pointer;
-  color: #e80000;
+  background: red;
+  border-radius: 100%;
+
+  img {
+    object-fit: contain;
+  }
 }
 /* The switch - the box around the slider */
 .switch {

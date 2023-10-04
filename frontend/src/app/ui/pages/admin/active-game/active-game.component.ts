@@ -72,9 +72,7 @@ export class ActiveGameComponent implements OnInit {
           this.gameStatuses = res.teamGameStatuses;
           this.places = res.places;
           this.selectedTeamStatus = this.gameStatuses[0];
-          console.log("loaded: ", this.selectedTeamStatus);
           this.selectedTeamPlace = this.gameStatuses[0]?.placeStatuses[0];
-          console.log("gameData:", res);
           this.processDataToMarkers(res);
         }));
       }
@@ -172,7 +170,6 @@ export class ActiveGameComponent implements OnInit {
 
   selectTeamPlace(placeId: string) {
     this.selectedTeamPlace = this.selectedTeamStatus?.placeStatuses?.find(p => p.placeId === Number(placeId));
-    console.log(this.selectedTeamPlace);
   }
 
   getPlaceName(placeId: number): string {

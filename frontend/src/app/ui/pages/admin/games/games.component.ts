@@ -1,7 +1,6 @@
-import { Component, DestroyRef, OnDestroy, OnInit, Type } from "@angular/core";
+import { Component, DestroyRef, OnInit, Type } from "@angular/core";
 import { Game } from "../../../../types/game";
 import { AdminService } from "../../../../services/AdminService";
-import { Subscription } from "rxjs";
 import { ModalService } from "../../../../services/ModalService";
 import { EditGameComponent } from "../../../components/admin/edit-game/edit-game.component";
 import { ButtonsComponent } from "../../../components/buttons/buttons.component";

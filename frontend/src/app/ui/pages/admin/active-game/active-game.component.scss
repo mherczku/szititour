@@ -1,3 +1,5 @@
+@import "styles/styles-variables";
+
 .map-container {
   border-radius: 8px;
   overflow: hidden;
@@ -8,8 +10,14 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin: 1rem;
+  gap: 2rem;
+  padding: 1rem;
+
+  @media (max-width: $breakpoint-mobile) {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
 }
 
 .answers {
@@ -24,6 +32,45 @@
     gap: 1rem;
     width: 100%;
     place-content: center;
+  }
+
+}
+
+select {
+  --arrow-bg: rgb(17 154 0);
+  --arrow-icon: url(https://upload.wikimedia.org/wikipedia/commons/9/9d/Caret_down_font_awesome_whitevariation.svg);
+  --option-bg: rgb(55 194 0);
+  --select-bg: rgb(55 194 0);
+  /* Reset */
+  appearance: none;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  /* Personalize */
+  width: 20rem;
+  padding: 1rem 3rem 1rem 1rem;
+  background: var(--arrow-icon) no-repeat right 0.8em center / 1.4em,
+    linear-gradient(to left, var(--arrow-bg) 3em, var(--select-bg) 3em);
+  color: white;
+  border-radius: 0.25em;
+  box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+
+  /* Remove IE arrow */
+  &::-ms-expand {
+    display: none;
+  }
+
+  /* Remove focus outline */
+  &:focus {
+    outline: none;
+  }
+
+  /* <option> colors */
+  option {
+    color: inherit;
+    background-color: var(--option-bg);
+
   }
 
 }

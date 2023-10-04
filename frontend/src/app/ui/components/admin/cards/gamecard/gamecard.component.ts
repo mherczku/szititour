@@ -81,8 +81,15 @@ export class GamecardComponent {
   }
 
   changeGameActivation() {
-    this.adminService.changeGameActivation(this.game.id, !this.game.active).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {
-      this.game = res;
-    });
+    this.confirmS.confirm(
+      {
+        question: `Biztos ${this.game.active ? "leállítod" : "elindítod"} a játékot?`
+      },
+      () => {
+        this.adminService.changeGameActivation(this.game.id, !this.game.active).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {
+          this.game = res;
+        });
+      });
+
   }
 }
