@@ -46,7 +46,6 @@ export class GamecardComponent {
   });
 
   @Input({required: true}) set game(value: Game) {
-    console.log("INPUT GAMECARD GAME:", value)
     this.$game.set(value);
   }
   @Output() onEditClicked: EventEmitter<unknown> = new EventEmitter<unknown>();

@@ -93,7 +93,6 @@ export class GamesComponent implements OnInit {
   }
 
   setApplications(applications: Application[]) {
-    console.log("emmited:", applications)
     this.$selectedGame.update(g => {
       g.applications = applications;
       return g;
@@ -101,7 +100,6 @@ export class GamesComponent implements OnInit {
     this.$games.update(games => {
       const g = games.find(g => g.id == this.$selectedGame().id);
       if(g) {
-        console.log("updated")
         g.applications = applications;
       }
       return games;
