@@ -1,9 +1,10 @@
-import {Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild} from "@angular/core";
+import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild} from "@angular/core";
 
 @Component({
   selector: "app-modal",
   templateUrl: "./modal.component.html",
-  styleUrls: ["./modal.component.scss"]
+  styleUrls: ["./modal.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModalComponent {
 
