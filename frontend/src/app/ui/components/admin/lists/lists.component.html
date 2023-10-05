@@ -1,7 +1,7 @@
 <div *ngIf="type === 'applications'" class="flex flex-col gap-3 relative bg-white p-5 rounded shadow w-full max-h-[80vh]">
   <p class="text-size-lg text-center w-full font-bold mb-6">Csapatok</p>
   <div class="overflow-y-auto h-fit">
-    <div *ngFor="let application of applications"
+    <div *ngFor="let application of $applications()"
          class="flex justify-between mobile:flex-col gap-10 p-5 pr-10 hover:border-amber-600 rounded border-1 border-transparent shadow items-center"
          [ngClass]="[application.accepted === true ? 'bg-green-200' : '', application.accepted === false ? 'bg-red-200' : '']">
 

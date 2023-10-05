@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, Type } from "@angular/core";
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, Type, WritableSignal, signal } from "@angular/core";
 import { Game } from "../../../../types/game";
 import { AdminService } from "../../../../services/AdminService";
 import { ModalService } from "../../../../services/ModalService";
@@ -9,6 +9,7 @@ import { ModalModule } from "../../../components/admin/modal/modal.module";
 import { ListsComponent } from "../../../components/admin/lists/lists.component";
 import { NgForOf } from "@angular/common";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Application } from "src/app/types/application";
 
 
 @Component({
@@ -28,16 +29,19 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     ModalModule,
     ListsComponent,
     NgForOf
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GamesComponent implements OnInit {
-  $games = this.adminService.$games;
-  editModalVisible = false;
-  teamsModalVisible = false;
-  placesModalVisible = false;
 
-  selectedGame: Game = { applications: [], id: 0, places: [], active: false, title: "", dateStart: new Date(), dateEnd: new Date() };
-  isGameEditing = false;
+  $games = this.adminService.$games;
+
+  $editModalVisible = signal(false);
+  $teamsModalVisible = signal(false);
+  $placesModalVisible = signal(false);
+
+  $selectedGame: WritableSignal<Game> = signal({ applications: [], id: 0, places: [], active: false, title: "", dateStart: new Date(), dateEnd: new Date() });
+  $isGameEditing = signal(false);
 
   constructor(
     private readonly adminService: AdminService,
@@ -63,29 +67,45 @@ export class GamesComponent implements OnInit {
   }
 
   closeEditModal() {
-    this.editModalVisible = false;
+    this.$editModalVisible.set(false);
     this.getGames();
   }
 
   changeModal(m: "TEAMS" | "EDIT" | "PLACES", selected: Game) {
-    this.selectedGame = { ...selected };
-    this.editModalVisible = false;
-    this.teamsModalVisible = false;
-    this.placesModalVisible = false;
+    this.$selectedGame.set({ ...selected });
+    this.$editModalVisible.set(false);
+    this.$teamsModalVisible.set(false);
+    this.$placesModalVisible.set(false);
     switch (m) {
       case "EDIT": {
-        this.editModalVisible = true;
+        this.$editModalVisible.set(true);
         break;
       }
       case "TEAMS": {
-        this.teamsModalVisible = true;
+        this.$teamsModalVisible.set(true);
         break;
       }
       case "PLACES": {
-        this.placesModalVisible = true;
+        this.$placesModalVisible.set(true);
         break;
       }
     }
+  }
+
+  setApplications(applications: Application[]) {
+    console.log("emmited:", applications)
+    this.$selectedGame.update(g => {
+      g.applications = applications;
+      return g;
+    });
+    this.$games.update(games => {
+      const g = games.find(g => g.id == this.$selectedGame().id);
+      if(g) {
+        console.log("updated")
+        g.applications = applications;
+      }
+      return games;
+    });
   }
 
 }

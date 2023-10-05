@@ -1,4 +1,4 @@
-import { Component, DestroyRef, EventEmitter, Input, Output } from "@angular/core";
+import { Component, DestroyRef, EventEmitter, Input, Output, WritableSignal, signal } from "@angular/core";
 import { Place } from "src/app/types/place";
 import { Application } from "../../../../types/application";
 import { AdminService } from "../../../../services/AdminService";
@@ -34,9 +34,13 @@ import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 })
 export class ListsComponent {
   @Input() type: "applications" | "places" = "applications";
-  @Input() applications: Application[] = [];
+  @Input() set applications(value: Application[]) {
+    this.$applications.set(value);
+  }
   @Input() places: Place[] = [];
   @Input() gameIdForPlacesList = 0;
+
+  $applications: WritableSignal<Application[]> = signal([]);
 
   @Output() applicationsChange: EventEmitter<Application[]> = new EventEmitter<Application[]>();
 
@@ -50,8 +54,10 @@ export class ListsComponent {
     this.reviewing = true;
     this.adminService.reviewApplication(application, isAccepted).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: value => {
-        const foundIndex = this.applications.findIndex(x => x.id == value.id);
-        this.applications[foundIndex] = value;
+        const foundIndex = this.$applications().findIndex(x => x.id == value.id);
+        this.$applications()[foundIndex] = value;
+        this.applications = this.$applications();
+        this.applicationsChange.emit(this.$applications());
         this.reviewing = false;
       },
       error: () => {

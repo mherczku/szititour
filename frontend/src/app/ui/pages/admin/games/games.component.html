@@ -14,13 +14,13 @@
 
 
 <!-- Applications modal -->
-<app-modal [(isDisplayed)]="teamsModalVisible" classes="w-full">
-  <app-lists [(applications)]="selectedGame.applications"></app-lists>
+<app-modal [isDisplayed]="$teamsModalVisible()" (isDisplayedChange)="$teamsModalVisible.set($event)" classes="w-full">
+  <app-lists [applications]="$selectedGame().applications" (applicationsChange)="setApplications($event)"></app-lists>
 </app-modal>
 
 <!-- Places modal -->
-<app-modal [(isDisplayed)]="placesModalVisible" classes="w-full">
-  <app-lists [gameIdForPlacesList]="selectedGame.id" [places]="selectedGame.places"
+<app-modal [isDisplayed]="$placesModalVisible()" (isDisplayedChange)="$placesModalVisible.set($event)" classes="w-full">
+  <app-lists [gameIdForPlacesList]="$selectedGame().id" [places]="$selectedGame().places"
              type="places"></app-lists>
 </app-modal>
 
