@@ -1,15 +1,16 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
-import {Place} from "../../../../types/place";
-import {ActivatedRoute, RouterLink} from "@angular/router";
-import {AdminService} from "../../../../services/AdminService";
-import {Observable, Subscription} from "rxjs";
-import {EditPlaceComponent} from "../../../components/admin/edit-place/edit-place.component";
-import {myTrackBy} from "../../../../e-functions/extension-functions";
-import {AsyncPipe, NgForOf} from "@angular/common";
-import {PlaceCardComponent} from "../../../components/user/place-card/place-card.component";
-import {Game} from "../../../../types/game";
-import {ConvertToActivePlacePipe} from "../../../../pipes/place-to-active/convert-to-active-place.pipe";
-import {ButtonsComponent} from "../../../components/buttons/buttons.component";
+import { ChangeDetectionStrategy, Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
+import { Place } from "../../../../types/place";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { AdminService } from "../../../../services/AdminService";
+import { Observable } from "rxjs";
+import { EditPlaceComponent } from "../../../components/admin/edit-place/edit-place.component";
+import { myTrackBy } from "../../../../e-functions/extension-functions";
+import { AsyncPipe, NgForOf } from "@angular/common";
+import { PlaceCardComponent } from "../../../components/user/place-card/place-card.component";
+import { Game } from "../../../../types/game";
+import { ConvertToActivePlacePipe } from "../../../../pipes/place-to-active/convert-to-active-place.pipe";
+import { ButtonsComponent } from "../../../components/buttons/buttons.component";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-place",
@@ -21,7 +22,7 @@ import {ButtonsComponent} from "../../../components/buttons/buttons.component";
       display: flex;
       flex-grow: 1;
     }
-  `],
+    `],
   imports: [
     EditPlaceComponent,
     AsyncPipe,
@@ -30,9 +31,12 @@ import {ButtonsComponent} from "../../../components/buttons/buttons.component";
     ConvertToActivePlacePipe,
     ButtonsComponent,
     RouterLink
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PlaceComponent implements OnInit, OnDestroy {
+export class PlaceComponent implements OnInit {
+
+  protected readonly myTrackBy = myTrackBy;
 
   place: Place = {
     id: 0,
@@ -49,13 +53,12 @@ export class PlaceComponent implements OnInit, OnDestroy {
   gameId = 0;
   isEdit = true;
 
-  subscriptionGet?: Subscription;
-
   currentGame$?: Observable<Game>;
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly adminService: AdminService) {
+    private readonly adminService: AdminService,
+    private readonly destroyRef: DestroyRef) {
   }
 
   selectPlace(place: Place) {
@@ -95,16 +98,11 @@ export class PlaceComponent implements OnInit, OnDestroy {
   }
 
   getPlace(): void {
-    this.subscriptionGet = this.adminService.getPlaceById(this.placeId).subscribe({
+    this.adminService.getPlaceById(this.placeId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: value => {
         this.place = value;
       }
     });
   }
 
-  ngOnDestroy(): void {
-    this.subscriptionGet?.unsubscribe();
-  }
-
-  protected readonly myTrackBy = myTrackBy;
 }
