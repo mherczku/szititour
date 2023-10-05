@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from "@angular/core";
+import {ChangeDetectionStrategy, Component, OnInit, ViewChild, WritableSignal, signal} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {Observable, tap} from "rxjs";
 import {GameWithStatuses} from "../../../../types/game";
@@ -23,7 +23,8 @@ type GameMarker = {
   standalone: true,
   imports: [CommonModule, GoogleMapsModule, FormsModule, AnswerComponent],
   templateUrl: "./active-game.component.html",
-  styleUrls: ["./active-game.component.scss"]
+  styleUrls: ["./active-game.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActiveGameComponent implements OnInit {
 
@@ -47,8 +48,8 @@ export class ActiveGameComponent implements OnInit {
   zoom = 11;
 
   selectedMarker?: GameMarker;
-  selectedTeamStatus?: TeamGameStatus;
-  selectedTeamPlace?: PlaceStatusDto;
+  $selectedTeamStatus: WritableSignal<TeamGameStatus | undefined> = signal(undefined);
+  $selectedTeamPlace: WritableSignal<PlaceStatusDto | undefined> = signal(undefined);
 
   private gameStatuses: TeamGameStatus[] = [];
   private places: Place[] = [];
@@ -72,8 +73,8 @@ export class ActiveGameComponent implements OnInit {
         this.gameData = this.adminService.getGameWithStatusesById(gameId).pipe(tap(res => {
           this.gameStatuses = res.teamGameStatuses;
           this.places = res.places;
-          this.selectedTeamStatus = this.gameStatuses[0];
-          this.selectedTeamPlace = this.gameStatuses[0]?.placeStatuses[0];
+          this.$selectedTeamStatus.set(this.gameStatuses[0]);
+          this.$selectedTeamPlace.set(this.gameStatuses[0]?.placeStatuses[0]);
           this.processDataToMarkers(res);
         }));
       }
@@ -158,11 +159,12 @@ export class ActiveGameComponent implements OnInit {
   }
 
   selectTeamStatus(teamStatusId: string) {
-    this.selectedTeamStatus = this.gameStatuses.find(s => s.id === Number(teamStatusId));
+    this.$selectedTeamStatus.set(this.gameStatuses.find(s => s.id === Number(teamStatusId)));
+    this.$selectedTeamPlace.set(this.$selectedTeamStatus()?.placeStatuses[0]);
   }
 
   selectTeamPlace(placeId: string) {
-    this.selectedTeamPlace = this.selectedTeamStatus?.placeStatuses?.find(p => p.placeId === Number(placeId));
+    this.$selectedTeamPlace.set(this.$selectedTeamStatus()?.placeStatuses?.find(p => p.placeId === Number(placeId)));
   }
 
   getPlaceName(placeId: number): string {

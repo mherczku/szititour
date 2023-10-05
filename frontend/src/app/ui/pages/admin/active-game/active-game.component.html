@@ -17,21 +17,21 @@
 </section>
 
 <section class="selectors text-size-base">
-  <select [ngModel]="selectedTeamStatus?.id ?? 'none'" (ngModelChange)="selectTeamStatus($event)" name="teams">
-    <option *ngIf="!selectedTeamStatus" value="none">Válassz</option>
+  <select [ngModel]="$selectedTeamStatus()?.id ?? 'none'" (ngModelChange)="selectTeamStatus($event)" name="teams">
+    <option *ngIf="!$selectedTeamStatus()" value="none">Válassz</option>
     <option *ngFor="let teamStatus of (gameData | async)?.teamGameStatuses; trackBy: myTrackBy" [value]="teamStatus.id">{{teamStatus.teamName}} csapat</option>
   </select>
 
-  <select [disabled]="!selectedTeamStatus" name="places" [ngModel]="selectedTeamPlace?.placeId ?? 'none'" (ngModelChange)="selectTeamPlace($event)">
-    <option *ngIf="!selectedTeamPlace" value="none">{{selectedTeamStatus?.teamId ? 'Válassz helyszínt' : 'Válassz csapatot'}}</option>
-    <option *ngFor="let placeStatus of selectedTeamStatus?.placeStatuses; trackBy: myTrackBy" [value]="placeStatus.placeId">{{getPlaceName(placeStatus.placeId)}}</option>
+  <select [disabled]="!$selectedTeamStatus()" name="places" [ngModel]="$selectedTeamPlace()?.placeId ?? 'none'" (ngModelChange)="selectTeamPlace($event)">
+    <option *ngIf="!$selectedTeamPlace()" value="none">{{$selectedTeamStatus()?.teamId ? 'Válassz helyszínt' : 'Válassz csapatot'}}</option>
+    <option *ngFor="let placeStatus of $selectedTeamStatus()?.placeStatuses; trackBy: myTrackBy" [value]="placeStatus.placeId">{{getPlaceName(placeStatus.placeId)}}</option>
   </select>
 </section>
 
 <section class="answers">
 
   <div>
-    <app-answer [answer]="answer" [index]="i" *ngFor="let answer of selectedTeamPlace?.qanswers, let i = index; trackBy: myTrackBy"></app-answer>
+    <app-answer [answer]="answer" [index]="i" *ngFor="let answer of $selectedTeamPlace()?.qanswers, let i = index; trackBy: myTrackBy"></app-answer>
   </div>
 
 </section>
