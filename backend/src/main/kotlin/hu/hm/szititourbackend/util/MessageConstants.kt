@@ -3,7 +3,6 @@ package hu.hm.szititourbackend.util
 object MessageConstants {
 
 
-
     //! SUCCESS MESSAGES:
     const val AUTH_SUCCESS = "AUTH_SUCCESS"
     const val DELETE_TEAM_REQUESTED = "DELETE_TEAM_REQUESTED"
@@ -31,6 +30,7 @@ object MessageConstants {
     const val AUTH_TOKEN_INVALID = "AUTH_TOKEN_INVALID"
     const val AUTH_TOKENID_NOT_FOUND = "AUTH_TOKENID_NOT_FOUND"
     const val BAD_CREDENTIALS = "BAD_CREDENTIALS"
+    const val CANNOT_ACTIVATE_RIDDLE = "CANNOT_ACTIVATE_RIDDLE"
     const val CANNOT_APPLY_ACTIVE_GAME = "CANNOT_APPLY_ACTIVE_GAME"
     const val CANNOT_CANCEL_ACTIVE = "CANNOT_CANCEL_ACTIVE"
     const val CANNOT_CANCEL_REFUSED = "CANNOT_CANCEL_REFUSED"

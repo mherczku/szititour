@@ -79,6 +79,15 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
 
     fun changeActivation(gameId: Int, activation: Boolean): Game {
         val game = getGameById(gameId)
+        //* Check places questions for riddles MINMAX 1 on activation
+        if (activation) {
+            game.places.forEach { place ->
+                if (place.questions.filter { it.riddle }.size != 1) {
+                    throw CustomException("Every place must have exactly one riddle!", HttpStatus.BAD_REQUEST, MessageConstants.CANNOT_ACTIVATE_RIDDLE)
+                }
+            }
+        }
+        //* Delete statuses on deactivation
         if (!activation) {
             game.teamGameStatuses.forEach {
                 teamGameStatusRepository.deleteById(it.id)
