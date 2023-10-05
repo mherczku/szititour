@@ -9,7 +9,7 @@ import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 @Component({
   selector: "app-dropdown",
   templateUrl: "./dropdown.component.html",
-  styleUrls: ["./dropdown.component.css"],
+  styleUrls: ["./dropdown.component.scss"],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [

@@ -8,7 +8,8 @@ export type Place = {
   latitude: number,
   longitude: number,
   questions: Question[],
-  gameId: number
+  gameId: number,
+  riddleWarning?: boolean
 }
 
 export type ActivePlace = {

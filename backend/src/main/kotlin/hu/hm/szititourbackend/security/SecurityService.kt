@@ -39,7 +39,7 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         const val ISSUER = "szititour_v1"
         const val JWT_TOKEN_VALIDITY_1MIN = 1 * 1 * 60          // 1 min
         const val JWT_TOKEN_VALIDITY_1HOUR = 1 * 60 * 60    // 1 hour
-        const val JWT_TOKEN_VALIDITY_1DAY = 24 * 60 * 60     // 1 hour
+        const val JWT_TOKEN_VALIDITY_1DAY = 24 * 60 * 60     // 1 day
         const val HEADER_TOKEN = "Authorization"
         const val HEADER_PASSWORD_TOKEN = "passwordToken"
         const val HEADER_DELETE_TOKEN = "deleteToken"
@@ -50,7 +50,6 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
 
     @Value("\${google.clientId}")
     var CLIENT_ID: String? = null
-
 
     // AUTH TOKEN
     fun generateToken(team: Team, tokenId: String, expiresAt: Instant): String {

@@ -6,7 +6,7 @@ import { ButtonsComponent } from "../../../buttons/buttons.component";
 @Component({
   selector: "app-text-input",
   templateUrl: "./text-input.component.html",
-  styleUrls: ["./text-input.component.css"],
+  styleUrls: ["./text-input.component.scss"],
   imports: [
     NgSwitch,
     NgSwitchCase,

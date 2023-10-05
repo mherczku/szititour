@@ -27,7 +27,7 @@
 
   <div class="h-fit overflow-y-auto">
     <app-dropdown *ngFor="let place of places; let index = index" [number]="index + 1" [place]="place"></app-dropdown>
-    <p *ngIf="places.length === 0" class="text-size-base bold text-center">No places yet</p>
+    <p *ngIf="places.length === 0" class="text-size-base bold text-center">Nincsenek helyszínek</p>
   </div>
 
   <div class="absolute z-add w-[3rem] h-[3rem] text-size-base right-10 bottom-10">

@@ -21,6 +21,7 @@
       class="w-[45%] p-5 max-h-[75vh] mobile:w-full rounded border-kon-blue mobile:border-transparent border-1 overflow-y-auto">
       <div class="flex gap-2 mb-2 items-center">
         <p class="text-size-lg bold">Kérdések:</p>
+        <img title="Pontosan egy rejtvénynek kell lennie!" class="riddleWarning" *ngIf="place.riddleWarning" src="assets/svg/warning-yellow.svg" alt="Rejtvény hiba">
         <app-buttons (onClicked)="openNewQuestionDialog()" [isDisabledBlocked]="!isEdit"
           classes="aspect-square w-[30px] hover:scale-110 active:opacity-70 transition" type="icon"
           iconSrc="assets/svg/add.svg"></app-buttons>

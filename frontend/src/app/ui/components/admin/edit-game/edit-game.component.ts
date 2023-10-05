@@ -21,7 +21,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 @Component({
   selector: "app-edit-game",
   templateUrl: "./edit-game.component.html",
-  styleUrls: ["./edit-game.component.css"],
+  styleUrls: ["./edit-game.component.scss"],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
