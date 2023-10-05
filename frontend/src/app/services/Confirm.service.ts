@@ -43,6 +43,10 @@ export class ConfirmService {
     this.reset();
   }
 
+  toClickOutside() {
+    this.reset();
+  }
+
   private reset() {
     this._$active.set(false);
     this.$data.set({});

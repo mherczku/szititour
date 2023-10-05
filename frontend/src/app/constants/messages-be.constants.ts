@@ -30,6 +30,7 @@ export const CONST_MESSAGES = {
     AUTH_TOKEN_INVALID: "Authentikációs hiba történt",
     AUTH_TOKENID_NOT_FOUND: "Bejelentkezés visszavonva, kérlek jelentkezz be újra!",
     BAD_CREDENTIALS: "Helytelen E-mail vagy Jelszó",
+    CANNOT_ACTIVATE_RIDDLE: "Nem aktiválható! Minden helyszínnek pontosan egy rejtvénynek kell lennie!",
     CANNOT_APPLY_ACTIVE_GAME: "Aktív játékra nem lehet jelentkezni",
     CANNOT_CANCEL_ACTIVE: "Aktív játékról a jelentkezést nem lehet visszavonni",
     CANNOT_CANCEL_REFUSED: "A jelentkezést már elutasították",

@@ -26,4 +26,8 @@ export class ConfirmComponent {
   reject() {
     this.confirmService.toReject();
   }
+
+  outside() {
+    this.confirmService.toClickOutside();
+  }
 }

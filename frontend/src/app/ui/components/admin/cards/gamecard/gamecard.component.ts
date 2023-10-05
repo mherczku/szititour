@@ -82,7 +82,7 @@ export class GamecardComponent {
   changeGameActivation() {
     this.confirmS.confirm(
       {
-        question: `Biztos ${this.game.active ? "leállítod" : "elindítod"} a játékot?`
+        question: `Biztos ${this.game.active ? "leállítod" : "elindítod"} a játékot? ${this.game.active ? "Leállítással törlöd az aktív játék állapotát!" : ""}`
       },
       () => {
         this.adminService.changeGameActivation(this.game.id, !this.game.active).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {
