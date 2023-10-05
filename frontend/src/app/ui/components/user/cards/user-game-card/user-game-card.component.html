@@ -1,8 +1,13 @@
 <div class="card-game">
-  <img [src]="game.img | imgSrc | imgLoader | async" [alt]="game.title">
+  <img [src]="$game().img | imgSrc | imgLoader | async" [alt]="$game().title">
   <div class="details">
-    <p class="text-size-lg bold">{{game.title}}</p>
-    <p class="text-size-base date-input-d">{{game.dateStart | date:'y.MM.d. H:mm' }} - {{game.dateEnd | date:'H:mm' }}</p>
-    <button class="btn-simple" [routerLink]="game.active && game.userApplied === 'accepted' ? '/user/active/' + game.id : undefined" [disabled]="game.userApplied === 'declined'" (click)="applyBtnClicked()" [ngClass]="{'btn-simple-red' : game.userApplied === 'applied' || game.userApplied === 'accepted' && !game.active, 'btn-simple-green' : game.active && game.userApplied === 'accepted'}">{{(game.userApplied === 'applied' || game.userApplied === 'accepted') ? game.active && game.userApplied === 'accepted' ? 'Írány a játék' : 'Visszamondás' : 'Jelentkezés'}}</button>
+    <p class="text-size-lg bold">{{$game().title}}</p>
+    <p class="text-size-base date-input-d">{{$game().dateStart | date:'y.MM.d. H:mm' }} - {{$game().dateEnd | date:'H:mm' }}
+    </p>
+    <button class="btn-simple"
+      [routerLink]="$game().active && $game().userApplied === 'accepted' ? '/user/active/' + $game().id : undefined"
+      [disabled]="$btnType() === 'DISABLED'" (click)="applyBtnClicked()"
+      [ngClass]="{'btn-simple-red' : $btnType() === 'RED', 'btn-simple-green' : $btnType() === 'GREEN'}">
+      {{$btnText()}}</button>
   </div>
 </div>

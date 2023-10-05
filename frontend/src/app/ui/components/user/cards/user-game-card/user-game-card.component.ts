@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, Input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, Input, Signal, WritableSignal, computed, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Game } from "../../../../../types/game";
 import { UserService } from "../../../../../services/UserService";
@@ -16,7 +16,13 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
   imports: [CommonModule, RouterLink, ImgSrcModule, ImgLoaderPipe]
 })
 export class UserGameCardComponent {
-  @Input() game: Game = {
+
+
+  @Input({ required: true }) set game(value: Game) {
+    this.$game.set(value);
+  }
+
+  $game: WritableSignal<Game> = signal({
     applications: [],
     dateEnd: new Date(),
     dateStart: new Date(),
@@ -24,7 +30,57 @@ export class UserGameCardComponent {
     places: [],
     title: "Test Title",
     active: false
-  };
+  });
+
+  $btnType: Signal<string> = computed(() => {
+    const g = this.$game();
+    if(g.active) {
+      if(g.userApplied === "accepted") {
+        return "GREEN";
+      } else if(g.userApplied === "applied") {
+        return "DISABLED";
+      } else if(g.userApplied === "declined"){
+        return "DISABLED";
+      } else {
+        return "DISABLED";
+      }
+    } else {
+      if(g.userApplied === "accepted") {
+        return "RED";
+      } else if(g.userApplied === "applied") {
+        return "RED";
+      } else if(g.userApplied === "declined"){
+        return "DISABLED";
+      } else {
+        return "GREEN";
+      }
+    }
+  });
+
+  $btnText: Signal<string> = computed(() => {
+    const g = this.$game();
+    if(g.active) {
+      if(g.userApplied === "accepted") {
+        return "Írány a játék";
+      } else if(g.userApplied === "applied") {
+        return "Aktív játék";
+      } else if(g.userApplied === "declined"){
+        return "Elutasítva";
+      } else {
+        return "Aktív játék";
+      }
+    } else {
+      if(g.userApplied === "accepted") {
+        return "Elfogadva - visszamondás";
+      } else if(g.userApplied === "applied") {
+        return "Visszamondás";
+      } else if(g.userApplied === "declined"){
+        return "Elutasítva";
+      } else {
+        return "Jelentkezés";
+      }
+    }
+  });
 
   constructor(
     private readonly cd: ChangeDetectorRef,
@@ -32,17 +88,17 @@ export class UserGameCardComponent {
     private readonly destroyRef: DestroyRef) { }
 
   applyBtnClicked() {
-    if (!this.game.active) {
-      if (this.game.userApplied === "applied" || this.game.userApplied === "accepted") {
+    if (!this.$game().active) {
+      if (this.$game().userApplied === "applied" || this.$game().userApplied === "accepted") {
         this.cancelApplicationForGame();
-      } else if (this.game.userApplied === "none") {
+      } else if (this.$game().userApplied === "none") {
         this.applyForGame();
       }
     }
   }
 
   private applyForGame() {
-    this.userService.applyForGame(this.game.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    this.userService.applyForGame(this.$game().id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: value => {
         this.game = value;
         this.cd.markForCheck();
@@ -51,7 +107,7 @@ export class UserGameCardComponent {
   }
 
   private cancelApplicationForGame() {
-    this.userService.cancelApplicationForGame(this.game.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    this.userService.cancelApplicationForGame(this.$game().id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: value => {
         this.game = value;
         this.cd.markForCheck();
