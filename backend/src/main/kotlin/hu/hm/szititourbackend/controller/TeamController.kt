@@ -21,12 +21,12 @@ class TeamController @Autowired constructor(private val teamService: TeamService
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    @PostMapping()
+    /*@PostMapping()
     fun addTeam(@RequestBody team: Team): ResponseEntity<TeamDto> {
         logger.debug("Add team ${team.name}}")
         val newTeam = teamService.addTeam(team)
         return ResponseEntity(newTeam.convertToDto(), HttpStatus.CREATED)
-    }
+    }*/
 
     @GetMapping("/{id}")
     fun getTeamById(@PathVariable id: Int): ResponseEntity<TeamDto?> {
@@ -42,11 +42,11 @@ class TeamController @Autowired constructor(private val teamService: TeamService
         return ResponseEntity(teams.convertToDto(), HttpStatus.OK)
     }
 
-    @PutMapping
+    /*@PutMapping
     fun updateTeam(@RequestBody team: Team): ResponseEntity<TeamDto> {
         logger.debug("Update team ${team.id}")
         return ResponseEntity(teamService.updateTeam(team).convertToDto(), HttpStatus.OK)
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     fun deleteTeamById(@PathVariable id: Int): ResponseEntity<Nothing> {

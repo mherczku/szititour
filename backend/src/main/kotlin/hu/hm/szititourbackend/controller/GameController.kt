@@ -23,12 +23,12 @@ class GameController @Autowired constructor(private val gameService: GameService
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    @PostMapping()
+    /*@PostMapping()
     fun addGame(@RequestBody game: Game): ResponseEntity<GameDto> {
         logger.debug("Add new game ${game.title}")
         val newGame = gameService.addGame(game)
         return ResponseEntity(newGame.convertToDto(), HttpStatus.CREATED)
-    }
+    }*/
 
     @PostMapping("/image")
     fun addGameWithImage(

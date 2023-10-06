@@ -1,4 +1,5 @@
 package hu.hm.szititourbackend.service
+
 import hu.hm.szititourbackend.datamodel.Answer
 import hu.hm.szititourbackend.datamodel.Question
 import hu.hm.szititourbackend.datamodel.Team
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
+import java.util.Optional
 
 @Service
 @Transactional
@@ -34,8 +36,12 @@ class AnswerService @Autowired constructor(private val answerRepository: AnswerR
         }
     }
 
-    private fun addAnswer(answer: Answer): Answer {
+    fun addAnswer(answer: Answer): Answer {
         return answerRepository.save(answer)
+    }
+
+    fun findByTeamAndQuestion(teamId: Int, questionId: Int): Optional<Answer> {
+        return answerRepository.findByTeamAndQuestion(Team(id = teamId), Question(id = questionId))
     }
 
     fun getAllAnswers() : MutableList<Answer>{

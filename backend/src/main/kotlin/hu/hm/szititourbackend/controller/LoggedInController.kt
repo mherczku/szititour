@@ -1,8 +1,10 @@
 package hu.hm.szititourbackend.controller
 
-import hu.hm.szititourbackend.datamodel.*
+import hu.hm.szititourbackend.datamodel.Answer
+import hu.hm.szititourbackend.datamodel.convertToActiveDto
+import hu.hm.szititourbackend.datamodel.convertToBasicDto
+import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.*
-import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.Response
 import hu.hm.szititourbackend.security.SecurityService
 import hu.hm.szititourbackend.service.*
@@ -23,10 +25,6 @@ import org.springframework.web.multipart.MultipartFile
 @RequestMapping("/user")
 class LoggedInController @Autowired constructor(
         private val teamService: TeamService,
-        private val gameService: GameService,
-        private val applicationService: ApplicationService,
-        private val questionService: QuestionService,
-        private val answerService: AnswerService,
         private val loggedInService: LoggedInService
 ) {
 
@@ -87,7 +85,7 @@ class LoggedInController @Autowired constructor(
     @GetMapping("games")
     fun getAllAvailableGames(auth: Authentication): ResponseEntity<List<GameOnlyBasicDto>> {
         logger.debug("Get available games")
-        return ResponseEntity(gameService.getAllAvailableGames().convertToBasicDto(auth.name.toInt()), HttpStatus.OK)
+        return ResponseEntity(loggedInService.getAllAvailableGames().convertToBasicDto(auth.name.toInt()), HttpStatus.OK)
     }
 
     @PostMapping("apply")
@@ -96,16 +94,7 @@ class LoggedInController @Autowired constructor(
             auth: Authentication
     ): ResponseEntity<GameOnlyBasicDto> {
         logger.debug("Apply for game ${gameId} by user ${auth.name}")
-
-        val game = gameService.getGameById(gameId)
-        if (game.active) {
-            throw CustomException("Cannot apply for an active game", HttpStatus.FORBIDDEN, MessageConstants.CANNOT_APPLY_ACTIVE_GAME)
-        }
-        if (teamService.hasTeamApplication(auth.name.toInt(), gameId)) {
-            throw CustomException("This Team has an application already", HttpStatus.BAD_REQUEST, MessageConstants.TEAM_ALREADY_APPLIED)
-        }
-        val newApplication = applicationService.createApplication(gameId, auth.name.toInt())
-        return ResponseEntity(gameService.getGameById(newApplication.game.id).convertToBasicDto(auth.name.toInt()), HttpStatus.CREATED)
+        return ResponseEntity(loggedInService.applyForGame(teamId = auth.name.toInt(), gameId = gameId).convertToBasicDto(auth.name.toInt()), HttpStatus.OK)
     }
 
     @PostMapping("cancel")
@@ -113,22 +102,8 @@ class LoggedInController @Autowired constructor(
             @RequestBody gameId: Int,
             auth: Authentication
     ): ResponseEntity<GameOnlyBasicDto> {
-
         logger.debug("Cancel application for game $gameId by user ${auth.name}")
-
-        val application = teamService.getTeamsApplicationByTeamId(auth.name.toInt(), gameId)
-        if (application.game.active) {
-            throw CustomException("Cannot cancel application for an active game", HttpStatus.FORBIDDEN, MessageConstants.CANNOT_CANCEL_ACTIVE)
-        }
-        return if (application.accepted == null) {
-            applicationService.deleteApplicationById(application.id)
-            ResponseEntity(application.game.convertToBasicDto(auth.name.toInt()), HttpStatus.OK)
-        } else if (application.accepted!!) {
-            applicationService.deleteApplicationById(application.id)
-            ResponseEntity(application.game.convertToBasicDto(auth.name.toInt()), HttpStatus.OK)
-        } else {
-            throw CustomException("Cannot cancel refused application", HttpStatus.FORBIDDEN, MessageConstants.CANNOT_CANCEL_REFUSED)
-        }
+        return ResponseEntity(loggedInService.cancelApplicationForGame(auth.name.toInt(), gameId).convertToBasicDto(auth.name.toInt()), HttpStatus.OK)
     }
 
     @PostMapping("revoke")
@@ -157,19 +132,12 @@ class LoggedInController @Autowired constructor(
             @PathVariable gameId: Int,
             auth: Authentication
     ): ResponseEntity<GameActiveDto> {
-
         logger.debug("Get game data by user ${auth.name}")
-
-        checkTeamAcceptedApplicationToGame(auth.name.toInt(), gameId)
-        val game = gameService.getGameById(gameId)
-
-        checkGameActive(game)
         return ResponseEntity(
-                game.convertToActiveDto(loggedInService.getTeamGameStatus(game.id, auth.name.toInt())),
+                loggedInService.getGameData(gameId, teamId = auth.name.toInt()).convertToActiveDto(loggedInService.getTeamGameStatus(gameId, auth.name.toInt()).convertToDto()),
                 HttpStatus.OK
         )
     }
-
 
     @GetMapping("status/{gameId}")
     fun getTeamGameStatus(
@@ -177,10 +145,7 @@ class LoggedInController @Autowired constructor(
             auth: Authentication
     ): ResponseEntity<TeamGameStatusDto> {
         logger.debug("Get teamGameStatus by user ${auth.name}")
-
-        checkTeamAcceptedApplicationToGame(auth.name.toInt(), gameId)
-        return ResponseEntity(loggedInService.getTeamGameStatus(gameId, auth.name.toInt()), HttpStatus.OK)
-
+        return ResponseEntity(loggedInService.getTeamGameStatus(gameId, auth.name.toInt()).convertToDto(), HttpStatus.OK)
     }
 
     @PostMapping("answers")
@@ -188,32 +153,11 @@ class LoggedInController @Autowired constructor(
             @RequestBody answers: AnswersRequestBody,
             auth: Authentication
     ): ResponseEntity<TeamGameStatusDto> {
-
         logger.debug("Answer questions by user ${auth.name}")
-
-        checkTeamAcceptedApplicationToGame(auth.name.toInt(), gameId = answers.gameId)
-        val theGame = gameService.getGameById(answers.gameId)
-
-        checkGameActive(theGame)
-        answers.questionAnswers.forEach { answer ->
-            val question = questionService.getQuestionById(answer.questionId)
-
-            answerService.createOrUpdateAnswer(
-                    Answer(
-                            answerBoolean = answer.answer.answerBoolean,
-                            answerNumber = answer.answer.answerNumber,
-                            answerText = answer.answer.answerText,
-                            img = answer.answer.img
-                    ),
-                    question = question,
-                    teamId = auth.name.toInt()
-            )
-        }
         return ResponseEntity(
-                loggedInService.getTeamGameStatus(theGame.id, auth.name.toInt()),
+                loggedInService.answerQuestions(auth.name.toInt(), answers).convertToDto(),
                 HttpStatus.OK
         )
-
     }
 
     @PostMapping("answer/{questionId}")
@@ -223,9 +167,8 @@ class LoggedInController @Autowired constructor(
             auth: Authentication
     ): ResponseEntity<TeamGameStatusDto> {
         logger.debug("Answer question ${questionId} by user ${auth.name}")
-
         return ResponseEntity(
-                loggedInService.answerQuestion(auth.name.toInt(), questionId, answer),
+                loggedInService.answerQuestion(auth.name.toInt(), questionId, answer).convertToDto(),
                 HttpStatus.OK
         )
     }
@@ -236,25 +179,8 @@ class LoggedInController @Autowired constructor(
             @PathVariable questionId: Int,
             auth: Authentication
     ): ResponseEntity<TeamGameStatusDto> {
-
         logger.debug("Answer question with image ${questionId} by user ${auth.name}")
-        return ResponseEntity(loggedInService.answerWithImage(questionId, auth.name.toInt(), file), HttpStatus.OK)
-    }
-
-    private fun checkTeamAcceptedApplicationToGame(teamId: Int, gameId: Int) {
-        logger.debug("Check team application to game ${gameId} by user ${teamId}")
-
-        val application = teamService.getTeamsApplicationByTeamId(teamId, gameId)
-        if (application.accepted == null || !application.accepted!!) {
-            throw CustomException("Your application is not accepted", HttpStatus.FORBIDDEN, MessageConstants.APPLICATION_NOT_ACCEPTED)
-        }
-    }
-
-    private fun checkGameActive(game: Game) {
-        logger.debug("Check game active to game ${game.id}")
-        if (!game.active) {
-            throw CustomException("This game is not active", HttpStatus.FORBIDDEN, MessageConstants.GAME_INACTIVE)
-        }
+        return ResponseEntity(loggedInService.answerWithImage(questionId, auth.name.toInt(), file).convertToDto(), HttpStatus.OK)
     }
 
 }

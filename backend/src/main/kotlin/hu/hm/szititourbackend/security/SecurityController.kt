@@ -79,7 +79,7 @@ class SecurityController(private val teamService: TeamService, private val secur
         val googleAccount = securityService.verifyGoogleToken(googleToken)
         val googleResponse = teamService.continueWithGoogle(googleAccount)
 
-        clientData.ipAddress = request.remoteAddr
+        clientData.ipAddress = request?.remoteAddr ?: "unknown"
         val client = teamService.addClient(googleResponse.team, clientData, true)
         val token = securityService.generateToken(team = googleResponse.team, client.tokenId, client.expireAt)
         response.addHeader(HEADER_TOKEN, "Bearer $token")
@@ -92,13 +92,13 @@ class SecurityController(private val teamService: TeamService, private val secur
 
     @PostMapping("login")
     fun login(auth: Authentication, @RequestBody clientData: ClientData, request: HttpServletRequest, response: HttpServletResponse): ResponseEntity<LoginResponse> {
-        logger.info("Login for ${auth.name} - remote: ${request.remoteAddr} - forwarded: ${request.getHeader("X-Forwarded-For")} - real: ${request.getHeader("X-Real-IP")}")
+        logger.info("Login for ${auth.name} - remote: ${request?.remoteAddr} - forwarded: ${request.getHeader("X-Forwarded-For")} - real: ${request.getHeader("X-Real-IP")}")
 
         val team = teamService.getTeamByEmail(email = auth.name)
         if (!team.enabled) {
             throw CustomException("User is not activated", HttpStatus.FORBIDDEN, MessageConstants.TEAM_INACTIVE)
         }
-        clientData.ipAddress = request.remoteAddr
+        clientData.ipAddress = request?.remoteAddr ?: "unknown"
         val client = teamService.addClient(team, clientData, false)
         val token = securityService.generateToken(team = team, client.tokenId, client.expireAt)
         response.addHeader(HEADER_TOKEN, "Bearer $token")

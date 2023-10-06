@@ -211,7 +211,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
             name = googleAccount.name
         }
 
-        val team: Team = Team(
+        val team = Team(
                 email = googleAccount.email,
                 role = ROLE_USER,
                 password = encryptPassword(generatePassword()),
