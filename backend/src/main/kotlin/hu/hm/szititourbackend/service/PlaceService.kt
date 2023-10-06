@@ -45,11 +45,6 @@ class PlaceService @Autowired constructor(
                 questions = placeDto.questions.convertToQuestions()
         )
         return placeRepository.save(newPlace)
-
-    }
-
-    fun addPlace(place: Place): Place {
-        return placeRepository.save(place)
     }
 
     fun getAllPlaces(): MutableList<Place> {
