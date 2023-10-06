@@ -32,7 +32,6 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-
     override fun postHandle(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -47,7 +46,7 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
         val gameId = request.getHeader(GAMEID)
 
         if (token !== null && lat !== null && lon !== null && gameId !== null) {
-            logger.debug("LOCATION INTERCEPT --> $lat - $lon - $gameId - ${System.currentTimeMillis()}")
+            logger.debug("Location intercepted: --> Lat: $lat - Long: $lon - Game: $gameId - Time: ${System.currentTimeMillis()}")
             val verification = securityService.verifyToken(token)
             if (verification.verified) {
                 try {
@@ -57,7 +56,7 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
                     teamService.updateTeam(team, true)
                     teamService.updateGameStatusAuto(gameId.toInt(), team)
                 } catch (e: CustomException) {
-                    logger.error("Error in Location INTERCEPTOR ${e.message}")
+                    logger.error("Exception occurred while processing location: ${e.messageCode} : ${e.message}")
                 }
 
             }
