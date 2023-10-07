@@ -61,9 +61,8 @@
         <div
           [@popInOut]
           *ngFor="let m of $msgs()"
-          [class.chat-message-sent]="(m.sender === 'ADMIN') ||
-          (m.sender !== 'ADMIN')"
-          [class.chat-message-received]="!( m.sender === 'ADMIN') ||(m.sender !== 'ADMIN')"
+          [class.chat-message-sent]="(m.sender !== 'ADMIN')"
+          [class.chat-message-received]="(m.sender === 'ADMIN')"
         >
           <p>{{ m.content }}</p>
         </div>
