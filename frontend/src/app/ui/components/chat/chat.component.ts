@@ -114,7 +114,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       ?.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (msg) => {
-
           if (msg?.type === "MSG") {
             this.handleMSG(msg);
           } else if (msg?.type === "INFO") {
