@@ -202,11 +202,11 @@ export class AuthService implements OnDestroy {
   }
 
   private getClientData(): ClientData {
-    const data = (navigator as any).userAgentData;
+    const data = (navigator as any)?.userAgentData;
     return {
-      isMobile: data.mobile ?? false,
-      brand: `${data.brands[0].brand} ${data.brands[0].version}`,
-      platform: data.platform ?? ""
+      isMobile: data?.mobile ?? false,
+      brand: data?.brands?.[0] ? `${data?.brands?.[0]?.brand} ${data?.brands?.[0]?.version}` : `${navigator?.userAgent}`,
+      platform: data?.platform ?? navigator?.platform ?? ""
     };
   }
 }
