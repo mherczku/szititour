@@ -92,6 +92,26 @@ export class AdminService {
       team: { id: application.teamId }
     };
     return this.http.put<Application>(`${this.baseUrl}/applications/`, updated);
+    /* .pipe(tap(updated => {
+      this.$games.update(games => {
+        const remove = games.findIndex(g => g.id === updated.gameId);
+        const toRemove = games.find(g => g.id === updated.gameId);
+        if (toRemove) {
+          const updateGame: Game = { ...toRemove };
+          if (remove > -1) {
+            games.splice(remove, 1);
+          }
+          const toRemoveApp = updateGame.applications.findIndex(a => a.id === updated.id);
+          if (toRemoveApp > -1) {
+            updateGame.applications.splice(remove, 1);
+          }
+          updateGame.applications.push(updated);
+          games.push(updateGame);
+          games.sort((a, b) => { if (a.dateStart < b.dateStart) return -1; else return 1; });
+        }
+        return games;
+      });
+    })); */
   }
 
   getPlaceById(placeId: number): Observable<Place> {
@@ -158,12 +178,6 @@ export class AdminService {
   }
 
   changeGameActivation(gameId: number, activate: boolean): Observable<Game> {
-    if (activate) {
-      return this.http.put<Game>(`${this.baseUrl}/games/activate/${gameId}`, null);
-    } else {
-      return this.http.put<Game>(`${this.baseUrl}/games/deactivate/${gameId}`, null);
-    }
+    return this.http.put<Game>(`${this.baseUrl}/games/${activate ? "activate" : "deactivate"}/${gameId}`, null);
   }
-
-
 }
