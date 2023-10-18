@@ -1,8 +1,8 @@
 package hu.hm.szititourbackend.controller
 
 import hu.hm.szititourbackend.exception.CustomException
-import hu.hm.szititourbackend.security.SecurityService
-import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_RESOURCE_TOKEN
+import hu.hm.szititourbackend.security.SecurityTokenService
+import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_RESOURCE_TOKEN
 import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.Utils
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory
 @RestController
 @RequestMapping("/resources")
 class ResourceController @Autowired constructor(
-    private val securityService: SecurityService,
+        private val securityTokenService: SecurityTokenService,
 ) {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
@@ -34,7 +34,7 @@ class ResourceController @Autowired constructor(
             @RequestParam("img") imagePath: String
     ): ResponseEntity<UrlResource> {
 
-        val verification = securityService.verifyResourceToken(token, imagePath)
+        val verification = securityTokenService.verifyResourceToken(token, imagePath)
         logger.debug("Get resource $imagePath by user ${verification.teamId}")
 
         if (verification.verified) {

@@ -1,8 +1,8 @@
 package hu.hm.szititourbackend.util
 
 import hu.hm.szititourbackend.exception.CustomException
-import hu.hm.szititourbackend.security.SecurityService
-import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
+import hu.hm.szititourbackend.security.SecurityTokenService
+import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_TOKEN
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.LocationUtils.GAMEID
 import hu.hm.szititourbackend.util.LocationUtils.LATITUDE
@@ -19,15 +19,15 @@ import org.slf4j.LoggerFactory
 
 
 @Configuration
-class WebMvcConfig(private val teamService: TeamService, private val securityService: SecurityService) :
+class WebMvcConfig(private val teamService: TeamService, private val securityTokenService: SecurityTokenService) :
     WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(LocationInterceptor(teamService, securityService))
+        registry.addInterceptor(LocationInterceptor(teamService, securityTokenService))
         super.addInterceptors(registry)
     }
 }
 
-class LocationInterceptor(private val teamService: TeamService, private val securityService: SecurityService) :
+class LocationInterceptor(private val teamService: TeamService, private val securityTokenService: SecurityTokenService) :
     HandlerInterceptor {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
@@ -47,7 +47,7 @@ class LocationInterceptor(private val teamService: TeamService, private val secu
 
         if (token !== null && lat !== null && lon !== null && gameId !== null) {
             logger.debug("Location intercepted: --> Lat: $lat - Long: $lon - Game: $gameId - Time: ${System.currentTimeMillis()}")
-            val verification = securityService.verifyToken(token)
+            val verification = securityTokenService.verifyToken(token)
             if (verification.verified) {
                 try {
                     val team = teamService.getTeamById(verification.teamId)

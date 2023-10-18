@@ -10,9 +10,9 @@ import hu.hm.szititourbackend.extramodel.ContinueGoogleResponse
 import hu.hm.szititourbackend.extramodel.GoogleAccount
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.repository.TeamRepository
-import hu.hm.szititourbackend.security.SecurityService
-import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_ADMIN
-import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_USER
+import hu.hm.szititourbackend.security.SecurityTokenService
+import hu.hm.szititourbackend.security.SecurityTokenService.Companion.ROLE_ADMIN
+import hu.hm.szititourbackend.security.SecurityTokenService.Companion.ROLE_USER
 import hu.hm.szititourbackend.util.LocationUtils
 import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.PasswordUtils
@@ -31,7 +31,7 @@ import java.util.*
 
 @Service
 @Transactional
-class TeamService @Autowired constructor(private val securityService: SecurityService, private val teamRepository: TeamRepository, private val statusRepository: TeamGameStatusRepository, private val emailService: EmailService) {
+class TeamService @Autowired constructor(private val securityTokenService: SecurityTokenService, private val teamRepository: TeamRepository, private val statusRepository: TeamGameStatusRepository, private val emailService: EmailService) {
 
     fun getTeamByEmail(email: String): Team {
         val team = teamRepository.findByEmail(email)
@@ -65,7 +65,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         val saved = teamRepository.save(team)
         if (!isTester) {
             try {
-                emailService.sendWelcomeMail(team.email, team.name, verificationToken = securityService.generateEmailVerificationToken(team))
+                emailService.sendWelcomeMail(team.email, team.name, verificationToken = securityTokenService.generateEmailVerificationToken(team))
             } catch (e: Exception) {
                 teamRepository.delete(team)
                 throw e
@@ -100,7 +100,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         team.nextEmail = nextEmail
         val updated = updateTeam(team, true)
         try {
-            emailService.sendModifyEmailMail(team.nextEmail, team.name, securityService.generateEmailVerificationToken(updated))
+            emailService.sendModifyEmailMail(team.nextEmail, team.name, securityTokenService.generateEmailVerificationToken(updated))
             return updated
         } catch (e: Exception) {
             updated.nextEmail = ""
@@ -239,7 +239,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         clientData.isGoogle = isGoogle
         val tokenId = UUID.randomUUID().toString()
         clientData.tokenId = tokenId
-        clientData.expireAt = Instant.now().plusSeconds(SecurityService.JWT_TOKEN_VALIDITY_1HOUR.toLong())
+        clientData.expireAt = Instant.now().plusSeconds(SecurityTokenService.JWT_TOKEN_VALIDITY_1HOUR.toLong())
         team.clients.add(clientData)
         updateTeam(team, true)
         return clientData
@@ -253,7 +253,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
     }
 
     fun deleteTeamByUser(deleteToken: String) {
-        val verification = securityService.verifyTeamDeleteToken(deleteToken)
+        val verification = securityTokenService.verifyTeamDeleteToken(deleteToken)
         if(verification.verified) {
             val team = getTeamById(verification.teamId)
             if(verification.messageCode != team.passwordChangeId) {
@@ -273,7 +273,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         }
         team.passwordChangeId = UUID.randomUUID().toString()
         updateTeam(team, true)
-        emailService.sendTeamDeleteMail(team.email, team.name, securityService.generateTeamDeleteToken(team))
+        emailService.sendTeamDeleteMail(team.email, team.name, securityTokenService.generateTeamDeleteToken(team))
     }
 
     fun updateTeamPasswordRequest(teamId: Int) {
@@ -283,7 +283,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         }
         team.passwordChangeId = UUID.randomUUID().toString()
         updateTeam(team, true)
-        emailService.sendModifyPasswordMail(team.email, team.name, securityService.generatePasswordChangeToken(team))
+        emailService.sendModifyPasswordMail(team.email, team.name, securityTokenService.generatePasswordChangeToken(team))
     }
 
     fun forgotTeamPasswordRequest(email: String) {
@@ -293,11 +293,11 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         }
         team.passwordChangeId = UUID.randomUUID().toString()
         updateTeam(team, true)
-        emailService.sendForgotPasswordMail(team.email, team.name, securityService.generatePasswordChangeToken(team))
+        emailService.sendForgotPasswordMail(team.email, team.name, securityTokenService.generatePasswordChangeToken(team))
     }
 
     fun updateTeamPassword(passwordUpdateDto: TeamPasswordUpdateDto, passwordChangeToken: String): Team {
-        val verification = securityService.verifyPasswordChangeToken(passwordChangeToken)
+        val verification = securityTokenService.verifyPasswordChangeToken(passwordChangeToken)
         if(verification.verified) {
             val team = getTeamById(verification.teamId)
             if(verification.messageCode != team.passwordChangeId) {

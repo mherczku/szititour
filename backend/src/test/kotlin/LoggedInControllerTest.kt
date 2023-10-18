@@ -6,7 +6,7 @@ import hu.hm.szititourbackend.dto.TeamPasswordUpdateDto
 import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
 import hu.hm.szititourbackend.extramodel.VerificationResponse
 import hu.hm.szititourbackend.repository.*
-import hu.hm.szititourbackend.security.SecurityService
+import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.service.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -33,7 +33,7 @@ class LoggedInControllerTest {
     private lateinit var teamRepository: TeamRepository
 
     @Mock
-    private lateinit var securityService: SecurityService
+    private lateinit var securityTokenService: SecurityTokenService
 
     @Mock
     private lateinit var statusRepository: TeamGameStatusRepository
@@ -58,7 +58,7 @@ class LoggedInControllerTest {
 
     @BeforeEach
     fun setUp() {
-        val teamService = TeamService(securityService, teamRepository, statusRepository, emailService)
+        val teamService = TeamService(securityTokenService, teamRepository, statusRepository, emailService)
         val gameService = GameService(gameRepository, statusRepository)
         val placeService = PlaceService(placeRepository, gameService)
         val applicationService = ApplicationService(applicationRepository)
@@ -90,7 +90,7 @@ class LoggedInControllerTest {
         // Arrange
         val team = Team(enabled = true)
         `when`(teamRepository.findById(anyInt())).thenReturn(Optional.of(team))
-        `when`(securityService.generatePasswordChangeToken(team)).thenReturn("")
+        `when`(securityTokenService.generatePasswordChangeToken(team)).thenReturn("")
         `when`(teamRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
         // Act
@@ -106,7 +106,7 @@ class LoggedInControllerTest {
         // Arrange
         val team = Team(enabled = true, passwordChangeId = "test")
         `when`(teamRepository.findById(anyInt())).thenReturn(Optional.of(team))
-        `when`(securityService.verifyPasswordChangeToken(anyString())).thenReturn(VerificationResponse(verified = true, false, messageCode = "test"))
+        `when`(securityTokenService.verifyPasswordChangeToken(anyString())).thenReturn(VerificationResponse(verified = true, false, messageCode = "test"))
         `when`(teamRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
         // Act
@@ -123,7 +123,7 @@ class LoggedInControllerTest {
         val team = Team(enabled = true)
         `when`(teamRepository.findById(anyInt())).thenReturn(Optional.of(team))
         `when`(teamRepository.findByEmail(anyString())).thenReturn(Optional.empty())
-        `when`(securityService.generateEmailVerificationToken(team)).thenReturn("")
+        `when`(securityTokenService.generateEmailVerificationToken(team)).thenReturn("")
         `when`(teamRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
         // Act
@@ -195,7 +195,7 @@ class LoggedInControllerTest {
         // Arrange
         val team = Team(enabled = true)
         `when`(teamRepository.findById(anyInt())).thenReturn(Optional.of(team))
-        `when`(securityService.generateTeamDeleteToken(team)).thenReturn("")
+        `when`(securityTokenService.generateTeamDeleteToken(team)).thenReturn("")
         `when`(teamRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
         // Act
@@ -211,7 +211,7 @@ class LoggedInControllerTest {
         // Arrange
         val team = Team(id = 1, enabled = true, passwordChangeId = "test")
         `when`(teamRepository.findById(anyInt())).thenReturn(Optional.of(team))
-        `when`(securityService.verifyTeamDeleteToken(anyString())).thenReturn(VerificationResponse(verified = true, false, teamId = 1, messageCode = "test"))
+        `when`(securityTokenService.verifyTeamDeleteToken(anyString())).thenReturn(VerificationResponse(verified = true, false, teamId = 1, messageCode = "test"))
 
         // Act
         val response = controller.deleteTeam("")

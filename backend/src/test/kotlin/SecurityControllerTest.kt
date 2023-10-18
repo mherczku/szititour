@@ -4,7 +4,7 @@ import hu.hm.szititourbackend.extramodel.LoginData
 import hu.hm.szititourbackend.extramodel.VerificationResponse
 import hu.hm.szititourbackend.repository.*
 import hu.hm.szititourbackend.security.SecurityController
-import hu.hm.szititourbackend.security.SecurityService
+import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.service.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -27,7 +27,7 @@ class SecurityControllerTest {
     private lateinit var teamRepository: TeamRepository
 
     @Mock
-    private lateinit var securityService: SecurityService
+    private lateinit var securityTokenService: SecurityTokenService
 
     @Mock
     private lateinit var statusRepository: TeamGameStatusRepository
@@ -37,14 +37,14 @@ class SecurityControllerTest {
 
     @BeforeEach
     fun setUp() {
-        val teamService = TeamService(securityService, teamRepository, statusRepository, emailService)
-        this.controller = SecurityController(teamService, securityService)
+        val teamService = TeamService(securityTokenService, teamRepository, statusRepository, emailService)
+        this.controller = SecurityController(teamService, securityTokenService)
     }
 
     @Test
     fun testAuthorize() {
         // Arrange
-        `when`(securityService.verifyToken("1")).thenReturn(VerificationResponse(true, teamId = 1, messageCode = "TEST_SUCCESS"))
+        `when`(securityTokenService.verifyToken("1")).thenReturn(VerificationResponse(true, teamId = 1, messageCode = "TEST_SUCCESS"))
         `when`(teamRepository.findById(1)).thenReturn(Optional.of(Team(1)))
 
         // Act
@@ -58,7 +58,7 @@ class SecurityControllerTest {
     @Test
     fun testVerifyEmailWithToken() {
         // Arrange
-        `when`(securityService.verifyEmailVerificationToken("1")).thenReturn(VerificationResponse(true, teamId = 1, messageCode = "TEST_SUCCESS"))
+        `when`(securityTokenService.verifyEmailVerificationToken("1")).thenReturn(VerificationResponse(true, teamId = 1, messageCode = "TEST_SUCCESS"))
         `when`(teamRepository.findById(1)).thenReturn(Optional.of(Team(1, enabled = true, nextEmail = "testEmail@test.hu")))
         `when`(teamRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
@@ -124,7 +124,7 @@ class SecurityControllerTest {
     @Test
     fun testLogout() {
         // Arrange
-        `when`(securityService.verifyToken("1")).thenReturn(VerificationResponse(true, teamId = 1, messageCode = "TEST_SUCCESS"))
+        `when`(securityTokenService.verifyToken("1")).thenReturn(VerificationResponse(true, teamId = 1, messageCode = "TEST_SUCCESS"))
         `when`(teamRepository.findById(1)).thenReturn(Optional.of(Team(1, clients = mutableListOf(ClientData("1")))))
         `when`(teamRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
@@ -140,7 +140,7 @@ class SecurityControllerTest {
     fun testForgotPasswordRequest() {
         // Arrange
         val team = Team(1, clients = mutableListOf(ClientData("1")), enabled = true)
-        `when`(securityService.generatePasswordChangeToken(team)).thenReturn("")
+        `when`(securityTokenService.generatePasswordChangeToken(team)).thenReturn("")
         `when`(teamRepository.findByEmail("test@test.hu")).thenReturn(Optional.of(team))
         `when`(teamRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
@@ -157,7 +157,7 @@ class SecurityControllerTest {
     fun testForgotPassword() {
         // Arrange
         val team = Team(1, clients = mutableListOf(ClientData("1")), enabled = true, passwordChangeId = "test")
-        `when`(securityService.verifyPasswordChangeToken(anyString())).thenReturn(VerificationResponse(true, teamId = 1, messageCode = "test"))
+        `when`(securityTokenService.verifyPasswordChangeToken(anyString())).thenReturn(VerificationResponse(true, teamId = 1, messageCode = "test"))
         `when`(teamRepository.findById(1)).thenReturn(Optional.of(team))
         `when`(teamRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 

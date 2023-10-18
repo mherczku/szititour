@@ -1,7 +1,7 @@
 import hu.hm.szititourbackend.controller.TeamController
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.repository.*
-import hu.hm.szititourbackend.security.SecurityService
+import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.service.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -24,7 +24,7 @@ class TeamControllerTest {
     private lateinit var repository: TeamRepository
 
     @Mock
-    private lateinit var securityService: SecurityService
+    private lateinit var securityTokenService: SecurityTokenService
 
     @Mock
     private lateinit var statusRepository: TeamGameStatusRepository
@@ -34,7 +34,7 @@ class TeamControllerTest {
 
     @BeforeEach
     fun setUp() {
-        val service = TeamService(securityService, repository, statusRepository, emailService)
+        val service = TeamService(securityTokenService, repository, statusRepository, emailService)
         this.controller = TeamController(service)
     }
 

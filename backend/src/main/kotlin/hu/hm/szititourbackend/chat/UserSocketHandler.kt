@@ -1,7 +1,7 @@
 package hu.hm.szititourbackend.chat
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import hu.hm.szititourbackend.security.SecurityService
+import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.service.TeamService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,7 +21,7 @@ data class SessionData(
 )
 
 @Component
-class UserSocketHandler(@Autowired @Lazy private val adminSocket: AdminSocketHandler, private val teamService: TeamService, private val securityService: SecurityService) : BaseSocketHandler() {
+class UserSocketHandler(@Autowired @Lazy private val adminSocket: AdminSocketHandler, private val teamService: TeamService, private val securityTokenService: SecurityTokenService) : BaseSocketHandler() {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -93,7 +93,7 @@ class UserSocketHandler(@Autowired @Lazy private val adminSocket: AdminSocketHan
     private fun authenticate(session: WebSocketSession, chatMessage: ChatMessage): SessionData? {
         return if (chatMessage.type == "AUTH") {
             val token = chatMessage.token
-            val verification = securityService.verifyToken(token)
+            val verification = securityTokenService.verifyToken(token)
             if (verification.verified) {
                 val currentTeam = teamService.getTeamById(verification.teamId)
 

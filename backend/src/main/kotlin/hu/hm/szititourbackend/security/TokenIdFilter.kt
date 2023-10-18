@@ -3,7 +3,7 @@ package hu.hm.szititourbackend.security
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ObjectWriter
 import hu.hm.szititourbackend.extramodel.Response
-import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
+import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_TOKEN
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.MessageConstants
 import org.slf4j.Logger
@@ -25,7 +25,7 @@ class TokenIdFilter : OncePerRequestFilter() {
     lateinit var teamService: TeamService
 
     @Autowired
-    lateinit var securityService: SecurityService
+    lateinit var securityTokenService: SecurityTokenService
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
 
@@ -33,7 +33,7 @@ class TokenIdFilter : OncePerRequestFilter() {
         myLogger.debug("Inside TokenIdFilter")
 
         if (token != null && token.contains("Bearer ")) {
-            val verification = securityService.verifyToken(token)
+            val verification = securityTokenService.verifyToken(token)
             var code = verification.messageCode
             if (verification.verified) {
                 val team = teamService.getTeamById(verification.teamId)

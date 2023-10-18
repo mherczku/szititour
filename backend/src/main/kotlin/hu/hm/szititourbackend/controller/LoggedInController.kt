@@ -6,7 +6,7 @@ import hu.hm.szititourbackend.datamodel.convertToBasicDto
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.*
 import hu.hm.szititourbackend.extramodel.Response
-import hu.hm.szititourbackend.security.SecurityService
+import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.service.*
 import hu.hm.szititourbackend.util.MessageConstants
 import org.slf4j.Logger
@@ -63,7 +63,7 @@ class LoggedInController @Autowired constructor(
 
     @PostMapping("update/password")
     fun updateProfilePassword(
-            @RequestHeader(SecurityService.HEADER_PASSWORD_TOKEN) token: String,
+            @RequestHeader(SecurityTokenService.HEADER_PASSWORD_TOKEN) token: String,
             @RequestBody passwordUpdateDto: TeamPasswordUpdateDto,
             auth: Authentication
     ): ResponseEntity<Response> {
@@ -119,7 +119,7 @@ class LoggedInController @Autowired constructor(
     }
 
     @DeleteMapping("delete")
-    fun deleteTeam(@RequestHeader(SecurityService.HEADER_DELETE_TOKEN) token: String): ResponseEntity<Response> {
+    fun deleteTeam(@RequestHeader(SecurityTokenService.HEADER_DELETE_TOKEN) token: String): ResponseEntity<Response> {
         logger.info("Delete team")
         teamService.deleteTeamByUser(token)
         return ResponseEntity(Response(success = true, message = "Team Deleted", messageCode = MessageConstants.TEAM_DELETE_SUCCESS), HttpStatus.OK)

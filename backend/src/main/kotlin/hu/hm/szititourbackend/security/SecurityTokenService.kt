@@ -20,7 +20,7 @@ import java.util.*
 
 
 @Service
-class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder, private val jwtDecoder: JwtDecoder) {
+class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEncoder, private val jwtDecoder: JwtDecoder) {
 
     companion object {
         const val CLAIM_ROLE = "role"

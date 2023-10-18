@@ -8,10 +8,10 @@ import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.LoginData
 import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.extramodel.Response
-import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_GOOGLE_TOKEN
-import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_PASSWORD_TOKEN
-import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
-import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN_ID
+import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_GOOGLE_TOKEN
+import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_PASSWORD_TOKEN
+import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_TOKEN
+import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_TOKEN_ID
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.PasswordUtils
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/auth")
-class SecurityController(private val teamService: TeamService, private val securityService: SecurityService) {
+class SecurityController(private val teamService: TeamService, private val securityTokenService: SecurityTokenService) {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -36,7 +36,7 @@ class SecurityController(private val teamService: TeamService, private val secur
 
     @GetMapping
     fun authorize(@RequestHeader(HEADER_TOKEN) token: String): ResponseEntity<LoginResponse> {
-        val verification = securityService.verifyToken(token)
+        val verification = securityTokenService.verifyToken(token)
         logger.debug("Authorize me ${verification.teamId}")
 
         if (!verification.verified) {
@@ -57,7 +57,7 @@ class SecurityController(private val teamService: TeamService, private val secur
     @GetMapping("verifyEmail/{token}")
     fun verifyEmailWithToken(@PathVariable token: String): ResponseEntity<Response> {
         logger.debug("Verify email")
-        val verification = securityService.verifyEmailVerificationToken(token)
+        val verification = securityTokenService.verifyEmailVerificationToken(token)
         return if (verification.verified) {
             teamService.verifyEmail(verification.teamId)
             ResponseEntity(Response(true, message = "Email verified", MessageConstants.EMAIL_VERIFIED), HttpStatus.OK)
@@ -74,12 +74,12 @@ class SecurityController(private val teamService: TeamService, private val secur
             response: HttpServletResponse
     ): ResponseEntity<LoginResponse> {
         logger.debug("Authorize by google")
-        val googleAccount = securityService.verifyGoogleToken(googleToken)
+        val googleAccount = securityTokenService.verifyGoogleToken(googleToken)
         val googleResponse = teamService.continueWithGoogle(googleAccount)
 
         clientData.ipAddress = request?.remoteAddr ?: "unknown"
         val client = teamService.addClient(googleResponse.team, clientData, true)
-        val token = securityService.generateToken(team = googleResponse.team, client.tokenId, client.expireAt)
+        val token = securityTokenService.generateToken(team = googleResponse.team, client.tokenId, client.expireAt)
         response.addHeader(HEADER_TOKEN, "Bearer $token")
         response.addHeader(HEADER_TOKEN_ID, client.tokenId)
         if (googleResponse.isCreation) {
@@ -98,7 +98,7 @@ class SecurityController(private val teamService: TeamService, private val secur
         }
         clientData.ipAddress = request?.remoteAddr ?: "unknown"
         val client = teamService.addClient(team, clientData, false)
-        val token = securityService.generateToken(team = team, client.tokenId, client.expireAt)
+        val token = securityTokenService.generateToken(team = team, client.tokenId, client.expireAt)
         response.addHeader(HEADER_TOKEN, "Bearer $token")
         response.addHeader(HEADER_TOKEN_ID, client.tokenId)
         return ResponseEntity(LoginResponse(true, "Login Successful", MessageConstants.LOGIN_SUCCESS, team.convertToDto()), HttpStatus.OK)
@@ -135,7 +135,7 @@ class SecurityController(private val teamService: TeamService, private val secur
 
     @PostMapping("logout")
     fun logout(@RequestHeader(HEADER_TOKEN) token: String): ResponseEntity<Response> {
-        val verification = securityService.verifyToken(token)
+        val verification = securityTokenService.verifyToken(token)
         if (verification.verified) {
             teamService.revokeClient(verification.tokenId, verification.teamId)
             return ResponseEntity<Response>(Response(success = true, messageCode = MessageConstants.LOGOUT_SUCCESS), HttpStatus.OK)

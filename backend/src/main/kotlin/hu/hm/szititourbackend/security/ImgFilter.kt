@@ -23,7 +23,7 @@ class ImgPropertyFilter : OncePerRequestFilter() {
     val myLogger: Logger = LoggerFactory.getLogger(javaClass)
 
     @Autowired
-    var securityService: SecurityService? = null
+    var securityTokenService: SecurityTokenService? = null
 
     private val objectMapper = ObjectMapper()
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
@@ -66,7 +66,7 @@ class ImgPropertyFilter : OncePerRequestFilter() {
                 if ("img" == fieldName) {
                     val value = fieldValue.asText()
                     if(!value.contains("https") && !value.contains("resToken") && value.isNotBlank()) {
-                        (node as ObjectNode).set<JsonNode>(fieldName, TextNode(securityService?.genImgUrl(imagePath = value, "-1")))
+                        (node as ObjectNode).set<JsonNode>(fieldName, TextNode(securityTokenService?.genImgUrl(imagePath = value, "-1")))
                         modified = true
                     }
                 } else {

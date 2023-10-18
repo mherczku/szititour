@@ -1,7 +1,7 @@
 package hu.hm.szititourbackend.dto
 
 import hu.hm.szititourbackend.datamodel.ClientData
-import hu.hm.szititourbackend.security.SecurityService.Companion.ROLE_USER
+import hu.hm.szititourbackend.security.SecurityTokenService.Companion.ROLE_USER
 import java.sql.Timestamp
 import java.time.Instant
 
