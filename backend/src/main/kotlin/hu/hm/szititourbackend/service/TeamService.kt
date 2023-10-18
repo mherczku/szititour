@@ -165,7 +165,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
         val team = getTeamById(teamId)
         if (team.enabled) {
             if (team.nextEmail.isNotBlank()) {
-                if (Utils.validateEmail(team.nextEmail)) {
+                if (PasswordUtils.validateEmail(team.nextEmail)) {
                     team.email = team.nextEmail
                     team.isGoogle = false
                     updateTeam(team, true)
@@ -304,7 +304,7 @@ class TeamService @Autowired constructor(private val securityService: SecuritySe
                 throw CustomException("Invalid Token PasswordChangeID", HttpStatus.FORBIDDEN, MessageConstants.PASSWORD_TOKEN_INVALID)
             }
             if (passwordUpdateDto.newPassword.isNotBlank()) {
-                if (Utils.validatePassword(passwordUpdateDto.newPassword)) {
+                if (PasswordUtils.validatePassword(passwordUpdateDto.newPassword)) {
                     if (team.nextEmail.isNotBlank()) {
                         throw CustomException("Cannot modify password while email is not verified", HttpStatus.FORBIDDEN, MessageConstants.EMAIL_NOT_VERIFIED)
                     }

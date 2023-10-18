@@ -282,20 +282,19 @@ class SecurityService @Autowired constructor(private val jwtEncoder: JwtEncoder,
         try {
             val idToken: GoogleIdToken? = verifier.verify(idTokenString)
             if (idToken !== null) {
-                val payload: IdToken.Payload = idToken.payload
+                val googleData: IdToken.Payload = idToken.payload
 
-                // Print user identifier
-                val userId: String = payload.subject
+                val userId: String = googleData.subject
 
                 return GoogleAccount(
                         userId = userId,
-                        email = payload["email"] as String,
-                        emailVerified = payload["email_verified"] as Boolean,
-                        name = payload["name"] as String,
-                        pictureUrl = payload["picture"] as String,
-                        locale = payload["locale"] as String,
-                        familyName = payload["family_name"] as String,
-                        givenName = payload["given_name"] as String,
+                        email = googleData["email"] as String,
+                        emailVerified = googleData["email_verified"] as Boolean,
+                        name = googleData["name"] as String,
+                        pictureUrl = googleData["picture"] as String,
+                        locale = googleData["locale"] as String,
+                        familyName = googleData["family_name"] as String,
+                        givenName = googleData["given_name"] as String,
                 )
             }
         } catch (e: Exception) {

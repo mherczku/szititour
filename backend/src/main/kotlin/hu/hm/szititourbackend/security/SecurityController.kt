@@ -8,7 +8,6 @@ import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.LoginData
 import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.extramodel.Response
-import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_DELETE_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_GOOGLE_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_PASSWORD_TOKEN
 import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN
@@ -16,7 +15,6 @@ import hu.hm.szititourbackend.security.SecurityService.Companion.HEADER_TOKEN_ID
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.PasswordUtils
-import hu.hm.szititourbackend.util.Utils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
@@ -112,8 +110,8 @@ class SecurityController(private val teamService: TeamService, private val secur
         if (credentials.email.isNullOrEmpty() || credentials.password.isNullOrEmpty()) {
             throw CustomException("Email or password is empty", HttpStatus.BAD_REQUEST, MessageConstants.EMPTY_CREDENTIALS)
         }
-        if (Utils.validateEmail(credentials.email)) {
-            if (Utils.validatePassword(credentials.password)) {
+        if (PasswordUtils.validateEmail(credentials.email)) {
+            if (PasswordUtils.validatePassword(credentials.password)) {
                 try {
 
                     teamService.addTeam(

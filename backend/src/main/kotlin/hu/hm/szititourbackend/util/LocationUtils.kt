@@ -11,8 +11,6 @@ object LocationUtils {
 
     /**
      * Calculate distance between two points in latitude and longitude.
-     * Uses Haversine method as its base.
-     *
      * lat1, lon1 Start point lat2, lon2
      * @returns Distance in Meters
      */
