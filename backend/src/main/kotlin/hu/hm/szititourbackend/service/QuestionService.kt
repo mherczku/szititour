@@ -5,7 +5,7 @@ import hu.hm.szititourbackend.dto.QuestionDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.QuestionRepository
 import hu.hm.szititourbackend.util.MessageConstants
-import hu.hm.szititourbackend.util.Utils
+import hu.hm.szititourbackend.util.ImgUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -22,12 +22,12 @@ class QuestionService @Autowired constructor(
     fun addQuestionToPlaceWithImage(questionDto: QuestionDto, file: MultipartFile): Question {
         var imagePath = ""
         return try {
-            imagePath = Utils.saveImage(file, Utils.imageDirectoryQuestionsName)
+            imagePath = ImgUtils.saveImage(file, ImgUtils.imageDirectoryQuestionsName)
             questionDto.img = imagePath
             val addedQuestion = addQuestionToPlace(questionDto)
             addedQuestion
         } catch (e: Exception) {
-            Utils.deleteImage(imagePath)
+            ImgUtils.deleteImage(imagePath)
             throw e
         }
     }
@@ -65,12 +65,12 @@ class QuestionService @Autowired constructor(
     fun updateQuestionWithImage(questionDto: QuestionDto, file: MultipartFile): Question {
         var imagePath = ""
         return try {
-            imagePath = Utils.saveImage(file, Utils.imageDirectoryQuestionsName, questionDto.img)
+            imagePath = ImgUtils.saveImage(file, ImgUtils.imageDirectoryQuestionsName, questionDto.img)
             questionDto.img = imagePath
             val updated = updateQuestion(questionDto)
             updated
         } catch (e: Exception) {
-            Utils.deleteImage(imagePath)
+            ImgUtils.deleteImage(imagePath)
             throw e
         }
     }
@@ -86,7 +86,7 @@ class QuestionService @Autowired constructor(
 
     fun deleteQuestionById(id: Int) {
         val question = getQuestionById(id)
-        Utils.deleteImage(question.img)
+        ImgUtils.deleteImage(question.img)
         return questionRepository.deleteById(id)
     }
 }

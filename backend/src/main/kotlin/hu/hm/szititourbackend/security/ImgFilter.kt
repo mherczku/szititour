@@ -66,17 +66,17 @@ class ImgPropertyFilter : OncePerRequestFilter() {
                 if ("img" == fieldName) {
                     val value = fieldValue.asText()
                     if(!value.contains("https") && !value.contains("resToken") && value.isNotBlank()) {
-                        (node as ObjectNode).set<JsonNode>(fieldName, TextNode(securityTokenService?.genImgUrl(imagePath = value, "-1")))
+                        (node as ObjectNode).set<JsonNode>(fieldName, TextNode(securityTokenService?.genImgUrl(imagePath = value)))
                         modified = true
                     }
                 } else {
-                    // Recursively traverse the field's value
+                    // Recursively on the fields
                     modified = (traverseJsonNode(fieldValue) || modified)
                 }
             }
         } else if (node.isArray) {
             for (arrayElement in node) {
-                // Recursively traverse each element in the array
+                // Recursively on each element
                 modified = (traverseJsonNode(arrayElement) || modified)
             }
         }

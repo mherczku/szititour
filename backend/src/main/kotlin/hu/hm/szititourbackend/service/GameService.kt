@@ -5,7 +5,7 @@ import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.GameRepository
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.util.MessageConstants
-import hu.hm.szititourbackend.util.Utils
+import hu.hm.szititourbackend.util.ImgUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -32,7 +32,7 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
     fun addGameWithImage(newGame: Game, file: MultipartFile): Game {
         val addedGame = addGame(newGame)
         try {
-            val imagePath = Utils.saveImage(file, Utils.imageDirectoryGamesName)
+            val imagePath = ImgUtils.saveImage(file, ImgUtils.imageDirectoryGamesName)
             addedGame.img = imagePath
             return updateGame(addedGame)
         } catch (ex: Exception) {
@@ -56,7 +56,7 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
 
     fun updateGameWithImage(game: Game, file: MultipartFile): Game {
         val updated = updateGame(game)
-        val imagePath = Utils.saveImage(file, Utils.imageDirectoryGamesName, updated.img)
+        val imagePath = ImgUtils.saveImage(file, ImgUtils.imageDirectoryGamesName, updated.img)
         updated.img = imagePath
         return updateGame(updated)
     }
@@ -73,7 +73,7 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
 
     fun deleteGameById(id: Int) {
         val game = getGameById(id)
-        Utils.deleteImage(game.img)
+        ImgUtils.deleteImage(game.img)
         return gameRepository.deleteById(id)
     }
 

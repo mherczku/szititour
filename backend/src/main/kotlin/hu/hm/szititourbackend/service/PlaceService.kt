@@ -6,7 +6,7 @@ import hu.hm.szititourbackend.dto.convertToQuestions
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.PlaceRepository
 import hu.hm.szititourbackend.util.MessageConstants
-import hu.hm.szititourbackend.util.Utils
+import hu.hm.szititourbackend.util.ImgUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -22,11 +22,11 @@ class PlaceService @Autowired constructor(
     fun addPlaceToGameWithImage(placeDto: PlaceDto, file: MultipartFile): Place {
         var imagePath = ""
         return try {
-            imagePath = Utils.saveImage(file, Utils.imageDirectoryPlacesName)
+            imagePath = ImgUtils.saveImage(file, ImgUtils.imageDirectoryPlacesName)
             placeDto.img = imagePath
             addPlaceToGame(placeDto)
         } catch (e: Exception) {
-            Utils.deleteImage(imagePath)
+            ImgUtils.deleteImage(imagePath)
             throw e
         }
     }
@@ -64,12 +64,12 @@ class PlaceService @Autowired constructor(
         val currentPlace = getPlaceById(placeDto.id)
         var imagePath = ""
         return try {
-            imagePath = Utils.saveImage(file, Utils.imageDirectoryPlacesName, currentPlace.img)
+            imagePath = ImgUtils.saveImage(file, ImgUtils.imageDirectoryPlacesName, currentPlace.img)
             placeDto.img = imagePath
             val updated = updatePlace(placeDto, true)
             updated
         } catch (e: Exception) {
-            Utils.deleteImage(imagePath)
+            ImgUtils.deleteImage(imagePath)
             throw e
         }
     }
@@ -88,7 +88,7 @@ class PlaceService @Autowired constructor(
 
     fun deletePlaceById(id: Int) {
         val place = getPlaceById(id)
-        Utils.deleteImage(place.img)
+        ImgUtils.deleteImage(place.img)
         return placeRepository.deleteById(id)
     }
 }

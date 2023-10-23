@@ -312,8 +312,6 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
                 .expiresAt(now.plusSeconds(JWT_TOKEN_VALIDITY_1MIN.toLong()))
                 .subject(teamId)
                 .claim(CLAIM_TYPE, CLAIM_TYPE_RES_TOKEN)
-                //.claim(CLAIM_USERNAME, team.email)
-                //.claim(CLAIM_ROLE, team.role)
                 .claim(CLAIM_RES_ID, resourceId)
                 .build()
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).tokenValue
@@ -352,8 +350,8 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
         }
     }
 
-    fun genImgUrl(imagePath: String, teamId: String): String {
-        val token = generateResourceToken(teamId, imagePath)
+    fun genImgUrl(imagePath: String): String {
+        val token = generateResourceToken("-1", imagePath)
         return "images?img=$imagePath&&resToken=$token"
     }
 

@@ -18,7 +18,7 @@ import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.PasswordUtils
 import hu.hm.szititourbackend.util.PasswordUtils.encryptPassword
 import hu.hm.szititourbackend.util.PasswordUtils.generatePassword
-import hu.hm.szititourbackend.util.Utils
+import hu.hm.szititourbackend.util.ImgUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -120,7 +120,7 @@ class TeamService @Autowired constructor(private val securityTokenService: Secur
 
     fun deleteTeamById(id: Int) {
         val team = getTeamById(id)
-        Utils.deleteImage(team.img)
+        ImgUtils.deleteImage(team.img)
         return teamRepository.deleteById(id)
     }
 
@@ -247,7 +247,7 @@ class TeamService @Autowired constructor(private val securityTokenService: Secur
 
     fun updateTeamImage(teamId: Int, img: MultipartFile): Team {
         val team = getTeamById(teamId)
-        val imagePath = Utils.saveImage(img, Utils.imageDirectoryTeamsName, team.img)
+        val imagePath = ImgUtils.saveImage(img, ImgUtils.imageDirectoryTeamsName, team.img)
         team.img = imagePath
         return updateTeam(team, true)
     }

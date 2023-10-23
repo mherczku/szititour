@@ -4,7 +4,7 @@ import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_RESOURCE_TOKEN
 import hu.hm.szititourbackend.util.MessageConstants
-import hu.hm.szititourbackend.util.Utils
+import hu.hm.szititourbackend.util.ImgUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.UrlResource
 import org.springframework.http.HttpStatus
@@ -41,7 +41,7 @@ class ResourceController @Autowired constructor(
 
             val paths = imagePath.split('-')
 
-            val directory = Utils.getImageDirectoryFromName(paths[0])
+            val directory = ImgUtils.getImageDirectoryFromName(paths[0])
 
             if (directory == "") {
                 throw CustomException("Image resource not found - directory not exist", HttpStatus.BAD_REQUEST, MessageConstants.RESOURCE_DIRECTORY_NOT_FOUND)

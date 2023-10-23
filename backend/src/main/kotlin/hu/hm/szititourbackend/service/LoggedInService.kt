@@ -5,7 +5,7 @@ import hu.hm.szititourbackend.dto.AnswersRequestBody
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.util.MessageConstants
-import hu.hm.szititourbackend.util.Utils
+import hu.hm.szititourbackend.util.ImgUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -112,7 +112,7 @@ class LoggedInService @Autowired constructor(
     fun answerWithImage(questionId: Int, teamId: Int, file: MultipartFile): TeamGameStatus {
         checkApplicationAndGameActive(teamId, null, null, questionId)
         val answer = answerService.findByTeamAndQuestion(teamId, questionId)
-        val imagePath = Utils.saveImage(file, Utils.imageDirectoryTeamsName)
+        val imagePath = ImgUtils.saveImage(file, ImgUtils.imageDirectoryTeamsName)
         return if (answer.isPresent) {
             val updateAnswer = answer.get()
             updateAnswer.img = imagePath

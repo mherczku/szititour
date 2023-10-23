@@ -6,7 +6,7 @@ import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.AnswerRepository
 import hu.hm.szititourbackend.util.MessageConstants
-import hu.hm.szititourbackend.util.Utils
+import hu.hm.szititourbackend.util.ImgUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -64,7 +64,7 @@ class AnswerService @Autowired constructor(private val answerRepository: AnswerR
 
     fun deleteAnswerById(id: Int) {
         val answer = getAnswerById(id)
-        Utils.deleteImage(answer.img)
+        ImgUtils.deleteImage(answer.img)
         return answerRepository.deleteById(id)
     }
 
