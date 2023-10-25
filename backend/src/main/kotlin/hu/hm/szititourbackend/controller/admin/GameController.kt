@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.controller
+package hu.hm.szititourbackend.controller.admin
 
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.convertToDto
@@ -22,13 +22,6 @@ import java.sql.Timestamp
 class GameController @Autowired constructor(private val gameService: GameService) {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
-
-    /*@PostMapping()
-    fun addGame(@RequestBody game: Game): ResponseEntity<GameDto> {
-        logger.debug("Add new game ${game.title}")
-        val newGame = gameService.addGame(game)
-        return ResponseEntity(newGame.convertToDto(), HttpStatus.CREATED)
-    }*/
 
     @PostMapping("/image")
     fun addGameWithImage(
@@ -116,7 +109,6 @@ class GameController @Autowired constructor(private val gameService: GameService
 
         return ResponseEntity(updatedGame.convertToDto(), HttpStatus.OK)
     }
-
 
     @DeleteMapping("/{id}")
     fun deleteGameById(@PathVariable id: Int): ResponseEntity<Nothing> {

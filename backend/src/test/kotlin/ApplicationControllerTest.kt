@@ -1,4 +1,4 @@
-import hu.hm.szititourbackend.controller.ApplicationController
+import hu.hm.szititourbackend.controller.admin.ApplicationController
 import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.repository.ApplicationRepository
 import hu.hm.szititourbackend.service.ApplicationService

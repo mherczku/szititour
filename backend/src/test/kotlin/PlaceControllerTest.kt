@@ -1,4 +1,4 @@
-import hu.hm.szititourbackend.controller.PlaceController
+import hu.hm.szititourbackend.controller.admin.PlaceController
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.Place
 import hu.hm.szititourbackend.repository.GameRepository
@@ -16,7 +16,6 @@ import org.mockito.Mockito.*
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.http.HttpStatus
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import java.util.*
 
 

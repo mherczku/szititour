@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.controller
+package hu.hm.szititourbackend.controller.user
 
 import hu.hm.szititourbackend.datamodel.Answer
 import hu.hm.szititourbackend.datamodel.convertToActiveDto

@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.controller
+package hu.hm.szititourbackend.controller.admin
 import hu.hm.szititourbackend.datamodel.Answer
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.dto.AnswerDto
@@ -44,12 +44,6 @@ class AnswerController @Autowired constructor(private val answerService: AnswerS
         logger.debug("Get all answers")
         val answers: MutableList<Answer> = answerService.getAllAnswers()
         return ResponseEntity(answers.convertToDto(), HttpStatus.OK)
-    }
-
-    @PutMapping
-    fun updateAnswer(@RequestBody answer: Answer): ResponseEntity<AnswerDto> {
-        logger.debug("Update answer ${answer.id}")
-        return ResponseEntity(answerService.updateAnswer(answer).convertToDto(), HttpStatus.OK)
     }
 
     @DeleteMapping("/{id}")

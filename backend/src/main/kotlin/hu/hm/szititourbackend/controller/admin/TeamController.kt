@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.controller
+package hu.hm.szititourbackend.controller.admin
 
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
@@ -21,13 +21,6 @@ class TeamController @Autowired constructor(private val teamService: TeamService
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    /*@PostMapping()
-    fun addTeam(@RequestBody team: Team): ResponseEntity<TeamDto> {
-        logger.debug("Add team ${team.name}}")
-        val newTeam = teamService.addTeam(team)
-        return ResponseEntity(newTeam.convertToDto(), HttpStatus.CREATED)
-    }*/
-
     @GetMapping("/{id}")
     fun getTeamById(@PathVariable id: Int): ResponseEntity<TeamDto?> {
         logger.debug("Get team by id ${id}")
@@ -41,12 +34,6 @@ class TeamController @Autowired constructor(private val teamService: TeamService
         val teams: MutableList<Team> = teamService.getAllTeam()
         return ResponseEntity(teams.convertToDto(), HttpStatus.OK)
     }
-
-    /*@PutMapping
-    fun updateTeam(@RequestBody team: Team): ResponseEntity<TeamDto> {
-        logger.debug("Update team ${team.id}")
-        return ResponseEntity(teamService.updateTeam(team).convertToDto(), HttpStatus.OK)
-    }*/
 
     @DeleteMapping("/{id}")
     fun deleteTeamById(@PathVariable id: Int): ResponseEntity<Nothing> {

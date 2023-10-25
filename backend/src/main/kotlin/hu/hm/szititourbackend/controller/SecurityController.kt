@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.security
+package hu.hm.szititourbackend.controller
 
 import hu.hm.szititourbackend.datamodel.ClientData
 import hu.hm.szititourbackend.datamodel.Team
@@ -8,6 +8,7 @@ import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.extramodel.LoginData
 import hu.hm.szititourbackend.extramodel.LoginResponse
 import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_GOOGLE_TOKEN
 import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_PASSWORD_TOKEN
 import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_TOKEN

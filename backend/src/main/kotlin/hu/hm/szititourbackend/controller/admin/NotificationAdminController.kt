@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.controller
+package hu.hm.szititourbackend.controller.admin
 
 import hu.hm.szititourbackend.extramodel.DirectNotification
 import hu.hm.szititourbackend.extramodel.Response

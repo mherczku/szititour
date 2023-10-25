@@ -1,4 +1,4 @@
-import hu.hm.szititourbackend.controller.TeamController
+import hu.hm.szititourbackend.controller.admin.TeamController
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.repository.*
 import hu.hm.szititourbackend.security.SecurityTokenService

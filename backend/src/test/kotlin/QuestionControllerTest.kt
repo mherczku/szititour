@@ -1,4 +1,4 @@
-import hu.hm.szititourbackend.controller.QuestionController
+import hu.hm.szititourbackend.controller.admin.QuestionController
 import hu.hm.szititourbackend.datamodel.Place
 import hu.hm.szititourbackend.datamodel.Question
 import hu.hm.szititourbackend.repository.*

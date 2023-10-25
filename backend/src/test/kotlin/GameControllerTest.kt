@@ -1,4 +1,4 @@
-import hu.hm.szititourbackend.controller.GameController
+import hu.hm.szititourbackend.controller.admin.GameController
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.TeamGameStatus
 import hu.hm.szititourbackend.repository.GameRepository

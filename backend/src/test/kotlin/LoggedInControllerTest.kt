@@ -1,4 +1,4 @@
-import hu.hm.szititourbackend.controller.LoggedInController
+import hu.hm.szititourbackend.controller.user.LoggedInController
 import hu.hm.szititourbackend.datamodel.*
 import hu.hm.szititourbackend.dto.AnswersRequestBody
 import hu.hm.szititourbackend.dto.QuestionAnswer

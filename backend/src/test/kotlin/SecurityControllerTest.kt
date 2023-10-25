@@ -3,7 +3,7 @@ import hu.hm.szititourbackend.dto.TeamPasswordUpdateDto
 import hu.hm.szititourbackend.extramodel.LoginData
 import hu.hm.szititourbackend.extramodel.VerificationResponse
 import hu.hm.szititourbackend.repository.*
-import hu.hm.szititourbackend.security.SecurityController
+import hu.hm.szititourbackend.controller.SecurityController
 import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.service.*
 import org.junit.jupiter.api.Assertions.assertEquals

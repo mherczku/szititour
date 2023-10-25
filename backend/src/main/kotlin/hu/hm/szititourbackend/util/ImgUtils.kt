@@ -82,20 +82,12 @@ object ImgUtils {
             val newFileName = RandomString.make(8)
             val fileNameAndPath: Path = Paths.get(directoryToSavePath, "$newFileName.$extension")
             val newFile = fileNameAndPath.toFile()
-            //val tempPath: Path = Paths.get("images/temp")
-            //val tempFile = kotlin.io.path.createTempFile(directory = tempPath).toFile()
-
             try {
-                //Files.write(tempFile.toPath(), file.bytes)
                 Files.write(newFile.toPath(), file.bytes)
-                //ImageCompressor.compressImage(tempFile, newFile)
-                //tempFile.delete()
             } catch(ex: Exception) {
                 newFile.delete()
-                //tempFile.delete()
-                throw CustomException("This png does not support compression, please try with another or use jpg", HttpStatus.BAD_REQUEST, MessageConstants.IMG_COMPRESSION_NOT_SUPPORTED)
+                throw CustomException("Error while saving img", HttpStatus.BAD_REQUEST, MessageConstants.IMG_SAVE_FAILED)
             }
-
             imagePath = "$directoryToSaveName-$newFileName.$extension"
         } else {
             throw CustomException("Image format must be png or jpg", HttpStatus.BAD_REQUEST, MessageConstants.IMG_FORMAT_NOT_SUPPORTED)

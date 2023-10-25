@@ -1,4 +1,4 @@
-import hu.hm.szititourbackend.controller.AnswerController
+import hu.hm.szititourbackend.controller.admin.AnswerController
 import hu.hm.szititourbackend.datamodel.Answer
 import hu.hm.szititourbackend.repository.AnswerRepository
 import hu.hm.szititourbackend.service.AnswerService
