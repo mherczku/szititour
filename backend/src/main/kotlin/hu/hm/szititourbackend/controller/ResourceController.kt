@@ -3,18 +3,13 @@ package hu.hm.szititourbackend.controller
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_RESOURCE_TOKEN
+import hu.hm.szititourbackend.service.ResourceService
 import hu.hm.szititourbackend.util.MessageConstants
-import hu.hm.szititourbackend.util.ImgUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.UrlResource
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.*
-import java.io.File
-import java.nio.file.Path
-import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -22,6 +17,7 @@ import org.slf4j.LoggerFactory
 @RequestMapping("/resources")
 class ResourceController @Autowired constructor(
         private val securityTokenService: SecurityTokenService,
+        private val resourceService: ResourceService
 ) {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
@@ -38,35 +34,11 @@ class ResourceController @Autowired constructor(
         logger.debug("Get resource $imagePath by user ${verification.teamId}")
 
         if (verification.verified) {
-
-            val paths = imagePath.split('-')
-
-            val directory = ImgUtils.getImageDirectoryFromName(paths[0])
-
-            if (directory == "") {
-                throw CustomException("Image resource not found - directory not exist", HttpStatus.BAD_REQUEST, MessageConstants.RESOURCE_DIRECTORY_NOT_FOUND)
-            }
-
-            val filename = paths[1]
-            val extension = StringUtils.getFilenameExtension(imagePath)
-            val path: Path = Paths.get("$directory/$filename")
-
-            val image = File(path.toUri())
-            if (!image.exists()) {
-                throw CustomException("Image not found", HttpStatus.NOT_FOUND, MessageConstants.RESOURCE_IMG_NOT_FOUND)
-            }
-
-            val urlRes = UrlResource(path.toUri())
-            val contentType: MediaType = if (extension == "jpg") MediaType.IMAGE_JPEG else MediaType.IMAGE_PNG
-
-            return ResponseEntity.ok()
-                    .contentType(contentType)
-                    .body(urlRes)
+            return this.resourceService.getResource(imagePath)
         }
         else {
             throw CustomException("Verification unsuccessful", HttpStatus.FORBIDDEN, MessageConstants.VERIFICATION_FAILED)
         }
     }
-
 
 }
