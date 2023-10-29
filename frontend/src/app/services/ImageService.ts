@@ -6,7 +6,7 @@ import { Observable, ReplaySubject } from "rxjs";
 export class ImageService {
 
   images = new Map<string, Blob>();
-  loader = "assets/svg/loader.svg";
+  private readonly loader = "assets/svg/loader.svg";
 
   getImageUrl(src: string): Observable<string> {
     const resToken = src.split("&&resToken=")[1];
