@@ -38,7 +38,8 @@ class SecurityControllerTest {
     @BeforeEach
     fun setUp() {
         val teamService = TeamService(securityTokenService, teamRepository, statusRepository, emailService)
-        this.controller = SecurityController(teamService, securityTokenService)
+        val service = SecurityService(teamService, securityTokenService)
+        this.controller = SecurityController(service, securityTokenService)
     }
 
     @Test

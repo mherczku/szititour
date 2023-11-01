@@ -44,7 +44,7 @@ import java.util.stream.Collectors
 @Configuration
 @EnableWebSecurity(debug = false)
 @EnableMethodSecurity
-class SecurityConfig2(
+class SecurityConfig(
         private val securityUserDetailService: SecurityUserDetailService,
         private val rsaKeyProperties: RsaKeyProperties
 ) {
