@@ -10,16 +10,16 @@
 
   <div class="right">
     <img (click)="ngRok()" *ngIf="!$isNgRok()" class="btn-icon mobile-none disableSelectAndTap" src="assets/svg/warning.svg" alt="Warning">
-    <img routerLink="/admin/notification" *ngIf="$isAdmin()" class="btn-icon mobile-none disableSelectAndTap" src="assets/svg/notification-plus.svg" alt="Notification-manager">
-    <a routerLink="/user/profile" *ngIf="$isLoggedIn()" class="btn-profile disableSelectAndTap"></a>
-    <button (click)="toggleNoti($event)" class="btn-notification hasNew disableSelectAndTap" [class.hasNew]="$hasNewNoti()"></button>
+    <img title="Push értesítés" routerLink="/admin/notification" *ngIf="$isAdmin()" class="btn-icon mobile-none disableSelectAndTap" src="assets/svg/notification-plus.svg" alt="Notification-manager">
+    <a title="Profil" routerLink="/user/profile" *ngIf="$isLoggedIn()" class="btn-profile disableSelectAndTap"></a>
+    <button title="Értesítések" (click)="toggleNoti($event)" class="btn-notification hasNew disableSelectAndTap" [class.hasNew]="$hasNewNoti()"></button>
     <div class="flex flex-row mobile:hidden tablet:block">
 
       <a class="btn-simple" *ngIf="!$isLoggedIn()" routerLink="/auth/login">Bejelentkezés</a>
       <button bold="Kijelentkezés" class="btn-hover-bold" (click)="logout()" *ngIf="$isLoggedIn()">Kijelentkezés</button>
     </div>
 
-    <div class="hidden z-navbar-hamburger-container mobile:block relative disableSelectAndTap">
+    <div class="hidden z-navbar-hamburger-container mobile:block relative disableSelectAndTap" title="Menü">
       <div class="nav-container">
         <input [ngModel]="$isMobileMenuOpen()" (ngModelChange)="changeIsMobileMenuOpen($event)" class="checkbox"
                type="checkbox"/>
