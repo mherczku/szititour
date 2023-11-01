@@ -63,8 +63,8 @@ class LoggedInService @Autowired constructor(
         if (teamService.hasTeamApplication(teamId, gameId)) {
             throw CustomException("This Team has an application already", HttpStatus.BAD_REQUEST, MessageConstants.TEAM_ALREADY_APPLIED)
         }
-        val newApplication = applicationService.createApplication(gameId, teamId)
-        return newApplication.game
+        applicationService.createApplication(gameId, teamId)
+        return gameService.getGameById(gameId)
     }
 
     fun cancelApplicationForGame(teamId: Int, gameId: Int): Game {
