@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.dto
+package hu.hm.szititourbackend.dto.request
 
 import hu.hm.szititourbackend.datamodel.Answer
 

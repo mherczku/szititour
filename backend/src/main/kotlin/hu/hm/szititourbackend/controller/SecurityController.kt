@@ -1,11 +1,11 @@
 package hu.hm.szititourbackend.controller
 
 import hu.hm.szititourbackend.datamodel.ClientData
-import hu.hm.szititourbackend.dto.TeamPasswordUpdateDto
+import hu.hm.szititourbackend.dto.response.TeamPasswordUpdateDto
 import hu.hm.szititourbackend.exception.CustomException
-import hu.hm.szititourbackend.extramodel.LoginData
-import hu.hm.szititourbackend.extramodel.LoginResponse
-import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.dto.request.RegisterRequest
+import hu.hm.szititourbackend.dto.response.LoginResponse
+import hu.hm.szititourbackend.dto.response.Response
 import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_GOOGLE_TOKEN
 import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_PASSWORD_TOKEN
@@ -70,7 +70,7 @@ class SecurityController(private val securityService: SecurityService, private v
     }
 
     @PostMapping("register")
-    fun register(@RequestBody credentials: LoginData): ResponseEntity<Response> {
+    fun register(@RequestBody credentials: RegisterRequest): ResponseEntity<Response> {
         logger.debug("Register for ${credentials.name}")
         return ResponseEntity(securityService.register(credentials), HttpStatus.CREATED)
     }

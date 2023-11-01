@@ -1,7 +1,7 @@
 package hu.hm.szititourbackend.datamodel
 
-import hu.hm.szititourbackend.dto.QuestionDto
-import hu.hm.szititourbackend.dto.QuestionDtoNoAnswers
+import hu.hm.szititourbackend.dto.response.QuestionDto
+import hu.hm.szititourbackend.dto.response.QuestionDtoNoAnswers
 import hu.hm.szititourbackend.enum.QuestionType
 import javax.persistence.*
 

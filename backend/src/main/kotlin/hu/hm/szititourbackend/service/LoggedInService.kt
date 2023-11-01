@@ -1,7 +1,7 @@
 package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.datamodel.*
-import hu.hm.szititourbackend.dto.AnswersRequestBody
+import hu.hm.szititourbackend.dto.request.AnswersRequestBody
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.util.MessageConstants

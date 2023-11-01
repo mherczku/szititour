@@ -1,9 +1,8 @@
 package hu.hm.szititourbackend.datamodel
 
-import hu.hm.szititourbackend.dto.AnswerDto
-import hu.hm.szititourbackend.dto.PlaceStatusDto
-import hu.hm.szititourbackend.dto.QAnswers
-import hu.hm.szititourbackend.dto.TeamGameStatusDto
+import hu.hm.szititourbackend.dto.response.AnswerDto
+import hu.hm.szititourbackend.dto.response.PlaceStatusDto
+import hu.hm.szititourbackend.dto.response.TeamGameStatusDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.http.HttpStatus

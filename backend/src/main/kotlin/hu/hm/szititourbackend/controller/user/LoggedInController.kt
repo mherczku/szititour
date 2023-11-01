@@ -4,8 +4,8 @@ import hu.hm.szititourbackend.datamodel.Answer
 import hu.hm.szititourbackend.datamodel.convertToActiveDto
 import hu.hm.szititourbackend.datamodel.convertToBasicDto
 import hu.hm.szititourbackend.datamodel.convertToDto
-import hu.hm.szititourbackend.dto.*
-import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.dto.request.AnswersRequestBody
+import hu.hm.szititourbackend.dto.response.*
 import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.service.*
 import hu.hm.szititourbackend.util.MessageConstants

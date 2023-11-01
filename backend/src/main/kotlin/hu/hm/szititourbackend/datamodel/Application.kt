@@ -1,6 +1,6 @@
 package hu.hm.szititourbackend.datamodel
 
-import hu.hm.szititourbackend.dto.ApplicationDto
+import hu.hm.szititourbackend.dto.response.ApplicationDto
 import java.sql.Timestamp
 import java.time.Instant
 import javax.persistence.*

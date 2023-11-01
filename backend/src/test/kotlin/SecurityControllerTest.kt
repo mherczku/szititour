@@ -1,6 +1,6 @@
 import hu.hm.szititourbackend.datamodel.*
-import hu.hm.szititourbackend.dto.TeamPasswordUpdateDto
-import hu.hm.szititourbackend.extramodel.LoginData
+import hu.hm.szititourbackend.dto.response.TeamPasswordUpdateDto
+import hu.hm.szititourbackend.dto.request.RegisterRequest
 import hu.hm.szititourbackend.extramodel.VerificationResponse
 import hu.hm.szititourbackend.repository.*
 import hu.hm.szititourbackend.controller.SecurityController
@@ -115,7 +115,7 @@ class SecurityControllerTest {
         `when`(teamRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
         // Act
-        val response = controller.register(LoginData("test@testtest.hu", "Alma1234", "TestTest"))
+        val response = controller.register(RegisterRequest("test@testtest.hu", "Alma1234", "TestTest"))
 
         // Assert
         assertNotNull(response.body)

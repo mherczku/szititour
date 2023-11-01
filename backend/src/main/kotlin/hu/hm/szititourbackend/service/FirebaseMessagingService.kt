@@ -6,9 +6,9 @@ import com.google.firebase.messaging.WebpushConfig
 import com.google.firebase.messaging.WebpushNotification
 import hu.hm.szititourbackend.datamodel.NotiSubscriber
 import hu.hm.szititourbackend.exception.CustomException
-import hu.hm.szititourbackend.extramodel.DirectNotification
-import hu.hm.szititourbackend.extramodel.SubscriptionRequest
-import hu.hm.szititourbackend.extramodel.TopicNotification
+import hu.hm.szititourbackend.dto.request.DirectNotification
+import hu.hm.szititourbackend.dto.request.SubscriptionRequest
+import hu.hm.szititourbackend.dto.request.TopicNotification
 import hu.hm.szititourbackend.repository.NotiSubscriberRepository
 import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.http.HttpStatus

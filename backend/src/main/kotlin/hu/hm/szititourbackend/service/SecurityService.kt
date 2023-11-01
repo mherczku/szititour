@@ -3,11 +3,11 @@ package hu.hm.szititourbackend.service
 import hu.hm.szititourbackend.datamodel.ClientData
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
-import hu.hm.szititourbackend.dto.TeamPasswordUpdateDto
+import hu.hm.szititourbackend.dto.response.TeamPasswordUpdateDto
 import hu.hm.szititourbackend.exception.CustomException
-import hu.hm.szititourbackend.extramodel.LoginData
-import hu.hm.szititourbackend.extramodel.LoginResponse
-import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.dto.request.RegisterRequest
+import hu.hm.szititourbackend.dto.response.LoginResponse
+import hu.hm.szititourbackend.dto.response.Response
 import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.PasswordUtils
@@ -72,7 +72,7 @@ class SecurityService @Autowired constructor(private val teamService: TeamServic
         return LoginResponse(true, "Login Successful", MessageConstants.LOGIN_SUCCESS, team.convertToDto())
     }
 
-    fun register(credentials: LoginData): Response {
+    fun register(credentials: RegisterRequest): Response {
         if (credentials.email.isNullOrEmpty() || credentials.password.isNullOrEmpty()) {
             throw CustomException("Email or password is empty", HttpStatus.BAD_REQUEST, MessageConstants.EMPTY_CREDENTIALS)
         }

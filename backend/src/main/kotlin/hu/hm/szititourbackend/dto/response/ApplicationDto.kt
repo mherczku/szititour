@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.dto
+package hu.hm.szititourbackend.dto.response
 
 import java.sql.Timestamp
 import java.time.Instant

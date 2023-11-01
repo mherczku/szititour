@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.dto
+package hu.hm.szititourbackend.dto.response
 
 import hu.hm.szititourbackend.datamodel.Place
 import hu.hm.szititourbackend.datamodel.Question
@@ -6,14 +6,14 @@ import hu.hm.szititourbackend.enum.QuestionType
 
 class QuestionDto(
 
-    val id: Int = 0,
-    val name: String = "",
-    val type: QuestionType = QuestionType.shortText,
-    val riddle: Boolean = false,
-    var img: String = "",
+        val id: Int = 0,
+        val name: String = "",
+        val type: QuestionType = QuestionType.shortText,
+        val riddle: Boolean = false,
+        var img: String = "",
 
-    val answers: MutableList<AnswerDto> = mutableListOf(),
-    val placeId: Int = 0
+        val answers: MutableList<AnswerDto> = mutableListOf(),
+        val placeId: Int = 0
 
 ) {
     fun convertToQuestion(): Question {

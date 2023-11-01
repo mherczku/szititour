@@ -3,8 +3,8 @@ package hu.hm.szititourbackend.controller.admin
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.datamodel.convertToStatusDto
-import hu.hm.szititourbackend.dto.GameDto
-import hu.hm.szititourbackend.dto.GameWithStatusesDto
+import hu.hm.szititourbackend.dto.response.GameDto
+import hu.hm.szititourbackend.dto.response.GameWithStatusesDto
 import hu.hm.szititourbackend.service.GameService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

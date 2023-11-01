@@ -1,5 +1,5 @@
 package hu.hm.szititourbackend.controller.admin
-import hu.hm.szititourbackend.dto.ApplicationDto
+import hu.hm.szititourbackend.dto.response.ApplicationDto
 import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.exception.CustomException

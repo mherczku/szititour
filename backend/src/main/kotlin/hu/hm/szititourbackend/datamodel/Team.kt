@@ -1,6 +1,6 @@
 package hu.hm.szititourbackend.datamodel
 
-import hu.hm.szititourbackend.dto.TeamDto
+import hu.hm.szititourbackend.dto.response.TeamDto
 import hu.hm.szititourbackend.security.SecurityTokenService.Companion.ROLE_USER
 import java.sql.Timestamp
 import java.time.Instant

@@ -1,7 +1,7 @@
 package hu.hm.szititourbackend.controller.admin
 import hu.hm.szititourbackend.datamodel.Answer
 import hu.hm.szititourbackend.datamodel.convertToDto
-import hu.hm.szititourbackend.dto.AnswerDto
+import hu.hm.szititourbackend.dto.response.AnswerDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.AnswerService
 import hu.hm.szititourbackend.util.MessageConstants

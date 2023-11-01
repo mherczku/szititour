@@ -2,7 +2,7 @@ package hu.hm.szititourbackend.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ObjectWriter
-import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.dto.response.Response
 import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_TOKEN
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.MessageConstants

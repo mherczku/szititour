@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.dto
+package hu.hm.szititourbackend.dto.response
 
 import hu.hm.szititourbackend.enum.QuestionType
 

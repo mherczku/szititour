@@ -1,7 +1,7 @@
 package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.datamodel.Question
-import hu.hm.szititourbackend.dto.QuestionDto
+import hu.hm.szititourbackend.dto.response.QuestionDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.QuestionRepository
 import hu.hm.szititourbackend.util.MessageConstants

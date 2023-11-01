@@ -1,6 +1,6 @@
 package hu.hm.szititourbackend.datamodel
 
-import hu.hm.szititourbackend.dto.AnswerDto
+import hu.hm.szititourbackend.dto.response.AnswerDto
 import javax.persistence.*
 
 @Entity

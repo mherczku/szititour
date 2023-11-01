@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.extramodel
+package hu.hm.szititourbackend.dto.request
 
 abstract class AppNotification(
         open val title: String = "",

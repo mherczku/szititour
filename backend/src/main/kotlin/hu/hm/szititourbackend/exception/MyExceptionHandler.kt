@@ -1,6 +1,6 @@
 package hu.hm.szititourbackend.exception
 
-import hu.hm.szititourbackend.extramodel.Response
+import hu.hm.szititourbackend.dto.response.Response
 import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
@@ -14,7 +14,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.oauth2.jwt.JwtValidationException
 import org.springframework.web.multipart.MaxUploadSizeExceededException
-import javax.naming.SizeLimitExceededException
 
 @ControllerAdvice
 class MyExceptionHandler {

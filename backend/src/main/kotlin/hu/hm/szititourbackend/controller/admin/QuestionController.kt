@@ -2,7 +2,7 @@ package hu.hm.szititourbackend.controller.admin
 
 import hu.hm.szititourbackend.datamodel.Question
 import hu.hm.szititourbackend.datamodel.convertToDto
-import hu.hm.szititourbackend.dto.QuestionDto
+import hu.hm.szititourbackend.dto.response.QuestionDto
 import hu.hm.szititourbackend.enum.QuestionType
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.QuestionService

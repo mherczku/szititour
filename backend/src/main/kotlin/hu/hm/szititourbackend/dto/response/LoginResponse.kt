@@ -1,6 +1,4 @@
-package hu.hm.szititourbackend.extramodel
-
-import hu.hm.szititourbackend.dto.TeamDto
+package hu.hm.szititourbackend.dto.response
 
 
 class LoginResponse(

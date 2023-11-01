@@ -1,4 +1,4 @@
-package hu.hm.szititourbackend.extramodel
+package hu.hm.szititourbackend.dto.response
 
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.util.MessageConstants

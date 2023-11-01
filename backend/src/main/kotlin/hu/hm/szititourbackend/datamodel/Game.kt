@@ -1,6 +1,6 @@
 package hu.hm.szititourbackend.datamodel
 
-import hu.hm.szititourbackend.dto.*
+import hu.hm.szititourbackend.dto.response.*
 import hu.hm.szititourbackend.enum.UserApplicationStatus
 import java.sql.Timestamp
 import java.time.Instant

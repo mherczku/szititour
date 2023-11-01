@@ -1,7 +1,7 @@
-package hu.hm.szititourbackend.extramodel
+package hu.hm.szititourbackend.dto.request
 
 
-class LoginData(
+class RegisterRequest(
     val email: String = "",
     val password: String = "",
     val name: String = ""

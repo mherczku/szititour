@@ -1,8 +1,8 @@
 package hu.hm.szititourbackend.controller.admin
 
-import hu.hm.szititourbackend.extramodel.DirectNotification
-import hu.hm.szititourbackend.extramodel.Response
-import hu.hm.szititourbackend.extramodel.TopicNotification
+import hu.hm.szititourbackend.dto.request.DirectNotification
+import hu.hm.szititourbackend.dto.response.Response
+import hu.hm.szititourbackend.dto.request.TopicNotification
 import hu.hm.szititourbackend.service.FirebaseMessagingService
 import hu.hm.szititourbackend.util.MessageConstants
 import org.slf4j.Logger

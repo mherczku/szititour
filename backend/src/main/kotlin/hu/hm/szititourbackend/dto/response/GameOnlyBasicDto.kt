@@ -1,10 +1,11 @@
-package hu.hm.szititourbackend.dto
+package hu.hm.szititourbackend.dto.response
 
+import hu.hm.szititourbackend.enum.UserApplicationStatus
 import java.sql.Timestamp
 import java.time.Instant
 
 
-class GameActiveDto(
+class GameOnlyBasicDto(
 
     val id: Int = 0,
     val title: String = "",
@@ -14,7 +15,8 @@ class GameActiveDto(
 
     var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
     var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
-    val places: MutableList<PlaceActiveDto> = mutableListOf(),
-    val teamGameStatusDto: TeamGameStatusDto = TeamGameStatusDto()
+
+    var userApplied: UserApplicationStatus = UserApplicationStatus.none,
+    var active: Boolean = false
 
     )

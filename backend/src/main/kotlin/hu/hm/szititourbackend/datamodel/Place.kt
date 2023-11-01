@@ -1,8 +1,8 @@
 package hu.hm.szititourbackend.datamodel
 
-import hu.hm.szititourbackend.dto.PlaceActiveDto
-import hu.hm.szititourbackend.dto.PlaceDto
-import hu.hm.szititourbackend.dto.TeamGameStatusDto
+import hu.hm.szititourbackend.dto.response.PlaceActiveDto
+import hu.hm.szititourbackend.dto.response.PlaceDto
+import hu.hm.szititourbackend.dto.response.TeamGameStatusDto
 import javax.persistence.*
 
 @Entity

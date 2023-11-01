@@ -1,8 +1,8 @@
 package hu.hm.szititourbackend.service
 
 import hu.hm.szititourbackend.datamodel.Place
-import hu.hm.szititourbackend.dto.PlaceDto
-import hu.hm.szititourbackend.dto.convertToQuestions
+import hu.hm.szititourbackend.dto.response.PlaceDto
+import hu.hm.szititourbackend.dto.response.convertToQuestions
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.PlaceRepository
 import hu.hm.szititourbackend.util.MessageConstants

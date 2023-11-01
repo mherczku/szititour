@@ -2,7 +2,7 @@ package hu.hm.szititourbackend.controller.admin
 
 import hu.hm.szititourbackend.datamodel.Team
 import hu.hm.szititourbackend.datamodel.convertToDto
-import hu.hm.szititourbackend.dto.TeamDto
+import hu.hm.szititourbackend.dto.response.TeamDto
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.service.TeamService
 import hu.hm.szititourbackend.util.MessageConstants

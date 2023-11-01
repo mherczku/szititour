@@ -1,9 +1,9 @@
 import hu.hm.szititourbackend.controller.user.LoggedInController
 import hu.hm.szititourbackend.datamodel.*
-import hu.hm.szititourbackend.dto.AnswersRequestBody
-import hu.hm.szititourbackend.dto.QuestionAnswer
-import hu.hm.szititourbackend.dto.TeamPasswordUpdateDto
-import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
+import hu.hm.szititourbackend.dto.request.AnswersRequestBody
+import hu.hm.szititourbackend.dto.request.QuestionAnswer
+import hu.hm.szititourbackend.dto.response.TeamPasswordUpdateDto
+import hu.hm.szititourbackend.dto.response.TeamUpdateProfileDto
 import hu.hm.szititourbackend.extramodel.VerificationResponse
 import hu.hm.szititourbackend.repository.*
 import hu.hm.szititourbackend.security.SecurityTokenService

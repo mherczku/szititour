@@ -3,10 +3,10 @@ package hu.hm.szititourbackend.service
 import hu.hm.szititourbackend.datamodel.Application
 import hu.hm.szititourbackend.datamodel.ClientData
 import hu.hm.szititourbackend.datamodel.Team
-import hu.hm.szititourbackend.dto.TeamPasswordUpdateDto
-import hu.hm.szititourbackend.dto.TeamUpdateProfileDto
+import hu.hm.szititourbackend.dto.response.TeamPasswordUpdateDto
+import hu.hm.szititourbackend.dto.response.TeamUpdateProfileDto
 import hu.hm.szititourbackend.exception.CustomException
-import hu.hm.szititourbackend.extramodel.ContinueGoogleResponse
+import hu.hm.szititourbackend.dto.response.ContinueGoogleResponse
 import hu.hm.szititourbackend.extramodel.GoogleAccount
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
 import hu.hm.szititourbackend.repository.TeamRepository
