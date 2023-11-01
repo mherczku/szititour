@@ -71,9 +71,9 @@ export class UserGameCardComponent {
       }
     } else {
       if(g.userApplied === "accepted") {
-        return "Elfogadva - visszamondás";
+        return "Elfogadva - visszavonás";
       } else if(g.userApplied === "applied") {
-        return "Visszamondás";
+        return "Visszavonás";
       } else if(g.userApplied === "declined"){
         return "Elutasítva";
       } else {
