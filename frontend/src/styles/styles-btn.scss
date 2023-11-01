@@ -22,16 +22,10 @@
   border-radius: 0.25rem;
   font-weight: 600;
   color: white;
-  transition: all;
+  transition: all 200ms;
 
-  &:hover {
+  &:hover:not([disabled]) {
     background: $m-green;
-  }
-
-  &:disabled {
-    &:hover {
-      background: $m-blue;
-    }
   }
 }
 
@@ -39,7 +33,7 @@
   @extend .btn-simple;
   background: #CD2A00;
 
-  &:hover {
+  &:hover:not([disabled]) {
     background: #ed2f02;
   }
 }
@@ -47,7 +41,7 @@
   @extend .btn-simple;
   background: #00c407;
 
-  &:hover {
+  &:hover:not([disabled]) {
     background: #0fbf16;
   }
 }
