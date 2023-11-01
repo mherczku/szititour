@@ -6,7 +6,7 @@ export class LoaderService {
 
   private _$loading = signal(false);
 
-  counter = 0;
+  private counter = 0;
 
   $loading = this._$loading.asReadonly();
 

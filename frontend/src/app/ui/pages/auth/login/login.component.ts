@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
 
   handleCredentialResponse(response: any) {
     this.authService.continueWithGoogle(response.credential).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
-
   }
 
   login() {
