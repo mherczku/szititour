@@ -28,7 +28,7 @@ class SzititourBackendApplication {
 
     /*@Bean
     fun commandLineRunner(teamService: TeamService, gameService: GameService, placeService: PlaceService): CommandLineRunner {
-        return CommandLineRunner { args ->
+        return CommandLineRunner { _ ->
             val testPass = PasswordUtils.encryptPassword("T12345678910")
             val tester =  Team(email= "ta@test.hu", password = testPass, name = "Test Admin")
             val tester2 =  Team(email= "t@test.hu", password = testPass, name = "Test User")

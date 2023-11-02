@@ -4,7 +4,9 @@
     <p *ngIf="answer.questionDtoNoAnswers.riddle" class="bold text-size-base">Rejtvény</p>
   </div>
   <div class="bodyPart">
+    <p class="text-size-base bold">Kérdés:</p>
     <p class="text-size-base">{{answer.questionDtoNoAnswers.name}}</p>
+    <p class="text-size-base bold mt-2">Válasz:</p>
     <div [ngSwitch]="answer.questionDtoNoAnswers.type">
       <p class="text-size-base" *ngSwitchCase="QuestionType.shortText">{{answer.answerText}}</p>
       <p class="text-size-base" *ngSwitchCase="QuestionType.longText">{{answer.answerText}}</p>
@@ -12,7 +14,7 @@
       <p class="text-size-base" *ngSwitchCase="QuestionType.year">{{answer.answerNumber}}</p>
       <img *ngSwitchCase="QuestionType.imgOnly" [src]="answer.img | imgSrc | imgLoader | async">
     </div>
-    <p class="text-size-base">Értékelése: {{answer.correct ?? "Nem értékelt"}}</p>
+    <p class="text-size-base mt-2"><strong>Értékelése: </strong>{{answer.correct ?? "Nem értékelt"}}</p>
     <button class="btn-hover-bold" (click)="$evaluateId.set(answer.id)">Értékelés</button>
   </div>
 

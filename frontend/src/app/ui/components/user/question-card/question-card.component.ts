@@ -72,6 +72,8 @@ export class QuestionCardComponent {
   }
 
   setIsAnswerSameAsStatus() {
+    console.log(this.answerIsSame = !this.currentImgChanged && (this._savedAnswer?.img?.length ?? 0) > 0)
+    console.log(this._savedAnswer)
     switch (this._question.type) {
 
       case QuestionType.shortText:
@@ -87,7 +89,7 @@ export class QuestionCardComponent {
         break;
 
       case QuestionType.imgOnly:
-        this.answerIsSame = !this.currentImgChanged;
+        this.answerIsSame = this.answerIsSame = !this.currentImgChanged && (this._savedAnswer?.img?.length ?? 0) > 0;
         break;
 
       case QuestionType.year:
