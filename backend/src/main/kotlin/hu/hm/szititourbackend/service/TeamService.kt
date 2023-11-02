@@ -138,20 +138,17 @@ class TeamService @Autowired constructor(private val securityTokenService: Secur
     fun updateGameStatusAuto(gameId: Int, theTeam: Team) {
         val gameStatus = theTeam.teamGameStatuses.find { it.game.id == gameId }
         if (gameStatus !== null && gameStatus.game.active) {
-
-            if (gameStatus.placeStatuses.size > gameStatus.nextUnreachedPlaceIndex) {
-                val placeStatus = gameStatus.placeStatuses[gameStatus.nextUnreachedPlaceIndex]
-                val place = gameStatus.game.places.find { it.id == placeStatus.placeId }
-                if (place !== null) {
-                    val distanceInMeter = LocationUtils.getDistance(place.latitude, place.longitude, theTeam.lastLatitude, theTeam.lastLongitude)
-                    if (distanceInMeter <= 50) {
-                        placeStatus.reached = true
-                        gameStatus.nextUnreachedPlaceIndex = gameStatus.nextUnreachedPlaceIndex + 1
-                        placeStatus.reachedAt = Timestamp(System.currentTimeMillis())
-                    }
-                    gameStatus.updatedAt = Timestamp(System.currentTimeMillis())
-                    this.statusRepository.save(gameStatus)
+            val nextPlaceStatus = gameStatus.placeStatuses.find { it.orderNumber == gameStatus.nextUnreachedPlaceIndex }
+            val nextPlace = gameStatus.game.places.find { it.id == nextPlaceStatus?.placeId }
+            if (nextPlace != null && nextPlaceStatus != null) {
+                val distanceInMeter = LocationUtils.getDistance(nextPlace.latitude, nextPlace.longitude, theTeam.lastLatitude, theTeam.lastLongitude)
+                if (distanceInMeter <= 50) {
+                    nextPlaceStatus.reached = true
+                    gameStatus.nextUnreachedPlaceIndex = nextPlaceStatus.orderNumber + 1
+                    nextPlaceStatus.reachedAt = Timestamp(System.currentTimeMillis())
                 }
+                gameStatus.updatedAt = Timestamp(System.currentTimeMillis())
+                this.statusRepository.save(gameStatus)
             }
         }
     }
@@ -254,9 +251,9 @@ class TeamService @Autowired constructor(private val securityTokenService: Secur
 
     fun deleteTeamByUser(deleteToken: String) {
         val verification = securityTokenService.verifyTeamDeleteToken(deleteToken)
-        if(verification.verified) {
+        if (verification.verified) {
             val team = getTeamById(verification.teamId)
-            if(verification.messageCode != team.passwordChangeId) {
+            if (verification.messageCode != team.passwordChangeId) {
                 throw CustomException("Invalid Token PasswordChangeID", HttpStatus.FORBIDDEN, MessageConstants.TEAM_DELETE_TOKEN_INVALID)
             }
             deleteTeamById(team.id)
@@ -298,9 +295,9 @@ class TeamService @Autowired constructor(private val securityTokenService: Secur
 
     fun updateTeamPassword(passwordUpdateDto: TeamPasswordUpdateDto, passwordChangeToken: String): Team {
         val verification = securityTokenService.verifyPasswordChangeToken(passwordChangeToken)
-        if(verification.verified) {
+        if (verification.verified) {
             val team = getTeamById(verification.teamId)
-            if(verification.messageCode != team.passwordChangeId) {
+            if (verification.messageCode != team.passwordChangeId) {
                 throw CustomException("Invalid Token PasswordChangeID", HttpStatus.FORBIDDEN, MessageConstants.PASSWORD_TOKEN_INVALID)
             }
             if (passwordUpdateDto.newPassword.isNotBlank()) {

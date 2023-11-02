@@ -1,7 +1,12 @@
 import hu.hm.szititourbackend.controller.admin.AnswerController
 import hu.hm.szititourbackend.datamodel.Answer
 import hu.hm.szititourbackend.repository.AnswerRepository
+import hu.hm.szititourbackend.repository.TeamGameStatusRepository
+import hu.hm.szititourbackend.repository.TeamRepository
+import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.service.AnswerService
+import hu.hm.szititourbackend.service.EmailService
+import hu.hm.szititourbackend.service.TeamService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
@@ -23,9 +28,22 @@ class AnswerControllerTest {
     @Mock
     lateinit var answerRepository: AnswerRepository
 
+    @Mock
+    private lateinit var teamRepository: TeamRepository
+
+    @Mock
+    private lateinit var securityTokenService: SecurityTokenService
+
+    @Mock
+    private lateinit var statusRepository: TeamGameStatusRepository
+
+    @Mock
+    private lateinit var emailService: EmailService
+
     @BeforeEach
     fun setUp() {
-        val answerService = AnswerService(answerRepository)
+        val teamService = TeamService(securityTokenService, teamRepository, statusRepository, emailService)
+        val answerService = AnswerService(answerRepository, teamService)
         this.answerController = AnswerController(answerService)
     }
 

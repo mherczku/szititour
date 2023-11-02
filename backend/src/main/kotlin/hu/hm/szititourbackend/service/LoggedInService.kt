@@ -92,7 +92,7 @@ class LoggedInService @Autowired constructor(
         } else {
             val statuses = mutableListOf<PlaceStatus>()
             game.places.forEach {
-                statuses.add(PlaceStatus(it.id, false))
+                statuses.add(PlaceStatus(it.id, it.ordernumber, false))
             }
             statuses.firstOrNull()?.reached = true
             val statusNew = TeamGameStatus(
@@ -102,15 +102,13 @@ class LoggedInService @Autowired constructor(
                     updatedAt = Timestamp(System.currentTimeMillis()),
                     placeStatuses = statuses
             )
-            val savedStatus = teamGameStatusRepository.save(statusNew)
-            // TODO REMOVE? teamGameStatusRepository.flush()
-            return savedStatus
+            return teamGameStatusRepository.save(statusNew)
         }
     }
 
 
     fun answerWithImage(questionId: Int, teamId: Int, file: MultipartFile): TeamGameStatus {
-        checkApplicationAndGameActive(teamId, null, null, questionId)
+        val game = checkApplicationAndGameActive(teamId, null, null, questionId)
         val answer = answerService.findByTeamAndQuestion(teamId, questionId)
         val imagePath = ImgUtils.saveImage(file, ImgUtils.imageDirectoryTeamsName)
         return if (answer.isPresent) {
@@ -125,8 +123,8 @@ class LoggedInService @Autowired constructor(
                     img = imagePath,
                     correct = null
             )
-            val gameId = answerService.addAnswer(newAnswer).question.place.game.id
-            getTeamGameStatus(gameId, teamId)
+            answerService.addAnswer(newAnswer)
+            getTeamGameStatus(game.id, teamId)
         }
     }
 
@@ -137,7 +135,7 @@ class LoggedInService @Autowired constructor(
         return getTeamGameStatus(question.place.game.id, teamId)
     }
 
-    private fun checkApplicationAndGameActive(teamId: Int, gameId: Int?, game: Game? = null, questionId: Int? = null) {
+    private fun checkApplicationAndGameActive(teamId: Int, gameId: Int?, game: Game? = null, questionId: Int? = null): Game {
         val theGameId: Int =
                 game?.id ?: gameId ?: questionId?.let { questionService.getQuestionById(it).place.game.id }
                 ?: throw CustomException(
@@ -145,15 +143,16 @@ class LoggedInService @Autowired constructor(
                         HttpStatus.BAD_REQUEST,
                         MessageConstants.GAME_GAMEID_QUESTIONID_NULL
                 )
-
-        if (game == null) {
-            val gameGot = gameService.getGameById(theGameId)
-            checkGameActive(gameGot)
+        var theGame = game
+        if (theGame == null) {
+            theGame = gameService.getGameById(theGameId)
         }
+        checkGameActive(theGame)
         val application = teamService.getTeamsApplicationByTeamId(teamId, theGameId)
         if (application.accepted == null || !application.accepted!!) {
             throw CustomException("Your application is not accepted", HttpStatus.FORBIDDEN, MessageConstants.APPLICATION_NOT_ACCEPTED)
         }
+        return theGame
     }
 
     private fun checkGameActive(game: Game) {

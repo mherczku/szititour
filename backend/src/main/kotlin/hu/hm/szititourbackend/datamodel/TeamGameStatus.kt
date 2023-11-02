@@ -22,7 +22,7 @@ class TeamGameStatus(
 
     @ElementCollection
     var placeStatuses: MutableList<PlaceStatus> = mutableListOf<PlaceStatus>(),
-    var nextUnreachedPlaceIndex: Int = 1,
+    var nextUnreachedPlaceIndex: Int = 2,
 
     @ManyToOne()
     val game: Game = Game(),
@@ -34,6 +34,7 @@ class TeamGameStatus(
 @Embeddable
 class PlaceStatus(
     var placeId: Int = 0,
+    val orderNumber: Int = 0,
     var reached: Boolean = false,
     var reachedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 )

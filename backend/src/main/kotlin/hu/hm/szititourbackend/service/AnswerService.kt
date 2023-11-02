@@ -11,12 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.sql.Timestamp
 import java.util.Optional
 
 @Service
 @Transactional
-class AnswerService @Autowired constructor(private val answerRepository: AnswerRepository){
+class AnswerService @Autowired constructor(private val answerRepository: AnswerRepository, private val teamService: TeamService){
 
     fun createOrUpdateAnswer(answer: Answer, teamId: Int, question: Question): Answer {
         val answerOptional = answerRepository.findByTeamAndQuestion(Team(id = teamId), question = question)
@@ -78,20 +77,15 @@ class AnswerService @Autowired constructor(private val answerRepository: AnswerR
     }
 
     private fun updatePlaceStatus(answer: Answer, isCorrect: Boolean) {
-        val gameStatus = answer.team.teamGameStatuses.find { it.game.id == answer.question.place.game.id }
-        if(gameStatus != null) {
-            val placeStatus = gameStatus.placeStatuses[gameStatus.nextUnreachedPlaceIndex]
-            placeStatus.reached = isCorrect
-            if(isCorrect) {
-                gameStatus.nextUnreachedPlaceIndex = gameStatus.placeStatuses.indexOf(placeStatus) + 1
-            } else {
-                gameStatus.nextUnreachedPlaceIndex = gameStatus.placeStatuses.indexOf(placeStatus)
+        if(isCorrect) {
+            val team = answer.team
+            val nextPlace = answer.question.place.game.places.find { it.ordernumber == answer.question.place.ordernumber + 1 }
+            if(nextPlace != null) {
+                team.lastLatitude = nextPlace.latitude
+                team.lastLongitude = nextPlace.longitude
+                teamService.updateGameStatusAuto(nextPlace.game.id, teamService.updateTeam(team, true))
             }
-            placeStatus.reachedAt = Timestamp(System.currentTimeMillis())
-            gameStatus.updatedAt = Timestamp(System.currentTimeMillis())
         }
-
     }
-
 
 }

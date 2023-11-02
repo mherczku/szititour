@@ -63,7 +63,7 @@ class LoggedInControllerTest {
         val placeService = PlaceService(placeRepository, gameService)
         val applicationService = ApplicationService(applicationRepository)
         val questionService = QuestionService(questionRepository, placeService)
-        val answerService = AnswerService(answerRepository)
+        val answerService = AnswerService(answerRepository, teamService)
         val service = LoggedInService(gameService, statusRepository, teamService, questionService, answerService, applicationService)
         this.controller = LoggedInController(teamService, service)
         authentication = JwtAuthenticationToken(mock(Jwt::class.java), listOf(mock(SimpleGrantedAuthority::class.java)), "1")
