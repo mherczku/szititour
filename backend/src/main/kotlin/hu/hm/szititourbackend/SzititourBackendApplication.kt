@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 
 
 @EnableConfigurationProperties(RsaKeyProperties::class, SzititourProperties::class)
-@SpringBootApplication(/*exclude = [SecurityAutoConfiguration::class]*/)
+@SpringBootApplication
 class SzititourBackendApplication {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
@@ -21,14 +21,11 @@ class SzititourBackendApplication {
         return CommandLineRunner { args ->
             val testPass = PasswordUtils.encryptPassword("T12345678")
             val tester =  Team(email= "ta@test.hu", password = testPass, name = "Test Admin")
-            val tester2 =  Team(email= "tu@test.hu", password = testPass, name = "Test User")
-            //val tester3 =  Team(email= "testerTeam23Autok@test.hu", password = testPass)
+            val tester2 =  Team(email= "t@test.hu", password = testPass, name = "Test User")
             val savedAdmin = teamService.addTeam(tester, true, isTester = true)
             val savedUser = teamService.addTeam(tester2, false, isTester = true)
-            //val savedUser3 = teamService.addTeam(tester3, false, isTester = true)
             logger.debug("tester admin created ${savedAdmin.id}")
             logger.debug("tester user created ${savedUser.id}")
-            //logger.debug("tester user created ${savedUser3.id}")
         }
     }*/
 }

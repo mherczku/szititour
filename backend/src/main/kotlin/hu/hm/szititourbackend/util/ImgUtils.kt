@@ -23,7 +23,6 @@ object ImgUtils {
     const val imageDirectoryGamesName = "games"
     const val imageDirectoryPlacesName = "places"
     const val imageDirectoryQuestionsName = "questions"
-    const val imageDirectoryAnswersName = "answers"
 
 
     fun getImageDirectoryFromName(directoryName: String): String {

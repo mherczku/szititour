@@ -38,8 +38,8 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
         const val ROLE_USER = "ROLE_USER"
         const val ISSUER = "szititour_v1"
         const val JWT_TOKEN_VALIDITY_1MIN = 1 * 1 * 60          // 1 min
-        const val JWT_TOKEN_VALIDITY_1HOUR = 1 * 60 * 60    // 1 hour
-        const val JWT_TOKEN_VALIDITY_1DAY = 24 * 60 * 60     // 1 day
+        const val JWT_TOKEN_VALIDITY_1HOUR = 1 * 60 * 60        // 1 hour
+        const val JWT_TOKEN_VALIDITY_1DAY = 24 * 60 * 60        // 1 day
         const val HEADER_TOKEN = "Authorization"
         const val HEADER_PASSWORD_TOKEN = "passwordToken"
         const val HEADER_DELETE_TOKEN = "deleteToken"
@@ -273,9 +273,8 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
 
     fun verifyGoogleToken(idTokenString: String): GoogleAccount {
 
-        val verifier: GoogleIdTokenVerifier = GoogleIdTokenVerifier.Builder(NetHttpTransport(), GsonFactory()) // Specify the CLIENT_ID of the app that accesses the backend:
-                .setAudience(Collections.singletonList(CLIENT_ID)) // Or, if multiple clients access the backend:
-                //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
+        val verifier: GoogleIdTokenVerifier = GoogleIdTokenVerifier.Builder(NetHttpTransport(), GsonFactory())
+                .setAudience(Collections.singletonList(CLIENT_ID))
                 .build()
 
         // (Receive idTokenString by HTTPS POST)
@@ -331,8 +330,6 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
             if (type != CLAIM_TYPE_RES_TOKEN) {
                 throw CustomException("Bad token type", HttpStatus.FORBIDDEN, MessageConstants.AUTH_INVALID_TOKEN_TYPE)
             }
-            //val role: String = jwt.getClaim(CLAIM_ROLE)
-            //val isAdmin = role == ROLE_ADMIN
             val teamId: Int = jwt.subject.toInt()
             val resourceId: String = jwt.getClaim(CLAIM_RES_ID)
             if (resourceId != requestedResourceId) {
@@ -346,7 +343,6 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
             } else {
                 throw e
             }
-            //VerificationResponse(verified = false, errorMessage = e.localizedMessage)
         }
     }
 

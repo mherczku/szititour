@@ -118,11 +118,6 @@ class SecurityConfig(
 
         val allowedOrigins = listOf(
                 "http://localhost:4200",
-                "http://192.168.100.66:4200",
-                "http://192.168.2.47:4200",
-                "http://192.168.2.73:8082",
-                "http://wildfire.ddns.net:8080",
-                "https://wildfire.ddns.net:8080",
                 "https://mherczku.github.io"
         )
 
