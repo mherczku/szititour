@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.email === "t" || this.email === "tu@test.hu") {
-      this.email = "tu@test.hu";
+      this.email = "t@test.hu";
       this.password = "T12345678910";
     }
     else if (this.email === "ta" || this.email === "ta@test.hu") {
