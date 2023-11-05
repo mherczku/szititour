@@ -13,6 +13,7 @@ export const CONST_MESSAGES = {
     PASSWORD_CHANGED: "Jelszó sikeresen módosítva",
     PASSWORD_CHANGE_EMAIL_SENT: "Jelszó módosításához E-mail kiküldve",
     REGISTER_SUCCESS: "Sikeres regisztráció, Aktiváló E-mail kiküldve",
+    REGISTER_SUCCESS_GOOGLE: "Üdvözlünk a Szititournál",
     SUCCESS: "Siker", // never comes to frontend
     TEAM_DELETE_SUCCESS: "Csapat sikeresen törölve",
     TOPIC_NOTIFICATION_SENT: "Push értesítés sikeresen kiküldve",

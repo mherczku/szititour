@@ -52,7 +52,7 @@ class SecurityService @Autowired constructor(private val teamService: TeamServic
         response.addHeader(SecurityTokenService.HEADER_TOKEN, "Bearer $token")
         response.addHeader(SecurityTokenService.HEADER_TOKEN_ID, client.tokenId)
         if (googleResponse.isCreation) {
-            return LoginResponse(true, "Register successful", MessageConstants.REGISTER_SUCCESS, googleResponse.team.convertToDto())
+            return LoginResponse(true, "Register successful", MessageConstants.REGISTER_SUCCESS_GOOGLE, googleResponse.team.convertToDto())
         }
         return LoginResponse(true, "Login successful", MessageConstants.LOGIN_SUCCESS, googleResponse.team.convertToDto())
 
