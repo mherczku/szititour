@@ -129,7 +129,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
         error: (error) => {
           this.$isConnected.set(false);
-          this.notiService.error(`Chat hiba történt: ${error}`);
+          this.notiService.error(`Chat hiba történt: ${error} (ngrok engedélyezve?)`);
         },
         complete: () => {
           this.$isConnected.set(false);
