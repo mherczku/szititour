@@ -9,7 +9,7 @@
 
 
   <div class="right">
-    <img (click)="ngRok()" *ngIf="!$isNgRok()" class="btn-icon mobile-none disableSelectAndTap" src="assets/svg/warning.svg" alt="Warning">
+    <img (click)="ngRok()" title="NgRok fix" *ngIf="!$isNgRok()" class="btn-icon mobile-none disableSelectAndTap" src="assets/svg/warning.svg" alt="Warning">
     <img title="Push értesítés" routerLink="/admin/notification" *ngIf="$isAdmin()" class="btn-icon mobile-none disableSelectAndTap" src="assets/svg/notification-plus.svg" alt="Notification-manager">
     <a title="Profil" routerLink="/user/profile" *ngIf="$isLoggedIn()" class="btn-profile disableSelectAndTap"></a>
     <button title="Értesítések" (click)="toggleNoti($event)" class="btn-notification hasNew disableSelectAndTap" [class.hasNew]="$hasNewNoti()"></button>

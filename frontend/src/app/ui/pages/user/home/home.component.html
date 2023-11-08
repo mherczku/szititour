@@ -1,7 +1,4 @@
-<!-- <div class="welcome">
-  <p class="text-size-h3">Üdv újra itt {{$profile()?.name}} csapat</p>
-</div> -->
-
+<p class="text-size-lg mx-auto w-fit mt-5" *ngIf="$games().length < 1">Még nincsenek játékok</p>
 <section class="grid-games">
   <app-user-game-card *ngFor="let g of (games | async)" [game]="g"></app-user-game-card>
 </section>

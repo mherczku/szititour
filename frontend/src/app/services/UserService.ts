@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable, Subject, tap } from "rxjs";
+import { Observable, tap } from "rxjs";
 import { Game } from "../types/game";
-import { Team, TeamUpdatePassword, TeamUpdateProfile } from "../types/team";
+import { Team, TeamUpdateProfile } from "../types/team";
 import { AuthService } from "./AuthService";
 import { NetworkResponse } from "../types/network-response";
 

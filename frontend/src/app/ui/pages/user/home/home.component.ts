@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { UserGameCardComponent } from "../../../components/user/cards/user-game-card/user-game-card.component";
 import { UserService } from "../../../../services/UserService";
-import { Observable } from "rxjs";
+import { Observable, tap } from "rxjs";
 import { Game } from "../../../../types/game";
-import { AuthService } from "src/app/services/AuthService";
 
 @Component({
   selector: "app-home",
@@ -18,15 +17,14 @@ import { AuthService } from "src/app/services/AuthService";
 export class HomeComponent implements OnInit {
 
   games!: Observable<Game[]>;
-  $profile = this.authService.$currentTeamR;
-
+  $games: WritableSignal<Game[]> = signal([]);
   constructor(
-    private readonly authService: AuthService,
-    private readonly userService: UserService) {
-  }
+    private readonly userService: UserService) { }
 
   ngOnInit(): void {
-    this.games = this.userService.getGames();
+    this.games = this.userService.getGames().pipe(tap(games => {
+      this.$games.set(games);
+    }));
   }
 
 }

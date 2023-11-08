@@ -7,7 +7,7 @@ import { ButtonsComponent } from "../../../components/buttons/buttons.component"
 import { GamecardComponent } from "../../../components/admin/cards/gamecard/gamecard.component";
 import { ModalModule } from "../../../components/admin/modal/modal.module";
 import { ListsComponent } from "../../../components/admin/lists/lists.component";
-import { NgForOf } from "@angular/common";
+import { CommonModule, NgForOf } from "@angular/common";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Application } from "src/app/types/application";
 
@@ -24,6 +24,7 @@ import { Application } from "src/app/types/application";
     }
   `],
   imports: [
+    CommonModule,
     ButtonsComponent,
     GamecardComponent,
     ModalModule,
