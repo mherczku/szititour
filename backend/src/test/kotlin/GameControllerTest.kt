@@ -116,7 +116,7 @@ class GameControllerTest {
         `when`(repository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
         // Act
-        val response = controller.deactivateGame(1)
+        val response = controller.deactivateGame(1, false)
 
         // Assert
         assertNotNull(response.body)

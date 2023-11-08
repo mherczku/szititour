@@ -3,6 +3,7 @@ package hu.hm.szititourbackend.controller.admin
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.datamodel.convertToStatusDto
+import hu.hm.szititourbackend.dto.request.DirectNotification
 import hu.hm.szititourbackend.dto.response.GameDto
 import hu.hm.szititourbackend.dto.response.GameWithStatusesDto
 import hu.hm.szititourbackend.service.GameService
@@ -77,9 +78,9 @@ class GameController @Autowired constructor(private val gameService: GameService
     }
 
     @PutMapping("deactivate/{id}")
-    fun deactivateGame(@PathVariable("id") gameId: Int): ResponseEntity<GameDto> {
-        logger.debug("Deactivate game by id ${gameId}")
-        return ResponseEntity(gameService.changeActivation(gameId, false).convertToDto(), HttpStatus.OK)
+    fun deactivateGame(@PathVariable("id") gameId: Int, @RequestBody deleting: Boolean): ResponseEntity<GameDto> {
+        logger.debug("Deactivate game by id ${gameId}, deleting statuses: ${deleting}")
+        return ResponseEntity(gameService.changeActivation(gameId, false, deleting).convertToDto(), HttpStatus.OK)
     }
 
     @PutMapping

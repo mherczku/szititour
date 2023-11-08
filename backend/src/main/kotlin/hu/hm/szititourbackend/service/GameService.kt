@@ -4,8 +4,8 @@ import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.GameRepository
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
-import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.ImgUtils
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -77,7 +77,7 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
         return gameRepository.deleteById(id)
     }
 
-    fun changeActivation(gameId: Int, activation: Boolean): Game {
+    fun changeActivation(gameId: Int, activation: Boolean, deleting: Boolean = false): Game {
         val game = getGameById(gameId)
         //* Check places questions for riddles MINMAX 1 on activation
         if (activation) {
@@ -87,12 +87,14 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
                 }
             }
         }
-        //* Delete statuses on deactivation
+        //* Delete statuses on deactivation if deleting true
         if (!activation) {
-            game.teamGameStatuses.forEach {
-                teamGameStatusRepository.deleteById(it.id)
+            if (deleting) {
+                game.teamGameStatuses.forEach {
+                    teamGameStatusRepository.deleteById(it.id)
+                }
+                game.teamGameStatuses.clear()
             }
-            game.teamGameStatuses.clear()
         }
         game.active = activation
         return gameRepository.save(game)
