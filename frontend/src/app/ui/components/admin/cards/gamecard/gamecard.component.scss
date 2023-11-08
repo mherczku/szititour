@@ -16,6 +16,10 @@
   background: red;
   border-radius: 100%;
 
+  &.inactive {
+    background-color: transparent;
+  }
+
   img {
     object-fit: contain;
   }

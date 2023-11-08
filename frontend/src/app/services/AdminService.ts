@@ -177,7 +177,7 @@ export class AdminService {
     return this.http.delete<unknown>(`${this.baseUrl}/questions/${id}`);
   }
 
-  changeGameActivation(gameId: number, activate: boolean): Observable<Game> {
-    return this.http.put<Game>(`${this.baseUrl}/games/${activate ? "activate" : "deactivate"}/${gameId}`, null);
+  changeGameActivation(gameId: number, activate: boolean, deleting = false): Observable<Game> {
+    return this.http.put<Game>(`${this.baseUrl}/games/${activate ? "activate" : "deactivate"}/${gameId}`, deleting);
   }
 }

@@ -45,7 +45,7 @@ export class GamecardComponent {
     return this.$game().applications.filter(e => e.accepted === true).length;
   });
 
-  @Input({required: true}) set game(value: Game) {
+  @Input({ required: true }) set game(value: Game) {
     this.$game.set(value);
   }
   @Output() onEditClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
@@ -86,7 +86,14 @@ export class GamecardComponent {
   changeGameActivation() {
     this.confirmS.confirm(
       {
-        question: `Biztos ${this.$game().active ? "leállítod" : "elindítod"} a játékot? ${this.$game().active ? "Leállítással törlöd az aktív játék állapotát!" : ""}`
+        question: `Biztos ${this.$game().active ? "leállítod" : "elindítod"} a játékot? ${this.$game().active ? 'Ha a játékot szerkeszteni szeretnéd, akkor a "Leállítás + törlés" opciót válaszd!' : ""}`,
+        confirmText: !this.$game().active ? undefined : "Leállítás és törlés",
+        rejectText: !this.$game().active ? undefined : "Sima leállítás"
+      },
+      () => {
+        this.adminService.changeGameActivation(this.$game().id, !this.$game().active, true).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {
+          this.game = res;
+        });
       },
       () => {
         this.adminService.changeGameActivation(this.$game().id, !this.$game().active).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {

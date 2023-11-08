@@ -18,6 +18,7 @@ import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
     styles: [`
     :host {
       width: 100%;
+      max-width: 600px;
     }
   `],
     imports: [

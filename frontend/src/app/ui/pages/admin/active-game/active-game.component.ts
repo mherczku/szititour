@@ -1,15 +1,15 @@
-import {ChangeDetectionStrategy, Component, OnInit, ViewChild, WritableSignal, signal} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {Observable, tap} from "rxjs";
-import {GameWithStatuses} from "../../../../types/game";
-import {AdminActiveGameService} from "../../../../services/AdminActiveGameService";
-import {ActivatedRoute} from "@angular/router";
-import {GoogleMap, GoogleMapsModule, MapInfoWindow, MapMarker} from "@angular/google-maps";
-import {FormsModule} from "@angular/forms";
-import {PlaceStatusDto, TeamGameStatus} from "../../../../types/team-game-status";
-import {AnswerComponent} from "../../../components/admin/answer/answer.component";
-import {Place} from "../../../../types/place";
-import {addMapApiHeader, myTrackBy} from "../../../../e-functions/extension-functions";
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, WritableSignal, signal } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Observable, tap } from "rxjs";
+import { GameWithStatuses } from "../../../../types/game";
+import { AdminActiveGameService } from "../../../../services/AdminActiveGameService";
+import { ActivatedRoute } from "@angular/router";
+import { GoogleMap, GoogleMapsModule, MapInfoWindow, MapMarker } from "@angular/google-maps";
+import { FormsModule } from "@angular/forms";
+import { PlaceStatusDto, TeamGameStatus } from "../../../../types/team-game-status";
+import { AnswerComponent } from "../../../components/admin/answer/answer.component";
+import { Place } from "../../../../types/place";
+import { addMapApiHeader, myTrackBy } from "../../../../e-functions/extension-functions";
 
 
 type GameMarker = {
@@ -29,7 +29,8 @@ type GameMarker = {
 export class ActiveGameComponent implements OnInit {
 
   gameData?: Observable<GameWithStatuses>;
-  apiLoaded = false;
+  $apiLoaded = signal(false);
+  $isGameActive = signal(false);
 
   gameMarkers: GameMarker[] = [];
 
@@ -40,11 +41,11 @@ export class ActiveGameComponent implements OnInit {
     fillColor: "#ffb70c",
     fillOpacity: 0.35,
   };
-  circleCenter: google.maps.LatLngLiteral = {lat: 0, lng: 0};
+  circleCenter: google.maps.LatLngLiteral = { lat: 0, lng: 0 };
   circleVisible = false;
 
 
-  center: google.maps.LatLngLiteral = {lat: 47.497913, lng: 19.040236};
+  center: google.maps.LatLngLiteral = { lat: 47.497913, lng: 19.040236 };
   zoom = 11;
 
   selectedMarker?: GameMarker;
@@ -59,18 +60,19 @@ export class ActiveGameComponent implements OnInit {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly adminService: AdminActiveGameService) {
-    this.apiLoaded = false;
-    addMapApiHeader(() => {
-      this.apiLoaded = true;
-    });
-  }
+    private readonly adminService: AdminActiveGameService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((p) => {
       const gameId: number = p["id"];
       if (gameId) {
         this.gameData = this.adminService.getGameWithStatusesById(gameId).pipe(tap(res => {
+          this.$isGameActive.set(res.active);
+          if (res.active) {
+            addMapApiHeader(() => {
+              this.$apiLoaded.set(true);
+            });
+          }
           this.gameStatuses = res.teamGameStatuses;
           this.places = res.places;
           this.$selectedTeamStatus.set(this.gameStatuses[0]);
@@ -92,7 +94,7 @@ export class ActiveGameComponent implements OnInit {
     const teams: { id: number; name: string; lat: number; lng: number; date: Date }[] = [];
 
     gameData.places.forEach(place => {
-      placeMap.set(place.id, {name: place.name, lat: place.latitude, lng: place.longitude, teams: []});
+      placeMap.set(place.id, { name: place.name, lat: place.latitude, lng: place.longitude, teams: [] });
     });
 
     gameData.teamGameStatuses.forEach(teamStatus => {
@@ -106,7 +108,7 @@ export class ActiveGameComponent implements OnInit {
 
       teamStatus.placeStatuses.forEach(ps => {
         if (ps.reached) {
-          placeMap.get(ps.placeId)?.teams.push({teamName: teamStatus.teamName, reached: ps.reachedAt});
+          placeMap.get(ps.placeId)?.teams.push({ teamName: teamStatus.teamName, reached: ps.reachedAt });
         }
         //teams.push({teamName: teamStatus.teamName, reached: ps.reachedAt})
       });
