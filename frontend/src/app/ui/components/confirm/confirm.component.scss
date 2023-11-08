@@ -13,7 +13,7 @@
 }
 
 .confirm-card {
-    width: min(400px, calc(100vw - 40px));
+    width: min(450px, calc(100vw - 40px));
     padding: 20px;
     border-radius: 8px;
 
@@ -35,5 +35,13 @@
     align-items: center;
     gap: 20px;
 
-    button {width: 100%; white-space: nowrap;}
+    button {
+        width: 100%;
+        white-space: nowrap;
+    }
+
+    @media (max-width: $breakpoint-mobile) {
+        flex-direction: column;
+        gap: 15px;
+    }
 }
