@@ -31,13 +31,14 @@ class ApplicationControllerTest {
     @Test
     fun testGetById() {
         // Arrange
-        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Application()))
+        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Application(id = 1)))
 
         // Act
         val response = controller.getApplicationById(1)
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.id)
     }
 
     @Test
@@ -50,6 +51,7 @@ class ApplicationControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.size)
     }
 
     @Test

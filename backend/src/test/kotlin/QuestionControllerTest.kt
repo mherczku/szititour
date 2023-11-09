@@ -46,13 +46,14 @@ class QuestionControllerTest {
     @Test
     fun testGetById() {
         // Arrange
-        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Question()))
+        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Question(id = 1)))
 
         // Act
         val response = controller.getQuestionById(1)
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.id)
     }
 
     @Test
@@ -65,6 +66,7 @@ class QuestionControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.size)
     }
 
     @Test
@@ -91,6 +93,7 @@ class QuestionControllerTest {
         // Assert
         assertEquals(HttpStatus.CREATED, response.statusCode)
         assertNotNull(response.body)
+        assertEquals("TestQuestion", response.body?.name)
     }
 
     @Test

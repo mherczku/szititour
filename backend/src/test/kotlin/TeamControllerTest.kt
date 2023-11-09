@@ -41,13 +41,14 @@ class TeamControllerTest {
     @Test
     fun testGetById() {
         // Arrange
-        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Team()))
+        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Team(id = 1)))
 
         // Act
         val response = controller.getTeamById(1)
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.id)
     }
 
     @Test
@@ -60,6 +61,7 @@ class TeamControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.size)
     }
 
     @Test

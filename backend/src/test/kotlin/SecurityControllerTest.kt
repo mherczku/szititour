@@ -4,6 +4,7 @@ import hu.hm.szititourbackend.dto.request.RegisterRequest
 import hu.hm.szititourbackend.extramodel.VerificationResponse
 import hu.hm.szititourbackend.repository.*
 import hu.hm.szititourbackend.controller.SecurityController
+import hu.hm.szititourbackend.extramodel.GoogleAccount
 import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.service.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -15,7 +16,12 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import java.util.*
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 
 @ExtendWith(MockitoExtension::class)
@@ -54,6 +60,7 @@ class SecurityControllerTest {
         // Assert
         assertNotNull(response.body)
         assertEquals(1, response.body?.team?.id)
+        assertEquals(true, response.body?.success)
     }
 
     @Test
@@ -71,33 +78,28 @@ class SecurityControllerTest {
         assertEquals(true, response.body?.success)
     }
 
-    /* TODO KELL? @Test
+    @Test
     fun testAuthorizeByGoogle() {
         // Arrange
         val team = Team(1, enabled = true, isGoogle = true)
-        `when`(securityService.verifyGoogleToken("1")).thenReturn(GoogleAccount("1", "test@test.hu", true, "", "", "", "", ""))
-        `when`(securityService.generateToken(team, anyString(), any<Instant>(Instant::class.java))).thenReturn("test_token")
-        `when`(teamRepository.findById(1)).thenReturn(Optional.of(team))
+        `when`(securityTokenService.verifyGoogleToken("1")).thenReturn(GoogleAccount("1", "test@test.hu", true, "", "", "", "", ""))
         `when`(teamRepository.findByEmail(anyString())).thenReturn(Optional.of(team))
         `when`(teamRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
         // Act
-        val response = controller.authorizeByGoogle("1", ClientData(), mock(HttpServletRequest::class.java), mock(HttpServletResponse::class.java))
+        val response = controller.authorizeWihGoogle("1", ClientData(), mock(HttpServletRequest::class.java), mock(HttpServletResponse::class.java))
 
         // Assert
         assertNotNull(response.body)
         assertEquals(true, response.body?.success)
-    }*/
+        assertEquals(1, response.body?.team?.id)
+    }
 
-    /*@Test
+    @Test
     fun testLogin() {
         // Arrange
         val authentication = JwtAuthenticationToken(mock(Jwt::class.java), listOf(mock(SimpleGrantedAuthority::class.java)), "test@test.hu")
-
         val team = Team(1, enabled = true, isGoogle = true)
-        `when`(securityService.verifyGoogleToken("1")).thenReturn(GoogleAccount("1", "test@test.hu", true, "", "", "", "", ""))
-        `when`(securityService.generateToken(team, anyString(), any())).thenReturn("test_token")
-        `when`(teamRepository.findById(1)).thenReturn(Optional.of(team))
         `when`(teamRepository.findByEmail(anyString())).thenReturn(Optional.of(team))
         `when`(teamRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
@@ -107,7 +109,8 @@ class SecurityControllerTest {
         // Assert
         assertNotNull(response.body)
         assertEquals(true, response.body?.success)
-    }*/
+        assertEquals(1, response.body?.team?.id)
+    }
 
     @Test
     fun testRegister() {
@@ -170,6 +173,4 @@ class SecurityControllerTest {
         assertEquals(true, response.body?.success)
         verify(emailService, times(1)).sendPasswordUpdatedEmail(anyString(), anyString())
     }
-
-
 }

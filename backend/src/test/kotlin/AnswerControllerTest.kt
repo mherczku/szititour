@@ -71,6 +71,7 @@ class AnswerControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.size)
     }
 
     @Test

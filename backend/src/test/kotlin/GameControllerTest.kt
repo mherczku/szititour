@@ -37,13 +37,14 @@ class GameControllerTest {
     @Test
     fun testGetById() {
         // Arrange
-        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Game()))
+        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Game(id = 1)))
 
         // Act
         val response = controller.getGameById(1)
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.id)
     }
 
     @Test
@@ -56,6 +57,7 @@ class GameControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.size)
     }
 
     @Test
@@ -81,18 +83,20 @@ class GameControllerTest {
         // Assert
         assertEquals(HttpStatus.CREATED, response.statusCode)
         assertNotNull(response.body)
+        assertEquals("TestGame", response.body?.title)
     }
 
     @Test
     fun testGetStatusById() {
         // Arrange
-        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Game()))
+        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Game(id = 1)))
 
         // Act
         val response = controller.getGameWithStatusesById(1)
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.id)
     }
 
     @Test
@@ -135,6 +139,7 @@ class GameControllerTest {
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
+        assertEquals("TestGame", response.body?.title)
     }
 
 }

@@ -4,6 +4,7 @@ import hu.hm.szititourbackend.dto.request.AnswersRequestBody
 import hu.hm.szititourbackend.dto.request.QuestionAnswer
 import hu.hm.szititourbackend.dto.response.TeamPasswordUpdateDto
 import hu.hm.szititourbackend.dto.response.TeamUpdateProfileDto
+import hu.hm.szititourbackend.enum.UserApplicationStatus
 import hu.hm.szititourbackend.extramodel.VerificationResponse
 import hu.hm.szititourbackend.repository.*
 import hu.hm.szititourbackend.security.SecurityTokenService
@@ -82,7 +83,6 @@ class LoggedInControllerTest {
         // Assert
         assertNotNull(response.body)
         assertEquals("UpdatedName", response.body?.name)
-
     }
 
     @Test
@@ -98,6 +98,7 @@ class LoggedInControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(true, response.body?.success)
         verify(emailService, times(1)).sendModifyPasswordMail("", "", "")
     }
 
@@ -114,6 +115,7 @@ class LoggedInControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(true, response.body?.success)
         verify(emailService, times(1)).sendPasswordUpdatedEmail("", "")
     }
 
@@ -131,6 +133,7 @@ class LoggedInControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals("newEmail@test.hu", response.body?.nextEmail)
         verify(emailService, times(1)).sendModifyEmailMail("newEmail@test.hu", "", "")
     }
 
@@ -145,12 +148,13 @@ class LoggedInControllerTest {
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
+        assertEquals(1, response.body?.size)
     }
 
     @Test
     fun testApplyForGame() {
         // Arrange
-        `when`(gameRepository.findById(1)).thenReturn(Optional.of(Game(active = false)))
+        `when`(gameRepository.findById(1)).thenReturn(Optional.of(Game(active = false, id = 1, applications = mutableListOf(Application(id = 1, team = Team(1), game = Game(id = 1))))))
         `when`(teamRepository.findById(anyInt())).thenReturn(Optional.of(Team()))
         `when`(applicationRepository.save(any())).thenAnswer { i: InvocationOnMock -> i.arguments[0] }
 
@@ -160,6 +164,7 @@ class LoggedInControllerTest {
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
+        assertEquals(UserApplicationStatus.applied, response.body?.userApplied)
     }
 
     @Test
@@ -173,6 +178,7 @@ class LoggedInControllerTest {
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
+        assertEquals(UserApplicationStatus.none, response.body?.userApplied)
     }
 
     @Test
@@ -203,6 +209,7 @@ class LoggedInControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(true, response.body?.success)
         verify(emailService, times(1)).sendTeamDeleteMail("", "", "")
     }
 
@@ -218,6 +225,7 @@ class LoggedInControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(true, response.body?.success)
         verify(teamRepository, times(1)).deleteById(1)
     }
 
@@ -235,6 +243,7 @@ class LoggedInControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.id)
     }
 
     @Test
@@ -251,6 +260,7 @@ class LoggedInControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.gameId)
     }
 
     @Test
@@ -269,6 +279,8 @@ class LoggedInControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.gameId)
+        assertEquals(1, response.body?.teamId)
     }
 
     @Test
@@ -287,6 +299,8 @@ class LoggedInControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.gameId)
+        assertEquals(1, response.body?.teamId)
     }
 
 }

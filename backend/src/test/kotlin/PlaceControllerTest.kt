@@ -43,13 +43,14 @@ class PlaceControllerTest {
     @Test
     fun testGetById() {
         // Arrange
-        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Place()))
+        `when`(repository.findById(anyInt())).thenReturn(Optional.of(Place(id = 1)))
 
         // Act
         val response = controller.getPlaceById(1)
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.id)
     }
 
     @Test
@@ -62,6 +63,7 @@ class PlaceControllerTest {
 
         // Assert
         assertNotNull(response.body)
+        assertEquals(1, response.body?.size)
     }
 
     @Test
@@ -88,6 +90,7 @@ class PlaceControllerTest {
         // Assert
         assertEquals(HttpStatus.CREATED, response.statusCode)
         assertNotNull(response.body)
+        assertEquals("TestPlace", response.body?.name)
     }
 
     @Test
