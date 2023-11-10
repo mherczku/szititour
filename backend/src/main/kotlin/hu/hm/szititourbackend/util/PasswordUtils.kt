@@ -1,6 +1,7 @@
 package hu.hm.szititourbackend.util
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import java.security.SecureRandom
 import java.util.*
 import java.util.regex.Pattern
 
@@ -35,7 +36,7 @@ object PasswordUtils {
         val specialCharacters = "!@#$&"
         val numbers = "1234567890"
         val combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers
-        val random = Random()
+        val random = SecureRandom()
         val password = CharArray(length)
         password[0] = lowerCaseLetters[random.nextInt(lowerCaseLetters.length)]
         password[1] = capitalCaseLetters[random.nextInt(capitalCaseLetters.length)]

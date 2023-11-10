@@ -5,6 +5,8 @@ plugins {
 	id("io.spring.dependency-management") version "1.0.12.RELEASE"
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
+	id("org.sonarqube") version "4.2.1.3168"
+
 }
 
 group = "hu.hm"

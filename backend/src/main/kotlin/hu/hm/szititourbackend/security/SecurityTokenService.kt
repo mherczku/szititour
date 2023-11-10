@@ -338,11 +338,7 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
 
             VerificationResponse(verified = true, isAdmin = false, teamId = teamId, messageCode = MessageConstants.SUCCESS)
         } catch (e: Exception) {
-            if (e is CustomException) {
-                throw e
-            } else {
-                throw e
-            }
+            throw e
         }
     }
 
