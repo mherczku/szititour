@@ -2,7 +2,6 @@ package hu.hm.szititourbackend.util
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.security.SecureRandom
-import java.util.*
 import java.util.regex.Pattern
 
 
