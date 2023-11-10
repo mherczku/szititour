@@ -73,7 +73,7 @@ fun Team.convertToDto(): TeamDto {
             updatedAt = this.updatedAt,
             applications = this.applications.convertToDto(),
             members = this.members,
-            clients = this.clients.filter { it.expireAt?.isAfter(Instant.now()) == true }.toMutableList()
+            clients = this.clients.filter { it.expireAt.isAfter(Instant.now()) == true }.toMutableList()
     )
 }
 

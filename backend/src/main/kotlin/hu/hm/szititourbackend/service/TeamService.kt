@@ -306,7 +306,7 @@ class TeamService @Autowired constructor(private val securityTokenService: Secur
                         throw CustomException("Cannot modify password while email is not verified", HttpStatus.FORBIDDEN, MessageConstants.EMAIL_NOT_VERIFIED)
                     }
                     team.passwordChangeId = ""
-                    team.password = PasswordUtils.encryptPassword(passwordUpdateDto.newPassword)
+                    team.password = encryptPassword(passwordUpdateDto.newPassword)
                     emailService.sendPasswordUpdatedEmail(team.email, team.name)
                     return updateTeam(team, true)
                 } else {
