@@ -3,7 +3,6 @@ package hu.hm.szititourbackend.controller.admin
 import hu.hm.szititourbackend.datamodel.Game
 import hu.hm.szititourbackend.datamodel.convertToDto
 import hu.hm.szititourbackend.datamodel.convertToStatusDto
-import hu.hm.szititourbackend.dto.request.DirectNotification
 import hu.hm.szititourbackend.dto.response.GameDto
 import hu.hm.szititourbackend.dto.response.GameWithStatusesDto
 import hu.hm.szititourbackend.service.GameService
@@ -32,7 +31,7 @@ class GameController @Autowired constructor(private val gameService: GameService
             @RequestParam("gameEnd") gameEnd: String
     ): ResponseEntity<GameDto> {
 
-        logger.debug("Add new game with image ${gameTitle}")
+        logger.debug("Add new game with image $gameTitle")
 
         val dateEnd = Timestamp(gameEnd.toLong())
         val dateStart = Timestamp(gameStart.toLong())
@@ -52,14 +51,14 @@ class GameController @Autowired constructor(private val gameService: GameService
 
     @GetMapping("/{id}")
     fun getGameById(@PathVariable id: Int): ResponseEntity<GameDto?> {
-        logger.debug("Get game by id ${id}")
+        logger.debug("Get game by id $id")
         val game: Game = gameService.getGameById(id)
         return ResponseEntity(game.convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping("/{id}/status")
     fun getGameWithStatusesById(@PathVariable id: Int): ResponseEntity<GameWithStatusesDto?> {
-        logger.debug("Get game with statuses by id ${id}")
+        logger.debug("Get game with statuses by id $id")
         val game: Game = gameService.getGameById(id)
         return ResponseEntity(game.convertToStatusDto(), HttpStatus.OK)
     }
@@ -73,13 +72,13 @@ class GameController @Autowired constructor(private val gameService: GameService
 
     @PutMapping("activate/{id}")
     fun activateGame(@PathVariable("id") gameId: Int): ResponseEntity<GameDto> {
-        logger.debug("Activate game by id ${gameId}")
+        logger.debug("Activate game by id $gameId")
         return ResponseEntity(gameService.changeActivation(gameId, true).convertToDto(), HttpStatus.OK)
     }
 
     @PutMapping("deactivate/{id}")
     fun deactivateGame(@PathVariable("id") gameId: Int, @RequestBody deleting: Boolean): ResponseEntity<GameDto> {
-        logger.debug("Deactivate game by id ${gameId}, deleting statuses: ${deleting}")
+        logger.debug("Deactivate game by id ${gameId}, deleting statuses: $deleting")
         return ResponseEntity(gameService.changeActivation(gameId, false, deleting).convertToDto(), HttpStatus.OK)
     }
 
@@ -92,7 +91,7 @@ class GameController @Autowired constructor(private val gameService: GameService
             @RequestParam("gameEnd") gameEnd: String
     ): ResponseEntity<GameDto> {
 
-        logger.debug("Update game by id ${gameId}")
+        logger.debug("Update game by id $gameId")
 
         val dateEnd = Timestamp(gameEnd.toLong())
         val dateStart = Timestamp(gameStart.toLong())
@@ -113,7 +112,7 @@ class GameController @Autowired constructor(private val gameService: GameService
 
     @DeleteMapping("/{id}")
     fun deleteGameById(@PathVariable id: Int): ResponseEntity<Nothing> {
-        logger.debug("Delete game by id ${id}")
+        logger.debug("Delete game by id $id")
         gameService.deleteGameById(id)
         return ResponseEntity(null, HttpStatus.OK)
     }

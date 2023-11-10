@@ -17,10 +17,10 @@ class Application(
         var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
         var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
-        @ManyToOne()
+        @ManyToOne
         val game: Game = Game(),
 
-        @ManyToOne()
+        @ManyToOne
         val team: Team = Team()
 
 )

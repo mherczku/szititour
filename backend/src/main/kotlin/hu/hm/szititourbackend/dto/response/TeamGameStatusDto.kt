@@ -9,7 +9,7 @@ class TeamGameStatusDto(
         var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
         var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
-        var placeStatuses: MutableList<PlaceStatusDto> = mutableListOf<PlaceStatusDto>(),
+        var placeStatuses: MutableList<PlaceStatusDto> = mutableListOf(),
 
         val gameId: Int = 0,
         val teamId: Int = 0,

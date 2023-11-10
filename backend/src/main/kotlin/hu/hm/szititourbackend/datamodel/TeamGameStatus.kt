@@ -13,22 +13,22 @@ import javax.persistence.*
 @Entity
 class TeamGameStatus(
 
-    @Id
+        @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     val id: Int = 0,
-    var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
-    var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
+        var createdAt: Timestamp = Timestamp(Instant.now().epochSecond),
+        var updatedAt: Timestamp = Timestamp(Instant.now().epochSecond),
 
-    @ElementCollection
-    var placeStatuses: MutableList<PlaceStatus> = mutableListOf<PlaceStatus>(),
-    var nextUnreachedPlaceIndex: Int = 2,
+        @ElementCollection
+    var placeStatuses: MutableList<PlaceStatus> = mutableListOf(),
+        var nextUnreachedPlaceIndex: Int = 2,
 
-    @ManyToOne()
-    val game: Game = Game(),
+        @ManyToOne
+        val game: Game = Game(),
 
-    @ManyToOne()
-    val team: Team = Team()
+        @ManyToOne
+        val team: Team = Team()
 )
 
 @Embeddable

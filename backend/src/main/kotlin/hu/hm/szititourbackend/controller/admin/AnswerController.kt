@@ -22,19 +22,19 @@ class AnswerController @Autowired constructor(private val answerService: AnswerS
 
     @GetMapping("/{id}/correct")
     fun markAsCorrect(@PathVariable id: Int): ResponseEntity<AnswerDto?> {
-        logger.debug("Mark answer ${id} as correct")
+        logger.debug("Mark answer $id as correct")
         return ResponseEntity(answerService.evaluateAnswer(id,true).convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping("/{id}/incorrect")
     fun markAsIncorrect(@PathVariable id: Int): ResponseEntity<AnswerDto?> {
-        logger.debug("Mark answer ${id} as incorrect")
+        logger.debug("Mark answer $id as incorrect")
         return ResponseEntity(answerService.evaluateAnswer(id,false).convertToDto(), HttpStatus.OK)
     }
 
     @GetMapping("/{id}")
     fun getAnswerById(@PathVariable id: Int): ResponseEntity<AnswerDto?> {
-        logger.debug("Get answer by id ${id}")
+        logger.debug("Get answer by id $id")
         val answer: Answer = answerService.getAnswerById(id)
         return ResponseEntity(answer.convertToDto(), HttpStatus.OK)
     }
@@ -48,7 +48,7 @@ class AnswerController @Autowired constructor(private val answerService: AnswerS
 
     @DeleteMapping("/{id}")
     fun deleteAnswerById(@PathVariable id: Int): ResponseEntity<Nothing> {
-        logger.debug("Delete answer ${id}")
+        logger.debug("Delete answer $id")
         return try {
             answerService.deleteAnswerById(id)
             ResponseEntity(null, HttpStatus.OK)

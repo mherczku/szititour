@@ -93,7 +93,7 @@ class LoggedInController @Autowired constructor(
             @RequestBody gameId: Int,
             auth: Authentication
     ): ResponseEntity<GameOnlyBasicDto> {
-        logger.debug("Apply for game ${gameId} by user ${auth.name}")
+        logger.debug("Apply for game $gameId by user ${auth.name}")
         return ResponseEntity(loggedInService.applyForGame(teamId = auth.name.toInt(), gameId = gameId).convertToBasicDto(auth.name.toInt()), HttpStatus.OK)
     }
 
@@ -166,7 +166,7 @@ class LoggedInController @Autowired constructor(
             @RequestBody answer: Answer,
             auth: Authentication
     ): ResponseEntity<TeamGameStatusDto> {
-        logger.debug("Answer question ${questionId} by user ${auth.name}")
+        logger.debug("Answer question $questionId by user ${auth.name}")
         return ResponseEntity(
                 loggedInService.answerQuestion(auth.name.toInt(), questionId, answer).convertToDto(),
                 HttpStatus.OK
@@ -179,7 +179,7 @@ class LoggedInController @Autowired constructor(
             @PathVariable questionId: Int,
             auth: Authentication
     ): ResponseEntity<TeamGameStatusDto> {
-        logger.debug("Answer question with image ${questionId} by user ${auth.name}")
+        logger.debug("Answer question with image $questionId by user ${auth.name}")
         return ResponseEntity(loggedInService.answerWithImage(questionId, auth.name.toInt(), file).convertToDto(), HttpStatus.OK)
     }
 

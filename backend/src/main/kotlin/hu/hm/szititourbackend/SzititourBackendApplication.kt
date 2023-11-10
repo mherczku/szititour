@@ -1,23 +1,12 @@
 package hu.hm.szititourbackend
 
-import hu.hm.szititourbackend.datamodel.Game
-import hu.hm.szititourbackend.datamodel.Team
-import hu.hm.szititourbackend.dto.response.PlaceDto
 import hu.hm.szititourbackend.security.RsaKeyProperties
-import hu.hm.szititourbackend.service.GameService
-import hu.hm.szititourbackend.service.PlaceService
-import hu.hm.szititourbackend.service.TeamService
-import hu.hm.szititourbackend.util.PasswordUtils
 import hu.hm.szititourbackend.util.SzititourProperties
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.boot.CommandLineRunner
-import org.springframework.context.annotation.Bean
-import java.sql.Timestamp
-import java.time.Instant
 
 
 @EnableConfigurationProperties(RsaKeyProperties::class, SzititourProperties::class)

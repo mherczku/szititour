@@ -22,7 +22,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    @PostMapping()
+    @PostMapping
     fun addPlaceToGame(
         @RequestParam("image") file: MultipartFile?,
         @RequestParam("gameId") gameId: String,
@@ -32,7 +32,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
         @RequestParam("lng") lng: String,
     ): ResponseEntity<PlaceDto> {
 
-        logger.debug("Add place to game ${gameId}")
+        logger.debug("Add place to game $gameId")
 
         val placeDto = PlaceDto(
             gameId = gameId.toInt(),
@@ -52,7 +52,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
 
     @GetMapping("/{id}")
     fun getPlaceById(@PathVariable id: Int): ResponseEntity<PlaceDto?> {
-        logger.debug("Get place by id ${id}")
+        logger.debug("Get place by id $id")
         val place: Place = placeService.getPlaceById(id)
         return ResponseEntity(place.convertToDto(), HttpStatus.OK)
     }
@@ -75,7 +75,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
 
     ): ResponseEntity<PlaceDto> {
 
-        logger.debug("Update place ${placeId}")
+        logger.debug("Update place $placeId")
 
         val placeDto = PlaceDto(
             id = placeId.toInt(),
@@ -95,7 +95,7 @@ class PlaceController @Autowired constructor(private val placeService: PlaceServ
 
     @DeleteMapping("/{id}")
     fun deletePlaceById(@PathVariable id: Int): ResponseEntity<Nothing> {
-        logger.debug("Delete place by id ${id}")
+        logger.debug("Delete place by id $id")
         return try {
             placeService.deletePlaceById(id)
             ResponseEntity(null, HttpStatus.OK)

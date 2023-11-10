@@ -23,7 +23,7 @@ class TeamController @Autowired constructor(private val teamService: TeamService
 
     @GetMapping("/{id}")
     fun getTeamById(@PathVariable id: Int): ResponseEntity<TeamDto?> {
-        logger.debug("Get team by id ${id}")
+        logger.debug("Get team by id $id")
         val team: Team = teamService.getTeamById(id)
         return ResponseEntity(team.convertToDto(), HttpStatus.OK)
     }
@@ -37,7 +37,7 @@ class TeamController @Autowired constructor(private val teamService: TeamService
 
     @DeleteMapping("/{id}")
     fun deleteTeamById(@PathVariable id: Int): ResponseEntity<Nothing> {
-        logger.debug("Delete team by id ${id}")
+        logger.debug("Delete team by id $id")
         return try {
             teamService.deleteTeamById(id)
             ResponseEntity(null, HttpStatus.OK)

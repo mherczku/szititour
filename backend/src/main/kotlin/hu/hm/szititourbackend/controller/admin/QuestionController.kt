@@ -23,7 +23,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    @PostMapping()
+    @PostMapping
     fun addQuestion(
         @RequestParam("image") file: MultipartFile?,
         @RequestParam("placeId") placeId: String,
@@ -32,7 +32,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
         @RequestParam("riddle") riddle: String
     ): ResponseEntity<QuestionDto> {
 
-        logger.debug("Add question to place ${placeId}")
+        logger.debug("Add question to place $placeId")
 
         val questionDto = QuestionDto(
             name = name,
@@ -51,7 +51,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
 
     @GetMapping("/{id}")
     fun getQuestionById(@PathVariable id: Int): ResponseEntity<QuestionDto?> {
-        logger.debug("Get question by id ${id}")
+        logger.debug("Get question by id $id")
         val question: Question = questionService.getQuestionById(id)
         return ResponseEntity(question.convertToDto(), HttpStatus.OK)
     }
@@ -72,7 +72,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
         @RequestParam("riddle") riddle: String
     ): ResponseEntity<QuestionDto> {
 
-        logger.debug("Update question ${questionId}")
+        logger.debug("Update question $questionId")
 
         val questionDto = QuestionDto(
             name = name,
@@ -90,7 +90,7 @@ class QuestionController @Autowired constructor(private val questionService: Que
 
     @DeleteMapping("/{id}")
     fun deleteQuestionById(@PathVariable id: Int): ResponseEntity<Nothing> {
-        logger.debug("Delete question by id ${id}")
+        logger.debug("Delete question by id $id")
         return try {
             questionService.deleteQuestionById(id)
             ResponseEntity(null, HttpStatus.OK)

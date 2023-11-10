@@ -22,7 +22,7 @@ class ApplicationController @Autowired constructor(private val applicationServic
 
     @GetMapping("/{id}")
     fun getApplicationById(@PathVariable id: Int): ResponseEntity<ApplicationDto?> {
-        logger.debug("Get application by id ${id}")
+        logger.debug("Get application by id $id")
         val application: Application = applicationService.getApplicationById(id)
         return ResponseEntity(application.convertToDto(), HttpStatus.OK)
     }
@@ -42,7 +42,7 @@ class ApplicationController @Autowired constructor(private val applicationServic
 
     @DeleteMapping("/{id}")
     fun deleteApplicationById(@PathVariable id: Int): ResponseEntity<Nothing> {
-        logger.debug("Delete application ${id}")
+        logger.debug("Delete application $id")
         return try {
             applicationService.deleteApplicationById(id)
             ResponseEntity(null, HttpStatus.OK)
