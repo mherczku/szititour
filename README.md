@@ -27,6 +27,8 @@ Amennyiben lokálisan szeretnéd kiprobálni a projektet a lentebb leirtak szeri
         2. Készíts egy Firebase projektet és a messaging szolgáltatást bekapcsolva tölts le a firebase.json konfigurációs fájlt és helyezd el a már említett resources mappába.
         3. Google Client ID szerzése a GoogleSignIn-hoz
 
+    Az alkalmazás futtatásához java 11 szükséges
+
 
 #### Saját adatbázis futtatása:
 
