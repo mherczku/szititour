@@ -60,7 +60,7 @@ object ImgUtils {
             throw CustomException("Image resource not found - directory not exist", HttpStatus.NOT_FOUND, MessageConstants.RESOURCE_DIRECTORY_NOT_FOUND)
         }
 
-        var imagePath = ""
+        val imagePath: String
         val directoryImages = File(imageDirectory)
         if (!directoryImages.exists()) {
             directoryImages.mkdir()

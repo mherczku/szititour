@@ -2,17 +2,17 @@ package hu.hm.szititourbackend.exception
 
 import hu.hm.szititourbackend.dto.response.Response
 import hu.hm.szititourbackend.util.MessageConstants
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.oauth2.jwt.JwtValidationException
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MissingRequestValueException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.security.oauth2.jwt.JwtValidationException
 import org.springframework.web.multipart.MaxUploadSizeExceededException
 
 @ControllerAdvice
@@ -29,8 +29,6 @@ class MyExceptionHandler {
     @ExceptionHandler(Exception::class)
     fun handleSimpleException(ex: Exception): ResponseEntity<Response> {
         logger.error("Internal Server Error occured: ${ex.message}")
-        // Todo if debug:
-        ex.printStackTrace()
         return ResponseEntity<Response>(
             Response(message = ex.message.toString(), success = false, messageCode = MessageConstants.UNKNOWN),
             HttpStatus.INTERNAL_SERVER_ERROR

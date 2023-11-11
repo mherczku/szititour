@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets
 class CustomAuthExceptionHandler : Customizer<ExceptionHandlingConfigurer<HttpSecurity>> {
     override fun customize(t: ExceptionHandlingConfigurer<HttpSecurity>) {
 
-        t.authenticationEntryPoint { request, response, authException ->
+        t.authenticationEntryPoint { _, response, authException ->
             if (authException is InsufficientAuthenticationException) {
                 val r = Response(message = "Authentication failed", success = false, messageCode = AuthUtil.currentError)
                 AuthUtil.currentError = MessageConstants.BAD_CREDENTIALS

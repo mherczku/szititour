@@ -1,11 +1,11 @@
 package hu.hm.szititourbackend.controller
 
 import hu.hm.szititourbackend.datamodel.ClientData
-import hu.hm.szititourbackend.dto.response.TeamPasswordUpdateDto
-import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.dto.request.RegisterRequest
 import hu.hm.szititourbackend.dto.response.LoginResponse
 import hu.hm.szititourbackend.dto.response.Response
+import hu.hm.szititourbackend.dto.response.TeamPasswordUpdateDto
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.security.SecurityTokenService
 import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_GOOGLE_TOKEN
 import hu.hm.szititourbackend.security.SecurityTokenService.Companion.HEADER_PASSWORD_TOKEN
@@ -65,7 +65,7 @@ class SecurityController(private val securityService: SecurityService, private v
 
     @PostMapping("login")
     fun login(auth: Authentication, @RequestBody clientData: ClientData, request: HttpServletRequest, response: HttpServletResponse): ResponseEntity<LoginResponse> {
-        logger.info("Login for ${auth.name} - remote: ${request?.remoteAddr} - forwarded: ${request.getHeader("X-Forwarded-For")} - real: ${request.getHeader("X-Real-IP")}")
+        logger.info("Login for ${auth.name}")
         return ResponseEntity(securityService.login(auth.name, request, response, clientData), HttpStatus.OK)
     }
 
