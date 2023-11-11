@@ -5,10 +5,10 @@ import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.WebpushConfig
 import com.google.firebase.messaging.WebpushNotification
 import hu.hm.szititourbackend.datamodel.NotiSubscriber
-import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.dto.request.DirectNotification
 import hu.hm.szititourbackend.dto.request.SubscriptionRequest
 import hu.hm.szititourbackend.dto.request.TopicNotification
+import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.NotiSubscriberRepository
 import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.http.HttpStatus
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service
 @Service
 class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscriberRepository) {
 
+    val logo = "https://mherczku.github.io/szititour/assets/svg/szititour.svg"
     fun sendNotificationToTarget(notification: DirectNotification) {
         if (!notification.isValid()) {
             throw CustomException("Notification is not valid", HttpStatus.BAD_REQUEST, MessageConstants.INVALID_NOTIFICATION)
@@ -33,8 +34,8 @@ class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscri
                                                 .setTitle(notification.title)
                                                 .setBody(notification.message)
                                                 .setSilent(true)
-                                                .setBadge("https://mherczku.github.io/szititour/assets/svg/szititour.svg")
-                                                .setIcon("https://mherczku.github.io/szititour/assets/svg/szititour.svg")
+                                                .setBadge(logo)
+                                                .setIcon(logo)
                                                 .build()
                                 ).build()
                 )
@@ -56,8 +57,8 @@ class FirebaseMessagingService(private val notiSubscriberRepository: NotiSubscri
                                                 .setTitle(notification.title)
                                                 .setBody(notification.message)
                                                 .setSilent(true)
-                                                .setBadge("https://mherczku.github.io/szititour/assets/svg/szititour.svg")
-                                                .setIcon("https://mherczku.github.io/szititour/assets/svg/szititour.svg")
+                                                .setBadge(logo)
+                                                .setIcon(logo)
                                                 .build()
                                 ).build()
                 ).setTopic(notification.topic)
