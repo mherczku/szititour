@@ -4,8 +4,8 @@ import hu.hm.szititourbackend.datamodel.*
 import hu.hm.szititourbackend.dto.request.AnswersRequestBody
 import hu.hm.szititourbackend.exception.CustomException
 import hu.hm.szititourbackend.repository.TeamGameStatusRepository
-import hu.hm.szititourbackend.util.MessageConstants
 import hu.hm.szititourbackend.util.ImgUtils
+import hu.hm.szititourbackend.util.MessageConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -72,10 +72,7 @@ class LoggedInService @Autowired constructor(
         if (application.game.active) {
             throw CustomException("Cannot cancel application for an active game", HttpStatus.FORBIDDEN, MessageConstants.CANNOT_CANCEL_ACTIVE)
         }
-        return if (application.accepted == null) {
-            applicationService.deleteApplicationById(application.id)
-            application.game
-        } else if (application.accepted!!) {
+        return if (application.accepted == null || application.accepted!!) {
             applicationService.deleteApplicationById(application.id)
             application.game
         } else {
