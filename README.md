@@ -13,21 +13,21 @@ Amennyiben lokálisan szeretnéd kiprobálni a projektet a lentebb leirtak szeri
 0. Lépés klónozd le a projektet!
 
 ### Backend:
-    A Backend futtatásához biztosítanod kell egy adatbázist is, ehhez két lehetőséged van:
+    *A Backend futtatásához biztosítanod kell egy adatbázist is, ehhez két lehetőséged van:
         1. Vagy futtatsz egy PostgreSQL adatbázist, amit a késöbbiekben leírtak szerint összekötsz a Backenddel.
         2. Vagy Beépített egyszerhasználatos "embeded" adatbázist használsz a késöbbiekben leírtak szerint.
 
-    A Backend futtatásához generálnod kell egy RSA nyilvános és privát kulcspárt:
+    *A Backend futtatásához generálnod kell egy RSA nyilvános és privát kulcspárt:
         1. Terminálban: openssl genrsa --out private.pem
         2: Terminálban: openssl rsa -in private.pem -pubout -out public.pem
         3. A létrejött két pem fájlt helyezed el a Backend projekt resources mappájában
 
-    Továbbá a Backend megfelelő működéséhez be kell állíts egy Email szolgáltatást és a Firebase Messaging szolgáltatását, valamint a GoogleSign-hoz szükség van egy Google clientID-ra:
+    (Opcionális) Továbbá a Backend megfelelő működéséhez be kell állíts egy Email szolgáltatást és a Firebase Messaging szolgáltatását, valamint a GoogleSign-hoz szükség van egy Google clientID-ra:
         1. Email fiókhoz generálj egy alkalmazás jelszót, amihez hozzá tud férni SMTP kapcsolattal.
         2. Készíts egy Firebase projektet és a messaging szolgáltatást bekapcsolva tölts le a firebase.json konfigurációs fájlt és helyezd el a már említett resources mappába.
         3. Google Client ID szerzése a GoogleSignIn-hoz
 
-    Az alkalmazás futtatásához java 11 szükséges
+    *Az alkalmazás futtatásához java 11 szükséges
 
 
 #### Saját adatbázis futtatása:
