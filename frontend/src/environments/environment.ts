@@ -2,14 +2,18 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+//! dont forget to change http / https - localhost: http
+const url = "dolphin-casual-deer.ngrok-free.app/szititour"; //https
+
 export const environment = {
   production: false,
 
-  apiBaseUrl: "https://localhost:8080",
-  //apiBaseUrl: "https://wildfire.ddns.net:8091",
-  
-  apiWebsocketUrlAdmin: "ws://localhost:8080/ws/admin",
-  apiWebsocketUrlUser: "ws://localhost:8080/ws/user",
+  apiBaseUrl: `https://${url}`,
+
+  apiWebsocketUrlAdmin: `wss://${url}/ws/admin`,
+  apiWebsocketUrlUser: `wss://${url}/ws/user`,
+
+  //optional:
   MAP_KEY: "",
   googleClientId: "",
   firebaseConfig: {},
