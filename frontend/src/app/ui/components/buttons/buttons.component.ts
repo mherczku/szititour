@@ -22,13 +22,13 @@ export class ButtonsComponent {
   @Input() iconSrc = "";
   @Input() isDisabledProgress = false;
   @Input() isDisabledBlocked = false;
-  @Output() onClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
+  @Output() clicked: EventEmitter<unknown> = new EventEmitter<unknown>();
 
   $mouseOver = signal(false);
 
   onClick() {
     if(!this.isDisabledBlocked && !this.isDisabledProgress){
-      this.onClicked.emit();
+      this.clicked.emit();
     }
   }
 

@@ -25,7 +25,7 @@ import { ImgLoaderPipe } from "../../../../pipes/img-loader.pipe";
 export class QuestionComponent {
   @Input() question!: Question;
   @Input() number!: number;
-  @Output() onEditPressed: EventEmitter<unknown> = new EventEmitter();
+  @Output() editPressed: EventEmitter<unknown> = new EventEmitter();
   $open = signal(false);
 
   toggle($event: MouseEvent) {
@@ -34,6 +34,6 @@ export class QuestionComponent {
   }
 
   openEditDialog() {
-    this.onEditPressed.emit();
+    this.editPressed.emit();
   }
 }

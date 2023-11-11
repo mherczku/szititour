@@ -5,7 +5,6 @@ import { environment } from "src/environments/environment";
 
 @Injectable({ providedIn: "root" })
 export class GoogleSignInService {
-  constructor() {}
 
   public initGoogleSignIn(handleSignIn: (res: any) => void) {
     // @ts-ignore
@@ -27,7 +26,7 @@ export class GoogleSignInService {
 
   public promtSignIn() {
     // @ts-ignore
-    google.accounts.id.prompt((notification: PromptMomentNotification) => {});
+    google.accounts.id.prompt(() => {});
   }
 
   public fullCycle(btnName: string, handleSignIn: (res: any) => void) {

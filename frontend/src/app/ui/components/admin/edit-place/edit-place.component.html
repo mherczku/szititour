@@ -9,7 +9,7 @@
         <p (click)="mapModalVisible = true" class="text-size-base cursor-text">{{place.address}}</p>
       </div>
       <div class="flex flex-col gap-2 mb-5 w-full">
-        <label class="text-size-base">Kép:</label>
+        <label for="img" class="text-size-base">Kép:</label>
         <div class="input_container">
           <app-image-uploader [src]="place.img | imgSrc | imgLoader | async"
             (fileChanged)="setFile($event)"></app-image-uploader>
@@ -22,11 +22,11 @@
       <div class="flex gap-2 mb-2 items-center">
         <p class="text-size-lg bold">Kérdések:</p>
         <img title="Pontosan egy rejtvénynek kell lennie!" class="riddleWarning" *ngIf="place.riddleWarning" src="assets/svg/warning-yellow.svg" alt="Rejtvény hiba">
-        <app-buttons (onClicked)="openNewQuestionDialog()" [isDisabledBlocked]="!isEdit"
+        <app-buttons (clicked)="openNewQuestionDialog()" [isDisabledBlocked]="!isEdit"
           classes="aspect-square w-[30px] hover:scale-110 active:opacity-70 transition" type="icon"
           iconSrc="assets/svg/add.svg"></app-buttons>
       </div>
-      <app-question [question]="question" [number]="index + 1" (onEditPressed)="openEditQuestionDialog(question)"
+      <app-question [question]="question" [number]="index + 1" (editPressed)="openEditQuestionDialog(question)"
         *ngFor="let question of place.questions; let index = index; trackBy: myTrackBy"></app-question>
     </div>
   </div>
@@ -39,7 +39,7 @@
 
   <!-- Edit modal -->
   <app-modal [(isDisplayed)]="editModalVisible">
-    <app-question-edit (onExit)="editQuestionDialogExited($event)" [isEdit]="isEditQuestion"
+    <app-question-edit (exit)="editQuestionDialogExited($event)" [isEdit]="isEditQuestion"
       [question]="selectedQuestion"></app-question-edit>
   </app-modal>
 

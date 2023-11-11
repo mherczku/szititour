@@ -12,14 +12,14 @@
       <a title="Státusz" [routerLink]="'/admin/active/' + $game().id" [class.inactive]="!$game().active" class="activeLink text-size-base"><img src="assets/svg/live.svg" alt="live"></a>
 
       <div class="absolute top-0 right-0 p-1 z-delete">
-        <app-buttons [isDisabledProgress]="$deleting()" (onClicked)="deleteGame()"
+        <app-buttons [isDisabledProgress]="$deleting()" (clicked)="deleteGame()"
           class="absolute right-0 top-0 bg-white rounded p-1" type="delete"></app-buttons>
       </div>
     </div>
     <div class="p-3">
       <div class="flex flex-row gap-3">
         <p class="font-bold text-size-base">{{$game().title}}</p>
-        <app-buttons classes="min-w-[20px]" (click)="onEditClicked.emit()" iconSrc="assets/svg/edit.svg"
+        <app-buttons classes="min-w-[20px]" (click)="editClicked.emit()" iconSrc="assets/svg/edit.svg"
           type="icon"></app-buttons>
       </div>
       <p class="text-size-min">{{$game().dateStart | date:'y.MM.d. H:mm'}} - {{$game().dateEnd | date:'H:mm'}}</p>
@@ -28,9 +28,9 @@
 
     </div>
     <div class="flex flex-row w-full border-t-1">
-      <app-buttons (click)="onPlacesClicked.emit()" classes="border-r-1" iconSrc="assets/svg/map.svg"
+      <app-buttons (click)="placesClicked.emit()" classes="border-r-1" iconSrc="assets/svg/map.svg"
         text="{{$game().places.length}} Helyszín" type="blueIcon"></app-buttons>
-      <app-buttons (click)="onTeamsClicked.emit()" iconSrc="assets/svg/team2.svg"
+      <app-buttons (click)="teamsClicked.emit()" iconSrc="assets/svg/team2.svg"
         text="{{$game().applications.length}} / {{$acceptedSize()}} Csapat" type="blueIcon"></app-buttons>
     </div>
   </div>

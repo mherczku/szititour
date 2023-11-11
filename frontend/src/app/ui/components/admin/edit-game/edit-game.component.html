@@ -5,7 +5,7 @@
   <app-date-input name="Kezdő időpont" classes="mb-4" [(date)]="game.dateStart"></app-date-input>
   <app-date-input name="Befejező időpont" classes="mb-4" [(date)]="game.dateEnd"></app-date-input>
   <div class="flex flex-col gap-2 mb-5 items-center">
-    <label class="text-size-base">Kép:</label>
+    <label for="img" class="text-size-base">Kép:</label>
     <div class="input_container">
       <app-image-uploader [src]="game.img | imgSrc | imgLoader | async"
         (fileChanged)="setFile($event)"></app-image-uploader>

@@ -3,12 +3,12 @@
   <p class="text-size-lg mx-auto" *ngIf="$games().length < 1">Még nincsenek játékok</p>
   <div class="grid grid-cols-4 tablet:grid-cols-2 gap-6 mobile:grid-cols-1 relative">
     <div class="fixed z-games-newgame w-[3rem] h-[3rem] text-size-base right-20 bottom-20 mobile:right-10 mobile:bottom-10">
-      <app-buttons (onClicked)="openNewGameDialog()" type="icon"
+      <app-buttons (clicked)="openNewGameDialog()" type="icon"
                    classes="hover:scale-110 active:opacity-70 transition" iconSrc="assets/svg/add.svg"></app-buttons>
     </div>
-    <app-gamecard (onDeleted)="getGames()" (onEditClicked)="editGame(game)"
-                  (onPlacesClicked)="changeModal('PLACES', game)"
-                  (onTeamsClicked)="changeModal('TEAMS', game)" *ngFor="let game of $games()" [game]="game"></app-gamecard>
+    <app-gamecard (deleted)="getGames()" (editClicked)="editGame(game)"
+                  (placesClicked)="changeModal('PLACES', game)"
+                  (teamsClicked)="changeModal('TEAMS', game)" *ngFor="let game of $games()" [game]="game"></app-gamecard>
   </div>
 
 </div>

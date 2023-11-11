@@ -48,7 +48,7 @@ export class EditGameComponent {
     dateEnd: new Date(),
     active: false
   };
-  @Output() onClose: EventEmitter<unknown> = new EventEmitter<unknown>();
+  @Output() closeE: EventEmitter<unknown> = new EventEmitter<unknown>();
 
   public setGame(data: { game: Game, isEdit: boolean }) {
     this.game = data.game;
@@ -71,7 +71,7 @@ export class EditGameComponent {
 
   close() {
     this.resetFields();
-    this.onClose.emit();
+    this.closeE.emit();
     this.modalS.close();
   }
 

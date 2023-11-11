@@ -12,9 +12,9 @@
       </div>
 
       <div class="flex h-full w-fit gap-[10%] items-center">
-        <app-buttons [isDisabledBlocked]="application.accepted === false" (onClicked)="reviewApplication(application, false)" [ngClass]="application.accepted === false ? '' : 'hover:opacity-80'" classes="w-[3rem]" type="icon"
+        <app-buttons [isDisabledBlocked]="application.accepted === false" (clicked)="reviewApplication(application, false)" [ngClass]="application.accepted === false ? '' : 'hover:opacity-80'" classes="w-[3rem]" type="icon"
                      iconSrc="assets/svg/remove.svg"></app-buttons>
-        <app-buttons [isDisabledBlocked]="application.accepted === true" (onClicked)="reviewApplication(application, true)" [ngClass]="application.accepted === true ? '' : 'hover:opacity-80'" classes="w-[3rem]" type="icon"
+        <app-buttons [isDisabledBlocked]="application.accepted === true" (clicked)="reviewApplication(application, true)" [ngClass]="application.accepted === true ? '' : 'hover:opacity-80'" classes="w-[3rem]" type="icon"
                      iconSrc="assets/svg/accept.svg"></app-buttons>
       </div>
     </div>

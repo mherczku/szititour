@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from "@angular/core";
 import { Place } from "../../../../types/place";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { AdminService } from "../../../../services/AdminService";

@@ -1,15 +1,15 @@
 <div class="relative bg-white p-5 rounded overflow-y-auto max-h-[80vh] flex-col gap-2 flex">
   <p class="text-size-h3 text-center w-full font-bold mb-6">{{this.isEdit ? "Kérdés szerkesztése" : "Kérdés
     létrehozása"}}</p>
-  <label class="text-size-base">Kérdés:</label>
-  <input [(ngModel)]="question.name" type="text" class="simpleInput">
+  <label for="name" class="text-size-base">Kérdés:</label>
+  <input [(ngModel)]="question.name" name="name" type="text" class="simpleInput">
   <div class="flex gap-2">
-    <label class="text-size-base">Rejtvény?:</label>
-    <input [checked]="question.riddle" (change)="question.riddle = !question.riddle" type="checkbox">
+    <label for="riddle" class="text-size-base">Rejtvény?:</label>
+    <input name="riddle" [checked]="question.riddle" (change)="question.riddle = !question.riddle" type="checkbox">
   </div>
   <div class="flex gap-2">
-    <label class="text-size-base">Kérdés típusa:</label>
-    <select [(ngModel)]="question.type">
+    <label for="type" class="text-size-base">Kérdés típusa:</label>
+    <select name="type" [(ngModel)]="question.type">
       <option value="shortText">Rövid szöveg</option>
       <option value="longText">Hosszú szöveg</option>
       <option value="number">Szám</option>
@@ -18,7 +18,7 @@
     </select>
   </div>
   <div class="flex gap-2">
-    <label class="text-size-base">Kép:</label>
+    <label for="img" class="text-size-base">Kép:</label>
     <div class="input_container">
       <app-image-uploader [src]="question.img | imgSrc | imgLoader | async"
         (fileChanged)="setFile($event)"></app-image-uploader>

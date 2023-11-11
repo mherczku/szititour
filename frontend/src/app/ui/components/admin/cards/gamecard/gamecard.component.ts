@@ -48,10 +48,10 @@ export class GamecardComponent {
   @Input({ required: true }) set game(value: Game) {
     this.$game.set(value);
   }
-  @Output() onEditClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
-  @Output() onTeamsClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
-  @Output() onPlacesClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
-  @Output() onDeleted: EventEmitter<unknown> = new EventEmitter<unknown>();
+  @Output() editClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
+  @Output() teamsClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
+  @Output() placesClicked: EventEmitter<unknown> = new EventEmitter<unknown>();
+  @Output() deleted: EventEmitter<unknown> = new EventEmitter<unknown>();
 
   $deleting = signal(false);
 
@@ -74,7 +74,7 @@ export class GamecardComponent {
           next: () => {
             this.$deleting.set(false);
             this.alert.success(`${this.$game().title} játék sikeresen törölve`);
-            this.onDeleted.emit();
+            this.deleted.emit();
           },
           error: () => {
             this.$deleting.set(false);

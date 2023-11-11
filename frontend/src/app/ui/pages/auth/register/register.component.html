@@ -6,10 +6,9 @@
 
     <form [formGroup]="registerForm">
 
-      <label class="text-size-base mb-2 block">Csapat név *</label>
+      <label for="name" class="text-size-base mb-2 block">Csapat név *</label>
       <input
         tabindex="1"
-        autofocus
         required
         formControlName="name"
         autocomplete="szititourName"
@@ -18,7 +17,7 @@
         placeholder="Add a csapat nevet"
       />
 
-      <label class="text-size-base mb-2 block">E-mail *</label>
+      <label for="email" class="text-size-base mb-2 block">E-mail *</label>
       <input
         tabindex="2"
         required
@@ -29,7 +28,7 @@
         placeholder="Add meg az e-mail címed"
       />
 
-      <label class="text-size-base mb-2 block">Jelszó *</label>
+      <label for="password" class="text-size-base mb-2 block">Jelszó *</label>
       <input
         tabindex="3"
         required
@@ -40,7 +39,7 @@
         placeholder="Adj meg egy jelszót"
       />
 
-      <label class="text-size-base mb-2 block">Jelszó mégegyszer *</label>
+      <label for="confirmPassword" class="text-size-base mb-2 block">Jelszó mégegyszer *</label>
       <input
         tabindex="4"
         required

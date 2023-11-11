@@ -9,7 +9,7 @@ import {HostDirective} from "../../../directives/hostDirective";
     <div [ngClass]="display_.visible ? '' : 'hidden-host'" id="ngx-modal-host-container" (click)="close()"
          class="host-container">
       <div (click)="$event.stopPropagation()" class="content-container">
-        <ng-template host></ng-template>
+        <ng-template appHost></ng-template>
       </div>
     </div>
   `,

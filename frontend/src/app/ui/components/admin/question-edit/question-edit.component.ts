@@ -43,7 +43,7 @@ export class QuestionEditComponent {
     placeId: 1,
     riddle: false
   };
-  @Output() onExit: EventEmitter<{ action: "create" | "delete" | "update", question: Question }> = new EventEmitter();
+  @Output() exit: EventEmitter<{ action: "create" | "delete" | "update", question: Question }> = new EventEmitter();
 
   saving = false;
   deleting = false;
@@ -65,7 +65,7 @@ export class QuestionEditComponent {
         next: value => {
           this.alert.success("Kérdés sikeresen frissítve");
           this.saving = false;
-          this.onExit.emit({ action: "update", question: value });
+          this.exit.emit({ action: "update", question: value });
         },
         error: () => {
           this.saving = false;
@@ -77,7 +77,7 @@ export class QuestionEditComponent {
         next: value => {
           this.alert.success("Kérdés sikeresen létrehozva");
           this.saving = false;
-          this.onExit.emit({ action: "create", question: value });
+          this.exit.emit({ action: "create", question: value });
         },
         error: () => {
           this.saving = false;
@@ -98,7 +98,7 @@ export class QuestionEditComponent {
           next: () => {
             this.alert.success("Kérdés sikeresen törölve");
             this.deleting = false;
-            this.onExit.emit({ action: "delete", question: this.question });
+            this.exit.emit({ action: "delete", question: this.question });
           },
           error: () => {
             this.deleting = false;

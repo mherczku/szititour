@@ -5,10 +5,10 @@
     <div id="google-button"></div>
 
     <form name="login">
-      <label class="text-size-base block mb-2">E-mail</label>
-      <input tabindex="1" autofocus [(ngModel)]="email" name="szititourLoginEmail" type="email" class="simpleInput mb-5"
+      <label for="szititourLoginEmail" class="text-size-base block mb-2">E-mail</label>
+      <input tabindex="1" [(ngModel)]="email" name="szititourLoginEmail" type="email" class="simpleInput mb-5"
         placeholder="E-mail cím" />
-      <label class="text-size-base block mb-2">Jelszó</label>
+      <label for="szititourLoginPassword" class="text-size-base block mb-2">Jelszó</label>
       <input tabindex="2" [(ngModel)]="password" name="szititourLoginPassword" type="password" class="simpleInput mb-5"
         placeholder="Jelszó" autocomplete="szititourLoginPassword" />
 

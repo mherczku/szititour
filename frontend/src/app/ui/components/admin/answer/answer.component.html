@@ -12,7 +12,7 @@
       <p class="text-size-base" *ngSwitchCase="QuestionType.longText">{{answer.answerText}}</p>
       <p class="text-size-base" *ngSwitchCase="QuestionType.number">{{answer.answerNumber}}</p>
       <p class="text-size-base" *ngSwitchCase="QuestionType.year">{{answer.answerNumber}}</p>
-      <img *ngSwitchCase="QuestionType.imgOnly" [src]="answer.img | imgSrc | imgLoader | async">
+      <img *ngSwitchCase="QuestionType.imgOnly" [src]="answer.img | imgSrc | imgLoader | async" alt="kérdés képe">
     </div>
     <p class="text-size-base mt-2"><strong>Értékelése: </strong>{{answer.correct ?? "Nem értékelt"}}</p>
     <button class="btn-hover-bold" (click)="$evaluateId.set(answer.id)">Értékelés</button>

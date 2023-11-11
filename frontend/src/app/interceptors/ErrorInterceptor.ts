@@ -22,7 +22,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
-      catchError((err: any, _caught: any) => {
+      catchError((err: any) => {
         if (err instanceof HttpErrorResponse) {
           //* Stopping loader
           this.loaderService.stop();
