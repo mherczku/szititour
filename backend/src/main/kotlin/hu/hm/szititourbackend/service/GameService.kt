@@ -88,13 +88,11 @@ class GameService @Autowired constructor(private val gameRepository: GameReposit
             }
         }
         //* Delete statuses on deactivation if deleting true
-        if (!activation) {
-            if (deleting) {
-                game.teamGameStatuses.forEach {
-                    teamGameStatusRepository.deleteById(it.id)
-                }
-                game.teamGameStatuses.clear()
+        if (!activation && deleting) {
+            game.teamGameStatuses.forEach {
+                teamGameStatusRepository.deleteById(it.id)
             }
+            game.teamGameStatuses.clear()
         }
         game.active = activation
         return gameRepository.save(game)
