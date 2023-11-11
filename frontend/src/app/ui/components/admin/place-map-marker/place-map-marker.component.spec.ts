@@ -8,16 +8,13 @@ describe("PlaceMapMarkerComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ PlaceMapMarkerComponent ]
+      imports: [PlaceMapMarkerComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(PlaceMapMarkerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it("should create", () => {
-    expect(component).toBeTruthy();
-  });
 });

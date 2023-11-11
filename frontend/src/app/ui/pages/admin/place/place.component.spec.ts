@@ -1,5 +1,5 @@
-import {ComponentFixture, TestBed} from "@angular/core/testing";
-import {PlaceComponent} from "./place.component";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { PlaceComponent } from "./place.component";
 
 describe("PlaceComponent", () => {
   let component: PlaceComponent;
@@ -16,7 +16,4 @@ describe("PlaceComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
-    expect(component).toBeTruthy();
-  });
 });

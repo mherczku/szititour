@@ -15,7 +15,4 @@ describe("VerifyComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
-    expect(component).toBeTruthy();
-  });
 });

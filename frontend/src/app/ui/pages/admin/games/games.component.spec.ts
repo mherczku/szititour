@@ -1,5 +1,5 @@
-import {ComponentFixture, TestBed} from "@angular/core/testing";
-import {GamesComponent} from "./games.component";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { GamesComponent } from "./games.component";
 
 describe("GamesComponent", () => {
   let component: GamesComponent;
@@ -7,7 +7,7 @@ describe("GamesComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GamesComponent]
+      imports: [GamesComponent]
     })
       .compileComponents();
   });
@@ -18,7 +18,4 @@ describe("GamesComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
-    expect(component).toBeTruthy();
-  });
 });

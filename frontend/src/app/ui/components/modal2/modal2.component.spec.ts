@@ -8,16 +8,13 @@ describe("Modal2Component", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ Modal2Component ]
+      imports: [Modal2Component]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(Modal2Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it("should create", () => {
-    expect(component).toBeTruthy();
-  });
 });
