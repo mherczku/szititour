@@ -131,7 +131,7 @@ class SecurityConfig(
         )
         corsConfiguration.exposedHeaders = listOf(
                 "Origin", "Content-Type", "Accept", "Authorization",
-                "Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", HEADER_TOKEN_ID
+                "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", HEADER_TOKEN_ID
         )
         corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
 

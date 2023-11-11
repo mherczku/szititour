@@ -96,15 +96,17 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
             //Invalid signature/claims
             when (e) {
                 is JwtValidationException -> {
-                    if(e.localizedMessage.contains("Jwt expired at")) {
-                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
+                    return if (e.localizedMessage.contains("Jwt expired at")) {
+                        VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
                     } else {
-                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                        VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
                     }
                 }
+
                 is CustomException -> {
                     return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
                 }
+
                 else -> {
                     return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
                 }
@@ -126,6 +128,7 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
                 .build()
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).tokenValue
     }
+
     fun verifyTeamDeleteToken(token: String): VerificationResponse {
         if (token.isNullOrEmpty()) {
             return VerificationResponse(verified = false, errorMessage = "Empty Token", messageCode = MessageConstants.AUTH_TOKEN_EMPTY)
@@ -148,15 +151,17 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
         } catch (e: Exception) {
             when (e) {
                 is JwtValidationException -> {
-                    if(e.localizedMessage.contains("Jwt expired at")) {
-                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
+                    return if (e.localizedMessage.contains("Jwt expired at")) {
+                        VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
                     } else {
-                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                        VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
                     }
                 }
+
                 is CustomException -> {
                     return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
                 }
+
                 else -> {
                     return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
                 }
@@ -179,6 +184,7 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
                 .build()
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).tokenValue
     }
+
     fun verifyPasswordChangeToken(token: String): VerificationResponse {
         if (token.isNullOrEmpty()) {
             return VerificationResponse(verified = false, errorMessage = "Empty Token", messageCode = MessageConstants.AUTH_TOKEN_EMPTY)
@@ -201,15 +207,17 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
         } catch (e: Exception) {
             when (e) {
                 is JwtValidationException -> {
-                    if(e.localizedMessage.contains("Jwt expired at")) {
-                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
+                    return if (e.localizedMessage.contains("Jwt expired at")) {
+                        VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
                     } else {
-                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                        VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
                     }
                 }
+
                 is CustomException -> {
                     return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
                 }
+
                 else -> {
                     return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
                 }
@@ -252,15 +260,17 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
         } catch (e: Exception) {
             when (e) {
                 is JwtValidationException -> {
-                    if(e.localizedMessage.contains("Jwt expired at")) {
-                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
+                    return if (e.localizedMessage.contains("Jwt expired at")) {
+                        VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.AUTH_TOKEN_EXPIRED)
                     } else {
-                        return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
+                        VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
                     }
                 }
+
                 is CustomException -> {
                     return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = e.messageCode)
                 }
+
                 else -> {
                     return VerificationResponse(verified = false, errorMessage = e.localizedMessage, messageCode = MessageConstants.VERIFICATION_FAILED)
                 }
@@ -308,7 +318,7 @@ class SecurityTokenService @Autowired constructor(private val jwtEncoder: JwtEnc
         val claims = JwtClaimsSet.builder()
                 .issuer(ISSUER)
                 .issuedAt(now)
-                .expiresAt(now.plusSeconds(JWT_TOKEN_VALIDITY_1MIN.toLong()))
+                .expiresAt(now.plusSeconds(JWT_TOKEN_VALIDITY_1MIN.toLong()*10))
                 .subject(teamId)
                 .claim(CLAIM_TYPE, CLAIM_TYPE_RES_TOKEN)
                 .claim(CLAIM_RES_ID, resourceId)
