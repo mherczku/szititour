@@ -110,8 +110,8 @@ import org.springframework.context.annotation.Bean
 ```
 
 ### Frontend:
-A Frontent alkalmazás lokális futtatása egy fokkal egyszerűbb:
-    1. A frontend/src/environments mappában lévő environment.ts fájl-t kell bekonfiguráld.
+    A Frontent alkalmazás lokális futtatása egy fokkal egyszerűbb:
+        1. A frontend/src/environments mappában lévő environment.ts fájl-t kell bekonfiguráld.
     (Itt figyelj, ha lokálisan futtatod a Backendet, akkor HTTP kell, valamint ha a térkép, push értesítések, googleSignIn funckiókat is ki szeretnéd próbálni akkor, ahhoz az opcionális rész megfelelő mezőit is ki kell töltsed. Egyébként push értesítések és googleSignIn csak HTTPS kapcsolaton keresztül engedélyezettek a Google által.)
-    2. A kész environment.ts fájl-t másold le és a másoltat nevezd el environment.local.ts nevűre. (előző megmarad)
-    3. npm run start parancs kiadásával futtathatod az alkalmazást (szükséges nodejs*, npm*, ng)
+        2. A kész environment.ts fájl-t másold le és a másoltat nevezd el environment.local.ts nevűre. (előző megmarad)
+        3. npm run start parancs kiadásával futtathatod az alkalmazást (szükséges nodejs*, npm*, ng)
