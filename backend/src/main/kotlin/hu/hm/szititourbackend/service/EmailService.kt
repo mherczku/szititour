@@ -18,10 +18,11 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
+    val email = "szititour.nxt@gmail.com"
     fun sendWelcomeMail(emailTo: String, username: String, verificationToken: String) {
         logger.debug("Send welcome email to $username")
         val mimeMessage = javaMailSender.createMimeMessage()
-        mimeMessage.setFrom("szititour.nxt@gmail.com")
+        mimeMessage.setFrom(email)
         mimeMessage.subject = "Verify your E-mail"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
@@ -38,7 +39,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
             javaMailSender.send(mimeMessage)
         } else {
             logger.error("Send welcome email to $username message template file was null")
-            throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
+            throw CustomException("Email send failed, welcome message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
         }
 
     }
@@ -46,7 +47,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
     fun sendModifyEmailMail(emailTo: String, username: String, verificationToken: String) {
         logger.debug("Send modify email to $username")
         val mimeMessage = javaMailSender.createMimeMessage()
-        mimeMessage.setFrom("szititour.nxt@gmail.com")
+        mimeMessage.setFrom(email)
         mimeMessage.subject = "E-mail cím módosítása"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
@@ -63,14 +64,14 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
             javaMailSender.send(mimeMessage)
         } else {
             logger.error("Send modify-email email to $username message template file was null")
-            throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
+            throw CustomException("Email send failed, modify-e message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
         }
     }
 
     fun sendPasswordUpdatedEmail(emailTo: String, username: String) {
         logger.debug("Send password update email to $username")
         val mimeMessage = javaMailSender.createMimeMessage()
-        mimeMessage.setFrom("szititour.nxt@gmail.com")
+        mimeMessage.setFrom(email)
         mimeMessage.subject = "Jelszavad módosítva"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
@@ -86,7 +87,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
             javaMailSender.send(mimeMessage)
         } else {
             logger.error("Send password update email to $username message template file was null")
-            throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
+            throw CustomException("Email send failed, update message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
         }
     }
 
@@ -94,7 +95,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
     fun sendModifyPasswordMail(emailTo: String, username: String, verificationToken: String) {
         logger.debug("Send modify password email to $username")
         val mimeMessage = javaMailSender.createMimeMessage()
-        mimeMessage.setFrom("szititour.nxt@gmail.com")
+        mimeMessage.setFrom(email)
         mimeMessage.subject = "Jelszó módosítása"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
@@ -111,14 +112,14 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
             javaMailSender.send(mimeMessage)
         } else {
             logger.error("Send modify-password email to $username message template file was null")
-            throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
+            throw CustomException("Email send failed, modify message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
         }
     }
 
     fun sendForgotPasswordMail(emailTo: String, username: String, verificationToken: String) {
         logger.debug("Send forgot password email to $username")
         val mimeMessage = javaMailSender.createMimeMessage()
-        mimeMessage.setFrom("szititour.nxt@gmail.com")
+        mimeMessage.setFrom(email)
         mimeMessage.subject = "Elfelejtett jelszó"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
@@ -135,7 +136,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
             javaMailSender.send(mimeMessage)
         } else {
             logger.error("Send forgot-password email to $username message template file was null")
-            throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
+            throw CustomException("Email send failed, forgot message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
         }
     }
 
@@ -144,7 +145,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
     fun sendTeamDeleteMail(emailTo: String, username: String, verificationToken: String) {
         logger.info("Send team delete to $username")
         val mimeMessage = javaMailSender.createMimeMessage()
-        mimeMessage.setFrom("szititour.nxt@gmail.com")
+        mimeMessage.setFrom(email)
         mimeMessage.subject = "Fiók törlése"
         mimeMessage.addRecipients(Message.RecipientType.TO, emailTo)
 
@@ -161,7 +162,7 @@ class EmailService @Autowired constructor(private val javaMailSender: JavaMailSe
             javaMailSender.send(mimeMessage)
         } else {
             logger.error("Send team delete email to $username message template file was null")
-            throw CustomException("Email send failed, message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
+            throw CustomException("Email send failed, delete message template was null", HttpStatus.INTERNAL_SERVER_ERROR, MessageConstants.EMAIL_SEND_FAILED_TEMPLATE_NULL)
         }
     }
 }
