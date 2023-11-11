@@ -67,7 +67,9 @@ google.clientId=CLIENTID.apps.googleusercontent.com
 
 #### Beépített adatbázis futtatása:
 
-Amennyiben a beépített adatbázis opciót választottad, akkor az alábbi kódot helyezd el egy application.properties nevezetű fájlban. Ezt a fájlt a többihez hasonlóan helyezd el a resources mappában.
+Amennyiben a beépített adatbázis opciót választottad, akkor az alábbi kódot helyezd el egy application.properties nevezetű fájlban.
+Ezt a fájlt a többihez hasonlóan helyezd el a resources mappában.
+A build.gradle.ts fájlban kommentezd ki a runtimeOnly("org.postgresql:postgresql") sort és szedd le a kommentet a runtimeOnly("com.h2database:h2") sorrol.
 
 Az Email és GoogleSigIn rész username password és clientId részét logikusan töltsd ki.
 
