@@ -16,7 +16,7 @@ class SzititourBackendApplication {
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     /*@Bean
-    fun commandLineRunner(teamService: TeamService, gameService: GameService, placeService: PlaceService): CommandLineRunner {
+    fun commandLineRunner(teamService: TeamService): CommandLineRunner {
         return CommandLineRunner { _ ->
             val testPass = PasswordUtils.encryptPassword("T12345678910")
             val tester =  Team(email= "ta@test.hu", password = testPass, name = "Test Admin")
@@ -25,8 +25,6 @@ class SzititourBackendApplication {
             val savedUser = teamService.addTeam(tester2, false, isTester = true)
             logger.debug("tester admin created ${savedAdmin.id}")
             logger.debug("tester user created ${savedUser.id}")
-            gameService.addGame(Game(1, title = "Teszt játék", dateStart = Timestamp.from(Instant.now()), dateEnd = Timestamp.from(Instant.now().plusSeconds(100000))))
-            //placeService.addPlaceToGame(PlaceDto(name = "Teszt helyszín 1"))
         }
     }*/
 }
