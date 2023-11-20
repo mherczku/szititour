@@ -9,7 +9,6 @@ import { DeleteComponent } from "./delete/delete.component";
 
 export const USER_ROUTES: Routes = [
   {
-    //matcher: getMatcher(["home", "fooldal"], 1),
     path: CONST_ROUTES.user.home.path,
     component: HomeComponent
   },
@@ -36,18 +35,3 @@ export const USER_ROUTES: Routes = [
 
   { path: "**", redirectTo: CONST_ROUTES.user.home.path },
 ];
-
-/*
-export function getMatcher(paths: string[], dept: number) {
-  return function(url: UrlSegment[]) {
-    if (url.length > dept) {
-      const path = url[dept].path;
-      console.log(path , url, paths, paths.includes(path))
-      if(paths.includes(path)){
-        return {consumed: url};
-      }
-    }
-    return null;
-  };
-}
-*/

@@ -66,9 +66,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     newMessages: computed(() => {
       let a = 0;
       this.$adminChat().users.forEach((user) => {
-        //if (user.name !== "Én") {
         a += user.newMessages;
-        //}
       });
       return a;
     }),

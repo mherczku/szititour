@@ -59,7 +59,6 @@ export class QuestionEditComponent {
 
   save() {
     if (this.isEdit) {
-      console.log(this.question.riddle, "saving");
       this.saving = true;
       this.adminService.updateQuestion(this.question, this.file).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: value => {

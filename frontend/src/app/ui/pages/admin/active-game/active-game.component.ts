@@ -110,9 +110,7 @@ export class ActiveGameComponent implements OnInit {
         if (ps.reached) {
           placeMap.get(ps.placeId)?.teams.push({ teamName: teamStatus.teamName, reached: ps.reachedAt });
         }
-        //teams.push({teamName: teamStatus.teamName, reached: ps.reachedAt})
       });
-      //placeMap.set(ps.placeId, {teamName: teamStatus.teamName, reached: ps.reachedAt})
     });
 
     this.gameMarkers.length = 0;

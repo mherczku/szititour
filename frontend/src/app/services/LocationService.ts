@@ -17,8 +17,6 @@ export class LocationService {
   private isTracking = false;
   private lastLocation: LastLocationData = {};
 
-  //private baseUrl = environment.apiBaseUrl + "/user";
-
   getLocationData() {
     return this.lastLocation;
   }
@@ -32,7 +30,6 @@ export class LocationService {
       this.isTracking = true;
       this.lastLocation.gameId = gameId;
       navigator.geolocation.watchPosition((position) => {
-        console.log("new location data");
         this.lastLocation.lastLatitude = position.coords.latitude;
         this.lastLocation.lastLongitude = position.coords.longitude;
         this.lastLocation.lastAltitude = position.coords.altitude;

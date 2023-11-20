@@ -45,7 +45,6 @@
 }
 
 .chat-container {
-  /* From https://css.glass */
   background: rgb(144 144 144 / 40%);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -64,7 +63,6 @@
 
   @media (max-width: $breakpoint-mobile) {
     max-width: 90vw;
-    //overflow-x: hidden;
   }
 
   .chat-head {

@@ -86,7 +86,7 @@ export class ChatService {
           };
           this.messages?.next(message);
         } else {
-          console.log("ws - auth - no token");
+          console.error("ws - auth - no token");
         }
 
 

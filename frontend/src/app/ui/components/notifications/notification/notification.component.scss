@@ -31,7 +31,6 @@
         position: absolute;
         top: 5px;
         right: 5px;
-        //transform: scale(0.9);
     }
 
     .content {
@@ -70,11 +69,8 @@
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
-            /* number of lines to show */
             line-clamp: 2;
         }
-
-
 
     }
 }

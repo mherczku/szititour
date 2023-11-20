@@ -68,10 +68,6 @@ export class ProfileComponent implements OnInit {
 
   addMember() {
     this.$profile().members.push("Játékos neve");
-    /*  this.$profile.update(p => {
-      p.members.push("Játékos neve");
-      return p;
-     }); */
   }
 
   get isSame(): boolean {

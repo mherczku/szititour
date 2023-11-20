@@ -15,6 +15,7 @@ class SzititourBackendApplication {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
+    // To Generate Test Data:
     /*@Bean
     fun commandLineRunner(teamService: TeamService): CommandLineRunner {
         return CommandLineRunner { _ ->

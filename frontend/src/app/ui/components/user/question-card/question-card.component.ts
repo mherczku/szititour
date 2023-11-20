@@ -72,8 +72,6 @@ export class QuestionCardComponent {
   }
 
   setIsAnswerSameAsStatus() {
-    console.log(this.answerIsSame = !this.currentImgChanged && (this._savedAnswer?.img?.length ?? 0) > 0)
-    console.log(this._savedAnswer)
     switch (this._question.type) {
 
       case QuestionType.shortText:
@@ -124,7 +122,6 @@ export class QuestionCardComponent {
           break;
       }
     }
-    //this.setIsAnswerSameAsStatus();
   }
 
   inputFileChanged(file: File) {
