@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild} from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from "@angular/core";
 
 @Component({
   selector: "app-modal",
@@ -18,7 +18,7 @@ export class ModalComponent {
 
   @HostListener("click", ["$event"])
   clickInside(event: FocusEvent) {
-    if(!this.modal.nativeElement.contains(event.target)){
+    if (!this.modal.nativeElement?.children[0]?.contains(event.target)) {
       this.isDisplayedChange.emit(false);
       this.isDisplayed = false;
     }
