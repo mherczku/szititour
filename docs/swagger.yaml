@@ -1,0 +1,3158 @@
+swagger: '2.0'
+info:
+  description: Api Documentation
+  version: '1.0'
+  title: Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+host: dolphin-casual-deer.ngrok-free.app
+basePath: /szititour
+tags:
+  - name: answer-controller
+    description: Answer Controller
+  - name: application-controller
+    description: Application Controller
+  - name: game-controller
+    description: Game Controller
+  - name: logged-in-controller
+    description: Logged In Controller
+  - name: notification-admin-controller
+    description: Notification Admin Controller
+  - name: notification-user-controller
+    description: Notification User Controller
+  - name: place-controller
+    description: Place Controller
+  - name: question-controller
+    description: Question Controller
+  - name: resource-controller
+    description: Resource Controller
+  - name: security-controller
+    description: Security Controller
+  - name: team-controller
+    description: Team Controller
+paths:
+  /answers:
+    get:
+      tags:
+        - answer-controller
+      summary: getAllAnswers
+      operationId: getAllAnswersUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AnswerDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /answers/{id}:
+    get:
+      tags:
+        - answer-controller
+      summary: getAnswerById
+      operationId: getAnswerByIdUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AnswerDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - answer-controller
+      summary: deleteAnswerById
+      operationId: deleteAnswerByIdUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /answers/{id}/correct:
+    get:
+      tags:
+        - answer-controller
+      summary: markAsCorrect
+      operationId: markAsCorrectUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AnswerDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /answers/{id}/incorrect:
+    get:
+      tags:
+        - answer-controller
+      summary: markAsIncorrect
+      operationId: markAsIncorrectUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AnswerDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /applications:
+    get:
+      tags:
+        - application-controller
+      summary: getAllApplications
+      operationId: getAllApplicationsUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ApplicationDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    put:
+      tags:
+        - application-controller
+      summary: updateApplication
+      operationId: updateApplicationUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: application
+          description: application
+          required: true
+          schema:
+            $ref: '#/definitions/Application'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /applications/{id}:
+    get:
+      tags:
+        - application-controller
+      summary: getApplicationById
+      operationId: getApplicationByIdUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - application-controller
+      summary: deleteApplicationById
+      operationId: deleteApplicationByIdUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /auth:
+    get:
+      tags:
+        - security-controller
+      summary: authorize
+      operationId: authorizeUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: Authorization
+          in: header
+          description: Authorization
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /auth/forgot-password:
+    post:
+      tags:
+        - security-controller
+      summary: forgotPasswordRequest
+      operationId: forgotPasswordRequestUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: email
+          description: email
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /auth/login:
+    post:
+      tags:
+        - security-controller
+      summary: login
+      operationId: loginUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - in: body
+          name: clientData
+          description: clientData
+          required: true
+          schema:
+            $ref: '#/definitions/ClientDataReq'
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /auth/login/google:
+    post:
+      tags:
+        - security-controller
+      summary: authorizeWihGoogle
+      operationId: authorizeWihGoogleUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: clientData
+          description: clientData
+          required: true
+          schema:
+            $ref: '#/definitions/ClientDataReq'
+        - name: googleToken
+          in: header
+          description: googleToken
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /auth/logout:
+    post:
+      tags:
+        - security-controller
+      summary: logout
+      operationId: logoutUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: Authorization
+          in: header
+          description: Authorization
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /auth/password:
+    post:
+      tags:
+        - security-controller
+      summary: forgotPassword
+      operationId: forgotPasswordUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: passwordToken
+          in: header
+          description: passwordToken
+          required: true
+          type: string
+        - in: body
+          name: passwordUpdateDto
+          description: passwordUpdateDto
+          required: true
+          schema:
+            $ref: '#/definitions/TeamPasswordUpdateDto'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /auth/register:
+    post:
+      tags:
+        - security-controller
+      summary: register
+      operationId: registerUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: credentials
+          description: credentials
+          required: true
+          schema:
+            $ref: '#/definitions/RegisterRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /auth/verifyEmail/{token}:
+    get:
+      tags:
+        - security-controller
+      summary: verifyEmailWithToken
+      operationId: verifyEmailWithTokenUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: token
+          in: path
+          description: token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /games:
+    get:
+      tags:
+        - game-controller
+      summary: getAllGames
+      operationId: getAllGamesUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/GameDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    put:
+      tags:
+        - game-controller
+      summary: updateGame
+      operationId: updateGameUsingPUT
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - name: gameEnd
+          in: query
+          description: gameEnd
+          required: true
+          type: string
+        - name: gameId
+          in: query
+          description: gameId
+          required: true
+          type: string
+        - name: gameStart
+          in: query
+          description: gameStart
+          required: true
+          type: string
+        - name: gameTitle
+          in: query
+          description: gameTitle
+          required: true
+          type: string
+        - in: body
+          name: image
+          description: image
+          required: true
+          schema:
+            type: string
+            format: binary
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GameDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /games/activate/{id}:
+    put:
+      tags:
+        - game-controller
+      summary: activateGame
+      operationId: activateGameUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GameDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /games/deactivate/{id}:
+    put:
+      tags:
+        - game-controller
+      summary: deactivateGame
+      operationId: deactivateGameUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: deleting
+          description: deleting
+          required: true
+          schema:
+            type: boolean
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GameDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /games/image:
+    post:
+      tags:
+        - game-controller
+      summary: addGameWithImage
+      operationId: addGameWithImageUsingPOST
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - name: gameEnd
+          in: query
+          description: gameEnd
+          required: true
+          type: string
+        - name: gameStart
+          in: query
+          description: gameStart
+          required: true
+          type: string
+        - name: gameTitle
+          in: query
+          description: gameTitle
+          required: true
+          type: string
+        - in: body
+          name: image
+          description: image
+          required: true
+          schema:
+            type: string
+            format: binary
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GameDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /games/{id}:
+    get:
+      tags:
+        - game-controller
+      summary: getGameById
+      operationId: getGameByIdUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GameDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - game-controller
+      summary: deleteGameById
+      operationId: deleteGameByIdUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /games/{id}/status:
+    get:
+      tags:
+        - game-controller
+      summary: getGameWithStatusesById
+      operationId: getGameWithStatusesByIdUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GameWithStatusesDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /noti/direct:
+    post:
+      tags:
+        - notification-admin-controller
+      summary: sendTargetedNotification
+      operationId: sendTargetedNotificationUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: notification
+          description: notification
+          required: true
+          schema:
+            $ref: '#/definitions/DirectNotification'
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /noti/topic:
+    post:
+      tags:
+        - notification-admin-controller
+      summary: sendNotificationToTopic
+      operationId: sendNotificationToTopicUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: notification
+          description: notification
+          required: true
+          schema:
+            $ref: '#/definitions/TopicNotification'
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /notification/subscribe:
+    post:
+      tags:
+        - notification-user-controller
+      summary: subscribeToTopic
+      operationId: subscribeToTopicUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: principal
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: subscription
+          description: subscription
+          required: true
+          schema:
+            $ref: '#/definitions/SubscriptionRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: string
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /notification/topics:
+    post:
+      tags:
+        - notification-user-controller
+      summary: getSubscriptions
+      operationId: getSubscriptionsUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: principal
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: subscription
+          description: subscription
+          required: true
+          schema:
+            $ref: '#/definitions/SubscriptionRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: string
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /notification/unsubscribe:
+    post:
+      tags:
+        - notification-user-controller
+      summary: unsubscribeFromTopic
+      operationId: unsubscribeFromTopicUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: principal
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: subscription
+          description: subscription
+          required: true
+          schema:
+            $ref: '#/definitions/SubscriptionRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: string
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /places:
+    get:
+      tags:
+        - place-controller
+      summary: getAllPlaces
+      operationId: getAllPlacesUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PlaceDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    post:
+      tags:
+        - place-controller
+      summary: addPlaceToGame
+      operationId: addPlaceToGameUsingPOST
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - name: address
+          in: query
+          description: address
+          required: true
+          type: string
+        - name: gameId
+          in: query
+          description: gameId
+          required: true
+          type: string
+        - in: body
+          name: image
+          description: image
+          required: true
+          schema:
+            type: string
+            format: binary
+        - name: lat
+          in: query
+          description: lat
+          required: true
+          type: string
+        - name: lng
+          in: query
+          description: lng
+          required: true
+          type: string
+        - name: name
+          in: query
+          description: name
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PlaceDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    put:
+      tags:
+        - place-controller
+      summary: updatePlace
+      operationId: updatePlaceUsingPUT
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - name: address
+          in: query
+          description: address
+          required: true
+          type: string
+        - in: body
+          name: image
+          description: image
+          required: true
+          schema:
+            type: string
+            format: binary
+        - name: lat
+          in: query
+          description: lat
+          required: true
+          type: string
+        - name: lng
+          in: query
+          description: lng
+          required: true
+          type: string
+        - name: name
+          in: query
+          description: name
+          required: true
+          type: string
+        - name: placeId
+          in: query
+          description: placeId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PlaceDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /places/{id}:
+    get:
+      tags:
+        - place-controller
+      summary: getPlaceById
+      operationId: getPlaceByIdUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PlaceDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - place-controller
+      summary: deletePlaceById
+      operationId: deletePlaceByIdUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /questions:
+    get:
+      tags:
+        - question-controller
+      summary: getAllQuestions
+      operationId: getAllQuestionsUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/QuestionDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    post:
+      tags:
+        - question-controller
+      summary: addQuestion
+      operationId: addQuestionUsingPOST
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: image
+          description: image
+          required: true
+          schema:
+            type: string
+            format: binary
+        - name: name
+          in: query
+          description: name
+          required: true
+          type: string
+        - name: placeId
+          in: query
+          description: placeId
+          required: true
+          type: string
+        - name: riddle
+          in: query
+          description: riddle
+          required: true
+          type: string
+        - name: type
+          in: query
+          description: type
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/QuestionDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    put:
+      tags:
+        - question-controller
+      summary: updateQuestion
+      operationId: updateQuestionUsingPUT
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: image
+          description: image
+          required: true
+          schema:
+            type: string
+            format: binary
+        - name: name
+          in: query
+          description: name
+          required: true
+          type: string
+        - name: questionId
+          in: query
+          description: questionId
+          required: true
+          type: string
+        - name: riddle
+          in: query
+          description: riddle
+          required: true
+          type: string
+        - name: type
+          in: query
+          description: type
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/QuestionDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /questions/{id}:
+    get:
+      tags:
+        - question-controller
+      summary: getQuestionById
+      operationId: getQuestionByIdUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/QuestionDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - question-controller
+      summary: deleteQuestionById
+      operationId: deleteQuestionByIdUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /resources/images:
+    get:
+      tags:
+        - resource-controller
+      summary: getResourceV2
+      operationId: getResourceV2UsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: img
+          in: query
+          description: img
+          required: true
+          type: string
+        - name: resToken
+          in: header
+          description: resToken
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/UrlResource'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /teams:
+    get:
+      tags:
+        - team-controller
+      summary: getAllTeams
+      operationId: getAllTeamsUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TeamDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /teams/{id}:
+    get:
+      tags:
+        - team-controller
+      summary: getTeamById
+      operationId: getTeamByIdUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TeamDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - team-controller
+      summary: deleteTeamById
+      operationId: deleteTeamByIdUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /user:
+    delete:
+      tags:
+        - logged-in-controller
+      summary: deleteTeamRequest
+      operationId: deleteTeamRequestUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /user/activegame/{gameId}:
+    get:
+      tags:
+        - logged-in-controller
+      summary: getGameData
+      operationId: getGameDataUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: gameId
+          in: path
+          description: gameId
+          required: true
+          type: integer
+          format: int32
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GameActiveDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/answer/{questionId}:
+    post:
+      tags:
+        - logged-in-controller
+      summary: answerQuestion
+      operationId: answerQuestionUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: answer
+          description: answer
+          required: true
+          schema:
+            $ref: '#/definitions/Answer'
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: principal
+          in: query
+          required: false
+          type: object
+        - name: questionId
+          in: path
+          description: questionId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TeamGameStatusDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/answer/{questionId}/image:
+    post:
+      tags:
+        - logged-in-controller
+      summary: answerQuestionWithImage
+      operationId: answerQuestionWithImageUsingPOST
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: image
+          description: image
+          required: true
+          schema:
+            type: string
+            format: binary
+        - name: principal
+          in: query
+          required: false
+          type: object
+        - name: questionId
+          in: path
+          description: questionId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TeamGameStatusDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/answers:
+    post:
+      tags:
+        - logged-in-controller
+      summary: answerQuestions
+      operationId: answerQuestionsUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: answers
+          description: answers
+          required: true
+          schema:
+            $ref: '#/definitions/AnswersRequestBody'
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TeamGameStatusDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/apply:
+    post:
+      tags:
+        - logged-in-controller
+      summary: applyForGame
+      operationId: applyForGameUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: gameId
+          description: gameId
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GameOnlyBasicDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/cancel:
+    post:
+      tags:
+        - logged-in-controller
+      summary: cancelApplicationForGame
+      operationId: cancelApplicationForGameUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: gameId
+          description: gameId
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GameOnlyBasicDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/delete:
+    delete:
+      tags:
+        - logged-in-controller
+      summary: deleteTeam
+      operationId: deleteTeamUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: deleteToken
+          in: header
+          description: deleteToken
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /user/games:
+    get:
+      tags:
+        - logged-in-controller
+      summary: getAllAvailableGames
+      operationId: getAllAvailableGamesUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/GameOnlyBasicDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/revoke:
+    post:
+      tags:
+        - logged-in-controller
+      summary: revokeToken
+      operationId: revokeTokenUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: principal
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: tokenId
+          description: tokenId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TeamDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/status/{gameId}:
+    get:
+      tags:
+        - logged-in-controller
+      summary: getTeamGameStatus
+      operationId: getTeamGameStatusUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: gameId
+          in: path
+          description: gameId
+          required: true
+          type: integer
+          format: int32
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TeamGameStatusDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/update:
+    post:
+      tags:
+        - logged-in-controller
+      summary: updateProfile
+      operationId: updateProfileUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: principal
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: profileUpdate
+          description: profileUpdate
+          required: true
+          schema:
+            $ref: '#/definitions/TeamUpdateProfileDto'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TeamDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/update/email:
+    post:
+      tags:
+        - logged-in-controller
+      summary: updateProfileEmail
+      operationId: updateProfileEmailUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: email
+          description: email
+          required: true
+          schema:
+            type: string
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TeamDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/update/image:
+    post:
+      tags:
+        - logged-in-controller
+      summary: updateProfile
+      operationId: updateProfileUsingPOST_1
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - in: body
+          name: image
+          description: image
+          required: true
+          schema:
+            type: string
+            format: binary
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TeamDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/update/password:
+    post:
+      tags:
+        - logged-in-controller
+      summary: updateProfilePassword
+      operationId: updateProfilePasswordUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: passwordToken
+          in: header
+          description: passwordToken
+          required: true
+          type: string
+        - in: body
+          name: passwordUpdateDto
+          description: passwordUpdateDto
+          required: true
+          schema:
+            $ref: '#/definitions/TeamPasswordUpdateDto'
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /user/update/password-request:
+    get:
+      tags:
+        - logged-in-controller
+      summary: updateProfilePasswordRequest
+      operationId: updateProfilePasswordRequestUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: authenticated
+          in: query
+          required: false
+          type: boolean
+        - name: authorities[0].authority
+          in: query
+          required: false
+          type: string
+        - name: credentials
+          in: query
+          required: false
+          type: object
+        - name: details
+          in: query
+          required: false
+          type: object
+        - name: principal
+          in: query
+          required: false
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+definitions:
+  Answer:
+    type: object
+    properties:
+      answerBoolean:
+        type: boolean
+      answerNumber:
+        type: integer
+        format: int32
+      answerText:
+        type: string
+      correct:
+        type: boolean
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      question:
+        $ref: '#/definitions/Question'
+      team:
+        $ref: '#/definitions/Team'
+    title: Answer
+  AnswerDto:
+    type: object
+    properties:
+      answerBoolean:
+        type: boolean
+      answerNumber:
+        type: integer
+        format: int32
+      answerText:
+        type: string
+      correct:
+        type: boolean
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      questionDtoNoAnswers:
+        $ref: '#/definitions/QuestionDtoNoAnswers'
+      teamId:
+        type: integer
+        format: int32
+    title: AnswerDto
+  AnswersRequestBody:
+    type: object
+    properties:
+      gameId:
+        type: integer
+        format: int32
+      questionAnswers:
+        type: array
+        items:
+          $ref: '#/definitions/QuestionAnswer'
+    title: AnswersRequestBody
+  Application:
+    type: object
+    properties:
+      accepted:
+        type: boolean
+      createdAt:
+        $ref: '#/definitions/TimestampReq'
+      game:
+        $ref: '#/definitions/Game'
+      id:
+        type: integer
+        format: int32
+      team:
+        $ref: '#/definitions/Team'
+      updatedAt:
+        $ref: '#/definitions/TimestampReq'
+    title: Application
+  ApplicationDto:
+    type: object
+    properties:
+      accepted:
+        type: boolean
+      createdAt:
+        $ref: '#/definitions/Timestamp'
+      gameId:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      teamId:
+        type: integer
+        format: int32
+      teamName:
+        type: string
+      updatedAt:
+        $ref: '#/definitions/Timestamp'
+    title: ApplicationDto
+  ClientData:
+    type: object
+    properties:
+      brand:
+        type: string
+      expireAt:
+        type: string
+        format: date-time
+      google:
+        type: boolean
+      ipAddress:
+        type: string
+      mobile:
+        type: boolean
+      platform:
+        type: string
+      tokenId:
+        type: string
+    title: ClientData
+  ClientDataReq:
+    type: object
+    properties:
+      brand:
+        type: string
+      expireAt:
+        type: string
+        format: date-time
+      google:
+        type: boolean
+      ipAddress:
+        type: string
+      platform:
+        type: string
+      tokenId:
+        type: string
+    title: ClientDataReq
+  ClientDataRes:
+    type: object
+    properties:
+      brand:
+        type: string
+      expireAt:
+        type: string
+        format: date-time
+      google:
+        type: boolean
+      ipAddress:
+        type: string
+      mobile:
+        type: boolean
+      platform:
+        type: string
+      tokenId:
+        type: string
+    title: ClientDataRes
+  DirectNotification:
+    type: object
+    properties:
+      message:
+        type: string
+      target:
+        type: string
+      title:
+        type: string
+    title: DirectNotification
+  Game:
+    type: object
+    properties:
+      active:
+        type: boolean
+      applications:
+        type: array
+        items:
+          $ref: '#/definitions/Application'
+      createdAt:
+        $ref: '#/definitions/TimestampReq'
+      dateEnd:
+        $ref: '#/definitions/TimestampReq'
+      dateStart:
+        $ref: '#/definitions/TimestampReq'
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      places:
+        type: array
+        items:
+          $ref: '#/definitions/Place'
+      teamGameStatuses:
+        type: array
+        items:
+          $ref: '#/definitions/TeamGameStatus'
+      title:
+        type: string
+      updatedAt:
+        $ref: '#/definitions/TimestampReq'
+    title: Game
+  GameActiveDto:
+    type: object
+    properties:
+      createdAt:
+        $ref: '#/definitions/TimestampRes'
+      dateEnd:
+        $ref: '#/definitions/TimestampRes'
+      dateStart:
+        $ref: '#/definitions/TimestampRes'
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      places:
+        type: array
+        items:
+          $ref: '#/definitions/PlaceActiveDto'
+      teamGameStatusDto:
+        $ref: '#/definitions/TeamGameStatusDto'
+      title:
+        type: string
+      updatedAt:
+        $ref: '#/definitions/TimestampRes'
+    title: GameActiveDto
+  GameDto:
+    type: object
+    properties:
+      active:
+        type: boolean
+      applications:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicationDto'
+      createdAt:
+        $ref: '#/definitions/Timestamp'
+      dateEnd:
+        $ref: '#/definitions/Timestamp'
+      dateStart:
+        $ref: '#/definitions/Timestamp'
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      places:
+        type: array
+        items:
+          $ref: '#/definitions/PlaceDto'
+      title:
+        type: string
+      updatedAt:
+        $ref: '#/definitions/Timestamp'
+    title: GameDto
+  GameOnlyBasicDto:
+    type: object
+    properties:
+      active:
+        type: boolean
+      createdAt:
+        $ref: '#/definitions/TimestampRes'
+      dateEnd:
+        $ref: '#/definitions/TimestampRes'
+      dateStart:
+        $ref: '#/definitions/TimestampRes'
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      title:
+        type: string
+      updatedAt:
+        $ref: '#/definitions/TimestampRes'
+      userApplied:
+        type: string
+        enum:
+          - accepted
+          - applied
+          - declined
+          - none
+    title: GameOnlyBasicDto
+  GameWithStatusesDto:
+    type: object
+    properties:
+      active:
+        type: boolean
+      applications:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicationDto'
+      createdAt:
+        $ref: '#/definitions/Timestamp'
+      dateEnd:
+        $ref: '#/definitions/Timestamp'
+      dateStart:
+        $ref: '#/definitions/Timestamp'
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      places:
+        type: array
+        items:
+          $ref: '#/definitions/PlaceDto'
+      teamGameStatuses:
+        type: array
+        items:
+          $ref: '#/definitions/TeamGameStatusDto'
+      title:
+        type: string
+      updatedAt:
+        $ref: '#/definitions/Timestamp'
+    title: GameWithStatusesDto
+  InputStream:
+    type: object
+    title: InputStream
+  LoginResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      messageCode:
+        type: string
+      success:
+        type: boolean
+      team:
+        $ref: '#/definitions/TeamDto'
+    title: LoginResponse
+  Place:
+    type: object
+    properties:
+      address:
+        type: string
+      game:
+        $ref: '#/definitions/Game'
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      latitude:
+        type: number
+        format: double
+      longitude:
+        type: number
+        format: double
+      name:
+        type: string
+      ordernumber:
+        type: integer
+        format: int32
+      questions:
+        type: array
+        items:
+          $ref: '#/definitions/Question'
+    title: Place
+  PlaceActiveDto:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      name:
+        type: string
+      questions:
+        type: array
+        items:
+          $ref: '#/definitions/QuestionDtoNoAnswers'
+      selectable:
+        type: boolean
+    title: PlaceActiveDto
+  PlaceDto:
+    type: object
+    properties:
+      address:
+        type: string
+      gameId:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      latitude:
+        type: number
+        format: double
+      longitude:
+        type: number
+        format: double
+      name:
+        type: string
+      questions:
+        type: array
+        items:
+          $ref: '#/definitions/QuestionDto'
+      riddleWarning:
+        type: boolean
+    title: PlaceDto
+  PlaceStatus:
+    type: object
+    properties:
+      orderNumber:
+        type: integer
+        format: int32
+      placeId:
+        type: integer
+        format: int32
+      reached:
+        type: boolean
+      reachedAt:
+        $ref: '#/definitions/TimestampReq'
+    title: PlaceStatus
+  PlaceStatusDto:
+    type: object
+    properties:
+      placeId:
+        type: integer
+        format: int32
+      qanswers:
+        type: array
+        items:
+          $ref: '#/definitions/AnswerDto'
+      reached:
+        type: boolean
+      reachedAt:
+        $ref: '#/definitions/TimestampRes'
+    title: PlaceStatusDto
+  Question:
+    type: object
+    properties:
+      answers:
+        type: array
+        items:
+          $ref: '#/definitions/Answer'
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      name:
+        type: string
+      place:
+        $ref: '#/definitions/Place'
+      riddle:
+        type: boolean
+      type:
+        type: string
+        enum:
+          - imgOnly
+          - longText
+          - number
+          - shortText
+          - year
+    title: Question
+  QuestionAnswer:
+    type: object
+    properties:
+      answer:
+        $ref: '#/definitions/Answer'
+      questionId:
+        type: integer
+        format: int32
+    title: QuestionAnswer
+  QuestionDto:
+    type: object
+    properties:
+      answers:
+        type: array
+        items:
+          $ref: '#/definitions/AnswerDto'
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      name:
+        type: string
+      placeId:
+        type: integer
+        format: int32
+      riddle:
+        type: boolean
+      type:
+        type: string
+        enum:
+          - imgOnly
+          - longText
+          - number
+          - shortText
+          - year
+    title: QuestionDto
+  QuestionDtoNoAnswers:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      name:
+        type: string
+      placeId:
+        type: integer
+        format: int32
+      riddle:
+        type: boolean
+      type:
+        type: string
+        enum:
+          - imgOnly
+          - longText
+          - number
+          - shortText
+          - year
+    title: QuestionDtoNoAnswers
+  RegisterRequest:
+    type: object
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    title: RegisterRequest
+  Response:
+    type: object
+    properties:
+      message:
+        type: string
+      messageCode:
+        type: string
+      success:
+        type: boolean
+    title: Response
+  ResponseEntity:
+    type: object
+    properties:
+      body:
+        type: object
+      statusCode:
+        type: string
+        enum:
+          - ACCEPTED
+          - ALREADY_REPORTED
+          - BAD_GATEWAY
+          - BAD_REQUEST
+          - BANDWIDTH_LIMIT_EXCEEDED
+          - CHECKPOINT
+          - CONFLICT
+          - CONTINUE
+          - CREATED
+          - DESTINATION_LOCKED
+          - EXPECTATION_FAILED
+          - FAILED_DEPENDENCY
+          - FORBIDDEN
+          - FOUND
+          - GATEWAY_TIMEOUT
+          - GONE
+          - HTTP_VERSION_NOT_SUPPORTED
+          - IM_USED
+          - INSUFFICIENT_SPACE_ON_RESOURCE
+          - INSUFFICIENT_STORAGE
+          - INTERNAL_SERVER_ERROR
+          - I_AM_A_TEAPOT
+          - LENGTH_REQUIRED
+          - LOCKED
+          - LOOP_DETECTED
+          - METHOD_FAILURE
+          - METHOD_NOT_ALLOWED
+          - MOVED_PERMANENTLY
+          - MOVED_TEMPORARILY
+          - MULTIPLE_CHOICES
+          - MULTI_STATUS
+          - NETWORK_AUTHENTICATION_REQUIRED
+          - NON_AUTHORITATIVE_INFORMATION
+          - NOT_ACCEPTABLE
+          - NOT_EXTENDED
+          - NOT_FOUND
+          - NOT_IMPLEMENTED
+          - NOT_MODIFIED
+          - NO_CONTENT
+          - OK
+          - PARTIAL_CONTENT
+          - PAYLOAD_TOO_LARGE
+          - PAYMENT_REQUIRED
+          - PERMANENT_REDIRECT
+          - PRECONDITION_FAILED
+          - PRECONDITION_REQUIRED
+          - PROCESSING
+          - PROXY_AUTHENTICATION_REQUIRED
+          - REQUESTED_RANGE_NOT_SATISFIABLE
+          - REQUEST_ENTITY_TOO_LARGE
+          - REQUEST_HEADER_FIELDS_TOO_LARGE
+          - REQUEST_TIMEOUT
+          - REQUEST_URI_TOO_LONG
+          - RESET_CONTENT
+          - SEE_OTHER
+          - SERVICE_UNAVAILABLE
+          - SWITCHING_PROTOCOLS
+          - TEMPORARY_REDIRECT
+          - TOO_EARLY
+          - TOO_MANY_REQUESTS
+          - UNAUTHORIZED
+          - UNAVAILABLE_FOR_LEGAL_REASONS
+          - UNPROCESSABLE_ENTITY
+          - UNSUPPORTED_MEDIA_TYPE
+          - UPGRADE_REQUIRED
+          - URI_TOO_LONG
+          - USE_PROXY
+          - VARIANT_ALSO_NEGOTIATES
+      statusCodeValue:
+        type: integer
+        format: int32
+    title: ResponseEntity
+  SubscriptionRequest:
+    type: object
+    properties:
+      subscriber:
+        type: string
+      topic:
+        type: string
+    title: SubscriptionRequest
+  Team:
+    type: object
+    properties:
+      answers:
+        type: array
+        items:
+          $ref: '#/definitions/Answer'
+      applications:
+        type: array
+        items:
+          $ref: '#/definitions/Application'
+      clients:
+        type: array
+        items:
+          $ref: '#/definitions/ClientDataReq'
+      createdAt:
+        $ref: '#/definitions/TimestampReq'
+      email:
+        type: string
+      enabled:
+        type: boolean
+      google:
+        type: boolean
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      lastLatitude:
+        type: number
+        format: double
+      lastLongitude:
+        type: number
+        format: double
+      members:
+        type: array
+        items:
+          type: string
+      name:
+        type: string
+      nextEmail:
+        type: string
+      password:
+        type: string
+      passwordChangeId:
+        type: string
+      role:
+        type: string
+      teamGameStatuses:
+        type: array
+        items:
+          $ref: '#/definitions/TeamGameStatus'
+      updatedAt:
+        $ref: '#/definitions/TimestampReq'
+    title: Team
+  TeamDto:
+    type: object
+    properties:
+      applications:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicationDto'
+      clients:
+        type: array
+        items:
+          $ref: '#/definitions/ClientData'
+      createdAt:
+        $ref: '#/definitions/Timestamp'
+      email:
+        type: string
+      id:
+        type: integer
+        format: int32
+      img:
+        type: string
+      members:
+        type: array
+        items:
+          type: string
+      name:
+        type: string
+      nextEmail:
+        type: string
+      role:
+        type: string
+      updatedAt:
+        $ref: '#/definitions/Timestamp'
+    title: TeamDto
+  TeamGameStatus:
+    type: object
+    properties:
+      createdAt:
+        $ref: '#/definitions/TimestampReq'
+      game:
+        $ref: '#/definitions/Game'
+      id:
+        type: integer
+        format: int32
+      nextUnreachedPlaceIndex:
+        type: integer
+        format: int32
+      placeStatuses:
+        type: array
+        items:
+          $ref: '#/definitions/PlaceStatus'
+      team:
+        $ref: '#/definitions/Team'
+      updatedAt:
+        $ref: '#/definitions/TimestampReq'
+    title: TeamGameStatus
+  TeamGameStatusDto:
+    type: object
+    properties:
+      createdAt:
+        $ref: '#/definitions/TimestampRes'
+      gameId:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+      lastLatitude:
+        type: number
+        format: double
+      lastLongitude:
+        type: number
+        format: double
+      placeStatuses:
+        type: array
+        items:
+          $ref: '#/definitions/PlaceStatusDto'
+      teamId:
+        type: integer
+        format: int32
+      teamName:
+        type: string
+      updatedAt:
+        $ref: '#/definitions/TimestampRes'
+    title: TeamGameStatusDto
+  TeamPasswordUpdateDto:
+    type: object
+    properties:
+      newPassword:
+        type: string
+    title: TeamPasswordUpdateDto
+  TeamUpdateProfileDto:
+    type: object
+    properties:
+      members:
+        type: array
+        items:
+          type: string
+      name:
+        type: string
+    title: TeamUpdateProfileDto
+  Timestamp:
+    type: object
+    properties:
+      date:
+        type: integer
+        format: int32
+      day:
+        type: integer
+        format: int32
+      hours:
+        type: integer
+        format: int32
+      minutes:
+        type: integer
+        format: int32
+      month:
+        type: integer
+        format: int32
+      nanos:
+        type: integer
+        format: int32
+      seconds:
+        type: integer
+        format: int32
+      time:
+        type: integer
+        format: int64
+      timezoneOffset:
+        type: integer
+        format: int32
+      year:
+        type: integer
+        format: int32
+    title: Timestamp
+  TimestampReq:
+    type: object
+    properties:
+      date:
+        type: integer
+        format: int32
+      hours:
+        type: integer
+        format: int32
+      minutes:
+        type: integer
+        format: int32
+      month:
+        type: integer
+        format: int32
+      nanos:
+        type: integer
+        format: int32
+      seconds:
+        type: integer
+        format: int32
+      time:
+        type: integer
+        format: int64
+      year:
+        type: integer
+        format: int32
+    title: TimestampReq
+  TimestampRes:
+    type: object
+    properties:
+      date:
+        type: integer
+        format: int32
+      day:
+        type: integer
+        format: int32
+      hours:
+        type: integer
+        format: int32
+      minutes:
+        type: integer
+        format: int32
+      month:
+        type: integer
+        format: int32
+      nanos:
+        type: integer
+        format: int32
+      seconds:
+        type: integer
+        format: int32
+      time:
+        type: integer
+        format: int64
+      timezoneOffset:
+        type: integer
+        format: int32
+      year:
+        type: integer
+        format: int32
+    title: TimestampRes
+  TopicNotification:
+    type: object
+    properties:
+      message:
+        type: string
+      title:
+        type: string
+      topic:
+        type: string
+    title: TopicNotification
+  UrlResource:
+    type: object
+    properties:
+      description:
+        type: string
+      file:
+        type: file
+      filename:
+        type: string
+      inputStream:
+        $ref: '#/definitions/InputStream'
+      open:
+        type: boolean
+      readable:
+        type: boolean
+      uri:
+        type: string
+        format: uri
+      url:
+        type: string
+        format: url
+    title: UrlResource
