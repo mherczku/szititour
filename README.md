@@ -5,6 +5,14 @@ Tájékozódási csapatverseny Fullstack webalkalmazás - Szititour - University
 A projekt prototípusa megtekinthető az alábbi oldalon:
 https://mherczku.github.io/szititour/
 
+TesztAdmin:
+   - E-mail: ta@test.hu
+   - Jelszó: T12345678910
+
+TesztFelhasználó:
+   - E-mail: t@test.hu
+   - Jelszó: T12345678910
+
 
 
 ## Lokális futtatás:
